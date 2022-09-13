@@ -21,8 +21,8 @@ const UserProfile = () => {
     const [page, setPage] = useState(0);
     const [datas, setDatas] = useState()
     const [isOpenCategory, setIsOpenCategory] = useState(false)
-    const [isOpenProfileImg, setIsOpenProfileImg] = useState(false)  
-    const [imageUrl, setImageUrl] = useState(''); 
+    const [isOpenProfileImg, setIsOpenProfileImg] = useState(false)
+    const [imageUrl, setImageUrl] = useState('');
     const [imgFile, setImgFile] = useState("")
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
@@ -31,7 +31,7 @@ const UserProfile = () => {
 
     let nickname;
     const readUser = async () => {
-        const response = await axios.get(`${baseURL}/main/user-info`, 
+        const response = await axios.get(`${baseURL}/main/user-info`,
             {
                 headers: {
                     Authorization: myToken,
@@ -42,10 +42,10 @@ const UserProfile = () => {
         nickname = response.data.data.nickname
         setImageUrl(response.data.data.profileImg)
         myContext.setNickname(nickname)
-        
+
 
         const readMypage = async () => {
-            const response = await axios.get(`${baseURL}/mypage/post/${0}/${1}?nickname=${nickname}&page=${1}&size=6`,{
+            const response = await axios.get(`${baseURL}/mypage/post/${0}/${1}?nickname=${nickname}&page=${1}&size=6`, {
                 headers: {
                     Authorization: myToken,
                     'refresh-token': refreshToken
@@ -56,11 +56,11 @@ const UserProfile = () => {
         }
         readMypage()
     }
-    
+
     useEffect(() => {
         readUser()
-    },[])
-    
+    }, [])
+
 
     const RightMouseClick = (e) => {
         e.preventDefault();
@@ -72,15 +72,14 @@ const UserProfile = () => {
     }
 
     const editNickChange = (e) => {
-        if ((e.target.value).length >= 2 && (e.target.value).length <= 8)
-        {
+        if ((e.target.value).length >= 2 && (e.target.value).length <= 8) {
             myContext.setNickname(e.target.value)
             setEditNickValue('')
         }
-        else {setEditNickValue('2글자 이상 8글자 이하로 입력해주세요')}
+        else { setEditNickValue('2글자 이상 8글자 이하로 입력해주세요') }
     }
-    const completeBtn = async() => {
-        if(editMyNickname === '') setEditMyNickName(false)
+    const completeBtn = async () => {
+        if (editMyNickname === '') setEditMyNickName(false)
         //서버에 전송
         // const info = {
         //     nickname: editMyNickname
@@ -112,27 +111,27 @@ const UserProfile = () => {
                             </TextContentContainer>
                             <TextContentContainer>
                                 <TextContent>닉네임</TextContent>
-                                <Texts >{editMyNickname ? 
+                                <Texts >{editMyNickname ?
                                     <EditInput placeholder={myContext.nickname} onChange={editNickChange} />
                                     : myContext.nickname}
                                 </Texts>
-                                {editMyNickname ? 
-                                <ValidationNickname>
-                                    <div style={{color:'red', marginLeft:'20px'}}>{editNickValue}</div>
-                                </ValidationNickname> : null}
+                                {editMyNickname ?
+                                    <ValidationNickname>
+                                        <div style={{ color: 'red', marginLeft: '20px' }}>{editNickValue}</div>
+                                    </ValidationNickname> : null}
                             </TextContentContainer>
-                            
+
                             <TextContentContainer>
                                 <TextContent>게시물</TextContent>
                                 <Texts>개</Texts>
                             </TextContentContainer>
                         </TextProfileContents>
                     </ProfileInner>
-                        {button}
+                    {button}
                 </ProfileContainer>
-                <ProfileBorder/>
+                <ProfileBorder />
                 {/* 카테고리별 */}
-                
+
                 <CategoryContainer>
                     <CategoryDisplay>
                         <CategoryContent id='all' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>전체</CategoryContent>
@@ -140,24 +139,24 @@ const UserProfile = () => {
                         <CategoryContent id='participate' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>참여한 글</CategoryContent>
                         <CategoryContent id='behind' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>숨긴 글</CategoryContent>
                     </CategoryDisplay>
-                    <CategoryButton id='categoryBtn' onClick={()=>{setIsOpenCategory(!isOpenCategory)}} >카테고리 ▼</CategoryButton>
+                    <CategoryButton id='categoryBtn' onClick={() => { setIsOpenCategory(!isOpenCategory) }} >카테고리 ▼</CategoryButton>
                 </CategoryContainer>
-               
+
 
                 {/* 카드 */}
                 <CardContainer>
-                    {datas && datas.data.mypageResponseDto.map((data,i) => {
-                        return(
-                        <GifCard key={i} data={data} />
+                    {datas && datas.data.mypageResponseDto.map((data, i) => {
+                        return (
+                            <GifCard key={i} data={data} />
                         )
                     })}
                 </CardContainer>
             </ContainerInner>
 
-        {/* 프로필이미지 모달창 */}
-            <ProfileImageModal shown={isOpenProfileImg} close={() => { setIsOpenProfileImg(false) }} setImageUrl={setImageUrl} setImgFile={setImgFile} />    
-         {/* 카테고리모달창 */}
-         <CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} />    
+            {/* 프로필이미지 모달창 */}
+            <ProfileImageModal shown={isOpenProfileImg} close={() => { setIsOpenProfileImg(false) }} setImageUrl={setImageUrl} setImgFile={setImgFile} />
+            {/* 카테고리모달창 */}
+            <CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} />
         </UserProfileContainer>
     )
 }
@@ -279,6 +278,6 @@ const CardContainer = styled.div`
     position: relative;
     display: flex;
     flex-wrap: wrap;
-` 
+`
 
 export default UserProfile

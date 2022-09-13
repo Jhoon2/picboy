@@ -1,42 +1,42 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ProfileImageIcons = ({shown, close}) => {
-  return shown ? (
-    <Overlay onClick={()=>{close()}}>
-    <OverlayPosition >
-        <ModalContainer onClick={e => {e.stopPropagation();}}>
-          <TitleIconModal>아이콘을 선택하세요.</TitleIconModal>
-          <IconsContainer>
-            <IconCard>
-              <IconImage></IconImage>
-              <IconName>이름</IconName>
-            </IconCard>
-            <IconCard>
-              <IconImage></IconImage>
-              <IconName>이름</IconName>
-            </IconCard>
-            <IconCard>
-              <IconImage></IconImage>
-              <IconName>이름</IconName>
-            </IconCard>
-            <IconCard>
-              <IconImage></IconImage>
-              <IconName>이름</IconName>
-            </IconCard>
-            <IconCard>
-              <IconImage></IconImage>
-              <IconName>이름</IconName>
-            </IconCard>
-            <IconCard>
-              <IconImage></IconImage>
-              <IconName>이름</IconName>
-            </IconCard>
-          </IconsContainer>
-        </ModalContainer>
-    </OverlayPosition>
-  </Overlay>
-  ) : null
+const ProfileImageIcons = ({ shown, close }) => {
+    return shown ? (
+        <Overlay onClick={() => { close() }}>
+            <OverlayPosition >
+                <ModalContainer onClick={e => { e.stopPropagation(); }}>
+                    <TitleIconModal>아이콘을 선택하세요.</TitleIconModal>
+                    <IconsContainer>
+                        <IconCard>
+                            <IconImage></IconImage>
+                            <IconName>이름</IconName>
+                        </IconCard>
+                        <IconCard>
+                            <IconImage></IconImage>
+                            <IconName>이름</IconName>
+                        </IconCard>
+                        <IconCard>
+                            <IconImage></IconImage>
+                            <IconName>이름</IconName>
+                        </IconCard>
+                        <IconCard>
+                            <IconImage></IconImage>
+                            <IconName>이름</IconName>
+                        </IconCard>
+                        <IconCard>
+                            <IconImage></IconImage>
+                            <IconName>이름</IconName>
+                        </IconCard>
+                        <IconCard>
+                            <IconImage></IconImage>
+                            <IconName>이름</IconName>
+                        </IconCard>
+                    </IconsContainer>
+                </ModalContainer>
+            </OverlayPosition>
+        </Overlay>
+    ) : null
 }
 
 const Overlay = styled.div`
