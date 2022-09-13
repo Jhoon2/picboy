@@ -11,7 +11,6 @@ import LoginErrorModal from '../components/Login/LoginErrorModal'
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
   const myContext = useMyContext();
-
   const navigate = useNavigate();
   const [focusedInput, setFocusedInput] = useState('')
 
@@ -23,7 +22,6 @@ const Login = () => {
       password: data.password
     }
     const response = await axios.post(`${baseURL}/user/login`, info)
-
     try {
       // console.log(response.data.data)
       // 헤더로 받는 것으로 추후 수정 예정
@@ -34,8 +32,7 @@ const Login = () => {
       //에러메시지 모달창
       if (response.data.errorResponse.status === 400) {
         myContext.btnClickOn();
-     }
-
+      }
     }
 
   }
@@ -45,52 +42,51 @@ const Login = () => {
   return (
     <>
       <LoginContainer>
-      {myContext.btnOpen ? <ErrorBox onClick={()=>myContext.btnClickOff()}>
-        <LoginErrorModal />
-      </ErrorBox> : null}
-      <FormContainer >
-        <InputBox>
-          <form onSubmit={handleSubmit(onClickLogin)}>
-            <p style={{ fontSize: '50px', fontWeight: '700' }}>로그인</p>
+        {myContext.btnOpen ? <ErrorBox onClick={() => myContext.btnClickOff()}>
+          <LoginErrorModal />
+        </ErrorBox> : null}
+        <FormContainer >
+          <InputBox>
+            <form onSubmit={handleSubmit(onClickLogin)}>
+              <Title style={{ fontSize: '50Titlex', fontWeight: '700' }}>LOGIN</Title>
+              <InputBoxInner>
+                <TextAndInput onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput} >
+                  <SignupText>아이디</SignupText>
+                  <InputWithButton id='userId' name='id' placeholder='ID'
+                    {...register('userId', {
+                      required: true
+                    })} />
+                </TextAndInput>
+                <Errorsmessage>{errors.userId?.type === 'required' && '아이디를 입력하세요'} </Errorsmessage>
 
-            <InputBoxInner>
-              <TextAndInput onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput} >
-                <SignupText>아이디</SignupText>
-                <InputWithButton id='userId' name='id' placeholder='ID'
-                  {...register('userId', {
-                    required: true
-                  })} />
-              </TextAndInput>
-              <Errorsmessage>{errors.userId?.type === 'required' && '아이디를 입력하세요'} </Errorsmessage>
+                <TextAndInput2 style={{ marginTop: '20px' }} onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput}>
+                  <SignupText>비밀번호</SignupText>
+                  <InputWithButton id='password' name='password' type='password' placeholder='PASSWORD' autoComplete='on'
+                    {...register('password', {
+                      required: true,
+                      pattern: {
+                        value:
+                          /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$/,
+                        message:
+                          '비밀번호를 8~16자로 영문 대소문자, 숫자, 특수기호를 조합해서 사용하세요. ',
+                      }
+                    })} />
+                </TextAndInput2>
+                <Errorsmessage>
+                  {errors.password?.type === 'required' && '비밀번호를 입력해주세요'}
+                  {errors.password?.type === 'pattern' && errors.password.message}
+                </Errorsmessage>
+              </InputBoxInner>
 
-              <TextAndInput2 style={{ marginTop: '20px' }} onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput}>
-                <SignupText>비밀번호</SignupText>
-                <InputWithButton id='password' name='password' type='password' placeholder='PASSWORD'
-                  {...register('password', {
-                    required: true,
-                    pattern: {
-                      value:
-                        /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$/,
-                      message:
-                        '비밀번호를 8~16자로 영문 대소문자, 숫자, 특수기호를 조합해서 사용하세요. ',
-                    }
-                  })} />
-              </TextAndInput2>
-              <Errorsmessage>
-                {errors.password?.type === 'required' && '비밀번호를 입력해주세요'}
-                {errors.password?.type === 'pattern' && errors.password.message}
-              </Errorsmessage>
-            </InputBoxInner>
+              {/* 로그인 버튼창 */}
+              <LoginButton type='submit' disabled={isSubmitting}>로그인</LoginButton>
+            </form>
 
-            {/* 로그인 버튼창 */}
-            <LoginButton type='submit' disabled={isSubmitting}>로그인</LoginButton>
-          </form>
-
-          <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton>
-          {/* <img src={kakaoButton} style={{width:'200px'}}></img> */}
-          <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
-        </InputBox>
-      </FormContainer>
+            <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton>
+            {/* <img src={kakaoButton} style={{width:'200px'}}></img> */}
+            <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
+          </InputBox>
+        </FormContainer>
       </LoginContainer>
 
     </>
@@ -108,7 +104,6 @@ const ErrorBox = styled.div`
   align-items: center;
   z-index: 2;
 `
-
 const LoginContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -116,7 +111,7 @@ const LoginContainer = styled.div`
 const FormContainer = styled.div`
     max-width: 1200px;
     height: 50vh;
-    margin-top: 20%;
+    margin-top: 236px;
 
 `
 const InputBox = styled.div`
@@ -131,6 +126,14 @@ const InputBox = styled.div`
 const InputBoxInner = styled.div`
 
 `
+const Title = styled.div`
+    margin-bottom: 82px;
+    text-align: center;
+    font-family: 'SilkBold';
+    font-size: 80px;
+    font-weight: 700;
+`
+
 const TextAndInput = styled.div`
   width: 585px;
   margin-left: 160px;
@@ -143,7 +146,7 @@ const TextAndInput2 = styled.div`
   margin-left: 160px;
   padding: 0.7rem;
   display: flex;
-  border-bottom: 1.5px solid ${(props) => ('password' === props.focusedInput) ? 'lightgray' : 'black'};
+  border-bottom: 2px solid ${(props) => ('password' === props.focusedInput) ? 'lightgray' : 'black'};
   `
 
 const SignupText = styled.div`
@@ -172,22 +175,27 @@ const SignMove = styled.p`
 
 const LoginButton = styled.button`
   width: 585px;
-  height: 52px;
+  height: 90px;
   margin-top: 80px;
   color: white;
+  font-family: 'NotoLight';
+  font-weight: 600;
+  font-size: 20px;
   cursor: pointer;
   background-color: black;
 `
 
 const KakaoButton = styled.button`
   width: 585px;
-  height: 52px;
+  height: 90px;
   margin-top: 32px;
   margin-left: 155px;
   border: none;
   border-radius: 5px;
   color:#000000 85%;
+  font-family: 'NotoLight';
   font-weight: 600;
+  font-size: 20px;
   cursor: pointer;
   background-color: #FEE500;
 `
