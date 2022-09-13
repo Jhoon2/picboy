@@ -8,10 +8,11 @@ import axios from "axios"
 import TimerPage from '../elem/UseTimer';
 import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components'
-
+import SignupErrorModal from '../components/Signup/SignupErrorModal';
 
 const SignUp = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
+    const myContext = useMyContext();
 
     const navigate = useNavigate();
     const [inputValue, setInputValue] = useState('')
@@ -125,7 +126,6 @@ const SignUp = () => {
 
 
     //핸드폰 코드 전송 버튼
-    const myContext = useMyContext();
     const [phoneValid, setPhoneValid] = useState(false)
 
     const phoneCheck = () => {
@@ -141,9 +141,8 @@ const SignUp = () => {
 
     //회원가입 버튼
     const onClickSignUp = async (data) => {
-        //에러메시지 창?
-        if (!availableId) { console.log('아이디 중복확인 누르는 창') }
-        if (!availableNick) { console.log('닉네임 중복확인 누르는 창') }
+        if (!availableId) return myContext.btnClickOn();
+        if (!availableNick) return myContext.btnClickOn();
 
         const info = {
             username: data.id,
@@ -151,10 +150,8 @@ const SignUp = () => {
             password: data.pw,
             phoneNumber: data.phone_number,
         }
-        console.log(info)
         try {
             const response = await axios.post(`${baseURL}/user/signup`, info)
-            console.log(response)
             if (response.status === 200) {
                 reset();
                 navigate(-1)
@@ -167,13 +164,13 @@ const SignUp = () => {
 
     return (
         <LoginContainer>
+      {myContext.btnOpen ? <ErrorBox onClick={()=>myContext.btnClickOff()}>
+        <SignupErrorModal />
+      </ErrorBox> : null}
             <FormContainer>
                 <form onSubmit={handleSubmit(onClickSignUp)}>
                     <InputBox>
-                        <h1 style={{
-                            textAlign:
-                                'center'
-                        }}>회원가입</h1>
+                        <Title>JOIN</Title>
                         <InputBoxInner>
 
                             <InputFlex>
@@ -190,24 +187,24 @@ const SignUp = () => {
                             <NoErrorsmessage>{availableId && '사용 가능한 아이디입니다'} </NoErrorsmessage>
 
                             <InputFlex>
-                                <TextAndInput>
+                                <NoButtonInput>
                                     <SignupText>비밀번호</SignupText>
                                     <OnlyInput id='password' name='pw' type='password' placeholder='비밀번호를 입력해주세요' autoComplete="off"
                                         {...register('pw', {
                                             required: true
                                         })} />
-                                </TextAndInput>
+                                </NoButtonInput>
                             </InputFlex>
                             <Errorsmessage>{errors.pw?.message}</Errorsmessage>
 
                             <InputFlex>
-                                <TextAndInput>
+                                <NoButtonInput>
                                     <SignupText>비밀번호 확인</SignupText>
                                     <OnlyInput id='checkPsasword' name='checkPw' autoComplete="off" type='password' placeholder='비밀번호를 확인해주세요'
                                         {...register('checkPw', {
                                             required: true
                                         })} />
-                                </TextAndInput>
+                                </NoButtonInput>
                             </InputFlex>
                             <Errorsmessage>
                                 {errors.checkPw?.message}
@@ -265,6 +262,19 @@ const SignUp = () => {
         </LoginContainer>
     )
 }
+
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+`
 const LoginContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -272,7 +282,7 @@ const LoginContainer = styled.div`
 const FormContainer = styled.div`
   max-width: 1200px;
   height: 50vh;
-  margin-top: 20%;
+  margin-top: 160px;
 
 `
 const InputBox = styled.div`
@@ -282,9 +292,16 @@ const InputBox = styled.div`
   flex-direction: column;
   justify-content: center;
 `
+const Title = styled.div`
+    text-align: center;
+    font-family: 'SilkBold';
+    font-size: 80px;
+    font-weight: 700;
+`
 
 const InputBoxInner = styled.div`
   width: 580px;
+  margin-top: 72px;
   margin-left: 10%;
   `
 
@@ -295,6 +312,12 @@ const InputFlex = styled.div`
   `
 const TextAndInput = styled.div`
   width: 450px;
+  padding: 0.8rem;
+  display: flex;
+  border-bottom: 2px solid lightgray;
+`
+const NoButtonInput = styled.div`
+  width: 575px;
   padding: 0.8rem;
   display: flex;
   border-bottom: 2px solid lightgray;
@@ -310,7 +333,9 @@ const PhoneTextAndInput = styled.div`
 const SignupText = styled.div`
   width: 120px;
   margin-left: -8px;
+  font-family: 'NotoLight';
   font-weight: 900;
+  font-size: 16px;
 `
 
 const InputWithButton = styled.input`
@@ -330,17 +355,24 @@ const OnlyInput = styled.input`
 `
 
 const CheckButton = styled.button`
-  width: 100px;
+  width: 180px;
   margin-left: 10px;
   font-size: 16px;
+  font-family: 'NotoLight';
   border: 1px solid grey ;
   cursor: pointer;
   background-color: white;
+
+  :hover {
+    color: white;
+    background-color: black;
+  }
 `
 const Errorsmessage = styled.div`
   width: 300px;
   margin-left: 130px;
   font-size: 13px;
+  font-family: 'NotoLight';
   color: red;
 `;
 
@@ -348,12 +380,17 @@ const NoErrorsmessage = styled.div`
   width: 300px;
   margin-left: 130px;
   font-size: 13px;
+  font-family: 'NotoLight';
   color: green;
 `
 
 const SignupButton = styled.button`
   width: 586px;
-  height: 52px;
+  height: 90px;
+  font-family: 'NotoLight';
+  font-size: 20px;
+  font-weight: 400;
+
   margin-top: 50px;
   padding: 0.5rem;
   cursor: pointer;

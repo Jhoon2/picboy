@@ -18,11 +18,10 @@ const value = {
      nickname,
     setNickname,
     timerMessage,
-      setTimerMessage,
-      btnOpen,
-      btnClickOff,
-      btnClickOn
-
+    setTimerMessage,
+    btnOpen,
+    btnClickOff,
+    btnClickOn
     };
 
     return (
