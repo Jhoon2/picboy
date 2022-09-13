@@ -1,70 +1,112 @@
-# Getting Started with Create React App
+# 🪙 (Make GIF)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## ****🔍 프로젝트 목적****
+이 프로젝트는 ~ <br>
 
-## Available Scripts
+## ****👨‍🏫 프로젝트 소개****
 
-In the project directory, you can run:
+<br>
+<br><br>
 
-### `npm start`
+## ****🗓 프로젝트 기간****
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- 2022.08.26 ~ 2022.09.??
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ****👨‍👧‍👦 팀 구성****
 
-### `npm test`
+|이름|팀원 깃허브|포지션|
+|---|---|---|
+|👑이동건[L]|https://github.com/dongkeon-lee|BE|
+|🪖신선호|https://github.com/yalla12|BE|
+|🪖정용욱|https://github.com/woojangsan|BE|
+|🪖장창균|https://github.com/JangChangKyoon|BE|
+|👑조다솜[VL]|https://github.com/bita5000|FE|
+|🪖정민희|https://github.com/minimi61|FE|
+|🪖우종훈|https://github.com/Jhoon2|FE|
+|🎨김나영||Design|
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## ****🛠주요기술****
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src= "https://img.shields.io/badge/React%20Hook%20Form-%23EC5990.svg?style=for-the-badge&logo=reacthookform&logoColor=white">  <img src= "https://camo.githubusercontent.com/47c21ef854794cf5ac5caea767d895396f7264ac6ada63d051cda8ed40b4e9a7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f72656475785f746f6f6c6b69742d3736344142433f7374796c653d666f722d7468652d6261646765266c6f676f3d7265647578266c6f676f436f6c6f723d7768697465"> <img src="https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white"> <img src="https://camo.githubusercontent.com/a228c9d2e94f10ecf6dd0d64d9a94072e6c8cdf3d2152a5907b3942487d9cceb/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6178696f732d3632333646463f7374796c653d666f722d7468652d6261646765266c6f676f3d6178696f73266c6f676f436f6c6f723d7768697465">
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white"> <img src="https://camo.githubusercontent.com/145d635adab58f09f26cac81e67c8f3548c7eab4b3f295c64abb5e009732a3b0/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f616d617a6f6e2073332d3536394133313f7374796c653d666f722d7468652d6261646765266c6f676f3d616d617a6f6e7333266c6f676f436f6c6f723d677265656e"> <img src="https://camo.githubusercontent.com/83ced0ba226a75cb155d2b95c5e4078c24d96df32b0142e4d2c9a9d0c246bedd/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f726f7574652035332d4637413831423f7374796c653d666f722d7468652d6261646765266c6f676f3d726f7574653533266c6f676f436f6c6f723d7768697465">
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<img src="https://img.shields.io/badge/adobe%20illustrator-%23FF9A00.svg?style=for-the-badge&logo=adobe%20illustrator&logoColor=white"> <img src="https://img.shields.io/badge/adobe%20photoshop-%2331A8FF.svg?style=for-the-badge&logo=adobe%20photoshop&logoColor=white"> <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white">
 
-## Learn More
+    
+## ****💡 ERD****
+![Untitled 1.png]()
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## ****🖼️ 프로젝트 상세****
 
-### Analyzing the Bundle Size
+#### 1⃣Sign up
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+ <img src="" width="600"/><br>
+-회원가입 페이지입니다.<br>
+-유효성 검사 및 아이디와 닉네임을 체크 편의기능을 추가하였습니다.<br><br> 
 
-### Making a Progressive Web App
+#### 2⃣Log in
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+ <img src="" width="600"/><br>
+-로그인 페이지입니다.<br>
+-아이디와 비밀번호를 입력받아 로그인합니다.<br><br>
 
-### Advanced Configuration
+#### 3⃣Main
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+<img src="" width="600"/><br>
+-메인페이지입니다. <br>
+ <br><br>
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+#### 4⃣List
 
-### `npm run build` fails to minify
+ <img src="" width="600"/><br>
+<br>
+<br>
+<br>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+#### 5⃣Post
+
+<img src="" width="600"/><br>
+<br>
+<br>
+
+#### 6⃣Detail
+
+<img src="" width="600"/><br>
+<br>
+<br>
+
+
+#### 7⃣Put
+
+<img src="" width="600"/><br>
+
+- 수정 페이지입니다. <br>
+
+#### 8.Chatting
+<" width="600"/><br>
+
+<br>
+
+
+
+## 📂REPOSITORIES
+
+- FRONT-END
+
+[GitHub - Project](https://github.com/jjaljjal-fe/jjaljjal)<br><br>
+
+
+- BACK-END
+
+[GitHub - Project](https://github.com/ClonecodingC1/CloneCodingC1)
