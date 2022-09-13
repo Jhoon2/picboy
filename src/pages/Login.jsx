@@ -5,9 +5,12 @@ import styled from 'styled-components'
 // import kakaoButton from '../images/kakao_login_medium_wide.png'
 import axios from "axios"
 import { setAccessToken, setRefreshToken } from '../shared/Cookie';
+import { useMyContext } from '../shared/ContextApi'
+import LoginErrorModal from '../components/Login/LoginErrorModal'
 
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
+  const myContext = useMyContext();
 
   const navigate = useNavigate();
   const [focusedInput, setFocusedInput] = useState('')
@@ -26,11 +29,13 @@ const Login = () => {
       // 헤더로 받는 것으로 추후 수정 예정
       setAccessToken(response.data.data.authorization);
       setRefreshToken(response.data.data.refreshToken)
-      if (response.status === 200) {
-        navigate('/')
-      }
+      if (response.status === 200) { navigate('/') }
     } catch (error) {
-      console.log(response.data.error.message)
+      //에러메시지 모달창
+      if (response.data.errorResponse.status === 400) {
+        myContext.btnClickOn();
+     }
+
     }
 
   }
@@ -38,11 +43,16 @@ const Login = () => {
 
 
   return (
-    <LoginContainer>
-      <FormContainer>
+    <>
+      <LoginContainer>
+      {myContext.btnOpen ? <ErrorBox onClick={()=>myContext.btnClickOff()}>
+        <LoginErrorModal />
+      </ErrorBox> : null}
+      <FormContainer >
         <InputBox>
           <form onSubmit={handleSubmit(onClickLogin)}>
-            <p style={{ marginBottom:'80px',fontSize: '50px', fontWeight: '700' }}>로그인</p>
+            <p style={{ fontSize: '50px', fontWeight: '700' }}>로그인</p>
+
             <InputBoxInner>
               <TextAndInput onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput} >
                 <SignupText>아이디</SignupText>
@@ -75,14 +85,30 @@ const Login = () => {
             {/* 로그인 버튼창 */}
             <LoginButton type='submit' disabled={isSubmitting}>로그인</LoginButton>
           </form>
+
           <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton>
           {/* <img src={kakaoButton} style={{width:'200px'}}></img> */}
           <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
         </InputBox>
       </FormContainer>
-    </LoginContainer>
+      </LoginContainer>
+
+    </>
   )
 }
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+`
+
 const LoginContainer = styled.div`
     display: flex;
     justify-content: center;

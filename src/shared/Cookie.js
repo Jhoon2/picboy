@@ -24,6 +24,8 @@ export const setRefreshToken = (refreshtoken) => {
   })
 }
 
+}
+
 export const getCookieToken = () => {
   return cookies.get("user_token");
 }
