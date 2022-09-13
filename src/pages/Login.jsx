@@ -61,7 +61,7 @@ const Login = () => {
 
               <TextAndInput2 style={{ marginTop: '20px' }} onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput}>
                 <SignupText>비밀번호</SignupText>
-                <InputWithButton id='password' name='password' type='password' placeholder='PASSWORD'
+                <InputWithButton id='password' name='password' type='password' placeholder='PASSWORD' autoComplete='on'
                   {...register('password', {
                     required: true,
                     pattern: {
