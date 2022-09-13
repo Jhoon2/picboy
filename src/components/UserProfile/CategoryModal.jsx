@@ -94,4 +94,3 @@ const TextBr = styled.div`
 `
 export default CategoryModal
 
-
