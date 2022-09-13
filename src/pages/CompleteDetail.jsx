@@ -1,8 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
+// 다솜님
+// 완료된 움짤 디테일 페이지
+import React from 'react'
 
 const CompleteDetail = () => {
-  return <div>ㅎㅇ</div>;
-};
+    return (
+        <div>CompleteDetail</div>
+    )
+}
 
-export default CompleteDetail;
+export default CompleteDetail

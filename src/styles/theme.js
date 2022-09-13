@@ -30,6 +30,7 @@ export const flexSet = (dire = 'column', just = 'center', align = 'center') => {
   justify-content: ${just};
   align-items: ${align};`;
 };
+
 export const backgroundSet = (size = 'cover') => {
   return `background-position: center;
   background-size: ${size};
@@ -38,10 +39,10 @@ export const backgroundSet = (size = 'cover') => {
 
 const deviceSizes = {
   mobile: '360px',
-  laptop: '1200px',
+  pc: '1920px',
 };
 
 export const device = {
   mobile: `screen and (max-width: ${deviceSizes.mobile})`,
-  laptop: `screen and (max-width: ${deviceSizes.laptop})`,
+  pc: `screen and (max-width: ${deviceSizes.pc})`,
 };
