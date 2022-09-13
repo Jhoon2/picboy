@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 import axios from "axios"
-import TimerPage from '../elem/UseTimer';
+import TimerPage from '../components/Signup/TimerPage';
 import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components'
 
@@ -22,9 +22,8 @@ const SignUp = () => {
             .min(3, '3글자 이상 입력해주세요!')
             .max(10, "10글자 이하로 입력해주세요!")
             .matches(
-                /^[a-zA-Z][^!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]*$/,
-                "ID에 특수문자가 포함되면 안되고 영어로 시작해야합니다")
-
+                /^[가-힣a-zA-Z][^!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]*$/,
+                "ID에 특수문자가 포함되면 안되고 숫자로 시작하면 안됩니다!")
             .required('아이디를 입력해주세요'),
 
         pw: yup.string()
@@ -152,7 +151,6 @@ const SignUp = () => {
             password: data.pw,
             phoneNumber: data.phone_number,
         }
-
         try {
             const response = await axios.post(`${baseURL}/user/signup`, info)
             console.log(response)
@@ -171,13 +169,11 @@ const SignUp = () => {
             <FormContainer>
                 <form onSubmit={handleSubmit(onClickSignUp)}>
                     <InputBox>
-
                         <div style={{
                             textAlign:
                                 'center', marginBottom:'80px',fontSize: '50px', fontWeight: '700' 
                             
                         }}>회원가입</div>
-
                         <InputBoxInner>
 
                             <InputFlex>
