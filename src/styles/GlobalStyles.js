@@ -42,11 +42,6 @@ height: 100vh;
 line-height: 1.285;
 }
 
-img {
-    display: inline-block;
-    content: "";
-}
-
 
 body {
 font-weight: 300;

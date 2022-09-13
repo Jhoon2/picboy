@@ -1,15 +1,11 @@
 // Router
-import Router from '../src/shared/Router';
+import Router from "../src/shared/Router"
 
-// global cs
+// global css
 import './App.css';
 
 function App() {
-  return (
-    <>
-      <Router />
-    </>
-  );
+  return <Router />;
 }
 
 export default App;

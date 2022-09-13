@@ -24,6 +24,7 @@ const SignUp = () => {
             .matches(
                 /^[a-zA-Z][^!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?\s]*$/,
                 "ID에 특수문자가 포함되면 안되고 영어로 시작해야합니다")
+
             .required('아이디를 입력해주세요'),
 
         pw: yup.string()
@@ -151,7 +152,7 @@ const SignUp = () => {
             password: data.pw,
             phoneNumber: data.phone_number,
         }
-        console.log(info)
+
         try {
             const response = await axios.post(`${baseURL}/user/signup`, info)
             console.log(response)
@@ -170,10 +171,13 @@ const SignUp = () => {
             <FormContainer>
                 <form onSubmit={handleSubmit(onClickSignUp)}>
                     <InputBox>
-                        <h1 style={{
+
+                        <div style={{
                             textAlign:
-                                'center'
-                        }}>회원가입</h1>
+                                'center', marginBottom:'80px',fontSize: '50px', fontWeight: '700' 
+                            
+                        }}>회원가입</div>
+
                         <InputBoxInner>
 
                             <InputFlex>

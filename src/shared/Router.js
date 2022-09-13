@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 // pages import
 import CompleteDetail from '../pages/CompleteDetail';
@@ -36,6 +36,7 @@ const Router = () => {
       </BrowserRouter>
     </Context>
   );
+
 };
 
 export default Router;

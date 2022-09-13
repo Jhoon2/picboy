@@ -11,6 +11,7 @@ import LoginErrorModal from '../components/Login/LoginErrorModal'
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
   const myContext = useMyContext();
+
   const navigate = useNavigate();
   const [focusedInput, setFocusedInput] = useState('')
 
@@ -22,6 +23,7 @@ const Login = () => {
       password: data.password
     }
     const response = await axios.post(`${baseURL}/user/login`, info)
+
     try {
       // console.log(response.data.data)
       // 헤더로 받는 것으로 추후 수정 예정
@@ -33,6 +35,7 @@ const Login = () => {
       if (response.data.errorResponse.status === 400) {
         myContext.btnClickOn();
      }
+
     }
 
   }
@@ -49,6 +52,7 @@ const Login = () => {
         <InputBox>
           <form onSubmit={handleSubmit(onClickLogin)}>
             <p style={{ fontSize: '50px', fontWeight: '700' }}>로그인</p>
+
             <InputBoxInner>
               <TextAndInput onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput} >
                 <SignupText>아이디</SignupText>
@@ -104,6 +108,7 @@ const ErrorBox = styled.div`
   align-items: center;
   z-index: 2;
 `
+
 const LoginContainer = styled.div`
     display: flex;
     justify-content: center;

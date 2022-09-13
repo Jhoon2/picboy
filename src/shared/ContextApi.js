@@ -22,6 +22,7 @@ const value = {
       btnOpen,
       btnClickOff,
       btnClickOn
+
     };
 
     return (
