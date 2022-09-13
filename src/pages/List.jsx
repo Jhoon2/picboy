@@ -7,46 +7,17 @@ import Grid from '../styles/Grid';
 import ProgressAll from '../components/ProgressAll';
 import ProgressFree from '../components/ProgressFree';
 import ProgressTopic from '../components/ProgressTopic';
+import ProgressBanner from '../elem/ProgressBanner';
 import TopScroll from '../elem/TopScroll';
 
 // const onClick = () => {
 //   navigate(`/detail/${todo.id}`);
 // };
 
-const throttle = function (callback, waitTime) {
-  let timerId = null;
-  return (e) => {
-    if (timerId) return;
-    timerId = setTimeout(() => {
-      callback.call(this, e);
-      timerId = null;
-    }, waitTime);
-  };
-};
-
 const List = () => {
   const navigate = useNavigate();
 
   const [proTap, setProTap] = useState(0);
-  const [hide, setHide] = useState(false);
-  const [pageY, setPageY] = useState(0);
-  const documentRef = useRef(document);
-
-  const handleScroll = () => {
-    const { pageYOffset } = window;
-    const deltaY = pageYOffset - pageY;
-    const hide = pageYOffset !== 0 && deltaY >= 0;
-    setHide(hide);
-    setPageY(pageYOffset);
-  };
-
-  const throttleScroll = throttle(handleScroll, 50);
-
-  useEffect(() => {
-    documentRef.current.addEventListener('scroll', throttleScroll);
-    return () =>
-      documentRef.current.removeEventListener('scroll', throttleScroll);
-  }, [pageY]);
 
   function ListComp({ proTap }) {
     return [<ProgressAll />, <ProgressTopic />, <ProgressFree />][proTap];
@@ -55,7 +26,7 @@ const List = () => {
     <ListContainer>
       <Header />
       <TopScroll />
-      <ImgBox className={hide && 'hide'}>
+      <ImgBox>
         <span>PROGRESS</span>
         <SelectBox>
           <SelectButton
@@ -94,6 +65,7 @@ export default List;
 
 const ListContainer = styled.div`
   width: 100%;
+  position: relative;
 `;
 
 const ImgBox = styled.div`
@@ -109,15 +81,6 @@ const ImgBox = styled.div`
     font-size: 80px;
     line-height: 102px;
     font-weight: 400;
-  }
-
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 1;
-  transition: 0.4s ease;
-  &.hide {
-    transform: translateY(-250px);
   }
 `;
 
