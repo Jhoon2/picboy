@@ -43,7 +43,6 @@ const UserProfile = () => {
         setImageUrl(response.data.data.profileImg)
         myContext.setNickname(nickname)
         
-        console.log(nickname)
 
         const readMypage = async () => {
             const response = await axios.get(`${baseURL}/mypage/post/${0}/${1}?nickname=${nickname}&page=${1}&size=6`,{

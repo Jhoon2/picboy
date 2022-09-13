@@ -22,6 +22,7 @@ export const setRefreshToken = (refreshtoken) => {
     path: "/",
     expires: new Date(expireDate),
   })
+
 }
 
 export const getCookieToken = () => {
