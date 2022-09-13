@@ -11,7 +11,7 @@ import ProgressDetail from '../pages/ProgressDetail';
 import ProgressPost from '../pages/ProgressPost';
 import SignUp from '../pages/SignUp';
 import UserProfile from '../pages/UserProfile';
-import CompList from '../pages/CompList';
+import CompList from '../pages/CompleteDetail';
 import { Context } from "./ContextApi";
 
 const Router = () => {
