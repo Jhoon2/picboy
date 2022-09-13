@@ -12,8 +12,7 @@ const throttle = function (callback, waitTime) {
   };
 };
 
-const ProgressBanner = () => {
-  const [proTap, setProTap] = useState(0);
+const ProgressBanner = (props) => {
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
   const documentRef = useRef(document);
@@ -34,7 +33,34 @@ const ProgressBanner = () => {
       documentRef.current.removeEventListener('scroll', throttleScroll);
   }, [pageY]);
 
-  return <ImgBox className={hide && 'hide'}></ImgBox>;
+  return (
+    <ImgBox className={hide && 'hide'}>
+      <span>PROGRESS</span>
+      <SelectBox>
+        <SelectButton
+          onClick={() => {
+            props.setProTap(0);
+          }}
+        >
+          <Underline>ALL</Underline>
+        </SelectButton>
+        <SelectButton
+          onClick={() => {
+            props.setProTap(1);
+          }}
+        >
+          <Underline>TOPIC</Underline>
+        </SelectButton>
+        <SelectButton
+          onClick={() => {
+            props.setProTap(2);
+          }}
+        >
+          <Underline>FREE</Underline>
+        </SelectButton>
+      </SelectBox>
+    </ImgBox>
+  );
 };
 
 export default ProgressBanner;

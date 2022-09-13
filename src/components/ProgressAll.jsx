@@ -12,17 +12,18 @@ const ProgressAll = () => {
   const [randomData, setRandomData] = useState([]);
   const [page, setPage] = useState(0);
   const lastIntersectingData = useRef(null);
+  const baseURL = process.env.REACT_APP_API_KEY;
 
   const getRandomData = async () => {
     try {
       const { data } = await axios.get(
-        `https://picboy.net/post/test?size=6&page=${page}`
+        `${baseURL}/post/gif/images/0?size=6&page=${page}`
       );
       if (!data) {
         return;
       }
-      setRandomData(randomData.concat(data.data.postResponseDtoList));
-      console.log(data.data.postResponseDtoList);
+      setRandomData(randomData.concat(data.data));
+      console.log(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -62,16 +63,16 @@ const ProgressAll = () => {
         {randomData.map((item, index) => {
           return (
             <BestBox
-              key={item.id}
+              key={item}
               onClick={() => {
-                navigate('/progress-detail/' + item.id);
+                navigate(`/progressdetail/${item.id}`);
               }}
             >
               <div style={{ position: 'relative' }}>
                 <OverlayWrap productImg={item?.imgUrl}>
                   <Overlay>
                     <DescBox>
-                      <Keyword>{item.topic}</Keyword>
+                      <Keyword>{item?.topic}</Keyword>
                     </DescBox>
                   </Overlay>
                 </OverlayWrap>
@@ -79,7 +80,7 @@ const ProgressAll = () => {
               </div>
               <BestDesc>
                 <Profile />
-                <Nickname>{item.nickname}</Nickname>
+                <Nickname>{item?.nickname}</Nickname>
               </BestDesc>
             </BestBox>
           );

@@ -26,32 +26,7 @@ const List = () => {
     <ListContainer>
       <Header />
       <TopScroll />
-      <ImgBox>
-        <span>PROGRESS</span>
-        <SelectBox>
-          <SelectButton
-            onClick={() => {
-              setProTap(0);
-            }}
-          >
-            <Underline>ALL</Underline>
-          </SelectButton>
-          <SelectButton
-            onClick={() => {
-              setProTap(1);
-            }}
-          >
-            <Underline>TOPIC</Underline>
-          </SelectButton>
-          <SelectButton
-            onClick={() => {
-              setProTap(2);
-            }}
-          >
-            <Underline>FREE</Underline>
-          </SelectButton>
-        </SelectBox>
-      </ImgBox>
+      <ProgressBanner setProTap={setProTap} />
       <ListBox>
         <Grid width="1200px" margin="0 auto">
           <ListComp proTap={proTap} />
