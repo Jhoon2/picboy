@@ -7,17 +7,10 @@ import 'react-intersection-observer';
 import axios from 'axios';
 import user from '../images/user.png';
 
-// const { error, progressListAll } = useSelector(
-//   (state) => state.progressListAll
-// );
-
-// console.log(progressListAll);
-
-// useEffect(() => {
-//   dispatch(__getProgressListAll());
-// }, [dispatch]);
 
 const ProgressAll = () => {
+  const baseURL = process.env.REACT_APP_API_KEY;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [randomData, setRandomData] = useState([]);
@@ -27,7 +20,7 @@ const ProgressAll = () => {
   const getRandomData = async () => {
     try {
       const { data } = await axios.get(
-        `https://picboy.net/post/test?size=6&page=${page}`
+        `${baseURL}/post/test?size=6&page=${page}`
       );
       if (!data) {
         return;
