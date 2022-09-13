@@ -5,9 +5,9 @@ import { useEffect } from 'react'
 import axios from "axios"
 
 import styled from 'styled-components'
-import GifCard from '../components/UserProfile/GifCard'
-import CategoryModal from '../components/UserProfile/CategoryModal'
-import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
+import GifCard from '../components/userprofile/GifCard'
+import CategoryModal from '../components/userprofile/CategoryModal'
+import ProfileImageModal from '../components/userprofile/ProfileImageModal'
 import { getCookieToken, getRefreshToken } from '../shared/Cookie'
 import basicImg from '../images/basicImg.jpg'
 
