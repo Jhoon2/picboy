@@ -317,7 +317,7 @@ const TextAndInput = styled.div`
   border-bottom: 2px solid lightgray;
 `
 const NoButtonInput = styled.div`
-  width: 560px;
+  width: 575px;
   padding: 0.8rem;
   display: flex;
   border-bottom: 2px solid lightgray;
