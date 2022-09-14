@@ -8,7 +8,7 @@ import axios from "axios"
 import TimerPage from '../elem/UseTimer';
 import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components'
-import SignupErrorModal from '../components/Signup/SignupErrorModal';
+import SignupErrorModal from '../components/signup/SignupErrorModal';
 
 const SignUp = () => {
   const baseURL = process.env.REACT_APP_API_KEY;

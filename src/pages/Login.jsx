@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import axios from "axios"
 import { setAccessToken, setRefreshToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi'
-import LoginErrorModal from '../components/Login/LoginErrorModal'
+// import LoginErrorModal from '../components/login/LoginErrorModal'
 
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -32,7 +32,7 @@ const Login = () => {
       //에러메시지 모달창
       if (response.data.errorResponse.status === 400) {
         myContext.btnClickOn();
-      }
+     }
     }
 
   }
@@ -42,51 +42,51 @@ const Login = () => {
   return (
     <>
       <LoginContainer>
-        {myContext.btnOpen ? <ErrorBox onClick={() => myContext.btnClickOff()}>
-          <LoginErrorModal />
-        </ErrorBox> : null}
-        <FormContainer >
-          <InputBox>
-            <form onSubmit={handleSubmit(onClickLogin)}>
-              <Title style={{ fontSize: '50Titlex', fontWeight: '700' }}>LOGIN</Title>
-              <InputBoxInner>
-                <TextAndInput onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput} >
-                  <SignupText>아이디</SignupText>
-                  <InputWithButton id='userId' name='id' placeholder='ID'
-                    {...register('userId', {
-                      required: true
-                    })} />
-                </TextAndInput>
-                <Errorsmessage>{errors.userId?.type === 'required' && '아이디를 입력하세요'} </Errorsmessage>
+      {myContext.btnOpen ? <ErrorBox onClick={()=>myContext.btnClickOff()}>
+        {/* <LoginErrorModal /> */}
+      </ErrorBox> : null}
+      <FormContainer >
+        <InputBox>
+          <form onSubmit={handleSubmit(onClickLogin)}>
+            <Title style={{ fontSize: '50Titlex', fontWeight: '700' }}>LOGIN</Title>
+            <InputBoxInner>
+              <TextAndInput onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput} >
+                <SignupText>아이디</SignupText>
+                <InputWithButton id='userId' name='id' placeholder='ID'
+                  {...register('userId', {
+                    required: true
+                  })} />
+              </TextAndInput>
+              <Errorsmessage>{errors.userId?.type === 'required' && '아이디를 입력하세요'} </Errorsmessage>
 
-                <TextAndInput2 style={{ marginTop: '20px' }} onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput}>
-                  <SignupText>비밀번호</SignupText>
-                  <InputWithButton id='password' name='password' type='password' placeholder='PASSWORD' autoComplete='on'
-                    {...register('password', {
-                      required: true,
-                      pattern: {
-                        value:
-                          /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$/,
-                        message:
-                          '비밀번호를 8~16자로 영문 대소문자, 숫자, 특수기호를 조합해서 사용하세요. ',
-                      }
-                    })} />
-                </TextAndInput2>
-                <Errorsmessage>
-                  {errors.password?.type === 'required' && '비밀번호를 입력해주세요'}
-                  {errors.password?.type === 'pattern' && errors.password.message}
-                </Errorsmessage>
-              </InputBoxInner>
+              <TextAndInput2 style={{ marginTop: '20px' }} onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput}>
+                <SignupText>비밀번호</SignupText>
+                <InputWithButton id='password' name='password' type='password' placeholder='PASSWORD' autoComplete='on'
+                  {...register('password', {
+                    required: true,
+                    pattern: {
+                      value:
+                        /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{2,50}).{8,16}$/,
+                      message:
+                        '비밀번호를 8~16자로 영문 대소문자, 숫자, 특수기호를 조합해서 사용하세요. ',
+                    }
+                  })} />
+              </TextAndInput2>
+              <Errorsmessage>
+                {errors.password?.type === 'required' && '비밀번호를 입력해주세요'}
+                {errors.password?.type === 'pattern' && errors.password.message}
+              </Errorsmessage>
+            </InputBoxInner>
 
-              {/* 로그인 버튼창 */}
-              <LoginButton type='submit' disabled={isSubmitting}>로그인</LoginButton>
-            </form>
+            {/* 로그인 버튼창 */}
+            <LoginButton type='submit' disabled={isSubmitting}>로그인</LoginButton>
+          </form>
 
-            <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton>
-            {/* <img src={kakaoButton} style={{width:'200px'}}></img> */}
-            <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
-          </InputBox>
-        </FormContainer>
+          <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton>
+          {/* <img src={kakaoButton} style={{width:'200px'}}></img> */}
+          <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
+        </InputBox>
+      </FormContainer>
       </LoginContainer>
 
     </>

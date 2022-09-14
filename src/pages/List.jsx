@@ -15,10 +15,6 @@ import TopScroll from '../elem/TopScroll';
 // };
 
 const List = () => {
-  return (
-    <div>List</div>
-  )
-
 
   const [proTap, setProTap] = useState(0);
 

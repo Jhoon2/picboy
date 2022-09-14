@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 // pages import
 import CompleteDetail from '../pages/CompleteDetail';
@@ -14,15 +14,12 @@ import UserProfile from '../pages/UserProfile';
 import CompList from '../pages/CompList';
 import { Context } from "./ContextApi";
 import Header from '../components/Header';
-// import { getCookieToken } from '../shared/Cookie'
 
 const Router = () => {
-  // const myToken = getCookieToken();
-
   return (
     <Context>
       <BrowserRouter>
-        <Header />
+          <Header /> 
         <Routes>
           {/* 종훈님 */}
           <Route path="/" element={<Main />} />
@@ -41,7 +38,6 @@ const Router = () => {
       </BrowserRouter>
     </Context>
   );
-
 };
 
 export default Router;
