@@ -13,11 +13,13 @@ import SignUp from '../pages/SignUp';
 import UserProfile from '../pages/UserProfile';
 import CompList from '../pages/CompList';
 import { Context } from "./ContextApi";
+import Header from '../components/Header';
 
 const Router = () => {
   return (
     <Context>
       <BrowserRouter>
+          <Header /> 
         <Routes>
           {/* 종훈님 */}
           <Route path="/" element={<Main />} />

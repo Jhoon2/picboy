@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
@@ -19,7 +20,8 @@ const Header = () => {
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
   const documentRef = useRef(document);
-
+  const location = useLocation();
+  
   const handleScroll = () => {
     const { pageYOffset } = window;
     const deltaY = pageYOffset - pageY;
@@ -36,6 +38,10 @@ const Header = () => {
       documentRef.current.removeEventListener('scroll', throttleScroll);
   }, [pageY]);
   const navigate = useNavigate();
+  
+  if (location.pathname === '/login') return null;
+  if (location.pathname === '/join') return null;
+
   return (
     <HeaderArea>
       <HeaderContainer className={hide && 'hide'}>
