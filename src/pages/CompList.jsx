@@ -5,79 +5,22 @@ import Grid from '../styles/Grid';
 import CompAll from '../components/CompAll';
 import CompTopic from '../components/CompTopic';
 import CompFree from '../components/CompFree';
-import ListCategories from '../elem/ListCategories';
+import CompleteBanner from '../elem/CompleteBanner';
 import TopScroll from '../elem/TopScroll';
 
 function ListComp({ proTap }) {
   return [<CompAll />, <CompTopic />, <CompFree />][proTap];
 }
 
-const throttle = function (callback, waitTime) {
-  let timerId = null;
-  return (e) => {
-    if (timerId) return;
-    timerId = setTimeout(() => {
-      callback.call(this, e);
-      timerId = null;
-    }, waitTime);
-  };
-};
-
 const CompList = () => {
   const [proTap, setProTap] = useState(0);
-
-  const [hide, setHide] = useState(false);
-  const [pageY, setPageY] = useState(0);
-  const documentRef = useRef(document);
-
-  const handleScroll = () => {
-    const { pageYOffset } = window;
-    const deltaY = pageYOffset - pageY;
-    const hide = pageYOffset !== 0 && deltaY >= 0;
-    setHide(hide);
-    setPageY(pageYOffset);
-  };
-
-  const throttleScroll = throttle(handleScroll, 50);
-
-  useEffect(() => {
-    documentRef.current.addEventListener('scroll', throttleScroll);
-    return () =>
-      documentRef.current.removeEventListener('scroll', throttleScroll);
-  }, [pageY]);
 
   return (
     <ListContainer>
       <Header />
-      <ImgBox className={hide && 'hide'}>
-        <span>COMPLETE</span>
-        <SelectBox>
-          <SelectButton
-            onClick={() => {
-              setProTap(0);
-            }}
-          >
-            <Underline>ALL</Underline>
-          </SelectButton>
-          <SelectButton
-            onClick={() => {
-              setProTap(1);
-            }}
-          >
-            <Underline>TOPIC</Underline>
-          </SelectButton>
-          <SelectButton
-            onClick={() => {
-              setProTap(2);
-            }}
-          >
-            <Underline>FREE</Underline>
-          </SelectButton>
-          <ListCategories />
-        </SelectBox>
-      </ImgBox>
+      <TopScroll />
+      <CompleteBanner setProTap={setProTap} />
       <ListBox>
-        <TopScroll />
         <Grid width="1200px" margin="0 auto">
           <ListComp proTap={proTap} />
         </Grid>

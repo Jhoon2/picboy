@@ -17,7 +17,6 @@ export default createGlobalStyle`
     font-family: 'SilkLight';
     src: local('SilkLight'),   
     url(${SilkLight}) format('woff');
-	
     font-style: normal;
   }
   @font-face {

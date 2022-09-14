@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Grid from '../styles/Grid';
 import ProgressAll from '../components/ProgressAll';
@@ -10,13 +8,7 @@ import ProgressTopic from '../components/ProgressTopic';
 import ProgressBanner from '../elem/ProgressBanner';
 import TopScroll from '../elem/TopScroll';
 
-// const onClick = () => {
-//   navigate(`/detail/${todo.id}`);
-// };
-
 const List = () => {
-  const navigate = useNavigate();
-
   const [proTap, setProTap] = useState(0);
 
   function ListComp({ proTap }) {
@@ -27,6 +19,7 @@ const List = () => {
       <Header />
       <TopScroll />
       <ProgressBanner setProTap={setProTap} />
+
       <ListBox>
         <Grid width="1200px" margin="0 auto">
           <ListComp proTap={proTap} />
