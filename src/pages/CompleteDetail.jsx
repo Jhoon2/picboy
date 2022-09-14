@@ -14,110 +14,113 @@ import LikeCount from '../images/like-count.png';
 
 const CompleteDetail = () => {
 
-    // axios 
+  // axios 
 
-    const [gif, setGif] = useState("");
+  const [gif, setGif] = useState("");
 
-    const gifApi = () => {
-        const url = "https://picboy.net/post/gif/detail/1";
-        axios
-            .get(url)
-            .then(function (response) {
-                setGif(response.data.data);
-            })
-            .catch(function (error) {
-                console.log("error");
-            });
-    }
+  //
+  const baseURL = process.env.REACT_APP_API_KEY;
 
-    useEffect(() => {
-        gifApi();
-    }, []);
+  const gifApi = () => {
+    const url = `${baseURL}/post/gif/detail/1`;
+    axios
+      .get(url)
+      .then(function (response) {
+        setGif(response.data.data);
+      })
+      .catch(function (error) {
+        console.log("error");
+      });
+  }
 
-
-    // carousel
-    var settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 6,
-        slidesToScroll: 6
-    };
-
-    const imgList = gif.frameImgList;
-    console.log(gif && gif.commentListResponseDtoList[5].createdAt);
+  useEffect(() => {
+    gifApi();
+  }, []);
 
 
-    // time moment
+  // carousel
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 6
+  };
 
-    return (
-        <>
-            <div>CompleteDetail Header</div>
-            <TitleBanner>
-                <ContentsTitle>COMPLETE</ContentsTitle>
-            </TitleBanner>
-            <WidthWrap>
-                <GifInfo>
-                    <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
-                    <Slider {...settings}>
-                        {
-                            imgList && imgList.map((list) => {
-                                return (
-                                    <>
-                                        <ImgListWrap>
-                                            <ImgGrey />
-                                            <ImgList src={list.imgUrl} alt="" />
-                                        </ImgListWrap>
-                                    </>
-                                );
-                            })
-                        }
-                    </Slider>
-                    <Community>
-                        <ContentsBtn>
-                            <BtnImg src={Download} alt="" />
-                            <BtnImg src={LikeBefore} alt="" />
-                        </ContentsBtn>
-                        <ContentsLine />
-                        <SuggestionInfo>
-                            <SuggestionInfoTitleWrap>
-                                <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
-                                <SuggestionInfoLikeCountWrap>
-                                    <img src={LikeCount} alt="" />
-                                    <SuggestionInfoLikeCount>
-                                        {gif.likeCount}
-                                    </SuggestionInfoLikeCount>
-                                </SuggestionInfoLikeCountWrap>
-                            </SuggestionInfoTitleWrap>
-                            <Suggestion>{gif.topic}</Suggestion>
-                        </SuggestionInfo>
-                        <CommentWrap>
-                            <CommentTitle>댓글<div>{ }</div></CommentTitle>
-                            <ContentsLine />
-                            <CommentInput placeholder="댓글을 남겨주세요." />
-                            <CommentPostBtn>게시하기</CommentPostBtn>
-                            <CommentList>
-                                {
-                                    gif && gif.commentListResponseDtoList.map((commentList) => {
-                                        return (
-                                            <Comment>
-                                                <CommentUserProfileImg src={commentList.profileImg} alt="" />
-                                                <div>
-                                                    <CommentUserNickName>{commentList.nickname}</CommentUserNickName>
-                                                    <UserComment>{commentList.comment}</UserComment>
-                                                </div>
-                                            </Comment>
-                                        );
-                                    })
-                                }
-                            </CommentList>
-                        </CommentWrap>
-                    </Community>
-                </GifInfo>
+  const imgList = gif.frameImgList;
+  console.log(gif && gif.commentListResponseDtoList[5].createdAt);
 
-            </WidthWrap>
-        </>
-    )
+
+  // time moment
+
+  return (
+    <>
+      <div>CompleteDetail Header</div>
+      <TitleBanner>
+        <ContentsTitle>COMPLETE</ContentsTitle>
+      </TitleBanner>
+      <WidthWrap>
+        <GifInfo>
+          <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
+          <Slider {...settings}>
+            {
+              imgList && imgList.map((list) => {
+                return (
+                  <>
+                    <ImgListWrap>
+                      <ImgGrey />
+                      <ImgList src={list.imgUrl} alt="" />
+                    </ImgListWrap>
+                  </>
+                );
+              })
+            }
+          </Slider>
+          <Community>
+            <ContentsBtn>
+              <BtnImg src={Download} alt="" />
+              <BtnImg src={LikeBefore} alt="" />
+            </ContentsBtn>
+            <ContentsLine />
+            <SuggestionInfo>
+              <SuggestionInfoTitleWrap>
+                <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
+                <SuggestionInfoLikeCountWrap>
+                  <img src={LikeCount} alt="" />
+                  <SuggestionInfoLikeCount>
+                    {gif.likeCount}
+                  </SuggestionInfoLikeCount>
+                </SuggestionInfoLikeCountWrap>
+              </SuggestionInfoTitleWrap>
+              <Suggestion>{gif.topic}</Suggestion>
+            </SuggestionInfo>
+            <CommentWrap>
+              <CommentTitle>댓글<div>{ }</div></CommentTitle>
+              <ContentsLine />
+              <CommentInput placeholder="댓글을 남겨주세요." />
+              <CommentPostBtn>게시하기</CommentPostBtn>
+              <CommentList>
+                {
+                  gif && gif.commentListResponseDtoList.map((commentList) => {
+                    return (
+                      <Comment>
+                        <CommentUserProfileImg src={commentList.profileImg} alt="" />
+                        <div>
+                          <CommentUserNickName>{commentList.nickname}</CommentUserNickName>
+                          <UserComment>{commentList.comment}</UserComment>
+                        </div>
+                      </Comment>
+                    );
+                  })
+                }
+              </CommentList>
+            </CommentWrap>
+          </Community>
+        </GifInfo>
+
+      </WidthWrap>
+    </>
+  )
 }
 
 const TitleBanner = styled.div`
