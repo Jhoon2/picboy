@@ -16,9 +16,6 @@ const ProgressAll = () => {
       const { data } = await axios.get(
         `${baseURL}/post/gif/images/0?size=6&page=${page}`
       );
-      if (!data) {
-        return;
-      }
       setRandomData(randomData.concat(data.data));
       console.log(data.data);
     } catch (error) {
@@ -38,10 +35,16 @@ const ProgressAll = () => {
       }
     });
   };
+  console.log(page);
 
   useEffect(() => {
     getRandomData();
   }, [page]);
+
+  // const options = {
+  //   rootMargin: '30px', // 관찰하는 뷰포트의 마진 지정
+  //   threshold: 1.0, // 관찰요소와 얼만큼 겹쳤을 때 콜백을 수행하도록 지정하는 요소
+  // };
 
   useEffect(() => {
     //observer 인스턴스를 생성한 후 구독
@@ -76,13 +79,17 @@ const ProgressAll = () => {
                 <BestImg />
               </div>
               <BestDesc>
-                <Profile />
-                <Nickname>{item?.nickname}</Nickname>
+                <Profile></Profile>
+                <Nickname>
+                  {item?.nickname} 외 {item?.participantCount} 명
+                </Nickname>
               </BestDesc>
             </BestBox>
           );
         })}
-        <div ref={lastIntersectingData}>.</div>
+      </>
+      <>
+        <Ref ref={lastIntersectingData}>.</Ref>
       </>
     </ListBox>
   );
@@ -92,6 +99,12 @@ export default ProgressAll;
 
 const Width = styled.div`
   width: 350px;
+`;
+
+const Ref = styled.div`
+  width: 100%;
+  height: 50px;
+  background: red;
 `;
 
 const ListBox = styled.div`

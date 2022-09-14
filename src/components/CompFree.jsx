@@ -1,38 +1,86 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import user from '../images/user.png';
 import bubble1 from '../images/bubble1.png';
 const CompFree = () => {
-    return (
-        <BestBox>
-            <div style={{ position: 'relative' }}>
-                <OverlayWrap>
-                    <Overlay>
-                        <DescBox>
-                            <Download />
-                            <Like />
-                        </DescBox>
-                    </Overlay>
+  const navigate = useNavigate();
+  const [randomData, setRandomData] = useState([]);
+  const [page, setPage] = useState(0);
+  const lastIntersectingData = useRef(null);
+  const baseURL = process.env.REACT_APP_API_KEY;
+
+  const getRandomData = async () => {
+    try {
+      const { data } = await axios.get(
+        `${baseURL}/post/gif/topic-no/1?size=6&page=${page}`
+      );
+      if (!data) {
+        return;
+      }
+      setRandomData(randomData.concat(data.data));
+      console.log(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getRandomData();
+  }, [page]);
+
+  return (
+    <ListBox>
+      <>
+        {randomData.map((item, index) => {
+          return (
+            <BestBox
+              key={item.id}
+              onClick={() => {
+                navigate(`/completedetail/${item.id}`);
+              }}
+            >
+              <div style={{ position: 'relative' }}>
+                <OverlayWrap productImg={item?.imgUrl}>
+                  <Overlay>
+                    <DescBox>
+                      <Download />
+                      <Like />
+                    </DescBox>
+                  </Overlay>
                 </OverlayWrap>
                 <BestImg />
-            </div>
-            <BestDesc>
+              </div>
+              <BestDesc>
                 <Profile />
-                <Nickname>일이삼사오육 외 8명</Nickname>
+                <Nickname>
+                  {item?.nickname} 외 {item?.participantCount}
+                </Nickname>
                 <CommentBox>
-                    <CommentImg />
-                    <DescText>520</DescText>
+                  <CommentImg />
+                  <DescText>{item?.commentCount}</DescText>
                 </CommentBox>
                 <LikeBox>
-                    <LikesImg />
-                    <DescText>220</DescText>
+                  <LikesImg />
+                  <DescText>{item?.likeCount}</DescText>
                 </LikeBox>
-            </BestDesc>
-        </BestBox>
-    );
+              </BestDesc>
+            </BestBox>
+          );
+        })}
+        <div ref={lastIntersectingData}>.</div>
+      </>
+    </ListBox>
+  );
 };
 
 export default CompFree;
+
+const ListBox = styled.div`
+  max-width: 1200px;
+  margin: auto;
+`;
 
 const Width = styled.div`
   width: 350px;
@@ -117,7 +165,8 @@ const OverlayWrap = styled.div`
   ${OverlaySize}
   overflow: hidden;
   position: absolute;
-  background: #e6e6e6;
+  background: url(${(props) => props.productImg});
+  ${({ theme }) => theme.backgroundSet('contain')};
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
   transition: 0.2s ease-in;
   &:hover {
