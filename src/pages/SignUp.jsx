@@ -170,7 +170,7 @@ const SignUp = () => {
       const response = await axios.post(`${baseURL}/user/signup`, info);
       if (response.status === 200) {
         reset();
-        navigate(-1);
+        navigate('/login');
       }
     } catch (error) {
       console.log(error);
