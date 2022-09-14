@@ -5,10 +5,10 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup'
 import axios from "axios"
-import TimerPage from '../elem/UseTimer';
 import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components'
-import SignupErrorModal from '../components/Signup/SignupErrorModal';
+import SignupErrorModal from '../components/signup/SignupErrorModal';
+import UseTimer from '../elem/UseTimer';
 
 const SignUp = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
@@ -127,15 +127,18 @@ const SignUp = () => {
 
     //핸드폰 코드 전송 버튼
     const [phoneValid, setPhoneValid] = useState(false)
-
+        //핸드폰 유효시간
+    const [minutes, setMinutes] = useState(0);
+    const [seconds, setSeconds] = useState(5);
     const phoneCheck = () => {
+        console.log('전송시작')
         setPhoneValid(false)
-
-        console.log('코드전송시작!')
         myContext.setTimerMessage(true)
         setTimeout(() => {
             myContext.setTimerMessage(false)
             setPhoneValid(true)
+            setMinutes(0)
+            setSeconds(5)
         },6000)
     }
 
@@ -230,7 +233,10 @@ const SignUp = () => {
                                             id='phone_valid_number' name='phone_valid_number' placeholder='인증번호를 입력해주세요'
                                             {...register('phone_valid_number')} />
                                     </div>
-                                    <div style={{color: 'red'}}>{myContext.timerMessage ? <TimerPage /> : null}</div>
+                                    <div style={{ color: 'red' }}>
+                                        {myContext.timerMessage ?
+                                            <UseTimer minutes={minutes} setMinutes={setMinutes} seconds={seconds} setSeconds={setSeconds} />
+                                            : null}</div>
                                 </PhoneTextAndInput>
                                 <CheckButton >인증확인</CheckButton>
                             </InputFlex>

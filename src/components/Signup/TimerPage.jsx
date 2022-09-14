@@ -1,18 +1,17 @@
 import React,{useState} from 'react'
-import UseTimer from '../../hooks/UseTimer';
+import UseTimer from '../../elem/UseTimer';
 // import { useMyContext } from '../../shared/ContextApi';
 
-const TimerPage = () => {
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(5);
+const TimerPage = ({ minutes, setMinutes, seconds, setSeconds }) => {
+  // const [minutes, setMinutes] = useState(0);
+  // const [seconds, setSeconds] = useState(5);
+  console.log('minutes는??',minutes)
 
-
-  const timerStart = UseTimer({ minutes, setMinutes, seconds, setSeconds })
-  
+  // const timerStart = UseTimer({ minutes, setMinutes, seconds, setSeconds })
   return (
     <>
       <div>
-        {timerStart}
+        { UseTimer({ minutes, setMinutes, seconds, setSeconds })}
       </div>
     </>
   )

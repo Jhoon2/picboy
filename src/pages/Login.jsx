@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import axios from "axios"
 import { setAccessToken, setRefreshToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi'
-import LoginErrorModal from '../components/Login/LoginErrorModal'
+import LoginErrorModal from '../components/login/LoginErrorModal'
 
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
