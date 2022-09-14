@@ -23,10 +23,24 @@ const CompleteDetail = () => {
 
     //redux
     const [commentInput, setCommentInput] = useState()
-    
     const { comments } = useSelector((state) => state.comments)
     const dispatch = useDispatch();
+
+    //댓글등록
+    const commentChange = (e) => {
+        if(e.target.value === '') return
+        setCommentInput(e.target.value)
+    }
   
+    const commentApply = ()=>{
+        const payload = {
+            id: params.Id,
+            content: commentInput
+        }
+        dispatch(__postComment(payload))
+        setCommentInput('')
+    }
+
     useEffect(()=>{
     dispatch(__getComment(params.Id))
     },[dispatch])
@@ -107,14 +121,8 @@ const CompleteDetail = () => {
                         <CommentWrap>
                             <CommentTitle>댓글<div>{ }</div></CommentTitle>
                             <ContentsLine />
-                            <CommentInput onChange={(e)=> setCommentInput(e.target.value)} placeholder="댓글을 남겨주세요." />
-                            <CommentPostBtn onClick={()=>{
-                                const payload = {
-                                    id: params.Id,
-                                    content: commentInput
-                                }
-                            dispatch(__postComment(payload))
-                            }}>게시하기</CommentPostBtn>
+                            <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
+                            <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
                             <CommentList>
                                 {
                                     comments && comments.map((commentList,idx) => 
@@ -129,6 +137,7 @@ const CompleteDetail = () => {
             </WidthWrap>
         </>
     )
+
 }
 
 const TitleBanner = styled.div`

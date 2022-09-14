@@ -27,7 +27,6 @@ export const __postComment = createAsyncThunk(
                 'refresh-token': refreshToken
                 }
             })
-            console.log(data.data.data)
             return thunkAPI.fulfillWithValue(data.data.data)
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
@@ -56,7 +55,6 @@ export const __editComment = createAsyncThunk(
     "comment/editComment",
     async (payload, thunkAPI) => {
         try {
-            console.log(payload)
             const response = await axios.put(`${baseURL}/comment/${payload.commentId}`, { content: payload.content },
                 {
                     headers: {
@@ -64,7 +62,6 @@ export const __editComment = createAsyncThunk(
                         'refresh-token': refreshToken
                     }
                 })
-            console.log(response)
             return thunkAPI.fulfillWithValue(payload)
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
