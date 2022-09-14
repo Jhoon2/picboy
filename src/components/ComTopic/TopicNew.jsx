@@ -2,26 +2,34 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import user from '../images/user.png';
+import user from '../../images/user.png';
+import bubble1 from '../../images/bubble1.png';
 
-const ProgressAll = () => {
+const TopicNew = () => {
   const navigate = useNavigate();
   const [randomData, setRandomData] = useState([]);
   const [page, setPage] = useState(0);
   const lastIntersectingData = useRef(null);
   const baseURL = process.env.REACT_APP_API_KEY;
 
-  const getRandomData = async () => {
+  const TopicNewData = async () => {
     try {
       const { data } = await axios.get(
-        `${baseURL}/post/gif/images/0?size=6&page=${page}`
+        `${baseURL}/post/gif/topic-ok/1?size=6&page=${page}`
       );
+      if (!data) {
+        return;
+      }
       setRandomData(randomData.concat(data.data));
       console.log(data.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    TopicNewData();
+  }, [page]);
 
   //observe 콜백 함수
   const onIntersect = (entries, observer) => {
@@ -35,16 +43,6 @@ const ProgressAll = () => {
       }
     });
   };
-  console.log(page);
-
-  useEffect(() => {
-    getRandomData();
-  }, [page]);
-
-  // const options = {
-  //   rootMargin: '30px', // 관찰하는 뷰포트의 마진 지정
-  //   threshold: 1.0, // 관찰요소와 얼만큼 겹쳤을 때 콜백을 수행하도록 지정하는 요소
-  // };
 
   useEffect(() => {
     //observer 인스턴스를 생성한 후 구독
@@ -65,7 +63,7 @@ const ProgressAll = () => {
             <BestBox
               key={item.id}
               onClick={() => {
-                navigate(`/progressdetail/${item.id}`);
+                navigate(`/completedetail/${item.id}`);
               }}
             >
               <div style={{ position: 'relative' }}>
@@ -73,29 +71,37 @@ const ProgressAll = () => {
                   <Overlay>
                     <DescBox>
                       <Keyword>{item?.topic}</Keyword>
+                      <Download />
+                      <Like />
                     </DescBox>
                   </Overlay>
                 </OverlayWrap>
                 <BestImg />
               </div>
               <BestDesc>
-                <Profile></Profile>
+                <Profile />
                 <Nickname>
                   {item?.nickname} 외 {item?.participantCount} 명
                 </Nickname>
+                <CommentBox>
+                  <CommentImg />
+                  <DescText>{item?.commentCount}</DescText>
+                </CommentBox>
+                <LikeBox>
+                  <LikesImg />
+                  <DescText>{item?.likeCount}</DescText>
+                </LikeBox>
               </BestDesc>
             </BestBox>
           );
         })}
-      </>
-      <>
         <div ref={lastIntersectingData}>.</div>
       </>
     </ListBox>
   );
 };
 
-export default ProgressAll;
+export default TopicNew;
 
 const Width = styled.div`
   width: 350px;
@@ -115,13 +121,14 @@ const BestBox = styled(Width)`
 
 const BestDesc = styled(Width)`
   height: 50px;
-  margin-top: 20px;
+  margin-top: 15px;
   ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
 `;
 
 const DescBox = styled(Width)`
   height: 110px;
   ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
+  position: relative;
 `;
 
 const Button = styled.button`
@@ -149,10 +156,24 @@ const Keyword = styled(Span)`
   color: white;
 `;
 
+const Download = styled.div`
+  width: 50px;
+  height: 50px;
+  background: white;
+  border-radius: 50px;
+  position: absolute;
+  right: 70px;
+`;
+
+const Like = styled(Download)`
+  background: white;
+  right: 10px;
+`;
+
 const Nickname = styled(Span)`
   font-family: 'NotoLight';
-  font-size: 16px;
-  margin-right: 100px;
+  font-size: 13px;
+  margin-right: 20px;
   color: #2e3248;
   display: inline-block;
   padding: 15px 0;
@@ -194,4 +215,31 @@ const BestImg = styled.div`
   width: 350px;
   height: 300px;
   display: block;
+`;
+
+const CommentBox = styled.div`
+  width: 70px;
+  padding-left: 20px;
+  ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
+`;
+
+const CommentImg = styled.div`
+  width: 20px;
+  height: 20px;
+  background: url(${bubble1});
+  ${({ theme }) => theme.backgroundSet('contain')}
+`;
+
+const LikeBox = styled(CommentBox)`
+  margin-left: 10px;
+`;
+
+const LikesImg = styled(CommentImg)``;
+
+const DescText = styled.span`
+  margin-left: 5px;
+  font-family: 'NotoLight';
+  font-size: 15px;
+  line-height: 20px;
+  color: #a3a3a3;
 `;

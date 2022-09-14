@@ -1,17 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import {
-  getCompleteNewSlice,
-  progressListTopicSlice,
-  progressListFreeSlice,
-} from '../modules/complete';
 import { commentSlice } from '../modules/comments';
+import { bestSlice } from '../modules/Best';
 
 const store = configureStore({
   reducer: {
-    completeNew: getCompleteNewSlice.reducer,
-    progressListTopic: progressListTopicSlice.reducer,
-    progressListFree: progressListFreeSlice.reducer,
     comments: commentSlice.reducer,
+    bests: bestSlice.reducer,
   },
 });
 

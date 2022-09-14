@@ -32,6 +32,7 @@ const CompleteBanner = (props) => {
     return () =>
       documentRef.current.removeEventListener('scroll', throttleScroll);
   }, [pageY]);
+
   return (
     <ImgBox className={hide && 'hide'}>
       <span>COMPLETE</span>
