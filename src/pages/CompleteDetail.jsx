@@ -12,14 +12,31 @@ import Download from '../images/download-btn.png';
 import LikeBefore from '../images/like-before.png';
 import LikeCount from '../images/like-count.png';
 
-const CompleteDetail = () => {
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { __getComment, __postComment } from '../redux/modules/comments';
+import CommentBox from '../components/completeDetail/CommentBox';
 
+const CompleteDetail = () => {
+    const baseURL = process.env.REACT_APP_API_KEY;
+    const params = useParams();
+
+    //redux
+    const [commentInput, setCommentInput] = useState()
+    
+    const { comments } = useSelector((state) => state.comments)
+    const dispatch = useDispatch();
+  
+    useEffect(()=>{
+    dispatch(__getComment(params.Id))
+    },[dispatch])
     // axios 
 
     const [gif, setGif] = useState("");
 
     const gifApi = () => {
-        const url = "https://picboy.net/post/gif/detail/1";
+        //추후에 바꾸기 `${baseURL}/post/gif/detail/${params.Id}`
+        const url = `${baseURL}/post/gif/detail/${params.Id}`;
         axios
             .get(url)
             .then(function (response) {
@@ -45,8 +62,6 @@ const CompleteDetail = () => {
     };
 
     const imgList = gif.frameImgList;
-    console.log(gif && gif.commentListResponseDtoList[5].createdAt);
-
 
     // time moment
 
@@ -62,14 +77,12 @@ const CompleteDetail = () => {
                     <Slider {...settings}>
                         {
                             imgList && imgList.map((list) => {
-                                return (
                                     <>
                                         <ImgListWrap>
                                             <ImgGrey />
-                                            <ImgList src={list.imgUrl} alt="" />
+                                            <ImgList key={list.id} src={list.imgUrl} alt="" />
                                         </ImgListWrap>
                                     </>
-                                );
                             })
                         }
                     </Slider>
@@ -94,21 +107,19 @@ const CompleteDetail = () => {
                         <CommentWrap>
                             <CommentTitle>댓글<div>{ }</div></CommentTitle>
                             <ContentsLine />
-                            <CommentInput placeholder="댓글을 남겨주세요." />
-                            <CommentPostBtn>게시하기</CommentPostBtn>
+                            <CommentInput onChange={(e)=> setCommentInput(e.target.value)} placeholder="댓글을 남겨주세요." />
+                            <CommentPostBtn onClick={()=>{
+                                const payload = {
+                                    id: params.Id,
+                                    content: commentInput
+                                }
+                            dispatch(__postComment(payload))
+                            }}>게시하기</CommentPostBtn>
                             <CommentList>
                                 {
-                                    gif && gif.commentListResponseDtoList.map((commentList) => {
-                                        return (
-                                            <Comment>
-                                                <CommentUserProfileImg src={commentList.profileImg} alt="" />
-                                                <div>
-                                                    <CommentUserNickName>{commentList.nickname}</CommentUserNickName>
-                                                    <UserComment>{commentList.comment}</UserComment>
-                                                </div>
-                                            </Comment>
-                                        );
-                                    })
+                                    comments && comments.map((commentList,idx) => 
+                                        <CommentBox commentList={commentList} key={idx} />
+                                    )
                                 }
                             </CommentList>
                         </CommentWrap>
@@ -264,30 +275,5 @@ const CommentList = styled.div`
     border: 1px solid #A3A3A3;
 `;
 
-const Comment = styled.div`
-    display: flex;
-    padding: 36px;
-    &:hover {
-        background-color: #f8f8f8;
-    }
-`;
 
-const CommentUserProfileImg = styled.img`
-    width: 73px;
-    height: 73px;
-    border-radius: 50%;
-    border: 1px solid #ccc;
-    margin-right: 24px;
-`;
-
-const CommentUserNickName = styled.div`
-    margin: 8px 0 24px 0;
-    font-size: 20px;
-    font-weight: 700;
-`;
-
-const UserComment = styled.div`
-    font-size: 20px;
-    font-weight: 400;
-`;
 export default CompleteDetail

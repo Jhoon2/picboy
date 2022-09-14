@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+const baseURL = process.env.REACT_APP_API_KEY;
 
 export const __getCompleteNew = createAsyncThunk(
   'completeNew',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`https://picboy.net/post/gif/images/0`);
+      const data = await axios.get(`${baseURL}/post/gif/images/0`);
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -17,7 +18,7 @@ export const __getCompleteLike = createAsyncThunk(
   'completeLike',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`https://picboy.net/post/gif/images/1`);
+      const data = await axios.get(`${baseURL}/post/gif/images/1`);
       console.log(data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -30,7 +31,7 @@ export const __getProgressListFree = createAsyncThunk(
   'progressListFree',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`https://picboy.net/post/gif/images/2`);
+      const data = await axios.get(`${baseURL}/post/gif/images/2`);
       console.log(data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {

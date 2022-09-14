@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import axios from 'axios';
 import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components';
-import SignupErrorModal from '../components/Signup/SignupErrorModal';
+import SignupErrorModal from '../components/signup/SignupErrorModal';
 import UseTimer from '../elem/UseTimer';
 
 const SignUp = () => {
@@ -170,7 +170,7 @@ const SignUp = () => {
       const response = await axios.post(`${baseURL}/user/signup`, info);
       if (response.status === 200) {
         reset();
-        navigate(-1);
+        navigate('/login');
       }
     } catch (error) {
       console.log(error);
