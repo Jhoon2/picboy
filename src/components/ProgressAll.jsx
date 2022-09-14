@@ -1,13 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import 'react-intersection-observer';
 import axios from 'axios';
 import user from '../images/user.png';
 
 const ProgressAll = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [randomData, setRandomData] = useState([]);
   const [page, setPage] = useState(0);
@@ -63,7 +60,7 @@ const ProgressAll = () => {
         {randomData.map((item, index) => {
           return (
             <BestBox
-              key={item}
+              key={item.id}
               onClick={() => {
                 navigate(`/progressdetail/${item.id}`);
               }}
@@ -92,12 +89,6 @@ const ProgressAll = () => {
 };
 
 export default ProgressAll;
-
-const PageButton = styled.button`
-  width: 200px;
-  height: 50px;
-  background: red;
-`;
 
 const Width = styled.div`
   width: 350px;

@@ -14,15 +14,12 @@ import UserProfile from '../pages/UserProfile';
 import CompList from '../pages/CompList';
 import { Context } from "./ContextApi";
 import Header from '../components/Header';
-// import { getCookieToken } from '../shared/Cookie'
 
 const Router = () => {
-  // const myToken = getCookieToken();
-  
   return (
     <Context>
       <BrowserRouter>
-        <Header />
+          <Header /> 
         <Routes>
           {/* 종훈님 */}
           <Route path="/" element={<Main />} />

@@ -15,7 +15,6 @@ import TopScroll from '../elem/TopScroll';
 // };
 
 const List = () => {
-  const navigate = useNavigate();
 
   const [proTap, setProTap] = useState(0);
 
