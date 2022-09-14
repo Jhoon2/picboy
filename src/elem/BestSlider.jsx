@@ -6,52 +6,52 @@ import 'slick-carousel/slick/slick-theme.css';
 import nikebanner from '../images/nikebanner.jpg';
 import user from '../images/user.png';
 const BestSlider = () => {
-  const settings = {
-    className: 'center',
-    centerMode: true,
-    infinite: true,
-    speed: 3000,
-    slidesToShow: 3,
-    centerPadding: '40px',
-    autoplay: true,
-    autoplaySpeed: 3000,
-    addaptiveHeight: true,
-    cssEase: 'linear',
-    responsive: [
-      // 반응형 웹 구현 옵션
-      {
-        breakpoint: 1200, //화면 사이즈 960px
-        settings: {
-          //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
-          slidesToShow: 3,
-        },
-      },
-    ],
-  };
-  return (
-    <>
-      <Container>
-        <style>{cssstyle}</style>
-        <Slider {...settings}>
-          <Box>
-            <Bannerimage />
-          </Box>
-          <Box>
-            <Bannerimage />
-          </Box>
-          <Box>
-            <Bannerimage />
-          </Box>
-          <Box>
-            <Bannerimage />
-          </Box>
-          <Box>
-            <Bannerimage />
-          </Box>
-        </Slider>
-      </Container>
-    </>
-  );
+    const settings = {
+        className: 'center',
+        centerMode: true,
+        infinite: true,
+        speed: 3000,
+        slidesToShow: 3,
+        centerPadding: '40px',
+        autoplay: true,
+        autoplaySpeed: 3000,
+        addaptiveHeight: true,
+        cssEase: 'linear',
+        responsive: [
+            // 반응형 웹 구현 옵션
+            {
+                breakpoint: 1200, //화면 사이즈 960px
+                settings: {
+                    //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+                    slidesToShow: 3,
+                },
+            },
+        ],
+    };
+    return (
+        <>
+            <Container>
+                <style>{cssstyle}</style>
+                <Slider {...settings}>
+                    <Box>
+                        <Bannerimage />
+                    </Box>
+                    <Box>
+                        <Bannerimage />
+                    </Box>
+                    <Box>
+                        <Bannerimage />
+                    </Box>
+                    <Box>
+                        <Bannerimage />
+                    </Box>
+                    <Box>
+                        <Bannerimage />
+                    </Box>
+                </Slider>
+            </Container>
+        </>
+    );
 };
 
 export default BestSlider;

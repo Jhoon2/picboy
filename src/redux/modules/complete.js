@@ -1,12 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-//   {
-//     headers: {
-//       Authorization: cookie,
-//     },
-//   }
-
 export const __getCompleteNew = createAsyncThunk(
   'completeNew',
   async (payload, thunkAPI) => {
@@ -23,14 +17,7 @@ export const __getCompleteLike = createAsyncThunk(
   'completeLike',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(
-        `https://picboy.net/post/gif/images/1`
-        //   {
-        //     headers: {
-        //       Authorization: cookie,
-        //     },
-        //   }
-      );
+      const data = await axios.get(`https://picboy.net/post/gif/images/1`);
       console.log(data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -43,14 +30,7 @@ export const __getProgressListFree = createAsyncThunk(
   'progressListFree',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(
-        `https://picboy.net/post/gif/images/2`
-        //   {
-        //     headers: {
-        //       Authorization: cookie,
-        //     },
-        //   }
-      );
+      const data = await axios.get(`https://picboy.net/post/gif/images/2`);
       console.log(data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
