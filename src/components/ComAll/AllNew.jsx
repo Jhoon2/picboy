@@ -13,7 +13,7 @@ const All = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
 
   //최신순
-  const getNewData = async () => {
+  const AllNewData = async () => {
     try {
       const { data } = await axios.get(
         `${baseURL}/post/gif/1?size=6&page=${page}`
@@ -22,7 +22,6 @@ const All = () => {
         return;
       }
       setRandomData(randomData.concat(data.data));
-      console.log(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -42,7 +41,7 @@ const All = () => {
   };
 
   useEffect(() => {
-    getNewData();
+    AllNewData();
   }, [page]);
 
   useEffect(() => {

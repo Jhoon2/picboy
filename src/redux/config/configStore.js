@@ -1,15 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import {
-  CompleteNewSlice,
-  CompleteLikeSlice,
-  CompleteCommSlice,
-} from '../modules/complete';
+import { commentSlice } from '../modules/comments';
+import { bestSlice } from '../modules/Best';
 
 const store = configureStore({
   reducer: {
-    completeNew: CompleteNewSlice.reducer,
-    completeLike: CompleteLikeSlice.reducer,
-    completeComm: CompleteCommSlice.reducer,
+    comments: commentSlice.reducer,
+    bests: bestSlice.reducer,
   },
 });
 

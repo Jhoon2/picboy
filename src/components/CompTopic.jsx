@@ -7,14 +7,14 @@ import ListCategories from '../elem/ListCategories';
 const CompTopic = () => {
   const [tap, setTap] = useState(0);
 
-  function Like({ tap }) {
+  function Topic({ tap }) {
     return [<TopicNew />, <TopicLike />, <TopicComm />][tap];
   }
 
   return (
     <>
       <ListCategories setTap={setTap} />
-      <Like tap={tap} />
+      <Topic tap={tap} />
     </>
   );
 };

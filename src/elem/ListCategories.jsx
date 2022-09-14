@@ -7,7 +7,7 @@ const ListCategories = (props) => {
   const [select, setSelect] = useState(false);
 
   return (
-    <>
+    <SelectContainer>
       <SelectBox>
         <Select>
           <div onClick={() => setSelect(!select)}>
@@ -60,11 +60,13 @@ const ListCategories = (props) => {
           </SelectList>
         )}
       </SelectListBox>
-    </>
+    </SelectContainer>
   );
 };
 
 export default ListCategories;
+
+const SelectContainer = styled.div``;
 
 const HR = styled.hr`
   width: 110px;
@@ -75,7 +77,7 @@ const HR = styled.hr`
 
 const SelectBox = styled.div`
   position: relative;
-  left: 1;
+  left: 30px;
 `;
 
 const Select = styled.button`
@@ -119,8 +121,8 @@ const SelectImg = styled.img`
 const SelectListBox = styled.div`
   width: 120px;
   position: relative;
-  top: 30px;
-  left: 1px;
+  top: 20px;
+  left: 30px;
   z-index: 1;
 `;
 
