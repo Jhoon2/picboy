@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import SignupErrorModal from '../components/signup/SignupErrorModal';
 import UseTimer from '../elem/UseTimer';
 
+
 const SignUp = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
