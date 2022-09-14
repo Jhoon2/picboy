@@ -1,12 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// const userToken = ('access-token')
+
+// const refreshToken = ('refresh-token')
+
+const baseURL = process.env.REACT_APP_API_KEY;
+
 export const __getCompleteNew = createAsyncThunk(
   'completeNew',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`https://picboy.net/post/gif/images/0`);
-      return thunkAPI.fulfillWithValue(data.data.data);
+      const data = await axios.get(`${baseURL}/post/gif/1?size=6&page={}`);
+      return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -17,7 +23,7 @@ export const __getCompleteLike = createAsyncThunk(
   'completeLike',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`https://picboy.net/post/gif/images/1`);
+      const data = await axios.get(`${baseURL}/post/gif/2`);
       console.log(data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -26,11 +32,11 @@ export const __getCompleteLike = createAsyncThunk(
   }
 );
 
-export const __getProgressListFree = createAsyncThunk(
-  'progressListFree',
+export const __getCompleteComm = createAsyncThunk(
+  'completeComm',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`https://picboy.net/post/gif/images/2`);
+      const data = await axios.get(`${baseURL}/post/gif/3`);
       console.log(data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -39,10 +45,10 @@ export const __getProgressListFree = createAsyncThunk(
   }
 );
 
-export const getCompleteNewSlice = createSlice({
+export const CompleteNewSlice = createSlice({
   name: 'completeNew',
   initialState: {
-    progressListAll: [],
+    completeNew: [],
     isLoading: false,
     error: null,
   },
@@ -53,7 +59,7 @@ export const getCompleteNewSlice = createSlice({
     },
     [__getCompleteNew.fulfilled]: (state, action) => {
       state.isLoading = false;
-      state.progressListAll = action.payload;
+      state.completeNew = action.payload;
     },
     [__getCompleteNew.rejected]: (state, action) => {
       state.isLoading = false;
@@ -62,10 +68,10 @@ export const getCompleteNewSlice = createSlice({
   },
 });
 
-export const progressListTopicSlice = createSlice({
+export const CompleteLikeSlice = createSlice({
   name: 'completeLike',
   initialState: {
-    progressListTopic: [],
+    completeLike: [],
     isLoading: false,
     error: null,
   },
@@ -85,24 +91,24 @@ export const progressListTopicSlice = createSlice({
   },
 });
 
-export const progressListFreeSlice = createSlice({
-  name: 'progressListFree',
+export const CompleteCommSlice = createSlice({
+  name: 'completeComm',
   initialState: {
-    progressListFree: [],
+    completeComm: [],
     isLoading: false,
     error: null,
   },
   reducers: {},
   extraReducers: {
-    [__getProgressListFree.pending]: (state, action) => {
+    [__getCompleteComm.pending]: (state, action) => {
       state.isLoading = true;
     },
-    [__getProgressListFree.fulfilled]: (state, action) => {
+    [__getCompleteComm.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.isFinish = true;
       state.progressListFree = action.payload;
     },
-    [__getProgressListFree.rejected]: (state, action) => {
+    [__getCompleteComm.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
