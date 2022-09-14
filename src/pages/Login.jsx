@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import axios from "axios"
 import { setAccessToken, setRefreshToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi'
-import LoginErrorModal from '../components/Login/LoginErrorModal'
+// import LoginErrorModal from '../components/login/LoginErrorModal'
 
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -43,12 +43,12 @@ const Login = () => {
     <>
       <LoginContainer>
       {myContext.btnOpen ? <ErrorBox onClick={()=>myContext.btnClickOff()}>
-        <LoginErrorModal />
+        {/* <LoginErrorModal /> */}
       </ErrorBox> : null}
       <FormContainer >
         <InputBox>
           <form onSubmit={handleSubmit(onClickLogin)}>
-            <p style={{ fontSize: '50px', fontWeight: '700' }}>로그인</p>
+            <Title style={{ fontSize: '50Titlex', fontWeight: '700' }}>LOGIN</Title>
             <InputBoxInner>
               <TextAndInput onFocus={(e) => setFocusedInput(e.target.name)} onBlur={() => setFocusedInput('')} focusedInput={focusedInput} >
                 <SignupText>아이디</SignupText>
@@ -111,7 +111,7 @@ const LoginContainer = styled.div`
 const FormContainer = styled.div`
     max-width: 1200px;
     height: 50vh;
-    margin-top: 20%;
+    margin-top: 236px;
 
 `
 const InputBox = styled.div`
@@ -126,6 +126,14 @@ const InputBox = styled.div`
 const InputBoxInner = styled.div`
 
 `
+const Title = styled.div`
+    margin-bottom: 82px;
+    text-align: center;
+    font-family: 'SilkBold';
+    font-size: 80px;
+    font-weight: 700;
+`
+
 const TextAndInput = styled.div`
   width: 585px;
   margin-left: 160px;
@@ -138,7 +146,7 @@ const TextAndInput2 = styled.div`
   margin-left: 160px;
   padding: 0.7rem;
   display: flex;
-  border-bottom: 1.5px solid ${(props) => ('password' === props.focusedInput) ? 'lightgray' : 'black'};
+  border-bottom: 2px solid ${(props) => ('password' === props.focusedInput) ? 'lightgray' : 'black'};
   `
 
 const SignupText = styled.div`
@@ -167,22 +175,27 @@ const SignMove = styled.p`
 
 const LoginButton = styled.button`
   width: 585px;
-  height: 52px;
+  height: 90px;
   margin-top: 80px;
   color: white;
+  font-family: 'NotoLight';
+  font-weight: 600;
+  font-size: 20px;
   cursor: pointer;
   background-color: black;
 `
 
 const KakaoButton = styled.button`
   width: 585px;
-  height: 52px;
+  height: 90px;
   margin-top: 32px;
   margin-left: 155px;
   border: none;
   border-radius: 5px;
   color:#000000 85%;
+  font-family: 'NotoLight';
   font-weight: 600;
+  font-size: 20px;
   cursor: pointer;
   background-color: #FEE500;
 `

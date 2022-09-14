@@ -1,40 +1,112 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import user from '../images/user.png';
 import bubble1 from '../images/bubble1.png';
 
 const CompTopic = () => {
+  const navigate = useNavigate();
+  const [randomData, setRandomData] = useState([]);
+  const [page, setPage] = useState(0);
+  const lastIntersectingData = useRef(null);
+  const baseURL = process.env.REACT_APP_API_KEY;
+
+  const getRandomData = async () => {
+    try {
+      const { data } = await axios.get(
+        `${baseURL}/post/gif/topic-ok/1?size=6&page=${page}`
+      );
+      if (!data) {
+        return;
+      }
+      setRandomData(randomData.concat(data.data));
+      console.log(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //observe 콜백 함수
+  const onIntersect = (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        //조건이 트루
+        //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
+        setPage((page) => page + 1);
+        // 현재 타겟을 observe한다.
+        observer.observe(entry.target); // unobserve가 아님
+      }
+    });
+  };
+
+  useEffect(() => {
+    getRandomData();
+  }, [page]);
+
+  useEffect(() => {
+    //observer 인스턴스를 생성한 후 구독
+    let observer;
+    if (lastIntersectingData) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
+      observer.observe(lastIntersectingData.current);
+    }
+    return () => observer && observer.disconnect();
+  }, [lastIntersectingData]);
+
   return (
-    <BestBox>
-      <div style={{ position: 'relative' }}>
-        <OverlayWrap>
-          <Overlay>
-            <DescBox>
-              <Keyword>제시어 혹은 제목...</Keyword>
-              <Download />
-              <Like />
-            </DescBox>
-          </Overlay>
-        </OverlayWrap>
-        <BestImg />
-      </div>
-      <BestDesc>
-        <Profile />
-        <Nickname>일이삼사오육 외 8명</Nickname>
-        <CommentBox>
-          <CommentImg />
-          <DescText>520</DescText>
-        </CommentBox>
-        <LikeBox>
-          <LikesImg />
-          <DescText>220</DescText>
-        </LikeBox>
-      </BestDesc>
-    </BestBox>
+    <ListBox>
+      <>
+        {randomData.map((item, index) => {
+          return (
+            <BestBox
+              key={item.id}
+              onClick={() => {
+                navigate(`/completedetail/${item.id}`);
+              }}
+            >
+              <div style={{ position: 'relative' }}>
+                <OverlayWrap productImg={item?.imgUrl}>
+                  <Overlay>
+                    <DescBox>
+                      <Keyword>{item?.topic}</Keyword>
+                      <Download />
+                      <Like />
+                    </DescBox>
+                  </Overlay>
+                </OverlayWrap>
+                <BestImg />
+              </div>
+              <BestDesc>
+                <Profile />
+                <Nickname>
+                  {item?.nickname} 외 {item?.participantCount} 명
+                </Nickname>
+                <CommentBox>
+                  <CommentImg />
+                  <DescText>{item?.commentCount}</DescText>
+                </CommentBox>
+                <LikeBox>
+                  <LikesImg />
+                  <DescText>{item?.likeCount}</DescText>
+                </LikeBox>
+              </BestDesc>
+            </BestBox>
+          );
+        })}
+        <div ref={lastIntersectingData}>.</div>
+      </>
+    </ListBox>
   );
 };
 
 export default CompTopic;
+
+const ListBox = styled.div`
+  max-width: 1200px;
+  margin: auto;
+`;
 
 const Width = styled.div`
   width: 350px;
@@ -127,7 +199,8 @@ const OverlayWrap = styled.div`
   ${OverlaySize}
   overflow: hidden;
   position: absolute;
-  background: #e6e6e6;
+  background: url(${(props) => props.productImg});
+  ${({ theme }) => theme.backgroundSet('contain')};
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
   transition: 0.2s ease-in;
   &:hover {

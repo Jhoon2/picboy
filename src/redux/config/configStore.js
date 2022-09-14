@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {
-  progressListAllSlice,
+  getCompleteNewSlice,
   progressListTopicSlice,
   progressListFreeSlice,
-} from '../modules/progressList';
+} from '../modules/complete';
 
 const store = configureStore({
   reducer: {
-    progressListAll: progressListAllSlice.reducer,
+    completeNew: getCompleteNewSlice.reducer,
     progressListTopic: progressListTopicSlice.reducer,
     progressListFree: progressListFreeSlice.reducer,
   },

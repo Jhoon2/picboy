@@ -2,26 +2,23 @@ import React from 'react'
 import styled from 'styled-components'
 import { useMyContext } from '../../shared/ContextApi'
 
-const LoginErrorModal = () => {
+const SignupErrorModal = () => {
   const myContext = useMyContext();
 
   return (
     <ErrorContainer onClick={(e) => { e.stopPropagation(); }}>
       <div style={{textAlign:'center'}}>
-        <ErrorTitle>로그인 오류</ErrorTitle>
-        <ErrorContent>로그인 정보를 확인해주세요</ErrorContent>
+        <ErrorContent>중복확인 버튼을 눌러주세요</ErrorContent>
         <ErrorButton onClick={()=>myContext.btnClickOff()}><div style={{marginTop:'13px'}}>확인</div></ErrorButton>
       </div>
     </ErrorContainer>
   )
 }
 
-
 const ErrorContainer = styled.div`
   min-width: 400px;
   min-height: 240px;
   display: flex;
-  /* justify-content: center; */
   flex-direction: column;
   position: fixed;
   border: 2px solid black;
@@ -33,15 +30,8 @@ const ErrorContainer = styled.div`
   background-color: white;
 `
 
-const ErrorTitle = styled.div`
-  margin-top: 40px;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 23px;
-`
-
 const ErrorContent = styled.div`
-  margin-top: 22px;
+  margin-top: 80px;
   font-size: 16px;
   font-weight: 400;
 `
@@ -56,5 +46,5 @@ const ErrorButton = styled.div`
   background: #000000;
   cursor: pointer;
 `
+export default SignupErrorModal
 
-export default LoginErrorModal

@@ -1,7 +1,7 @@
 import React from 'react'
-import { useState } from 'react'
-import { useMyContext } from '../shared/ContextApi'
+import { useState,useRef } from 'react'
 import { useEffect } from 'react'
+import { useMyContext } from '../shared/ContextApi'
 import axios from "axios"
 
 import styled from 'styled-components'
@@ -18,8 +18,11 @@ const UserProfile = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
     const [user, setUser] = useState(null)
+
+    const [randomData, setRandomData] = useState([]);
     const [page, setPage] = useState(0);
-    const [datas, setDatas] = useState()
+    const lastIntersectingData = useRef(null);
+    
     const [isOpenCategory, setIsOpenCategory] = useState(false)
     const [isOpenProfileImg, setIsOpenProfileImg] = useState(false)  
     const [imageUrl, setImageUrl] = useState(''); 
@@ -38,29 +41,56 @@ const UserProfile = () => {
                     'refresh-token': refreshToken
                 }
             })
+        console.log(response)
         setUser(response)
         nickname = response.data.data.nickname
         setImageUrl(response.data.data.profileImg)
         myContext.setNickname(nickname)
         
-
         const readMypage = async () => {
-            const response = await axios.get(`${baseURL}/mypage/post/${0}/${1}?nickname=${nickname}&page=${1}&size=6`,{
+            const response = await axios.get(`${baseURL}/mypage/post/${0}/${1}?nickname=${nickname}&page=${page}&size=6`,
+            {
                 headers: {
                     Authorization: myToken,
                     'refresh-token': refreshToken
                 }
-            })
-            setDatas(response.data)
-            // console.log(response)
+                })
+            
+            setRandomData(randomData.concat(response.data.data));
         }
         readMypage()
     }
+        
+  //observe 콜백 함수
+  const onIntersect = (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        //조건이 트루
+        //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
+        setPage((page) => page + 1);
+        // 현재 타겟을 observe한다.
+        observer.observe(entry.target); // unobserve가 아님
+      }
+    });
+  };
+    console.log(page)
     
-    useEffect(() => {
-        readUser()
-    },[])
-    
+  useEffect(() => {
+    readUser();
+  }, [page]);
+
+  useEffect(() => {
+    //observer 인스턴스를 생성한 후 구독
+    let observer;
+    if (lastIntersectingData) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 1 });
+      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
+      observer.observe(lastIntersectingData.current);
+    }
+    return () => observer && observer.disconnect();
+  }, [lastIntersectingData]);
+
+
 
     const RightMouseClick = (e) => {
         e.preventDefault();
@@ -98,6 +128,7 @@ const UserProfile = () => {
         button = <EditButton onClick={editNickname}>수정</EditButton>
     }
 
+    
     return (
         <UserProfileContainer>
             <ContainerInner >
@@ -145,13 +176,16 @@ const UserProfile = () => {
                
 
                 {/* 카드 */}
-                <CardContainer>
-                    {datas && datas.data.mypageResponseDto.map((data,i) => {
-                        return(
-                        <GifCard key={i} data={data} />
-                        )
-                    })}
-                </CardContainer>
+                <>
+                    <CardContainer>
+                        {randomData && randomData.map((data, i) => {
+                            return(
+                            <GifCard key={i} data={data} />
+                            )
+                        })}
+                    </CardContainer>
+                    <div style={{width:'100px', height:'20px', backgroundColor:'gray'}} ref={lastIntersectingData}>.</div>
+                </>
             </ContainerInner>
 
         {/* 프로필이미지 모달창 */}
@@ -168,7 +202,7 @@ const UserProfileContainer = styled.div`
 `
 const ContainerInner = styled.div`
     width: 1200px;
-    height: 100vh;
+    height: 100%;
 `
 const ProfileContainer = styled.div`
     width: 100%;
