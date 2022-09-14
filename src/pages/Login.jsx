@@ -28,7 +28,7 @@ const Login = () => {
       // 헤더로 받는 것으로 추후 수정 예정
       setAccessToken(response.data.data.authorization);
       setRefreshToken(response.data.data.refreshToken)
-      if (response.status === 200) { navigate('/') }
+      if (response.status === 200) {window.location.href = '/';}
     } catch (error) {
       //에러메시지 모달창
       if (response.data.errorResponse.status === 400) {
