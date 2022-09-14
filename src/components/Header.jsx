@@ -6,77 +6,77 @@ import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
 
 const throttle = function (callback, waitTime) {
-  let timerId = null;
-  return (e) => {
-    if (timerId) return;
-    timerId = setTimeout(() => {
-      callback.call(this, e);
-      timerId = null;
-    }, waitTime);
-  };
+    let timerId = null;
+    return (e) => {
+        if (timerId) return;
+        timerId = setTimeout(() => {
+            callback.call(this, e);
+            timerId = null;
+        }, waitTime);
+    };
 };
 
 const Header = () => {
-  const [hide, setHide] = useState(false);
-  const [pageY, setPageY] = useState(0);
-  const documentRef = useRef(document);
-  const location = useLocation();
-  
-  const handleScroll = () => {
-    const { pageYOffset } = window;
-    const deltaY = pageYOffset - pageY;
-    const hide = pageYOffset !== 0 && deltaY >= 0;
-    setHide(hide);
-    setPageY(pageYOffset);
-  };
+    const [hide, setHide] = useState(false);
+    const [pageY, setPageY] = useState(0);
+    const documentRef = useRef(document);
+    const location = useLocation();
 
-  const throttleScroll = throttle(handleScroll, 50);
+    const handleScroll = () => {
+        const { pageYOffset } = window;
+        const deltaY = pageYOffset - pageY;
+        const hide = pageYOffset !== 0 && deltaY >= 0;
+        setHide(hide);
+        setPageY(pageYOffset);
+    };
 
-  useEffect(() => {
-    documentRef.current.addEventListener('scroll', throttleScroll);
-    return () =>
-      documentRef.current.removeEventListener('scroll', throttleScroll);
-  }, [pageY]);
-  const navigate = useNavigate();
-  
-  if (location.pathname === '/login') return null;
-  if (location.pathname === '/join') return null;
+    const throttleScroll = throttle(handleScroll, 50);
 
-  return (
-    <HeaderArea>
-      <HeaderContainer className={hide && 'hide'}>
-        <HeaderBox>
-          <Logo
-            onClick={() => {
-              navigate('/');
-            }}
-          ></Logo>
-          <ProceedingButton
-            onClick={() => {
-              navigate('/list');
-            }}
-          >
-            Proceeding
-          </ProceedingButton>
-          <CompleteButton
-            onClick={() => {
-              navigate('/CompList');
-            }}
-          >
-            Complete
-          </CompleteButton>
-          <PostCategories />
-          <LoginButton
-            onClick={() => {
-              navigate('/login');
-            }}
-          >
-            LOGIN
-          </LoginButton>
-        </HeaderBox>
-      </HeaderContainer>
-    </HeaderArea>
-  );
+    useEffect(() => {
+        documentRef.current.addEventListener('scroll', throttleScroll);
+        return () =>
+            documentRef.current.removeEventListener('scroll', throttleScroll);
+    }, [pageY]);
+    const navigate = useNavigate();
+
+    if (location.pathname === '/login') return null;
+    if (location.pathname === '/join') return null;
+
+    return (
+        <HeaderArea>
+            <HeaderContainer className={hide && 'hide'}>
+                <HeaderBox>
+                    <Logo
+                        onClick={() => {
+                            navigate('/');
+                        }}
+                    ></Logo>
+                    <ProceedingButton
+                        onClick={() => {
+                            navigate('/list');
+                        }}
+                    >
+                        Proceeding
+                    </ProceedingButton>
+                    <CompleteButton
+                        onClick={() => {
+                            navigate('/CompList');
+                        }}
+                    >
+                        Complete
+                    </CompleteButton>
+                    <PostCategories />
+                    <LoginButton
+                        onClick={() => {
+                            navigate('/login');
+                        }}
+                    >
+                        LOGIN
+                    </LoginButton>
+                </HeaderBox>
+            </HeaderContainer>
+        </HeaderArea>
+    );
 };
 
 export default Header;

@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import Canvas from '../components/Canvas';
 
 const FirstPost = () => {
-  return <div>FirstPost</div>;
+  return (
+    <div>
+      <Canvas />
+    </div>
+  );
 };
 
 export default FirstPost;
-
-const C = styled.div`
-  width: 100vw;
-  height: 100vh;
-`;
