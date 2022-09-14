@@ -1,13 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
+// 다솜님
+// 첫 생성 포스트 페이지
+import React from 'react'
 
 const FirstPost = () => {
-  return <div>FirstPost</div>;
-};
+    return (
+        <div>FirstPost</div>
+    )
+}
 
-export default FirstPost;
-
-const C = styled.div`
-  width: 100vw;
-  height: 100vh;
-`;
+export default FirstPost

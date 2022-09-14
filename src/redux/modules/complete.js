@@ -1,17 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+const baseURL = process.env.REACT_APP_API_KEY;
 
-//   {
-//     headers: {
-//       Authorization: cookie,
-//     },
-//   }
-
-export const __getProgressListAll = createAsyncThunk(
-  'getProgressListAll',
+export const __getCompleteNew = createAsyncThunk(
+  'completeNew',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`https://picboy.net/post/gif/images/0`);
+      const data = await axios.get(`${baseURL}/post/gif/images/0`);
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -19,18 +14,11 @@ export const __getProgressListAll = createAsyncThunk(
   }
 );
 
-export const __getProgressListTopic = createAsyncThunk(
-  'progressListTopic',
+export const __getCompleteLike = createAsyncThunk(
+  'completeLike',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(
-        `https://picboy.net/post/gif/images/1`
-        //   {
-        //     headers: {
-        //       Authorization: cookie,
-        //     },
-        //   }
-      );
+      const data = await axios.get(`${baseURL}/post/gif/images/1`);
       console.log(data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -43,14 +31,7 @@ export const __getProgressListFree = createAsyncThunk(
   'progressListFree',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(
-        `https://picboy.net/post/gif/images/2`
-        //   {
-        //     headers: {
-        //       Authorization: cookie,
-        //     },
-        //   }
-      );
+      const data = await axios.get(`${baseURL}/post/gif/images/2`);
       console.log(data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -59,8 +40,8 @@ export const __getProgressListFree = createAsyncThunk(
   }
 );
 
-export const progressListAllSlice = createSlice({
-  name: 'progressListAll',
+export const getCompleteNewSlice = createSlice({
+  name: 'completeNew',
   initialState: {
     progressListAll: [],
     isLoading: false,
@@ -68,14 +49,14 @@ export const progressListAllSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    [__getProgressListAll.pending]: (state, action) => {
+    [__getCompleteNew.pending]: (state, action) => {
       state.isLoading = true;
     },
-    [__getProgressListAll.fulfilled]: (state, action) => {
+    [__getCompleteNew.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.progressListAll = action.payload;
     },
-    [__getProgressListAll.rejected]: (state, action) => {
+    [__getCompleteNew.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
@@ -83,7 +64,7 @@ export const progressListAllSlice = createSlice({
 });
 
 export const progressListTopicSlice = createSlice({
-  name: 'progressListTopic',
+  name: 'completeLike',
   initialState: {
     progressListTopic: [],
     isLoading: false,
@@ -91,14 +72,14 @@ export const progressListTopicSlice = createSlice({
   },
   reducers: {},
   extraReducers: {
-    [__getProgressListTopic.pending]: (state, action) => {
+    [__getCompleteLike.pending]: (state, action) => {
       state.isLoading = true;
     },
-    [__getProgressListTopic.fulfilled]: (state, action) => {
+    [__getCompleteLike.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.progressListTopic = action.payload;
     },
-    [__getProgressListTopic.rejected]: (state, action) => {
+    [__getCompleteLike.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },

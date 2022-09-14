@@ -7,58 +7,58 @@ import bubble1 from '../images/bubble1.png';
 import right from '../images/right.png';
 
 const Categories = (props) => {
-  const navigate = useNavigate();
-  const [select, setSelect] = useState(false);
-  return (
-    <>
-      <SelectBox>
-        <Select>
-          <div onClick={() => setSelect(!select)}>Drawing</div>
-        </Select>
-      </SelectBox>
-      <SelectListBox>
-        {/* {select && ( */}
-        <Down select={select}>
-          <ul>
-            <Topic
-              onClick={() => {
-                navigate('/list');
-              }}
-            >
-              <Title>
-                <TopicBubble />
-                TOPIC
-                <Right left={'110px'} />
-              </Title>
-              <Desc>
-                제시어를 설정해 유저들과 그림을
-                <br />
-                그릴 수 있어요!
-              </Desc>
-            </Topic>
-            <HR />
-            <Free
-              onClick={() => {
-                navigate('/list');
-              }}
-            >
-              <Title>
-                <TopicBubble />
-                Free
-                <Right left={'122px'} />
-              </Title>
-              <Desc>
-                제시어 없이 유저들과 그림을
-                <br />
-                그릴 수 있어요!
-              </Desc>
-            </Free>
-          </ul>
-        </Down>
-        {/* // )} */}
-      </SelectListBox>
-    </>
-  );
+    const navigate = useNavigate();
+    const [select, setSelect] = useState(false);
+    return (
+        <>
+            <SelectBox>
+                <Select>
+                    <div onClick={() => setSelect(!select)}>Drawing</div>
+                </Select>
+            </SelectBox>
+            <SelectListBox>
+                {/* {select && ( */}
+                <Down select={select}>
+                    <ul>
+                        <Topic
+                            onClick={() => {
+                                navigate('/list');
+                            }}
+                        >
+                            <Title>
+                                <TopicBubble />
+                                TOPIC
+                                <Right left={'110px'} />
+                            </Title>
+                            <Desc>
+                                제시어를 설정해 유저들과 그림을
+                                <br />
+                                그릴 수 있어요!
+                            </Desc>
+                        </Topic>
+                        <HR />
+                        <Free
+                            onClick={() => {
+                                navigate('/list');
+                            }}
+                        >
+                            <Title>
+                                <TopicBubble />
+                                Free
+                                <Right left={'122px'} />
+                            </Title>
+                            <Desc>
+                                제시어 없이 유저들과 그림을
+                                <br />
+                                그릴 수 있어요!
+                            </Desc>
+                        </Free>
+                    </ul>
+                </Down>
+                {/* // )} */}
+            </SelectListBox>
+        </>
+    );
 };
 
 export default Categories;

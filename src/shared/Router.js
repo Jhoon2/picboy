@@ -12,21 +12,21 @@ import ProgressPost from '../pages/ProgressPost';
 import SignUp from '../pages/SignUp';
 import UserProfile from '../pages/UserProfile';
 import CompList from '../pages/CompList';
-import { Context } from "./ContextApi";
+import { Context } from './ContextApi';
 import Header from '../components/Header';
 // import { getCookieToken } from '../shared/Cookie'
 
 const Router = () => {
   // const myToken = getCookieToken();
-  
+
   return (
     <Context>
       <BrowserRouter>
-          <Header /> 
+        <Header />
         <Routes>
           {/* 종훈님 */}
           <Route path="/" element={<Main />} />
-          <Route path="progress-detail:id" element={<ProgressDetail />} />
+          <Route path="/progressdetail/:id" element={<ProgressDetail />} />
           <Route path="progress-post" element={<ProgressPost />} />
           {/* 민희님 */}
           <Route path="login" element={<Login />} />
@@ -36,7 +36,7 @@ const Router = () => {
           <Route path="list" element={<List />} />
           <Route path="complist" element={<CompList />} />
           <Route path="first-post" element={<FirstPost />} />
-          <Route path="complete-detail" element={<CompleteDetail />} />
+          <Route path="/completedetail/:Id" element={<CompleteDetail />} />
         </Routes>
       </BrowserRouter>
     </Context>

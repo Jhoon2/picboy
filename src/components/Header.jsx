@@ -9,14 +9,14 @@ import {getCookieToken, removeCookieToken, removeRefreshCookieToken} from '../sh
 const myToken = getCookieToken();
 
 const throttle = function (callback, waitTime) {
-  let timerId = null;
-  return (e) => {
-    if (timerId) return;
-    timerId = setTimeout(() => {
-      callback.call(this, e);
-      timerId = null;
-    }, waitTime);
-  };
+    let timerId = null;
+    return (e) => {
+        if (timerId) return;
+        timerId = setTimeout(() => {
+            callback.call(this, e);
+            timerId = null;
+        }, waitTime);
+    };
 };
 
 const Header = () => {
@@ -89,6 +89,7 @@ const Header = () => {
       </HeaderContainer>
     </HeaderArea>
   );
+
 };
 
 export default Header;
