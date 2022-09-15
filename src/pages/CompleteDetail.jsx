@@ -20,7 +20,7 @@ import CommentBox from '../components/completeDetail/CommentBox';
 const CompleteDetail = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const params = useParams();
-
+  
     //redux
     const [commentInput, setCommentInput] = useState('')
     const { comments } = useSelector((state) => state.comments)

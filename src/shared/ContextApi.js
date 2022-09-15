@@ -14,6 +14,9 @@ export const Context = (props) => {
     const btnClickOff = () => setBtnOpen(false);
     const btnClickOn = () => setBtnOpen(!btnOpen);
 
+    const [tabNum, setTabNum] = React.useState(0);
+    const [categoryNum, setCategoryNum] = React.useState(1);
+
     const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)  
 
 
@@ -26,7 +29,15 @@ export const Context = (props) => {
         btnClickOff,
         btnClickOn,
         isOpenProfileImg,
-        setIsOpenProfileImg
+        setIsOpenProfileImg,
+
+        //탭넘버
+        tabNum,
+        setTabNum,
+
+        //카테고리넘버
+        categoryNum,
+        setCategoryNum
     };
 
     return (

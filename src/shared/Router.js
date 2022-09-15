@@ -42,7 +42,7 @@ const Router = () => {
           <Route path="post-topic" element={<PostTopic />} />
           <Route path="post-free-relay" element={<PostFreeRelay />} />
           <Route path="post-topic-relay" element={<PostTopicRelay />} />
-          <Route path="complete-detail" element={<CompleteDetail />} />
+          <Route path="complete-detail/:id" element={<CompleteDetail />} />
         </Routes>
       </BrowserRouter>
     </Context>
