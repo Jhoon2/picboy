@@ -3,190 +3,191 @@ import styled, { css } from 'styled-components';
 import Fade from 'react-reveal/Fade';
 import BestSlider from '../elem/BestSlider';
 import icon from '../images/icon.png';
+import first from '../images/1번.gif';
 
 const MainDesc = ({ moveRef, move2Ref }) => {
-    const TopicgRef = useRef();
-    const FreeRef = useRef();
+  const TopicgRef = useRef();
+  const FreeRef = useRef();
 
-    const handleMove = () => {
-        FreeRef.current.scrollIntoView({ behavior: 'smooth' });
-    };
+  const handleMove = () => {
+    FreeRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
-    const handleMoves = () => {
-        TopicgRef.current.scrollIntoView({ behavior: 'smooth' });
-    };
-    return (
-        <DescContainer>
-            <Fade bottom>
-                <IntroBlock>
-                    <DescTitle ref={move2Ref}>
-                        유저들과 함께
-                        <br />
-                        예측할수 없는 즐거움을
-                        <br />
-                        만들어 보세요!
-                    </DescTitle>
-                </IntroBlock>
-            </Fade>
-            <ButtonBox>
-                <Fade left>
-                    <TopicButton
-                        onClick={() => {
-                            handleMoves();
-                        }}
-                    >
-                        TOPIC
-                        <br />
-                        <span>뉴비에게 추천!</span>
-                    </TopicButton>
-                </Fade>
-                <Fade right>
-                    <FreeButton
-                        onClick={() => {
-                            handleMove();
-                        }}
-                    >
-                        FREE
-                        <br />
-                        <span>고인물에게 추천!</span>
-                    </FreeButton>
-                </Fade>
-            </ButtonBox>
-            <DescBox1 ref={TopicgRef}>
-                <Descimg1 />
-                <DescFirst>
-                    <Fade bottom>
-                        <Number1>#1</Number1>
-                        <Title1>
-                            누구나 나만의 움짤을
-                            <br />
-                            만들수 있어요!
-                        </Title1>
-                        <Des1>
-                            게임의 기본형식은 주어지는 단어를 그림판에 그림을 그려서
-                            <br />
-                            유저들과 같이 설명하고 하나의 "움짤을 만드는 게임"으로
-                            <br />
-                            무한한 창의적 발상과 상상력을 발휘해 보세요.
-                        </Des1>
-                    </Fade>
-                </DescFirst>
-            </DescBox1>
-            <DescBox2>
-                <DescSecond>
-                    <Fade left>
-                        <Number2>#2</Number2>
-                        <Title2>멀티 플레이</Title2>
-                        <Des2>
-                            PC, 모바일을 통해 혼자 또는 다른 사용자들과
-                            <br />
-                            함께 만들수 있어요.
-                        </Des2>
-                    </Fade>
-                </DescSecond>
-                <Descimg2 />
-            </DescBox2>
-            <DescBox3>
-                <Descimg3 />
-                <DescThird>
-                    <Fade right>
-                        <Number3>#3</Number3>
-                        <Title3>다른 유저와 공유 및 저장</Title3>
-                        <Des3>
-                            유저들과 같이 만드는 움짤을 공유, 소통하고 마음에 드는
-                            <br />
-                            움짤을 저장 해보세요.
-                        </Des3>
-                    </Fade>
-                </DescThird>
-            </DescBox3>
-            <DescBox4 ref={FreeRef}>
-                <Fade bottom>
-                    <DescFourth>
-                        <Number4>#1</Number4>
-                        <Title4>
-                            유저들과
-                            <br />
-                            텔레파시
-                        </Title4>
-                        <Des4>
-                            제시어 없이 오직 유저들의 그림을 보고
-                            <br />
-                            의미를 찾고 예측할 수 없는 움짤을 만들어 보세요.
-                        </Des4>
-                    </DescFourth>
-                    <Descimg4 />
-                </Fade>
-            </DescBox4>
-            <HowContainer ref={moveRef}>
-                <HowTitle>How To Use ?</HowTitle>
-                <HowBox>
-                    <Fade bottom>
-                        <HowElem>
-                            <HowImg />
-                            <HowSub>Start</HowSub>
-                            <HowDesc>Drawing 버튼 클릭</HowDesc>
-                        </HowElem>
+  const handleMoves = () => {
+    TopicgRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
+  return (
+    <DescContainer>
+      <Fade bottom>
+        <IntroBlock>
+          <DescTitle ref={move2Ref}>
+            유저들과 함께
+            <br />
+            예측할수 없는 즐거움을
+            <br />
+            만들어 보세요!
+          </DescTitle>
+        </IntroBlock>
+      </Fade>
+      <ButtonBox>
+        <Fade left>
+          <TopicButton
+            onClick={() => {
+              handleMoves();
+            }}
+          >
+            TOPIC
+            <br />
+            <span>뉴비에게 추천!</span>
+          </TopicButton>
+        </Fade>
+        <Fade right>
+          <FreeButton
+            onClick={() => {
+              handleMove();
+            }}
+          >
+            FREE
+            <br />
+            <span>고인물에게 추천!</span>
+          </FreeButton>
+        </Fade>
+      </ButtonBox>
+      <DescBox1 ref={TopicgRef}>
+        <Descimg1 img={first} />
+        <DescFirst>
+          <Fade bottom>
+            <Number1>#1</Number1>
+            <Title1>
+              누구나 나만의 움짤을
+              <br />
+              만들수 있어요!
+            </Title1>
+            <Des1>
+              게임의 기본형식은 주어지는 단어를 그림판에 그림을 그려서
+              <br />
+              유저들과 같이 설명하고 하나의 "움짤을 만드는 게임"으로
+              <br />
+              무한한 창의적 발상과 상상력을 발휘해 보세요.
+            </Des1>
+          </Fade>
+        </DescFirst>
+      </DescBox1>
+      <DescBox2>
+        <DescSecond>
+          <Fade left>
+            <Number2>#2</Number2>
+            <Title2>멀티 플레이</Title2>
+            <Des2>
+              PC, 모바일을 통해 혼자 또는 다른 사용자들과
+              <br />
+              함께 만들수 있어요.
+            </Des2>
+          </Fade>
+        </DescSecond>
+        <Descimg2 />
+      </DescBox2>
+      <DescBox3>
+        <Descimg3 />
+        <DescThird>
+          <Fade right>
+            <Number3>#3</Number3>
+            <Title3>다른 유저와 공유 및 저장</Title3>
+            <Des3>
+              유저들과 같이 만드는 움짤을 공유, 소통하고 마음에 드는
+              <br />
+              움짤을 저장 해보세요.
+            </Des3>
+          </Fade>
+        </DescThird>
+      </DescBox3>
+      <DescBox4 ref={FreeRef}>
+        <Fade bottom>
+          <DescFourth>
+            <Number4>#1</Number4>
+            <Title4>
+              유저들과
+              <br />
+              텔레파시
+            </Title4>
+            <Des4>
+              제시어 없이 오직 유저들의 그림을 보고
+              <br />
+              의미를 찾고 예측할 수 없는 움짤을 만들어 보세요.
+            </Des4>
+          </DescFourth>
+          <Descimg4 />
+        </Fade>
+      </DescBox4>
+      <HowContainer ref={moveRef}>
+        <HowTitle>How To Use ?</HowTitle>
+        <HowBox>
+          <Fade bottom>
+            <HowElem>
+              <HowImg />
+              <HowSub>Start</HowSub>
+              <HowDesc>Drawing 버튼 클릭</HowDesc>
+            </HowElem>
 
-                        <HowElem2>
-                            <HowImg />
-                            <HowSub>Drawing</HowSub>
-                            <HowDesc>
-                                제시어(FREE일 경우 PASS)
-                                <br />
-                                프레임 선택 후 그리기
-                            </HowDesc>
-                        </HowElem2>
+            <HowElem2>
+              <HowImg />
+              <HowSub>Drawing</HowSub>
+              <HowDesc>
+                제시어(FREE일 경우 PASS)
+                <br />
+                프레임 선택 후 그리기
+              </HowDesc>
+            </HowElem2>
 
-                        <HowElem>
-                            <HowImg />
-                            <HowSub>Progress</HowSub>
-                            <HowDesc>진행중인 그림 감상</HowDesc>
-                        </HowElem>
+            <HowElem>
+              <HowImg />
+              <HowSub>Progress</HowSub>
+              <HowDesc>진행중인 그림 감상</HowDesc>
+            </HowElem>
 
-                        <HowElem>
-                            <HowImg />
-                            <HowSub>Complete</HowSub>
-                            <HowDesc>프레임 수 채워지면 완성버튼 클릭</HowDesc>
-                        </HowElem>
-                    </Fade>
-                </HowBox>
-            </HowContainer>
-            <BestContainer>
-                <BestImg left={'580px'} bottom={'600px'} />
-                {/* <BestImg left={'1300px'} top={'220px'} /> */}
-                <Fade bottom>
-                    <BestTitle>내가 PICBOY 왕!</BestTitle>
-                    <BestDesc>
-                        유저들에게 좋아할만한 움짤을 만든 후,
-                        <br />
-                        주간 베스트에 선정 되어 보세요.
-                    </BestDesc>
-                </Fade>
-                <SlideContainer>
-                    <BestSlider></BestSlider>
-                </SlideContainer>
-            </BestContainer>
+            <HowElem>
+              <HowImg />
+              <HowSub>Complete</HowSub>
+              <HowDesc>프레임 수 채워지면 완성버튼 클릭</HowDesc>
+            </HowElem>
+          </Fade>
+        </HowBox>
+      </HowContainer>
+      <BestContainer>
+        <BestImg left={'580px'} bottom={'600px'} />
+        {/* <BestImg left={'1300px'} top={'220px'} /> */}
+        <Fade bottom>
+          <BestTitle>내가 PICBOY 왕!</BestTitle>
+          <BestDesc>
+            유저들에게 좋아할만한 움짤을 만든 후,
+            <br />
+            주간 베스트에 선정 되어 보세요.
+          </BestDesc>
+        </Fade>
+        <SlideContainer>
+          <BestSlider></BestSlider>
+        </SlideContainer>
+      </BestContainer>
 
-            <StartBox>
-                <Fade bottom>
-                    <StartTitle>시작해볼까요?</StartTitle>
-                    <StartButtonBox>
-                        <StartTopic>
-                            TOPIC
-                            <br />
-                            <span>뉴비에게 추천!</span>
-                        </StartTopic>
-                        <StartFree>
-                            FREE
-                            <br />
-                            <span>고인물에게 추천!</span>
-                        </StartFree>
-                    </StartButtonBox>
-                </Fade>
-            </StartBox>
-        </DescContainer>
-    );
+      <StartBox>
+        <Fade bottom>
+          <StartTitle>시작해볼까요?</StartTitle>
+          <StartButtonBox>
+            <StartTopic>
+              TOPIC
+              <br />
+              <span>뉴비에게 추천!</span>
+            </StartTopic>
+            <StartFree>
+              FREE
+              <br />
+              <span>고인물에게 추천!</span>
+            </StartFree>
+          </StartButtonBox>
+        </Fade>
+      </StartBox>
+    </DescContainer>
+  );
 };
 
 export default MainDesc;
@@ -312,7 +313,12 @@ const Desc = css`
 
 const DescBox1 = styled(DescBox)``;
 
-const Descimg1 = styled(Descimg)``;
+const Descimg1 = styled(Descimg)`
+  width: 500px;
+  height: 500px;
+  background: url(${(props) => props.img});
+  animation-name: none;
+`;
 
 const DescFirst = styled.div`
   ${DescTextBox}

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import Header from '../components/Header';
 import Grid from '../styles/Grid';
 import ProgressAll from '../components/ProgressAll';
 import ProgressFree from '../components/ProgressFree';
@@ -16,7 +15,6 @@ const List = () => {
   }
   return (
     <ListContainer>
-      <Header />
       <TopScroll />
       <ProgressBanner setProTap={setProTap} />
 
