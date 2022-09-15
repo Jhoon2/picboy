@@ -26,7 +26,7 @@ const Free = () => {
     }
   };
 
-  //observe 콜백 함수
+  // observe 콜백 함수
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -55,52 +55,60 @@ const Free = () => {
   }, [lastIntersectingData]);
 
   return (
-    <ListBox>
-      <>
-        {randomData.map((item, index) => {
-          return (
-            <BestBox
-              key={item.id}
-              onClick={() => {
-                navigate(`/completedetail/${item.id}`);
-              }}
-            >
-              <div style={{ position: 'relative' }}>
-                <OverlayWrap productImg={item?.imgUrl}>
-                  <Overlay>
-                    <DescBox>
-                      <Keyword>{item?.topic}</Keyword>
-                      <Download />
-                      <Like />
-                    </DescBox>
-                  </Overlay>
-                </OverlayWrap>
-                <BestImg />
-              </div>
-              <BestDesc>
-                <Profile />
-                <Nickname>
-                  {item?.nickname} 외 {item?.participantCount} 명
-                </Nickname>
-                <CommentBox>
-                  <CommentImg />
-                  <DescText>{item?.commentCount}</DescText>
-                </CommentBox>
-                <LikeBox>
-                  <LikesImg />
-                  <DescText>{item?.likeCount}</DescText>
-                </LikeBox>
-              </BestDesc>
-            </BestBox>
-          );
-        })}
-        <div ref={lastIntersectingData}>.</div>
-      </>
-    </ListBox>
+    <>
+      <ListBox>
+        <>
+          {randomData.map((item, index) => {
+            return (
+              <BestBox
+                key={item.id}
+                onClick={() => {
+                  navigate(`/completedetail/${item.id}`);
+                }}
+              >
+                <div style={{ position: 'relative' }}>
+                  <OverlayWrap productImg={item?.imgUrl}>
+                    <Overlay>
+                      <DescBox>
+                        <Keyword>{item?.topic}</Keyword>
+                        <Download />
+                        <Like />
+                      </DescBox>
+                    </Overlay>
+                  </OverlayWrap>
+                  <BestImg />
+                </div>
+                <BestDesc>
+                  <Profile />
+                  <Nickname>
+                    {item?.nickname} 외 {item?.participantCount} 명
+                  </Nickname>
+                  <CommentBox>
+                    <CommentImg />
+                    <DescText>{item?.commentCount}</DescText>
+                  </CommentBox>
+                  <LikeBox>
+                    <LikesImg />
+                    <DescText>{item?.likeCount}</DescText>
+                  </LikeBox>
+                </BestDesc>
+              </BestBox>
+            );
+          })}
+          <div ref={lastIntersectingData}>.</div>
+        </>
+      </ListBox>
+    </>
   );
 };
 
 export default Free;
+
+const Loading = styled.div`
+  width: 100%;
+  height: 1000px;
+  background: gray;
+`;
 
 const Width = styled.div`
   width: 350px;

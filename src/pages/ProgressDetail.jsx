@@ -1,60 +1,123 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled, { css } from 'styled-components';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+import nike from '../images/nikebanner.jpg';
 
-const baseUrl = 'https://picsum.photos';
+const throttle = function (callback, waitTime) {
+  let timerId = null;
+  return (e) => {
+    if (timerId) return;
+    timerId = setTimeout(() => {
+      callback.call(this, e);
+      timerId = null;
+    }, waitTime);
+  };
+};
 
 const ProgressDetail = () => {
+  const [hide, setHide] = useState(false);
+  const [pageY, setPageY] = useState(0);
+  const documentRef = useRef(document);
+
+  const handleScroll = () => {
+    const { pageYOffset } = window;
+    const deltaY = pageYOffset - pageY;
+    const hide = pageYOffset !== 0 && deltaY >= 0;
+    setHide(hide);
+    setPageY(pageYOffset);
+  };
+
+  const throttleScroll = throttle(handleScroll, 50);
+
+  useEffect(() => {
+    documentRef.current.addEventListener('scroll', throttleScroll);
+    return () =>
+      documentRef.current.removeEventListener('scroll', throttleScroll);
+  }, [pageY]);
+  const myToken = getCookieToken();
+  const refreshToken = getRefreshToken();
+
+  const baseURL = process.env.REACT_APP_API_KEY;
+  const params = useParams();
+
+  const [Data, setData] = useState([]);
+
+  const getProgressData = () => {
+    const url = `${baseURL}/post/gif/images/detail/${params.id}`;
+    axios
+      .get(url)
+      .then(function (response) {
+        setData(response.data.data);
+      })
+      .catch(function (error) {
+        console.log('error');
+      });
+  };
+
+  const imgList = Data.frameImgList;
+
+  useEffect(() => {
+    getProgressData();
+  }, []);
+
   const settings = {
-    customPaging: function (i) {
-      return (
-        <a>
-          <img src={`${baseUrl}/id/10${i + 1}/400/300`} />
-        </a>
-      );
-    },
     dots: true,
-    dotsClass: 'slick-dots slick-thumb',
     infinite: true,
-    speed: 500,
-    slidesToShow: 1,
+    speed: 800,
+    slidesToShow: 6,
     slidesToScroll: 1,
+    autoplay: false,
+    autoplaySpeed: 3000,
+    pauseOnHover: true,
   };
   return (
     <ProContainer>
-      <Header />
-      <div className="container">
-        <link
-          rel="stylesheet"
-          type="text/css"
-          charSet="UTF-8"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-        />
+      <ImgBox className={hide && 'hide'}>
+        <span>PROGRESS</span>
+      </ImgBox>
+      <Firstimg img={Data.imgUrl} />
+
+      <Bannerbox>
         <style>{cssstyle}</style>
         <Slider {...settings}>
-          <div>
-            <img src={baseUrl + `/id/101/400/300`} />
-          </div>
-          <div>
-            <img src={baseUrl + `/id/102/400/300`} />
-          </div>
-          <div>
-            <img src={baseUrl + `/id/103/400/300`} />
-          </div>
-          <div>
-            <img src={baseUrl + `/id/104/400/300`} />
-          </div>
+          {imgList &&
+            imgList.map((item, index) => {
+              return (
+                <Box key={item}>
+                  <img src={item.imgUrl} alt="" />
+                </Box>
+              );
+            })}
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
+
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
+
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
+
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
         </Slider>
-      </div>
+      </Bannerbox>
+      <ButtonBox>
+        <ToEnter>TO ENTER</ToEnter>
+      </ButtonBox>
       <Footer />
     </ProContainer>
   );
@@ -66,39 +129,93 @@ const ProContainer = styled.div`
   width: 100%;
 `;
 
-const cssstyle = css`
-  .container {
-    margin: auto;
-    margin-top: 200px;
-    padding: 0px 40px 40px 40px;
-    width: 1000px;
-    height: 100vh;
+const ImgBox = styled.div`
+  width: 100%;
+  height: 300px;
+  ${({ theme }) => theme.flexSet('column', 'space-between', 'center')}
+  text-align: center;
+  background: #f4f4f4;
+  border: 0.5px solid #a3a3a3;
+  span {
+    margin-top: 140px;
+    font-family: 'SilkLight';
+    font-size: 80px;
+    line-height: 102px;
+    font-weight: 400;
   }
-  h3 {
-    background: #5f9ea0;
+
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  transition: 0.4s ease;
+  &.hide {
+    transform: translateY(-250px);
+  }
+`;
+
+const Firstimg = styled.div`
+  width: 500px;
+  height: 500px;
+  margin: auto;
+  margin-top: 20px;
+  background: red;
+  background: url(${(props) => props.img});
+  ${({ theme }) => theme.backgroundSet('contain')};
+`;
+
+const Bannerbox = styled.div`
+  max-width: 1800px;
+  height: 400px;
+  margin: auto;
+`;
+
+const Box = styled.div`
+  width: 280px;
+  height: 250px;
+  display: block;
+  &:hover {
+    border: 3px solid #000;
+  }
+`;
+
+const cssstyle = css`
+  img {
+    width: 280px;
+    height: 250px;
     color: #fff;
     font-size: 36px;
-    line-height: 100px;
     margin: 10px;
-    padding: 2%;
     position: relative;
     text-align: center;
+    &:hover {
+      background: gray;
+    }
   }
+
   .slick-next:before,
   .slick-prev:before {
     color: #000;
   }
-  .slick-thumb {
-    bottom: -300px;
-  }
-  .slick-thumb li {
-    width: 200px;
-    height: 45px;
-    cursor: pointer;
-  }
-  img {
-    max-width: 100%;
-    margin: 0 0 1.45rem;
-    padding: 0;
+`;
+
+const ButtonBox = styled.div`
+  max-width: 1800px;
+  height: 200px;
+  margin: auto;
+  ${({ theme }) => theme.flexSet('row', 'flex-end', 'center')};
+`;
+
+const ToEnter = styled.button`
+  width: 200px;
+  height: 50px;
+  border: 1px solid white;
+  border-radius: 10px;
+  font-family: 'SilkLight';
+  font-size: 20px;
+  color: white;
+  background: black;
+  &:hover {
+    background: white;
   }
 `;

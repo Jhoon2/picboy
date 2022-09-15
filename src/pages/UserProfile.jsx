@@ -1,3 +1,4 @@
+
 import React, { useCallback } from 'react'
 import { useState,useRef } from 'react'
 import { useEffect } from 'react'
@@ -56,6 +57,7 @@ const UserProfile = () => {
                         Authorization: myToken,
                         'refresh-token': refreshToken
                     }
+
                     })
                 
                 setRandomData(randomData.concat(response.data.data));
@@ -95,7 +97,6 @@ const UserProfile = () => {
     }
     return () => observer && observer.disconnect();
   }, [lastIntersectingData]);
-
 
 
     const RightMouseClick = (e) => {
@@ -139,6 +140,7 @@ const UserProfile = () => {
     } else {
         button = <EditButton onClick={editNickname}>수정</EditButton>
     }
+
 
     //닉네임 중복확인
     const [existedNick, setExistedNick] = useState(false);
@@ -202,7 +204,9 @@ const UserProfile = () => {
                             </TextContentContainer>
                         </TextProfileContents>
                     </ProfileInner>
+
                         {user && user.data.data.username === userinfo.data.data.username ? button : null}
+
                 </ProfileContainer>
                 <ProfileBorder />
                 {/* 카테고리별 */}
@@ -231,11 +235,13 @@ const UserProfile = () => {
                 </>
             </ContainerInner>
 
+
         {/* 프로필이미지 모달창 */}
             {user && user.data.data.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
                 close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
          {/* 카테고리모달창 */}
-         {/* <CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} />     */}
+<CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} /> 
+
         </UserProfileContainer>
     )
 }
@@ -360,6 +366,7 @@ const CardContainer = styled.div`
     position: relative;
     display: flex;
     flex-wrap: wrap;
+
 ` 
 const CheckButton = styled.button`
   width: 100px;
@@ -393,5 +400,6 @@ const NoErrorsmessage = styled.div`
   font-family: 'NotoLight';
   color: green;
 `;
+
 
 export default UserProfile

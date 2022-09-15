@@ -17,7 +17,6 @@ const CompList = () => {
 
   return (
     <ListContainer>
-      <TopScroll />
       <CompleteBanner setProTap={setProTap} />
       <Grid width="1200px" margin="0 auto">
         <ListComp proTap={proTap} />

@@ -4,7 +4,13 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
-import { getCookieToken, removeCookieToken, removeRefreshCookieToken } from '../shared/Cookie';
+import {
+  getCookieToken,
+  removeCookieToken,
+  removeRefreshCookieToken,
+} from '../shared/Cookie';
+
+
 
 const myToken = getCookieToken();
 
@@ -29,22 +35,18 @@ const Header = () => {
   const logoutFeat = () => {
     removeCookieToken();
     window.location.href = '/';
-  }
-
-  const handleScroll = () => {
-    const { pageYOffset } = window;
-    const deltaY = pageYOffset - pageY;
-    const hide = pageYOffset !== 0 && deltaY >= 0;
-    setHide(hide);
-    setPageY(pageYOffset);
   };
+
+  if (location.pathname === '/login') return null;
+  if (location.pathname === '/join') return null;
 
 
   const throttleScroll = throttle(handleScroll, 50);
 
+
   return (
     <HeaderArea>
-      <HeaderContainer className={hide && 'hide'}>
+      <HeaderContainer>
         <HeaderBox>
           <Logo
             onClick={() => {
@@ -66,22 +68,21 @@ const Header = () => {
             Complete
           </CompleteButton>
           <PostCategories />
-          {myToken ? <LogoutButton onClick={
-            logoutFeat}>
-            LOGOUT
-          </LogoutButton> :
+          {myToken ? (
+            <LogoutButton onClick={logoutFeat}>LOGOUT</LogoutButton>
+          ) : (
             <LoginButton
               onClick={() => {
                 navigate('/login');
               }}
             >
               LOGIN
-            </LoginButton>}
+            </LoginButton>
+          )}
         </HeaderBox>
       </HeaderContainer>
     </HeaderArea>
   );
-
 };
 
 export default Header;
@@ -103,7 +104,7 @@ const HeaderArea = styled.div`
 
 const HeaderContainer = styled.div`
   width: 100%;
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   z-index: 2;
@@ -157,8 +158,8 @@ const LoginButton = styled(Button)`
 `;
 
 const LogoutButton = styled(Button)`
-width: 80px;
-${({ theme }) => theme.backgroundSet('cover')}
+  width: 80px;
+  ${({ theme }) => theme.backgroundSet('cover')}
 
-font-size: 13px;
+  font-size: 13px;
 `;

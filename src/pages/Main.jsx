@@ -26,7 +26,6 @@ const Main = () => {
     <MainContainer>
       <VideoContainer>
         <TopScroll />
-        {/* <Header /> */}
         <Videos src={MP4} autoPlay muted loop></Videos>
         <VideoTitle>
           WELCOME
@@ -111,13 +110,13 @@ const How = styled.button`
 `;
 
 const DownScroll = styled.button`
-  width: 30px;
+  width: 60px;
   height: 30px;
 
   background: url(${down});
   ${({ theme }) => theme.backgroundSet('contain')};
   ${Position}
-  top: 75%;
+  top: 50%;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
   animation-name: bounce;
