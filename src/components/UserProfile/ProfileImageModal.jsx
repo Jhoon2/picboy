@@ -1,15 +1,21 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import ProfileImageIcons from './ProfileImageIcons'
 import basicImg from '../../images/basicImg.jpg'
+import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
+import { useMyContext } from '../../shared/ContextApi'
 
-const ProfileImageModal = ({ shown, close, setImageUrl }) => {
+const myToken = getCookieToken();
+const refreshToken = getRefreshToken();
+
+const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
   const baseURL = process.env.REACT_APP_API_KEY;
-
+  const myContext = useMyContext();
   const [profileChange, setProfileChange] = useState(false)
   const [selectIcon, setSelectIcon] = useState(false)
-
+  const [imgUrl, setImgUrl] = useState(false)
+  // const [changeImg, setChangeImg] = useState(imgFile)
   // 내 PC에서 가져오기
   const FromMyPc = (e) => {
     setSelectIcon(false)
@@ -17,29 +23,38 @@ const ProfileImageModal = ({ shown, close, setImageUrl }) => {
   }
   const imgRef = useRef();
 
-  const onChangeImage = (e) => {
+  const onChangeImage =  (e) => {
     const reader = new FileReader();
     const file = imgRef.current.files[0];
-    reader.readAsDataURL(file);
-
     reader.onloadend = () => {
-      setImageUrl(reader.result);    
-      // setImgFile(file)
+      const base64data = reader.result;
+      setImgUrl(base64data);
+      sendApi(base64data);
+      myContext.setImgAddress(base64data)
     }
+    reader.readAsDataURL(file);
     close();
-
-    // const formData = new FormData();
-    // formData.append('file',file )
-    // console.log(formData)
-    // for (const keyValue of formData) 
-    //   console.log(keyValue[1])
-    // const upload_file = async () => {
-    //   const response = await axios.get(`${baseURL}/mypage/update-image`)
-    //   console.log(response)
-    // }     
-    // upload_file();
   }
   
+  const sendApi = async (data) => {
+    try {
+      const response = await axios.put(`${baseURL}/mypage/update-image`, { img: data },
+        {
+          headers: {
+            Authorization: myToken,
+            'refresh-token': refreshToken
+          }
+        }
+      )
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    
+  },[imgUrl])
   // 아이콘 고르기
   const clickSelect = (e) => {
     setProfileChange(e.target.id)
@@ -50,7 +65,7 @@ const ProfileImageModal = ({ shown, close, setImageUrl }) => {
   const clickBasic = (e) => {
     setSelectIcon(false)
     setProfileChange(e.target.id)
-    setImageUrl(basicImg)
+    myContext.setImgAddress(basicImg)
     close();
   }
   return shown ? (

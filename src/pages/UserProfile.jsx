@@ -30,8 +30,8 @@ const UserProfile = () => {
     const lastIntersectingData = useRef(null);
     
     const [isOpenCategory, setIsOpenCategory] = useState(false)
-    const [imageUrl, setImageUrl] = useState(''); 
-    // const [imgFile, setImgFile] = useState("")
+    // const [imageUrl, setImageUrl] = useState(); 
+    const [imgFile, setImgFile] = useState(null)
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
@@ -44,11 +44,11 @@ const UserProfile = () => {
             const response = await axios.get(`${baseURL}/mypage/user-info?nickname=${ userinfo?.data?.data.nickname}`)
             setUser(response)
             const nickname = response.data.data.nickname
-            setImageUrl(response.data.data.profileImg)
             setLoadMyNickName(nickname)
             setPostCount(response.data.data.postCount)
+            myContext.setImgAddress(response.data.data.profilImg)
 
-            //컴포넌트 다시 
+            //컴포넌트 다시
             const readMypage = async () => {
                 const response =  await axios.get(`${baseURL}/mypage/post/${0}/${1}?nickname=${nickname}&page=${page}&size=6`,
                 {
@@ -82,7 +82,7 @@ const UserProfile = () => {
         if (userinfo) {
             readUser()
         }
-      }, [page,userinfo,readUser]);
+      }, [page,userinfo,readUser,imgFile]);
 
     
   useEffect(() => {
@@ -129,7 +129,6 @@ const UserProfile = () => {
               'refresh-token': refreshToken,
             },
           })
-        console.log(response.data)
         setEditMyNickName(false)
     }
 
@@ -170,7 +169,7 @@ const UserProfile = () => {
                 {/* 프로필 */}
                 <ProfileContainer>
                     <ProfileInner>
-                        <ProfileImage src={imageUrl ? imageUrl : basicImg} onContextMenu={RightMouseClick} />
+                        <ProfileImage src={myContext.imgAddress ? myContext.imgAddress : basicImg} onContextMenu={RightMouseClick} />
                         <TextProfileContents>
                             <TextContentContainer>
                                 <TextContent>아이디</TextContent>
@@ -234,7 +233,7 @@ const UserProfile = () => {
 
         {/* 프로필이미지 모달창 */}
             {user && user.data.data.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
-                close={() => { myContext.setIsOpenProfileImg(false) }} setImageUrl={setImageUrl}  /> : null}  
+                close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
          {/* 카테고리모달창 */}
          <CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} />    
         </UserProfileContainer>

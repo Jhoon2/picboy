@@ -44,7 +44,7 @@ const BestSlider = () => {
         <style>{cssstyle}</style>
         <Slider {...settings}>
           <>
-            {bests.data.data.map((item, index) => {
+            {bests.data && bests.data.data.map((item, index) => {
               return (
                 <Box>
                   <Bannerimage key={item.id} src={item.gifUrl} alt="" />
