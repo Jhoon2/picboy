@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import Slider from 'react-slick';
+import { useSelector, useDispatch } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import nikebanner from '../images/nikebanner.jpg';
-import user from '../images/user.png';
+import { __getBest } from '../redux/modules/Best';
+
 const BestSlider = () => {
+  const dispatch = useDispatch();
+  const { bests } = useSelector((state) => state.bests);
+  console.log(bests);
+
+  useEffect(() => {
+    dispatch(__getBest());
+  }, [dispatch]);
+
   const settings = {
     className: 'center',
     centerMode: true,
@@ -28,26 +37,21 @@ const BestSlider = () => {
       },
     ],
   };
+
   return (
     <>
       <Container>
         <style>{cssstyle}</style>
         <Slider {...settings}>
-          <Box>
-            <Bannerimage />
-          </Box>
-          <Box>
-            <Bannerimage />
-          </Box>
-          <Box>
-            <Bannerimage />
-          </Box>
-          <Box>
-            <Bannerimage />
-          </Box>
-          <Box>
-            <Bannerimage />
-          </Box>
+          <>
+            {bests.data.data.map((item, index) => {
+              return (
+                <Box>
+                  <Bannerimage key={item.id} src={item.gifUrl} alt="" />
+                </Box>
+              );
+            })}
+          </>
         </Slider>
       </Container>
     </>
@@ -67,44 +71,11 @@ const Box = styled.div`
   position: relative;
 `;
 
-const Bannerimage = styled.div`
+const Bannerimage = styled.img`
   height: 300px;
-  background: url(${nikebanner});
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  /* transition: all 0.2s linear;
-  &:hover {
-    transform: scale(1.05);
-  } */
-`;
-
-const ProfileBox = styled.div`
-  width: 200px;
-  height: 150px;
-  margin: auto;
-  /* position: absolute;
-  top: 50%;
-  left: 150px; */
-  ${({ theme }) => theme.flexSet('column', 'space-evenly', 'center')}
-`;
-
-const Img = styled.div`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: url(${user});
-  ${({ theme }) => theme.backgroundSet('contain')}
-`;
-
-const Topic = styled.span`
-  font-family: 'NotoBold';
-  font-size: 30px;
-`;
-
-const Nickname = styled.span`
-  font-family: 'NotoLight';
-  font-size: 20px;
 `;
 
 const cssstyle = css`

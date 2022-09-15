@@ -19,15 +19,15 @@ import store from './redux/config/configStore';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-    <Provider store={store}>
-      <ThemeProvider
-        theme={{ ...color, ...fontSizes, device, flexSet, backgroundSet }}
-      >
-        <GlobalStyle />
-        <GlobalFonts />
-        <App />
-      </ThemeProvider>
-    </Provider>
+  <Provider store={store}>
+    <ThemeProvider
+      theme={{ ...color, ...fontSizes, device, flexSet, backgroundSet }}
+    >
+      <GlobalStyle />
+      <GlobalFonts />
+      <App />
+    </ThemeProvider>
+  </Provider>
   // </React.StrictMode>
 );
 // If you want to start measuring performance in your app, pass a function

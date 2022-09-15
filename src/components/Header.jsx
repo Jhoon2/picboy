@@ -4,16 +4,19 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
+import {getCookieToken, removeCookieToken, removeRefreshCookieToken} from '../shared/Cookie';
+
+const myToken = getCookieToken();
 
 const throttle = function (callback, waitTime) {
-  let timerId = null;
-  return (e) => {
-    if (timerId) return;
-    timerId = setTimeout(() => {
-      callback.call(this, e);
-      timerId = null;
-    }, waitTime);
-  };
+    let timerId = null;
+    return (e) => {
+        if (timerId) return;
+        timerId = setTimeout(() => {
+            callback.call(this, e);
+            timerId = null;
+        }, waitTime);
+    };
 };
 
 const Header = () => {
@@ -22,6 +25,11 @@ const Header = () => {
   const documentRef = useRef(document);
   const location = useLocation();
   
+  const logoutFeat = () => {
+    removeCookieToken();
+    window.location.href = '/';
+  }
+
   const handleScroll = () => {
     const { pageYOffset } = window;
     const deltaY = pageYOffset - pageY;
@@ -66,17 +74,22 @@ const Header = () => {
             Complete
           </CompleteButton>
           <PostCategories />
-          <LoginButton
+          {myToken ? <LogoutButton onClick={
+            logoutFeat}>
+            LOGOUT
+          </LogoutButton> :
+            <LoginButton
             onClick={() => {
               navigate('/login');
             }}
           >
             LOGIN
-          </LoginButton>
+          </LoginButton>}
         </HeaderBox>
       </HeaderContainer>
     </HeaderArea>
   );
+
 };
 
 export default Header;
@@ -148,4 +161,11 @@ const LoginButton = styled(Button)`
   ${({ theme }) => theme.backgroundSet('cover')}
 
   font-size: 13px;
+`;
+
+const LogoutButton = styled(Button)`
+width: 80px;
+${({ theme }) => theme.backgroundSet('cover')}
+
+font-size: 13px;
 `;
