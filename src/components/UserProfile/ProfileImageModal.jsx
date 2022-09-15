@@ -26,6 +26,7 @@ const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
   const onChangeImage =  (e) => {
     const reader = new FileReader();
     const file = imgRef.current.files[0];
+    console.log(imgRef.current.files)
     reader.onloadend = () => {
       const base64data = reader.result;
       setImgUrl(base64data);
@@ -57,6 +58,7 @@ const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
   },[imgUrl])
   // 아이콘 고르기
   const clickSelect = (e) => {
+    
     setProfileChange(e.target.id)
     setSelectIcon(!selectIcon)
   }
@@ -68,8 +70,14 @@ const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
     myContext.setImgAddress(basicImg)
     close();
   }
+
+  const closeOuter = () => {
+    close();
+    setSelectIcon(false)
+  }
+
   return shown ? (
-    <Overlay onClick={() => { close() }}>
+    <Overlay onClick={closeOuter}>
       <OverlayPosition >
         <ModalContainer onClick={(e) => { e.stopPropagation(); }}>
         <label htmlFor="upload-photo">

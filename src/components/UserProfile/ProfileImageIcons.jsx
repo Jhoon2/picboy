@@ -1,4 +1,5 @@
 import React from 'react'
+import { useRef } from 'react'
 import { useMyContext } from '../../shared/ContextApi'
 import styled from 'styled-components'
 import icon from '../../images/icon.png'
@@ -10,8 +11,26 @@ import rectangle from '../../images/rectangle.png'
 
 const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
   const myContext = useMyContext();
+  const imgRef = useRef();
+
   const clickIcon = (e) => {
-    console.log(e.target.src)
+    e.stopPropagation()
+    // console.log(e.target)
+    // const reader = new FileReader();
+    // const file = e.target.src;
+    // reader.readAsDataURL(file);
+
+    // console.log(file)
+    // const aa = reader.readAsDataURL(file)
+    // console.log(aa)
+    // reader.onloadend = () => {
+    //   const base64data = reader.result;
+    //   // setImgUrl(base64data);
+    //   // sendApi(base64data);
+    //   myContext.setImgAddress(base64data)
+    // }
+    // reader.readAsDataURL(file);
+    console.log(myContext.imgAddress)
     setSelectIcon(false)
     close();
     myContext.setIsOpenProfileImg(false)
@@ -27,27 +46,27 @@ const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
           <TitleIconModal>아이콘을 선택하세요.</TitleIconModal>
           <IconsContainer>
             <IconCard>
-              <IconImage id='fisrt' src={icon} onClick={clickIcon}></IconImage>
+              <IconImage id='fisrt'  ref={imgRef} src={icon} onClick={clickIcon}></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='second' src={reactlogo} onClick={clickIcon}></IconImage>
+              <IconImage id='second' ref={imgRef} src={reactlogo} onClick={clickIcon}></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='third' src={user} onClick={clickIcon}></IconImage>
+              <IconImage id='third'ref={imgRef} src={user} onClick={clickIcon}></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='fourth' src={topbutton} onClick={clickIcon}></IconImage>
+              <IconImage id='fourth' ref={imgRef} src={topbutton} onClick={clickIcon}></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='fifth' src={line} onClick={clickIcon}></IconImage>
+              <IconImage id='fifth' ref={imgRef} src={line} onClick={clickIcon}></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='sixth' src={rectangle} onClick={clickIcon}></IconImage>
+              <IconImage id='sixth' ref={imgRef} src={rectangle} onClick={clickIcon}></IconImage>
               <IconName>이름</IconName>
             </IconCard>
           </IconsContainer>
