@@ -2,36 +2,35 @@ import React from 'react'
 import styled from 'styled-components'
 
 const GifCard = ({ data }) => {
-    return (
-        <CardContainer>
-            <GifImg src={data.imgUrl} />
-            <OverlayImg>
-                <HoverSideButton>···</HoverSideButton>
-                <HoverContent>
-                    <div style={{
-                        color: 'white'
-                    }}>{data.topic ? data.topic : null}</div>
-                    <div style={{ display: 'flex' }}>
-                        <ClickCircle><div style={{ marginTop: '15px', marginLeft: '12px', fontSize: '10px' }}>다운</div></ClickCircle>
-                        <ClickCircle><div style={{ marginTop: '5px', marginLeft: '9px', fontSize: '30px' }}>♥</div>
-                        </ClickCircle>
-                    </div>
-                </HoverContent>
-            </OverlayImg>
-
-            <GifContents>
-                <UserProfileContent>
-                    <ProfileImage />
-                    <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+3</div></Participants>
-                    <div style={{ marginTop: '15px', marginLeft: '15px' }}>{data.nickname} 외 3명</div>
-                </UserProfileContent>
-                <div style={{ display: 'flex' }}>
-                    <div style={{ marginLeft: '15px', fontSize: '30px' }}>♥</div>
-                    <div style={{ marginTop: '7px', marginLeft: '10px', fontSize: '20px' }}>30</div>
-                </div>
-            </GifContents>
-        </CardContainer>
-    )
+  return (
+    <CardContainer>
+      <GifImg src={data.imgUrl}/>
+        <OverlayImg>
+          <HoverSideButton>···</HoverSideButton>
+          <HoverContent>
+          <div style={{color:'white'
+          }}>{data.topic ? data.topic : null}</div>
+            <div style={{display :'flex'}}>
+              <ClickCircle><div style={{ marginTop:'15px',marginLeft:'12px', fontSize:'10px'}}>다운</div></ClickCircle>
+              <ClickCircle><div style={{ marginTop:'5px',marginLeft:'9px', fontSize:'30px'}}>♥</div>
+              </ClickCircle>
+            </div>
+          </HoverContent>
+        </OverlayImg>
+     
+      <GifContents>
+        <UserProfileContent>
+          <ProfileImage  />
+          <Participants><div style={{ marginTop:'5px', marginLeft:'5px', fontSize:'10px'}}>+3</div></Participants>
+          <div style={{marginTop:'15px', marginLeft:'15px'}}>{data.nickname} 외 3명</div>
+        </UserProfileContent>
+        <div style={{display:'flex'}}>
+          <div style={{ marginLeft: '15px', fontSize: '30px' }}>♥</div>
+          <div style={{ marginTop:'7px',marginLeft: '10px',fontSize: '20px' }}>30</div>
+        </div>
+      </GifContents>
+    </CardContainer>
+  )
 }
 
 const CardContainer = styled.div`

@@ -2,31 +2,31 @@ import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 
-const CategoryModal = ({ children, shown, close }) => {
-    const [categoryContent, setCategoryContent] = useState('recent')
+const CategoryModal = ({children, shown, close}) => {
+  const [categoryContent, setCategoryContent] = useState('recent')
 
-    return shown ? (
-        <Overlay onClick={() => { close() }}>
-            <OverlayPosition >
-                <OverlayContainer>
-                    <ModalContainer onClick={e => { e.stopPropagation(); }}>
-                        <ModalText id='recent' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent} >
-                            최신순
-                        </ModalText>
-                        <TextBr />
-                        <ModalText id='liked' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>
-                            좋아요순
-                        </ModalText>
-                        <TextBr />
-                        <ModalText id='comments' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>
-                            댓글많은순
-                        </ModalText>
-                        {/* {children} */}
-                    </ModalContainer>
-                </OverlayContainer>
-            </OverlayPosition>
-        </Overlay>
-    ) : null
+  return shown? (
+    <Overlay onClick={()=>{close()}}>
+      <OverlayPosition >
+        <OverlayContainer>
+          <ModalContainer onClick={e => {e.stopPropagation();}}>
+            <ModalText id='recent' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent} >
+              최신순
+              </ModalText>
+            <TextBr />
+            <ModalText id='liked' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>
+              좋아요순
+            </ModalText>
+            <TextBr />
+            <ModalText id='comments' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>
+              댓글많은순
+            </ModalText>
+            {/* {children} */}
+          </ModalContainer>
+        </OverlayContainer>
+      </OverlayPosition>
+    </Overlay>
+  ) : null
 }
 
 const Overlay = styled.div`
@@ -74,7 +74,7 @@ const ModalText = styled.div`
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
-  color: ${(props) => (props.id === props.categoryContent) ? '#000000' : '#A3A3A3'} ;
+  color: ${(props)=> (props.id === props.categoryContent) ? '#000000' : '#A3A3A3'} ;
   cursor: pointer;
 
   :first-child {
@@ -93,3 +93,4 @@ const TextBr = styled.div`
   border: 0.5px solid #A3A3A3;
 `
 export default CategoryModal
+

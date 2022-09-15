@@ -161,7 +161,8 @@ const PostFreeRelay = () => {
     const [countFrame, setCountFrame] = useState("");
     const [lastImg, setLastImg] = useState("");
 
-    const imgInfoUrl = `${baseURL}/post/gif/images/detail${postid}`;
+    // const imgInfoUrl = `${baseURL}/post/gif/images/detail${postid}`;
+    const imgInfoUrl = `${baseURL}/post/gif/images/detail`;
     axios
         .get(imgInfoUrl)
         .then(function (response) {
@@ -178,9 +179,8 @@ const PostFreeRelay = () => {
         const canvas = canvasRef.current;
         const imgDataUrl = canvas.toDataURL('image/png');
         axios.post(
-            ////////////////////
-            // 서버 바꾸고 url변경
-            `${baseURL}/post/relay/${postid}`,
+            // `${baseURL}/post/relay/${postid}`,
+            `${baseURL}/post/relay`,
             {
                 "file": imgDataUrl,
             },
