@@ -95,6 +95,24 @@ const ProgressDetail = () => {
                 </Box>
               );
             })}
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
+
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
+
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
+
+          <Box>
+            <img img={nike} alt="" />
+          </Box>
         </Slider>
       </Bannerbox>
       <ButtonBox>

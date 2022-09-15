@@ -12,8 +12,21 @@ import {
 
 const myToken = getCookieToken();
 
+const throttle = function (callback, waitTime) {
+  let timerId = null;
+  return (e) => {
+    if (timerId) return;
+    timerId = setTimeout(() => {
+      callback.call(this, e);
+      timerId = null;
+    }, waitTime);
+  };
+};
+
 const Header = () => {
   const navigate = useNavigate();
+  const [hide, setHide] = useState(false);
+  const [pageY, setPageY] = useState(0);
   const documentRef = useRef(document);
   const location = useLocation();
 
@@ -80,6 +93,7 @@ const Button = styled.button`
 const HeaderArea = styled.div`
   position: relative;
   width: 100%;
+  z-index: 9999;
 `;
 
 const HeaderContainer = styled.div`

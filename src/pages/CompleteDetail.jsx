@@ -22,8 +22,10 @@ const CompleteDetail = () => {
   const params = useParams();
 
   //redux
+
   const [commentInput, setCommentInput] = useState();
   const { comments } = useSelector((state) => state.comments);
+
   const dispatch = useDispatch();
 
   //댓글등록
@@ -49,6 +51,7 @@ const CompleteDetail = () => {
   const [gif, setGif] = useState('');
 
   const gifApi = () => {
+    //추후에 바꾸기 `${baseURL}/post/gif/detail/${params.Id}`
     const url = `${baseURL}/post/gif/detail/${params.Id}`;
     axios
       .get(url)
@@ -69,7 +72,7 @@ const CompleteDetail = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
+    slidesToShow: 6,
     slidesToScroll: 6,
   };
 
@@ -91,9 +94,6 @@ const CompleteDetail = () => {
           <Slider {...settings}>
             {imgList &&
               imgList.map((list) => {
-                {
-                  console.log(list);
-                }
                 <>
                   <ImgListWrap>
                     <ImgGrey />
