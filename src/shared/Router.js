@@ -13,7 +13,7 @@ import ProgressPost from '../pages/ProgressPost';
 import SignUp from '../pages/SignUp';
 import UserProfile from '../pages/UserProfile';
 import CompList from '../pages/CompList';
-import { Context } from "./ContextApi";
+import { Context } from './ContextApi';
 import Header from '../components/Header';
 import PostFreeRelay from '../pages/PostFreeRelay';
 import PostTopicRelay from '../pages/PostTopicRelay';
@@ -29,7 +29,7 @@ const Router = () => {
         <Routes>
           {/* 종훈님 */}
           <Route path="/" element={<Main />} />
-          <Route path="progress-detail:id" element={<ProgressDetail />} />
+          <Route path="/progressdetail/:id" element={<ProgressDetail />} />
           <Route path="progress-post" element={<ProgressPost />} />
           <Route path="list" element={<List />} />
           {/* 민희님 */}

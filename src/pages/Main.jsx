@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import Header from '../components/Header';
+// import Header from '../components/Header';
 import Footer from '../components/Footer';
 import TopScroll from '../elem/TopScroll';
 import MainDesc from '../components/MainDesc';
@@ -26,7 +26,7 @@ const Main = () => {
     <MainContainer>
       <VideoContainer>
         <TopScroll />
-        <Header />
+        {/* <Header /> */}
         <Videos src={MP4} autoPlay muted loop></Videos>
         <VideoTitle>
           WELCOME
