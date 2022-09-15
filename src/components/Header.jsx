@@ -10,6 +10,8 @@ import {
   removeRefreshCookieToken,
 } from '../shared/Cookie';
 
+
+
 const myToken = getCookieToken();
 
 const throttle = function (callback, waitTime) {
@@ -37,6 +39,10 @@ const Header = () => {
 
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
+
+
+  const throttleScroll = throttle(handleScroll, 50);
+
 
   return (
     <HeaderArea>

@@ -38,6 +38,7 @@ const BestSlider = () => {
       },
     ],
   };
+
   return (
     <>
       <Container>
@@ -82,10 +83,11 @@ const Box = styled.div`
   position: relative;
 `;
 
-const Bannerimage = styled.div`
+const Bannerimage = styled.img`
   height: 300px;
   background: url(${(props) => props.img});
   ${({ theme }) => theme.backgroundSet('contain')};
+
 `;
 
 const cssstyle = css`

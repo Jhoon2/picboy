@@ -1,15 +1,18 @@
-import React from 'react'
-import { useState, useRef } from 'react'
+
+import React, { useCallback } from 'react'
+import { useState,useRef } from 'react'
 import { useEffect } from 'react'
-import { useMyContext } from '../shared/ContextApi'
 import axios from "axios"
 
 import styled from 'styled-components'
-import GifCard from '../components/userprofile/GifCard'
-import CategoryModal from '../components/userprofile/CategoryModal'
-import ProfileImageModal from '../components/userprofile/ProfileImageModal'
+import GifCard from '../components/UserProfile/GifCard'
+// import CategoryModal from '../components/UserProfile/CategoryModal'
+import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import { getCookieToken, getRefreshToken } from '../shared/Cookie'
+import UseGet from '../hooks/UseGetUser'
+import { useMyContext } from '../shared/ContextApi'
 import basicImg from '../images/basicImg.jpg'
+
 
 const myToken = getCookieToken();
 const refreshToken = getRefreshToken();
@@ -17,6 +20,10 @@ const refreshToken = getRefreshToken();
 const UserProfile = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
+    //로그인 정보
+    const userinfo = UseGet();
+
+
     const [user, setUser] = useState(null)
 
     const [randomData, setRandomData] = useState([]);
@@ -24,77 +31,77 @@ const UserProfile = () => {
     const lastIntersectingData = useRef(null);
 
     const [isOpenCategory, setIsOpenCategory] = useState(false)
-    const [isOpenProfileImg, setIsOpenProfileImg] = useState(false)
-    const [imageUrl, setImageUrl] = useState('');
-    const [imgFile, setImgFile] = useState("")
+    // const [imageUrl, setImageUrl] = useState(); 
+    const [imgFile, setImgFile] = useState(null)
+    const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
     const [categoryContent, setCategoryContent] = useState('all')
     const [filter, setFilter] = useState(false);
+    const [postCount, setPostCount] = useState(false)
 
-    let nickname;
-    const readUser = async () => {
-        const response = await axios.get(`${baseURL}/main/user-info`,
-            {
-                headers: {
-                    Authorization: myToken,
-                    'refresh-token': refreshToken
-                }
-            })
-        console.log(response)
-        setUser(response)
-        nickname = response.data.data.nickname
-        setImageUrl(response.data.data.profileImg)
-        myContext.setNickname(nickname)
+    const readUser = useCallback(
+        async () => {
+            const response = await axios.get(`${baseURL}/mypage/user-info?nickname=${ userinfo?.data?.data.nickname}`)
+            setUser(response)
+            const nickname = response.data.data.nickname
+            setLoadMyNickName(nickname)
+            setPostCount(response.data.data.postCount)
+            myContext.setImgAddress(response.data.data.profilImg)
 
-        const readMypage = async () => {
-            const response = await axios.get(`${baseURL}/mypage/post/${0}/${1}?nickname=${nickname}&page=${page}&size=6`,
+            //컴포넌트 다시
+            const readMypage = async () => {
+                const response =  await axios.get(`${baseURL}/mypage/post/${0}/${1}?nickname=${nickname}&page=${page}&size=6`,
                 {
                     headers: {
                         Authorization: myToken,
                         'refresh-token': refreshToken
                     }
-                })
 
-            setRandomData(randomData.concat(response.data.data));
-        }
-        readMypage()
-    }
-
-    //observe 콜백 함수
-    const onIntersect = (entries, observer) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                //조건이 트루
-                //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
-                setPage((page) => page + 1);
-                // 현재 타겟을 observe한다.
-                observer.observe(entry.target); // unobserve가 아님
+                    })
+                
+                setRandomData(randomData.concat(response.data.data));
             }
-        });
-    };
-    console.log(page)
+        readMypage()
+    }, [userinfo,page])
+        
+  //observe 콜백 함수
+  const onIntersect = (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        //조건이 트루
+        //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
+        setPage((page) => page + 1);
+        // 현재 타겟을 observe한다.
+        observer.observe(entry.target); // unobserve가 아님
+      }
+    });
+  };
+    // console.log(page)
+    
 
     useEffect(() => {
-        readUser();
-    }, [page]);
-
-    useEffect(() => {
-        //observer 인스턴스를 생성한 후 구독
-        let observer;
-        if (lastIntersectingData) {
-            observer = new IntersectionObserver(onIntersect, { threshold: 1 });
-            //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
-            observer.observe(lastIntersectingData.current);
+        if (userinfo) {
+            readUser()
         }
-        return () => observer && observer.disconnect();
-    }, [lastIntersectingData]);
+      }, [page,userinfo,readUser,imgFile]);
 
+    
+  useEffect(() => {
+    //observer 인스턴스를 생성한 후 구독
+    let observer;
+    if (lastIntersectingData) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 1 });
+      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
+      observer.observe(lastIntersectingData.current);
+    }
+    return () => observer && observer.disconnect();
+  }, [lastIntersectingData]);
 
 
     const RightMouseClick = (e) => {
         e.preventDefault();
-        setIsOpenProfileImg(!isOpenProfileImg)
+        myContext.setIsOpenProfileImg(!myContext.isOpenProfileImg)
     }
 
     const editNickname = () => {
@@ -102,8 +109,9 @@ const UserProfile = () => {
     }
 
     const editNickChange = (e) => {
-        if ((e.target.value).length >= 2 && (e.target.value).length <= 8) {
-            myContext.setNickname(e.target.value)
+        if ((e.target.value).length >= 2 && (e.target.value).length <= 8)
+        {
+            setLoadMyNickName(e.target.value)
             setEditNickValue('')
         }
         else { setEditNickValue('2글자 이상 8글자 이하로 입력해주세요') }
@@ -111,11 +119,17 @@ const UserProfile = () => {
     const completeBtn = async () => {
         if (editMyNickname === '') setEditMyNickName(false)
         //서버에 전송
-        // const info = {
-        //     nickname: editMyNickname
-        // }
-        // const response = await axios.put(`${baseURL}/mypage/update-info`, info)
-        // console.log(response)
+        const info = {
+            nickname: loadMyNickname
+        }
+        console.log(info)
+        const response = await axios.put(`${baseURL}/mypage/update-nickname`,info,
+        {
+            headers: {
+              Authorization: myToken,
+              'refresh-token': refreshToken,
+            },
+          })
         setEditMyNickName(false)
     }
 
@@ -128,13 +142,36 @@ const UserProfile = () => {
     }
 
 
+    //닉네임 중복확인
+    const [existedNick, setExistedNick] = useState(false);
+    const [availableNick, setAvailableNick] = useState(false);
+
+    const checkNickname = async () => {
+        try {
+        const response = await axios.get(
+            `${baseURL}/user/nickname-double-check/${editMyNickname}`
+        );
+        if (!response.data.success) {
+            setExistedNick(true);
+        } else {
+            setAvailableNick(true);
+        }
+        } catch (error) {
+        console.log(error);
+        }
+        };
+        const NickinputVacant = () => {
+            setExistedNick(false);
+            setAvailableNick(false);
+        };
+    
     return (
         <UserProfileContainer>
             <ContainerInner >
                 {/* 프로필 */}
                 <ProfileContainer>
                     <ProfileInner>
-                        <ProfileImage src={imageUrl ? imageUrl : basicImg} onContextMenu={RightMouseClick} />
+                        <ProfileImage src={myContext.imgAddress ? myContext.imgAddress : basicImg} onContextMenu={RightMouseClick} />
                         <TextProfileContents>
                             <TextContentContainer>
                                 <TextContent>아이디</TextContent>
@@ -142,23 +179,34 @@ const UserProfile = () => {
                             </TextContentContainer>
                             <TextContentContainer>
                                 <TextContent>닉네임</TextContent>
-                                <Texts >{editMyNickname ?
-                                    <EditInput placeholder={myContext.nickname} onChange={editNickChange} />
-                                    : myContext.nickname}
+                                <Texts >{editMyNickname ? 
+                                    <EditInput placeholder={loadMyNickname} onChange={editNickChange} onFocus={NickinputVacant} />
+                                    : loadMyNickname}
                                 </Texts>
-                                {editMyNickname ?
-                                    <ValidationNickname>
-                                        <div style={{ color: 'red', marginLeft: '20px' }}>{editNickValue}</div>
-                                    </ValidationNickname> : null}
+                                {editMyNickname ? 
+                                <ValidationNickname>
+                                        <div style={{ color: 'red', marginLeft: '20px'}}>{editNickValue} </div>
+                                        {editNickValue ? null : <CheckButton onClick={checkNickname}>중복확인</CheckButton>}
+                                        <div style={{width:'300px'}}>
+                                            <Errorsmessage>
+                                                {existedNick && '중복 아이디입니다'}
+                                            </Errorsmessage>
+                                            <NoErrorsmessage>
+                                                {availableNick && '사용 가능한 아이디입니다'}
+                                            </NoErrorsmessage>
+                                        </div>
+                                </ValidationNickname> : null}
                             </TextContentContainer>
 
                             <TextContentContainer>
                                 <TextContent>게시물</TextContent>
-                                <Texts>개</Texts>
+                                <Texts>{postCount}개</Texts>
                             </TextContentContainer>
                         </TextProfileContents>
                     </ProfileInner>
-                    {button}
+
+                        {user && user.data.data.username === userinfo.data.data.username ? button : null}
+
                 </ProfileContainer>
                 <ProfileBorder />
                 {/* 카테고리별 */}
@@ -187,10 +235,13 @@ const UserProfile = () => {
                 </>
             </ContainerInner>
 
-            {/* 프로필이미지 모달창 */}
-            <ProfileImageModal shown={isOpenProfileImg} close={() => { setIsOpenProfileImg(false) }} setImageUrl={setImageUrl} setImgFile={setImgFile} />
-            {/* 카테고리모달창 */}
-            <CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} />
+
+        {/* 프로필이미지 모달창 */}
+            {user && user.data.data.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
+                close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
+         {/* 카테고리모달창 */}
+<CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} /> 
+
         </UserProfileContainer>
     )
 }
@@ -233,7 +284,9 @@ const TextProfileContents = styled.div`
     margin-left: 50px;
 `
 const TextContentContainer = styled.div`
+    width: 1000px;
     display: flex;
+    
 `
 
 const TextContent = styled.div`
@@ -279,6 +332,7 @@ const EditButton = styled.button`
 `
 const ValidationNickname = styled.div`
     width: 50%;
+    display: flex;
 `
 
 const CategoryContainer = styled.div`
@@ -312,6 +366,40 @@ const CardContainer = styled.div`
     position: relative;
     display: flex;
     flex-wrap: wrap;
-`
+
+` 
+const CheckButton = styled.button`
+  width: 100px;
+  height: 40px;
+  margin-top: -10px;
+  margin-left: 10px;
+  font-size: 14px;
+  font-family: 'NotoLight';
+  border: 1px solid grey;
+  cursor: pointer;
+  background-color: white;
+
+  :hover {
+    color: white;
+    background-color: black;
+  }
+`;
+
+const Errorsmessage = styled.div`
+  width: 300px;
+  margin-left: 10px;
+  font-size: 13px;
+  font-family: 'NotoLight';
+  color: red;
+`;
+
+const NoErrorsmessage = styled.div`
+  width: 300px;
+  margin-left: 10px;
+  font-size: 13px;
+  font-family: 'NotoLight';
+  color: green;
+`;
+
 
 export default UserProfile
