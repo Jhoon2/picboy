@@ -4,27 +4,28 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
-import {getCookieToken, removeCookieToken, removeRefreshCookieToken} from '../shared/Cookie';
+import { getCookieToken, removeCookieToken, removeRefreshCookieToken } from '../shared/Cookie';
 
 const myToken = getCookieToken();
 
 const throttle = function (callback, waitTime) {
-    let timerId = null;
-    return (e) => {
-        if (timerId) return;
-        timerId = setTimeout(() => {
-            callback.call(this, e);
-            timerId = null;
-        }, waitTime);
-    };
+  let timerId = null;
+  return (e) => {
+    if (timerId) return;
+    timerId = setTimeout(() => {
+      callback.call(this, e);
+      timerId = null;
+    }, waitTime);
+  };
 };
 
 const Header = () => {
+  const navigate = useNavigate();
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
   const documentRef = useRef(document);
   const location = useLocation();
-  
+
   const logoutFeat = () => {
     removeCookieToken();
     window.location.href = '/';
@@ -38,17 +39,8 @@ const Header = () => {
     setPageY(pageYOffset);
   };
 
-  const throttleScroll = throttle(handleScroll, 50);
 
-  useEffect(() => {
-    documentRef.current.addEventListener('scroll', throttleScroll);
-    return () =>
-      documentRef.current.removeEventListener('scroll', throttleScroll);
-  }, [pageY]);
-  const navigate = useNavigate();
-  
-  if (location.pathname === '/login') return null;
-  if (location.pathname === '/join') return null;
+  const throttleScroll = throttle(handleScroll, 50);
 
   return (
     <HeaderArea>
@@ -79,12 +71,12 @@ const Header = () => {
             LOGOUT
           </LogoutButton> :
             <LoginButton
-            onClick={() => {
-              navigate('/login');
-            }}
-          >
-            LOGIN
-          </LoginButton>}
+              onClick={() => {
+                navigate('/login');
+              }}
+            >
+              LOGIN
+            </LoginButton>}
         </HeaderBox>
       </HeaderContainer>
     </HeaderArea>
@@ -106,6 +98,7 @@ const Button = styled.button`
 const HeaderArea = styled.div`
   position: relative;
   width: 100%;
+  z-index: 9999;
 `;
 
 const HeaderContainer = styled.div`

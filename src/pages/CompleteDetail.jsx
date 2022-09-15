@@ -41,8 +41,9 @@ const CompleteDetail = () => {
         dispatch(__postComment(payload))
         setCommentInput('')
     }
+  
 
-    useEffect(()=>{
+  useEffect(() => {
     dispatch(__getComment(params.Id))
     },[dispatch])
     // axios 
@@ -136,9 +137,11 @@ const CompleteDetail = () => {
 
             </WidthWrap>
         </>
-    )
+)
+    
 
 }
+
 
 const TitleBanner = styled.div`
     width: 100%;

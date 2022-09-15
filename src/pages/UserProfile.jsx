@@ -5,7 +5,7 @@ import axios from "axios"
 
 import styled from 'styled-components'
 import GifCard from '../components/UserProfile/GifCard'
-import CategoryModal from '../components/UserProfile/CategoryModal'
+// import CategoryModal from '../components/UserProfile/CategoryModal'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import { getCookieToken, getRefreshToken } from '../shared/Cookie'
 import UseGet from '../hooks/UseGetUser'
@@ -28,7 +28,7 @@ const UserProfile = () => {
     const [randomData, setRandomData] = useState([]);
     const [page, setPage] = useState(0);
     const lastIntersectingData = useRef(null);
-    
+
     const [isOpenCategory, setIsOpenCategory] = useState(false)
     // const [imageUrl, setImageUrl] = useState(); 
     const [imgFile, setImgFile] = useState(null)
@@ -113,10 +113,10 @@ const UserProfile = () => {
             setLoadMyNickName(e.target.value)
             setEditNickValue('')
         }
-        else {setEditNickValue('2글자 이상 8글자 이하로 입력해주세요')}
+        else { setEditNickValue('2글자 이상 8글자 이하로 입력해주세요') }
     }
-    const completeBtn = async() => {
-        if(editMyNickname === '') setEditMyNickName(false)
+    const completeBtn = async () => {
+        if (editMyNickname === '') setEditMyNickName(false)
         //서버에 전송
         const info = {
             nickname: loadMyNickname
@@ -195,7 +195,7 @@ const UserProfile = () => {
                                         </div>
                                 </ValidationNickname> : null}
                             </TextContentContainer>
-                            
+
                             <TextContentContainer>
                                 <TextContent>게시물</TextContent>
                                 <Texts>{postCount}개</Texts>
@@ -204,9 +204,9 @@ const UserProfile = () => {
                     </ProfileInner>
                         {user && user.data.data.username === userinfo.data.data.username ? button : null}
                 </ProfileContainer>
-                <ProfileBorder/>
+                <ProfileBorder />
                 {/* 카테고리별 */}
-                
+
                 <CategoryContainer>
                     <CategoryDisplay>
                         <CategoryContent id='all' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>전체</CategoryContent>
@@ -214,20 +214,20 @@ const UserProfile = () => {
                         <CategoryContent id='participate' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>참여한 글</CategoryContent>
                         <CategoryContent id='behind' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>숨긴 글</CategoryContent>
                     </CategoryDisplay>
-                    <CategoryButton id='categoryBtn' onClick={()=>{setIsOpenCategory(!isOpenCategory)}} >카테고리 ▼</CategoryButton>
+                    <CategoryButton id='categoryBtn' onClick={() => { setIsOpenCategory(!isOpenCategory) }} >카테고리 ▼</CategoryButton>
                 </CategoryContainer>
-               
+
 
                 {/* 카드 */}
                 <>
                     <CardContainer>
                         {randomData && randomData.map((data, i) => {
-                            return(
-                            <GifCard key={i} data={data} />
+                            return (
+                                <GifCard key={i} data={data} />
                             )
                         })}
                     </CardContainer>
-                    <div style={{width:'100px', height:'20px', backgroundColor:'gray'}} ref={lastIntersectingData}>.</div>
+                    <div style={{ width: '100px', height: '20px', backgroundColor: 'gray' }} ref={lastIntersectingData}>.</div>
                 </>
             </ContainerInner>
 
@@ -235,7 +235,7 @@ const UserProfile = () => {
             {user && user.data.data.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
                 close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
          {/* 카테고리모달창 */}
-         <CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} />    
+         {/* <CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} />     */}
         </UserProfileContainer>
     )
 }
