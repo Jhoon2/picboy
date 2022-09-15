@@ -93,6 +93,7 @@ const Button = styled.button`
 const HeaderArea = styled.div`
   position: relative;
   width: 100%;
+  z-index: 9999;
 `;
 
 const HeaderContainer = styled.div`

@@ -30,6 +30,8 @@ const Canvas = () => {
     const [brushState, setBrushState] = useState(false);
     const [paintState, setPaintState] = useState(false);
     const [eraserState, setEraserState] = useState(false);
+    const [undoState, setUndoState] = useState(0);
+    const [redoState, setRedoState] = useState(0);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -38,6 +40,12 @@ const Canvas = () => {
         setPencilState(true);
         setCtx(canvasRef.current.getContext('2d'));
     }, []);
+
+    // const submit = () => {
+    //     const canvas = canvasRef.current;
+    //     const imgDataUrl = canvas.toDataURL('image/png');
+    //     console.log(imgDataUrl)
+    // }
 
     const draw = (e) => {
         const X = e.clientX - canvasRef.current.offsetLeft;
@@ -75,7 +83,6 @@ const Canvas = () => {
     // 선 투명도 변경
     const onLineOpacityChange = (e) => {
         setLineOpacity(ctx.globalAlpha = e.target.value);
-
     }
 
     // paint
@@ -121,6 +128,11 @@ const Canvas = () => {
     const undoHandler = (e) => {
     }
 
+    // redo
+    const redoHandler = (e) => {
+
+    }
+
     // draw Rect
     const drawRect = () => {
         setRectState(true);
@@ -157,8 +169,8 @@ const Canvas = () => {
                                     <Td><IcButton><img src={circle} alt="circle" /></IcButton></Td>
                                 </tr>
                                 <tr>
-                                    <Td><IcButton onClick={undoHandler}><img src={undo} alt="undo" /></IcButton></Td>
-                                    <Td><IcButton><img src={redo} alt="redo" /></IcButton></Td>
+                                    <Td><IcButton onClick={undoHandler} disabled={undoState === 0}><img src={undo} alt="undo" /></IcButton></Td>
+                                    <Td><IcButton onClick={redoHandler} disabled={redoState === 0}><img src={redo} alt="redo" /></IcButton></Td>
                                 </tr>
                             </tbody>
                         </Table>
@@ -232,7 +244,6 @@ const Canvas = () => {
                     onMouseUp={cancelPainting}
                     onMouseLeave={cancelPainting}
                 />
-
             </CanvasWrap>
         </>
     )
@@ -246,8 +257,6 @@ const canvasStyle = {
 }
 
 const CanvasWrap = styled.div`
-    width: 1200px;
-    margin: 300px auto;
     display: flex;
 `;
 
@@ -296,7 +305,7 @@ const IcButton = styled.div`
 `;
 
 const Table = styled.table`
-    margin-bottom: 12px;
+    c
     border: 2px solid #000;
     border-collapse: collapse;
     position: absolute;
@@ -310,8 +319,8 @@ const Td = styled.td`
 `;
 
 const ColorOption = styled.div`
-    width: 35px;
-    height: 35px;
+    width: 37px;
+    height: 37px;
     border: 1px solid #fff;
     background-color: ${props => props.color};
 `;
