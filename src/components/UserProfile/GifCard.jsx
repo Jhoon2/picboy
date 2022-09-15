@@ -1,22 +1,32 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 const GifCard = ({ data }) => {
+  const navigate = useNavigate();
+  //완료 페이지, 진행중 페이지 이동
+  const movePage = () => {
+    if (data.status === 1) {
+      navigate(`/progressdetail/${data.postId}`)
+    } else {
+      navigate(`/completedetail/${data.postId}`)
+    }
+  }
   return (
     <CardContainer>
-      <GifImg src={data.imgUrl}/>
-        <OverlayImg>
-          <HoverSideButton>···</HoverSideButton>
-          <HoverContent>
-          <div style={{color:'white'
-          }}>{data.topic ? data.topic : null}</div>
-            <div style={{display :'flex'}}>
-              <ClickCircle><div style={{ marginTop:'15px',marginLeft:'12px', fontSize:'10px'}}>다운</div></ClickCircle>
-              <ClickCircle><div style={{ marginTop:'5px',marginLeft:'9px', fontSize:'30px'}}>♥</div>
-              </ClickCircle>
-            </div>
-          </HoverContent>
-        </OverlayImg>
+      <GifImg src={data.imgUrl} />
+      <OverlayImg onClick={movePage} >
+        <HoverSideButton>···</HoverSideButton>
+        <HoverContent>
+        <div style={{color:'white'
+        }}>{data.topic ? data.topic : null}</div>
+          <div style={{display :'flex'}}>
+            <ClickCircle><div style={{ marginTop:'15px',marginLeft:'12px', fontSize:'10px'}}>다운</div></ClickCircle>
+            <ClickCircle><div style={{ marginTop:'5px',marginLeft:'9px', fontSize:'30px'}}>♥</div>
+            </ClickCircle>
+          </div>
+        </HoverContent>
+      </OverlayImg>
      
       <GifContents>
         <UserProfileContent>

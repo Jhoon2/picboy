@@ -8,7 +8,7 @@ const myToken = getCookieToken();
 
 const UseGetUser = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState('')
 
   const readUser = async () => {
     const response = await axios.get(`${baseURL}/main/user-info`, 

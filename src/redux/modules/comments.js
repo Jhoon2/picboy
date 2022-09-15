@@ -22,8 +22,7 @@ export const __postComment = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const data = await axios.post(
-        `${baseURL}/comment/${payload.id}`,
-        { content: payload.content },
+        `${baseURL}/comment/${payload.id}`, { content: payload.content },
         {
           headers: {
             Authorization: myToken,
@@ -42,9 +41,7 @@ export const __deleteComment = createAsyncThunk(
   async (payload, thunkAPI) => {
     try {
       const data = await axios.delete(
-        `${baseURL}/comment/1/${payload}`,
-
-        {
+        `${baseURL}/comment/${payload}`, {
           headers: {
             Authorization: myToken,
             'refresh-token': refreshToken,

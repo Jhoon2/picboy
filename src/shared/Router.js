@@ -25,7 +25,7 @@ const Router = () => {
   return (
     <Context>
       <BrowserRouter>
-        <Header />
+          <Header /> 
         <Routes>
           {/* 종훈님 */}
           <Route path="/" element={<Main />} />

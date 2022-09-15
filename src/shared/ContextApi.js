@@ -8,20 +8,25 @@ export const useMyContext = () => {
 
 
 export const Context = (props) => {
-    const [nickname, setNickname] = React.useState('잠자는누룽지');
+    const [imgAddress, setImgAddress] = React.useState();
     const [timerMessage, setTimerMessage] = React.useState(false)
     const [btnOpen, setBtnOpen] = React.useState(false);
     const btnClickOff = () => setBtnOpen(false);
     const btnClickOn = () => setBtnOpen(!btnOpen);
 
+    const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)  
+
+
     const value = {
-        nickname,
-        setNickname,
+        imgAddress,
+        setImgAddress,
         timerMessage,
         setTimerMessage,
         btnOpen,
         btnClickOff,
-        btnClickOn
+        btnClickOn,
+        isOpenProfileImg,
+        setIsOpenProfileImg
     };
 
     return (

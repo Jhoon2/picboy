@@ -4,7 +4,6 @@ import Slider from 'react-slick';
 import { useSelector, useDispatch } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import nikebanner from '../images/nikebanner.jpg';
 import { __getBest } from '../redux/modules/Best';
 
 const BestSlider = () => {
@@ -38,16 +37,21 @@ const BestSlider = () => {
       },
     ],
   };
+
   return (
     <>
       <Container>
         <style>{cssstyle}</style>
         <Slider {...settings}>
-          {bests.map((item, index) => {
-            <Box>
-              <Bannerimage>{item.gifUrl}</Bannerimage>
-            </Box>;
-          })}
+          <>
+            {bests.data && bests.data.data.map((item, index) => {
+              return (
+                <Box>
+                  <Bannerimage key={item.id} src={item.gifUrl} alt="" />
+                </Box>
+              );
+            })}
+          </>
         </Slider>
       </Container>
     </>
@@ -67,16 +71,11 @@ const Box = styled.div`
   position: relative;
 `;
 
-const Bannerimage = styled.div`
+const Bannerimage = styled.img`
   height: 300px;
-  background: url(${nikebanner});
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  /* transition: all 0.2s linear;
-  &:hover {
-    transform: scale(1.05);
-  } */
 `;
 
 const cssstyle = css`

@@ -18,127 +18,130 @@ import { __getComment, __postComment } from '../redux/modules/comments';
 import CommentBox from '../components/completeDetail/CommentBox';
 
 const CompleteDetail = () => {
-  const baseURL = process.env.REACT_APP_API_KEY;
-  const params = useParams();
+    const baseURL = process.env.REACT_APP_API_KEY;
+    const params = useParams();
 
-  //redux
-  const [commentInput, setCommentInput] = useState()
-  const { comments } = useSelector((state) => state.comments)
-  const dispatch = useDispatch();
-
-  //댓글등록
-  const commentChange = (e) => {
-    if (e.target.value === '') return
-    setCommentInput(e.target.value)
-  }
-
-  const commentApply = () => {
-    const payload = {
-      id: params.Id,
-      content: commentInput
+    //redux
+    const [commentInput, setCommentInput] = useState('')
+    const { comments } = useSelector((state) => state.comments)
+    const dispatch = useDispatch();
+    // console.log(commentInput)
+    //댓글등록
+    const commentChange = (e) => {
+        setCommentInput(e.target.value)
     }
-    dispatch(__postComment(payload))
-    setCommentInput('')
-  }
+  
+    const commentApply = () => {
+        if(commentInput === '') return
+
+        const payload = {
+            id: params.Id,
+            content: commentInput
+        }
+        dispatch(__postComment(payload))
+        setCommentInput('')
+    }
+  
 
   useEffect(() => {
     dispatch(__getComment(params.Id))
-  }, [dispatch])
-  // axios 
+    },[dispatch])
+    // axios 
 
-  const [gif, setGif] = useState("");
+    const [gif, setGif] = useState("");
 
-  const gifApi = () => {
-    //추후에 바꾸기 `${baseURL}/post/gif/detail/${params.Id}`
-    const url = `${baseURL}/post/gif/detail/${params.Id}`;
-    axios
-      .get(url)
-      .then(function (response) {
-        setGif(response.data.data);
-      })
-      .catch(function (error) {
-        console.log("error");
-      });
-  }
+    const gifApi = () => {
+        const url = `${baseURL}/post/gif/detail/${params.Id}`;
+        axios
+            .get(url)
+            .then(function (response) {
+                setGif(response.data.data);
+            })
+            .catch(function (error) {
+                console.log("error");
+            });
+    }
 
-  useEffect(() => {
-    gifApi();
-  }, []);
+    useEffect(() => {
+        gifApi();
+    }, []);
 
 
-  // carousel
-  var settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 6,
-    slidesToScroll: 6
-  };
+    // carousel
+    var settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 6,
+        slidesToScroll: 6
+    };
 
-  const imgList = gif.frameImgList;
+    const imgList = gif.frameImgList;
 
-  // time moment
+    // time moment
 
-  return (
-    <>
-      <div>CompleteDetail Header</div>
-      <TitleBanner>
-        <ContentsTitle>COMPLETE</ContentsTitle>
-      </TitleBanner>
-      <WidthWrap>
-        <GifInfo>
-          <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
-          <Slider {...settings}>
-            {
-              imgList && imgList.map((list) => {
-                <>
-                  <ImgListWrap>
-                    <ImgGrey />
-                    <ImgList key={list.id} src={list.imgUrl} alt="" />
-                  </ImgListWrap>
-                </>
-              })
-            }
-          </Slider>
-          <Community>
-            <ContentsBtn>
-              <BtnImg src={Download} alt="" />
-              <BtnImg src={LikeBefore} alt="" />
-            </ContentsBtn>
-            <ContentsLine />
-            <SuggestionInfo>
-              <SuggestionInfoTitleWrap>
-                <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
-                <SuggestionInfoLikeCountWrap>
-                  <img src={LikeCount} alt="" />
-                  <SuggestionInfoLikeCount>
-                    {gif.likeCount}
-                  </SuggestionInfoLikeCount>
-                </SuggestionInfoLikeCountWrap>
-              </SuggestionInfoTitleWrap>
-              <Suggestion>{gif.topic}</Suggestion>
-            </SuggestionInfo>
-            <CommentWrap>
-              <CommentTitle>댓글<div>{ }</div></CommentTitle>
-              <ContentsLine />
-              <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
-              <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
-              <CommentList>
-                {
-                  comments && comments.map((commentList, idx) =>
-                    <CommentBox commentList={commentList} key={idx} />
-                  )
-                }
-              </CommentList>
-            </CommentWrap>
-          </Community>
-        </GifInfo>
+    return (
+        <>
+            <div>CompleteDetail Header</div>
+            <TitleBanner>
+                <ContentsTitle>COMPLETE</ContentsTitle>
+            </TitleBanner>
+            <WidthWrap>
+                <GifInfo>
+                    <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
+                    <Slider {...settings}>
+                        {
+                            imgList && imgList.map((list) => {
+                                    <>
+                                        <ImgListWrap>
+                                            <ImgGrey />
+                                            <ImgList key={list.id} src={list.imgUrl} alt="" />
+                                        </ImgListWrap>
+                                    </>
+                            })
+                        }
+                    </Slider>
+                    <Community>
+                        <ContentsBtn>
+                            <BtnImg src={Download} alt="" />
+                            <BtnImg src={LikeBefore} alt="" />
+                        </ContentsBtn>
+                        <ContentsLine />
+                        <SuggestionInfo>
+                            <SuggestionInfoTitleWrap>
+                                <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
+                                <SuggestionInfoLikeCountWrap>
+                                    <img src={LikeCount} alt="" />
+                                    <SuggestionInfoLikeCount>
+                                        {gif.likeCount}
+                                    </SuggestionInfoLikeCount>
+                                </SuggestionInfoLikeCountWrap>
+                            </SuggestionInfoTitleWrap>
+                            <Suggestion>{gif.topic}</Suggestion>
+                        </SuggestionInfo>
+                        <CommentWrap>
+                            <CommentTitle>댓글<div>{ }</div></CommentTitle>
+                            <ContentsLine />
+                            <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
+                            <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
+                            <CommentList>
+                                {
+                                    comments && comments.map((commentList,idx) => 
+                                        <CommentBox commentList={commentList} key={idx} />
+                                    )
+                                }
+                            </CommentList>
+                        </CommentWrap>
+                    </Community>
+                </GifInfo>
 
-      </WidthWrap>
-    </>
-  )
+            </WidthWrap>
+        </>
+)
+    
 
 }
+
 
 const TitleBanner = styled.div`
     width: 100%;
