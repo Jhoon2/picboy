@@ -180,8 +180,9 @@ const UserProfile = () => {
     const checkNickname = async () => {
         try {
         const response = await axios.get(
-            `${baseURL}/user/nickname-double-check/${editMyNickname}`
-        );
+            `${baseURL}/user/nickname-double-check/${loadMyNickname}`
+            );
+            console.log(loadMyNickname)
         if (!response.data.success) {
             setExistedNick(true);
         } else {
