@@ -9,7 +9,7 @@ import { __getBest } from '../redux/modules/Best';
 const BestSlider = () => {
   const dispatch = useDispatch();
   const { bests } = useSelector((state) => state.bests);
-  console.log(bests);
+  // console.log(bests);
 
   useEffect(() => {
     dispatch(__getBest());

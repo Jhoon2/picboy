@@ -1,48 +1,41 @@
-import React from 'react'
-import { useState } from 'react'
-import styled from 'styled-components'
-import { useMyContext } from '../../shared/ContextApi'
+import React, { useState } from 'react';
+import styled, { css } from 'styled-components';
+import {
+  removeCookieToken,
+} from '../../shared/Cookie';
+import { useMyContext } from '../../shared/ContextApi';
+import { useNavigate } from 'react-router-dom';
 
-const CategoryModal = ({children, shown, close}) => {
-  const [categoryContent, setCategoryContent] = useState('recent')
+const ClickProfileModal = ({shown, close}) => {
   const myContext = useMyContext();
+  const [selectContent, setSelectContent] = useState('myPage')
 
-  const recent = (e) => {
-    console.log(e.target.id)
-    setCategoryContent(e.target.id)
-    myContext.setCategoryNum(1)
+  const navigate = useNavigate();
+  const myPage = (e) => {
+    setSelectContent(e.target.id)
+    navigate('/user-profile')
+    myContext.setLogonProfileImg(false)
   }
-  const liked = (e) => {
-    console.log(e.target.id)
+  const Logout = (e) => {
+    setSelectContent(e.target.id)
+    removeCookieToken();
+    window.location.href = '/';
+  }
 
-    setCategoryContent(e.target.id)
-    myContext.setCategoryNum(2)
-  }
-  const comments = (e) => {
-    console.log(e.target.id)
-
-    setCategoryContent(e.target.id)
-    myContext.setCategoryNum(3)
-  }
 
   return shown? (
     <Overlay onClick={()=>{close()}}>
       <OverlayPosition >
         <OverlayContainer>
-          {console.log('ss',categoryContent)}
           <ModalContainer onClick={e => {e.stopPropagation();}}>
-            <ModalText id='recent' name='1' onClick={recent} categoryContent={myContext.categoryNum} >
-              최신순
+            <ModalText id='myPage' name='myPage' onClick={myPage} selectContent={selectContent}
+            >
+              마이페이지
               </ModalText>
             <TextBr />
-            <ModalText id='liked' name='2'onClick={liked} categoryContent={myContext.categoryNum}>
-              좋아요순
+            <ModalText id='Logout' name='Logout'onClick={Logout} categoryContent={selectContent}>
+              로그아웃
             </ModalText>
-            <TextBr />
-            <ModalText id='comments' name='3' onClick={comments} categoryContent={myContext.categoryNum}>
-              댓글많은순
-            </ModalText>
-            {/* {children} */}
           </ModalContainer>
         </OverlayContainer>
       </OverlayPosition>
@@ -53,7 +46,7 @@ const CategoryModal = ({children, shown, close}) => {
 const Overlay = styled.div`
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   top: 0px;
   bottom: 0;
   left: 0;
@@ -69,12 +62,12 @@ const OverlayContainer = styled.div`
 const OverlayPosition = styled.div`
   height: 30px;
   position:relative;
-  top:880px;
-  left: 450px;
+  top: 100px;
+  left: 530px;
 `
 const ModalContainer = styled.div`
   width: 132px;
-  height: 149px;
+  height: 100px;
   position: absolute;
   z-index: 2;
   border: 2px solid #000000;
@@ -95,7 +88,7 @@ const ModalText = styled.div`
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
-  color: ${(props)=> (props.name === String(props.categoryContent)) ? '#000000' : '#A3A3A3'} ;
+  color: ${(props)=> (props.name === (props.selectContent)) ? '#000000' : '#A3A3A3'} ;
   cursor: pointer;
 
   :first-child {
@@ -113,4 +106,5 @@ const TextBr = styled.div`
   align-items: flex-start;
   border: 0.5px solid #A3A3A3;
 `
-export default CategoryModal
+
+export default ClickProfileModal

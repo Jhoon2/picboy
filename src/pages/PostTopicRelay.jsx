@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // import Canvas from '../components/Canvas';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
+import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 
 // import component
 import Footer from '../components/Footer'
@@ -24,6 +25,7 @@ import waterdrop from "../images/waterdrop.png";
 
 const PostTopicRelay = () => {
 
+    
     /////////////////////////////////
     // canvas
     // useRef를 이용해 canvas 엘리먼트에 접근
@@ -153,8 +155,8 @@ const PostTopicRelay = () => {
     ///////////////////////////
     // ajax
 
-    const accessToken = localStorage.getItem("Authorization");
-    const refreshToken = localStorage.getItem("Refresh-Token");
+    const accessToken = getCookieToken();
+    const refreshToken = getRefreshToken();
     const baseURL = process.env.REACT_APP_API_KEY;
 
     // get

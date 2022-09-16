@@ -20,7 +20,7 @@ import CommentBox from '../components/completeDetail/CommentBox';
 const CompleteDetail = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const params = useParams();
-  
+
     //redux
     const [commentInput, setCommentInput] = useState('')
     const { comments } = useSelector((state) => state.comments)
@@ -35,7 +35,7 @@ const CompleteDetail = () => {
         if(commentInput === '') return
 
         const payload = {
-            id: params.Id,
+            id: params.id,
             content: commentInput
         }
         dispatch(__postComment(payload))
@@ -44,21 +44,21 @@ const CompleteDetail = () => {
   
 
   useEffect(() => {
-    dispatch(__getComment(params.Id))
+    dispatch(__getComment(params.id))
     },[dispatch])
     // axios 
 
     const [gif, setGif] = useState("");
 
     const gifApi = () => {
-        const url = `${baseURL}/post/gif/detail/${params.Id}`;
+        const url = `${baseURL}/post/gif/detail/${params.id}`;
         axios
             .get(url)
             .then(function (response) {
                 setGif(response.data.data);
             })
             .catch(function (error) {
-                console.log("error");
+                console.log(error);
             });
     }
 
@@ -82,7 +82,6 @@ const CompleteDetail = () => {
 
     return (
         <>
-            <div>CompleteDetail Header</div>
             <TitleBanner>
                 <ContentsTitle>COMPLETE</ContentsTitle>
             </TitleBanner>

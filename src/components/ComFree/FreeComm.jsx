@@ -63,7 +63,7 @@ const FreeComm = () => {
             <BestBox
               key={item.id}
               onClick={() => {
-                navigate(`/completedetail/${item.id}`);
+                navigate(`/complete-detail/${item.id}`);
               }}
             >
               <div style={{ position: 'relative' }}>
