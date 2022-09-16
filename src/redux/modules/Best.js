@@ -6,9 +6,10 @@ const baseURL = process.env.REACT_APP_API_KEY;
 export const __getBest = createAsyncThunk(
   'getBest',
   async (payload, thunkAPI) => {
+    console.log(payload)
     try {
       const data = await axios.get(`${baseURL}/main/best-top10`);
-      return thunkAPI.fulfillWithValue(data);
+      return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }

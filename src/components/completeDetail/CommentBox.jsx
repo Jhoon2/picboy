@@ -31,10 +31,13 @@ const CommentBox = ({ commentList }) => {
       setEditState(false)
     }
     //삭제
-    const deleteBtn = () => {
+  const deleteBtn = () => {
+    console.log(commentList.commentId)
       dispatch(__deleteComment(commentList.commentId))
       alert('삭제완료!')
-    }
+  }
+  
+  //완료,삭제버튼(로그인유저와 같으면 뜸)
   let button;
   let button_1;
     if (editState === true) {
@@ -44,7 +47,6 @@ const CommentBox = ({ commentList }) => {
         button =<button style={{ mr: 3, cursor: 'pointer' }} onClick={editBtn }>수정</button>
         button_1 = <button style={{ mr: 3, cursor: 'pointer' }} onClick={deleteBtn}>삭제</button>
     }
-    // console.log(userNickname, '유저닉네임', commentList.nickname, '코멘트닉네임')
 
   return (
     <Comment>

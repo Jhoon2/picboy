@@ -1,12 +1,21 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
 import ProfileImageIcons from './ProfileImageIcons'
 import basicImg from '../../images/basicImg.jpg'
+import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
+import { useMyContext } from '../../shared/ContextApi'
 
-const ProfileImageModal = ({ shown, close, setImageUrl,setImgFile }) => {
+const myToken = getCookieToken();
+const refreshToken = getRefreshToken();
+
+const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
+  const baseURL = process.env.REACT_APP_API_KEY;
+  const myContext = useMyContext();
   const [profileChange, setProfileChange] = useState(false)
   const [selectIcon, setSelectIcon] = useState(false)
-
+  const [imgUrl, setImgUrl] = useState(false)
+  // const [changeImg, setChangeImg] = useState(imgFile)
   // 내 PC에서 가져오기
   const FromMyPc = (e) => {
     setSelectIcon(false)
@@ -14,24 +23,42 @@ const ProfileImageModal = ({ shown, close, setImageUrl,setImgFile }) => {
   }
   const imgRef = useRef();
 
-  const onChangeImage = (e) => {
+  const onChangeImage =  (e) => {
     const reader = new FileReader();
     const file = imgRef.current.files[0];
-    reader.readAsDataURL(file);
+    console.log(imgRef.current.files)
     reader.onloadend = () => {
-      setImageUrl(reader.result);    
-      setImgFile(file)
+      const base64data = reader.result;
+      setImgUrl(base64data);
+      sendApi(base64data);
+      myContext.setImgAddress(base64data)
     }
-    // const formData = new FormData();
-    // formData.append('file',imgRef.current.files[0] )
-    // const response = await apiClient.post('주소', formData);
-    // console.log(e.target.files[0])
-    // setImageUrl(e.target.files[0])
-    // console.log(formData)
+    reader.readAsDataURL(file);
+    close();
   }
   
+  const sendApi = async (data) => {
+    try {
+      const response = await axios.put(`${baseURL}/mypage/update-image`, { img: data },
+        {
+          headers: {
+            Authorization: myToken,
+            'refresh-token': refreshToken
+          }
+        }
+      )
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  useEffect(() => {
+    
+  },[imgUrl])
   // 아이콘 고르기
   const clickSelect = (e) => {
+    
     setProfileChange(e.target.id)
     setSelectIcon(!selectIcon)
   }
@@ -40,10 +67,17 @@ const ProfileImageModal = ({ shown, close, setImageUrl,setImgFile }) => {
   const clickBasic = (e) => {
     setSelectIcon(false)
     setProfileChange(e.target.id)
-    setImageUrl(basicImg)
+    myContext.setImgAddress(basicImg)
+    close();
   }
+
+  const closeOuter = () => {
+    close();
+    setSelectIcon(false)
+  }
+
   return shown ? (
-    <Overlay onClick={() => { close() }}>
+    <Overlay onClick={closeOuter}>
       <OverlayPosition >
         <ModalContainer onClick={(e) => { e.stopPropagation(); }}>
         <label htmlFor="upload-photo">
@@ -68,7 +102,7 @@ const ProfileImageModal = ({ shown, close, setImageUrl,setImgFile }) => {
         </ModalContainer>
         
         {/* 아이콘 고르기 모달창 */}
-        <ProfileImageIcons shown={selectIcon} close={() => { setSelectIcon(false) }} />
+        <ProfileImageIcons shown={selectIcon} close={() => { setSelectIcon(false) }}  setSelectIcon={setSelectIcon}  />
       </OverlayPosition>
     </Overlay>
   ):null

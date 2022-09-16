@@ -1,35 +1,59 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-
+import download from '../../images/download-btn.png'
+import heart from '../../images/like-before.png'
+import MySpecialButton from './MySpecialButton'
 const GifCard = ({ data }) => {
+  // console.log(data)
+  const navigate = useNavigate();
+  //완료 페이지, 진행중 페이지 이동
+  const movePage = () => {
+    if (data.status === 1) {
+      navigate(`/progressdetail/${data.postId}`)
+    } else {
+      navigate(`/completedetail/${data.postId}`)
+    }
+  }
+
+  //... 버튼
+  const [openSpecialModal, setOpenSpecialModal] =useState(false)
+  const buttonCollection = (e) => {
+    e.stopPropagation();
+    setOpenSpecialModal(!openSpecialModal)
+  }
+  console.log(data)
   return (
     <CardContainer>
-      <GifImg src={data.imgUrl}/>
-        <OverlayImg>
-          <HoverSideButton>···</HoverSideButton>
-          <HoverContent>
-          <div style={{color:'white'
-          }}>{data.topic ? data.topic : null}</div>
-            <div style={{display :'flex'}}>
-              <ClickCircle><div style={{ marginTop:'15px',marginLeft:'12px', fontSize:'10px'}}>다운</div></ClickCircle>
-              <ClickCircle><div style={{ marginTop:'5px',marginLeft:'9px', fontSize:'30px'}}>♥</div>
-              </ClickCircle>
-            </div>
-          </HoverContent>
-        </OverlayImg>
+      <GifImg src={data.imgUrl} />
+      <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
+        <HoverSideButton onClick={buttonCollection}>···</HoverSideButton>
+        <HoverContent>
+        <div style={{color:'white'
+        }}>{data.topic ? data.topic : null}</div>
+          <div style={{display :'flex'}}>
+            <ClickCircle src={download}/>
+            <ClickCircle src={heart} />
+          </div>
+        </HoverContent>
+      </OverlayImg>
      
       <GifContents>
         <UserProfileContent>
-          <ProfileImage  />
-          <Participants><div style={{ marginTop:'5px', marginLeft:'5px', fontSize:'10px'}}>+3</div></Participants>
-          <div style={{marginTop:'15px', marginLeft:'15px'}}>{data.nickname} 외 3명</div>
+          {/* <ProfileImage src={data.imgUrl} /> */}
+          <ProfileImage />
+
+          <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>
+          <div style={{ marginTop: '15px', marginLeft: '15px' }}>{data.nickname} 외 {data.memberCount}명</div>
         </UserProfileContent>
         <div style={{display:'flex'}}>
           <div style={{ marginLeft: '15px', fontSize: '30px' }}>♥</div>
-          <div style={{ marginTop:'7px',marginLeft: '10px',fontSize: '20px' }}>30</div>
+          <div style={{ marginTop: '7px', marginLeft: '10px', fontSize: '20px' }}>{data.likeCount}</div>
         </div>
       </GifContents>
+      <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal} /> 
     </CardContainer>
+    
   )
 }
 
@@ -78,13 +102,13 @@ const HoverContent = styled.div`
   display: flex;
   justify-content: space-between;
 `
-const ClickCircle = styled.div`
+const ClickCircle = styled.img`
   width: 50px;
   height: 50px;
   margin-top: -18px;
   border-radius: 50px;
   cursor: pointer;
-  background-color: gray;
+  /* background-color: gray; */
 
   :first-child {
     margin-right: 10px;
@@ -102,11 +126,10 @@ const UserProfileContent = styled.div`
   display: flex;
 `
 
-const ProfileImage = styled.div`
+const ProfileImage = styled.img`
   width: 57px;
   height: 57px;
   border-radius: 50px;
-  background-color: gray;
 `
 
 const Participants = styled.div`

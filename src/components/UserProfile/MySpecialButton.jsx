@@ -1,48 +1,46 @@
 import React from 'react'
-import { useState } from 'react'
 import styled from 'styled-components'
-import { useMyContext } from '../../shared/ContextApi'
 
-const CategoryModal = ({children, shown, close}) => {
-  const [categoryContent, setCategoryContent] = useState('recent')
-  const myContext = useMyContext();
-
-  const recent = (e) => {
+const MySpecialButton = ({ shown, close, setOpenSpecialModal }) => {
+  const hide = (e) => {
     console.log(e.target.id)
-    setCategoryContent(e.target.id)
-    myContext.setCategoryNum(1)
+    // setCategoryContent(e.target.id)
+    // myContext.setCategoryNum(1)
   }
-  const liked = (e) => {
+  const declaration = (e) => {
     console.log(e.target.id)
 
-    setCategoryContent(e.target.id)
-    myContext.setCategoryNum(2)
+    // setCategoryContent(e.target.id)
+    // myContext.setCategoryNum(2)
   }
-  const comments = (e) => {
+  const deletePost = (e) => {
     console.log(e.target.id)
 
-    setCategoryContent(e.target.id)
-    myContext.setCategoryNum(3)
+    // setCategoryContent(e.target.id)
+    // myContext.setCategoryNum(3)
   }
-
-  return shown? (
-    <Overlay onClick={()=>{close()}}>
+  return shown ? (
+    <Overlay onClick={() => { close() }}>
       <OverlayPosition >
         <OverlayContainer>
-          {console.log('ss',categoryContent)}
-          <ModalContainer onClick={e => {e.stopPropagation();}}>
-            <ModalText id='recent' name='1' onClick={recent} categoryContent={myContext.categoryNum} >
-              최신순
-              </ModalText>
-            <TextBr />
-            <ModalText id='liked' name='2'onClick={liked} categoryContent={myContext.categoryNum}>
-              좋아요순
+          <ModalContainer onClick={e => { e.stopPropagation() }}>
+            <ModalText id='hide' name='1' onClick={hide}
+              // categoryContent={myContext.categoryNum}
+            >
+              숨기기
             </ModalText>
             <TextBr />
-            <ModalText id='comments' name='3' onClick={comments} categoryContent={myContext.categoryNum}>
-              댓글많은순
+            <ModalText id='declaration' name='2' onClick={declaration}
+              // categoryContent={myContext.categoryNum}
+            >
+              신고
             </ModalText>
-            {/* {children} */}
+            <TextBr />
+            <ModalText id='delete' name='3' onClick={deletePost}
+              // categoryContent={myContext.categoryNum}
+            >
+              삭제
+            </ModalText>
           </ModalContainer>
         </OverlayContainer>
       </OverlayPosition>
@@ -51,7 +49,7 @@ const CategoryModal = ({children, shown, close}) => {
 }
 
 const Overlay = styled.div`
-  position: absolute;
+  /* position: absolute;
   width: 100%;
   height: 100%;
   top: 0px;
@@ -60,17 +58,17 @@ const Overlay = styled.div`
   right: 0;
   z-index: 9999;
   display: flex;
-  justify-content: center;
+  justify-content: center; */
 `
 const OverlayContainer = styled.div`
-  width: 200px;
-  position: absolute;
+  /* width: 200px;
+  position: absolute; */
 `
 const OverlayPosition = styled.div`
   height: 30px;
   position:relative;
-  top:865px;
-  left: 450px;
+  top: -330px;
+  left: 330px;
 `
 const ModalContainer = styled.div`
   width: 132px;
@@ -80,7 +78,6 @@ const ModalContainer = styled.div`
   border: 2px solid #000000;
   background-color: white;
 `
-
 const ModalText = styled.div`
   width: 132px;
   height: 23px;
@@ -113,4 +110,4 @@ const TextBr = styled.div`
   align-items: flex-start;
   border: 0.5px solid #A3A3A3;
 `
-export default CategoryModal
+export default MySpecialButton

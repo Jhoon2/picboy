@@ -8,20 +8,36 @@ export const useMyContext = () => {
 
 
 export const Context = (props) => {
-    const [nickname, setNickname] = React.useState('잠자는누룽지');
+    const [imgAddress, setImgAddress] = React.useState();
     const [timerMessage, setTimerMessage] = React.useState(false)
     const [btnOpen, setBtnOpen] = React.useState(false);
     const btnClickOff = () => setBtnOpen(false);
     const btnClickOn = () => setBtnOpen(!btnOpen);
 
+    const [tabNum, setTabNum] = React.useState(0);
+    const [categoryNum, setCategoryNum] = React.useState(1);
+
+    const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)  
+
+
     const value = {
-        nickname,
-        setNickname,
+        imgAddress,
+        setImgAddress,
         timerMessage,
         setTimerMessage,
         btnOpen,
         btnClickOff,
-        btnClickOn
+        btnClickOn,
+        isOpenProfileImg,
+        setIsOpenProfileImg,
+
+        //탭넘버
+        tabNum,
+        setTabNum,
+
+        //카테고리넘버
+        categoryNum,
+        setCategoryNum
     };
 
     return (
