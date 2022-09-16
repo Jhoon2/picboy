@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import Fade from 'react-reveal/Fade';
 import BestSlider from '../elem/BestSlider';
 import icon from '../images/icon.png';
+import first from '../images/1번.gif';
 
 const MainDesc = ({ moveRef, move2Ref }) => {
   const TopicgRef = useRef();
@@ -53,7 +54,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
         </Fade>
       </ButtonBox>
       <DescBox1 ref={TopicgRef}>
-        <Descimg1 />
+        <Descimg1 img={first} />
         <DescFirst>
           <Fade bottom>
             <Number1>#1</Number1>
@@ -312,7 +313,12 @@ const Desc = css`
 
 const DescBox1 = styled(DescBox)``;
 
-const Descimg1 = styled(Descimg)``;
+const Descimg1 = styled(Descimg)`
+  width: 500px;
+  height: 500px;
+  background: url(${(props) => props.img});
+  animation-name: none;
+`;
 
 const DescFirst = styled.div`
   ${DescTextBox}

@@ -5,23 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  -ms-overflow-style: none;
 }
 
 body::-webkit-scrollbar {
   /* width: 8px;  */
   display: none;
-}
-
-body::-webkit-scrollbar-thumb {
-  height: 15%; /* 스크롤바의 길이 */
-  background: white; /* 스크롤바의 색상 */
-
-  border-radius: 10px;
-}
-
-body::-webkit-scrollbar-track {
-  background: black; /*스크롤바 뒷 배경 색상*/
 }
 
 code {

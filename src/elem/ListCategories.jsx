@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import Fade from 'react-reveal/Fade';
 import bubble1 from '../images/bubble1.png';
 
-const ListCategories = () => {
-  const navigate = useNavigate();
+const ListCategories = (props) => {
   const [select, setSelect] = useState(false);
+
   return (
-    <>
+    <SelectContainer>
       <SelectBox>
         <Select>
           <div onClick={() => setSelect(!select)}>
@@ -23,47 +22,51 @@ const ListCategories = () => {
       </SelectBox>
       <SelectListBox>
         {select && (
-          <Fade bottom>
-            <SelectList>
-              <ul>
-                <New>
-                  <Title>
-                    <TopicBubble />
-                    최신순
-                  </Title>
-                </New>
-                <HR />
-                <Like>
-                  <Title>
-                    <TopicBubble />
-                    좋아요
-                  </Title>
-                </Like>
-                <HR />
-                <Comm>
-                  <Title>
-                    <TopicBubble />
-                    댓글 많은 순
-                  </Title>
-                </Comm>
-              </ul>
-            </SelectList>
-          </Fade>
+          <SelectList>
+            <ul>
+              <New>
+                <Title
+                  onClick={() => {
+                    props.setTap(0);
+                  }}
+                >
+                  <TopicBubble />
+                  최신순
+                </Title>
+              </New>
+              <HR />
+              <Like>
+                <Title
+                  onClick={() => {
+                    props.setTap(1);
+                  }}
+                >
+                  <TopicBubble />
+                  좋아요
+                </Title>
+              </Like>
+              <HR />
+              <Comm>
+                <Title
+                  onClick={() => {
+                    props.setTap(2);
+                  }}
+                >
+                  <TopicBubble />
+                  댓글 많은 순
+                </Title>
+              </Comm>
+            </ul>
+          </SelectList>
         )}
       </SelectListBox>
-    </>
+    </SelectContainer>
   );
 };
 
 export default ListCategories;
 
-const Label = css`
-  width: 100px;
-  max-width: 110px;
-  position: absolute;
-  top: 50%;
-  z-index: 10;
-`;
+const SelectContainer = styled.div``;
 
 const HR = styled.hr`
   width: 110px;
@@ -72,14 +75,9 @@ const HR = styled.hr`
   background: #ccc;
 `;
 
-const Checkbox = css`
-  position: absolute;
-  opacity: 0;
-`;
-
 const SelectBox = styled.div`
   position: relative;
-  left: 801px;
+  left: 30px;
 `;
 
 const Select = styled.button`
@@ -123,8 +121,8 @@ const SelectImg = styled.img`
 const SelectListBox = styled.div`
   width: 120px;
   position: relative;
-  top: 30px;
-  left: 690px;
+  top: 20px;
+  left: 30px;
   z-index: 1;
 `;
 
