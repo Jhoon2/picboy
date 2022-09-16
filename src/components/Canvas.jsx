@@ -305,7 +305,6 @@ const IcButton = styled.div`
 `;
 
 const Table = styled.table`
-    c
     border: 2px solid #000;
     border-collapse: collapse;
     position: absolute;
