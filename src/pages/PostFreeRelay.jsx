@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // import Canvas from '../components/Canvas';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
+import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 
 // import component
 import Footer from '../components/Footer'
@@ -20,10 +21,12 @@ import undo from "../images/undo.png";
 import redo from "../images/redo.png";
 import stroke from "../images/stroke.png";
 import waterdrop from "../images/waterdrop.png";
+import { useParams } from 'react-router-dom';
 
 
 const PostFreeRelay = () => {
-
+    const param = useParams();
+    console.log(param)
     /////////////////////////////////
     // canvas
     // useRef를 이용해 canvas 엘리먼트에 접근
@@ -153,8 +156,8 @@ const PostFreeRelay = () => {
     ///////////////////////////
     // ajax
 
-    const accessToken = localStorage.getItem("Authorization");
-    const refreshToken = localStorage.getItem("Refresh-Token");
+    const accessToken = getCookieToken();
+    const refreshToken = getRefreshToken();
     const baseURL = process.env.REACT_APP_API_KEY;
 
     // get
@@ -182,7 +185,7 @@ const PostFreeRelay = () => {
             // `${baseURL}/post/relay/${postid}`,
             `${baseURL}/post/relay`,
             {
-                "file": imgDataUrl,
+                "file": imgDataUrl
             },
             {
                 headers: { "Authorization": accessToken, "Refresh-Token": refreshToken }

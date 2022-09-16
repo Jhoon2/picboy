@@ -26,7 +26,7 @@ const UserProfile = () => {
     const [user, setUser] = useState(null)
 
     const [randomData, setRandomData] = useState([]);
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(-1);
     const lastIntersectingData = useRef(null);
 
     // const [isOpenCategory, setIsOpenCategory] = useState(false)
@@ -55,9 +55,10 @@ const UserProfile = () => {
     }, [userinfo,page,myContext.tabNum,myContext.categoryNum])
         
     const readMypage = async (nickname) => {
-        console.log(myContext.tabNum)
-        console.log(myContext.categoryNum,'카테고리넘버')
-        const response =  await axios.get(`${baseURL}/mypage/post/${myContext.tabNum}/${myContext.categoryNum}?nickname=${nickname}&page=${page}&size=6`,
+        // console.log(myContext.tabNum)
+        // console.log(myContext.categoryNum,'카테고리넘버')
+        const response = await axios.get
+            (`${baseURL}/mypage/post/${myContext.tabNum}/${myContext.categoryNum}?nickname=${nickname}&page=${page}&size=6`,
         {
             headers: {
                 Authorization: myToken,
@@ -65,7 +66,7 @@ const UserProfile = () => {
             }
 
             })
-            // console.log(response&&response.data)
+            console.log(response&&response.data)
         setRandomData(randomData.concat(response&&response.data.data));
     }
 
@@ -76,12 +77,13 @@ const UserProfile = () => {
         //조건이 트루
         //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
         setPage((page) => page + 1);
+        console.log('페이지나와라', page)
         // 현재 타겟을 observe한다.
         observer.observe(entry.target); // unobserve가 아님
       }
     });
   };
-    // console.log(page)
+    console.log('페이지나와라2',page)
     
 
     useEffect(() => {
@@ -214,7 +216,7 @@ const UserProfile = () => {
                 </ProfileContainer>
                 <ProfileBorder />
                 {/* 카테고리별 */}
-                <CategoryOpen />
+                <CategoryOpen value={user && user.data.data.username === userinfo.data.data.username} />
                
 
 
@@ -227,7 +229,7 @@ const UserProfile = () => {
                             )
                         })}
                     </CardContainer>
-                    <div style={{ width: '100px', height: '20px', backgroundColor: 'gray' }} ref={lastIntersectingData}>.</div>
+                    <div style={{ width: '100px', height: '20px', backgroundColor: 'gray' }} ref={page === 0 ? null : lastIntersectingData}>.</div>
                 </>
             </ContainerInner>
 
@@ -236,7 +238,7 @@ const UserProfile = () => {
             {user && user.data.data.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
                 close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
         
-
+        
         </UserProfileContainer>
     )
 }
@@ -266,7 +268,7 @@ const ProfileImage = styled.img`
     width: 218px;
     height: 218px;
     border-radius: 150px;
-    background-color: pink;
+    background-color: white;
 `
 const ProfileBorder = styled.div`
     margin-top: 116px;

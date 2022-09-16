@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 // import Canvas from '../components/Canvas';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
+import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 
 // import component
 import Footer from '../components/Footer'
@@ -45,8 +46,8 @@ const PostFree = () => {
   ///////////////////////////
   // ajax
 
-  const accessToken = localStorage.getItem("Authorization");
-  const refreshToken = localStorage.getItem("Refresh-Token");
+  const accessToken = getCookieToken();
+  const refreshToken = getRefreshToken();
   const baseURL = process.env.REACT_APP_API_KEY;
 
   const submitImg = () => {

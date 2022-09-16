@@ -5,25 +5,49 @@ import '../elem/Down.css';
 import Down from '../elem/Down';
 import bubble1 from '../images/bubble1.png';
 import right from '../images/right.png';
+import UseGetUser from '../hooks/UseGetUser'
+import { useMyContext } from '../shared/ContextApi'
+
+import AnyModal from '../elem/AnyModal'
 
 const Categories = (props) => {
-    const navigate = useNavigate();
-    const [select, setSelect] = useState(false);
+  const navigate = useNavigate();
+  const myContext = useMyContext();
+
+  const logonUser = UseGetUser();
+  // console.log(logonUser && logonUser)
+  const [select, setSelect] = useState(false);
+
+  const moveTopic = () => {
+    setSelect(false)
+    if ( !logonUser ) return myContext.btnClickOn()
+    navigate('/post-topic')
+  }
+  const moveFree = () => {
+    setSelect(false)
+    if ( !logonUser ) return myContext.btnClickOn()
+    navigate('/post-free')
+  }
     return (
-        <>
+      <>
+        {myContext.btnOpen ? 
+          <ErrorBox onClick={() => myContext.btnClickOff()}>
+        <AnyModal title ='회원정보' content = '로그인 후 가능합니다'/>
+        </ErrorBox>
+          : null}
             <SelectBox>
-                <Select>
-                    <div onClick={() => setSelect(!select)}>Drawing</div>
-                </Select>
+                <DrawingBox onClick={() => setSelect(!select)}>
+                  <Select >
+                      <div  >DRAWING</div>
+                  </Select>
+                </DrawingBox>
             </SelectBox>
             <SelectListBox>
                 {/* {select && ( */}
                 <Down select={select}>
                     <ul>
                         <Topic
-                            onClick={() => {
-                                navigate('/list');
-                            }}
+                            onClick={moveTopic}
                         >
                             <Title>
                                 <TopicBubble />
@@ -38,9 +62,7 @@ const Categories = (props) => {
                         </Topic>
                         <HR />
                         <Free
-                            onClick={() => {
-                                navigate('/list');
-                            }}
+                            onClick={moveFree}
                         >
                             <Title>
                                 <TopicBubble />
@@ -63,6 +85,18 @@ const Categories = (props) => {
 
 export default Categories;
 
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+`
 const Label = css`
   width: 100px;
   max-width: 110px;
@@ -88,12 +122,23 @@ const SelectBox = styled.div`
   display: flex;
 `;
 
+const DrawingBox = styled.div`
+  width: 170px;
+  height: 45px;
+  margin-left: -50px;
+  text-align: center;
+  border: 1px white solid;
+    cursor: pointer;
+
+`
+
 const Select = styled.button`
+  margin-top: 7px;
   margin-left: auto;
   position: relative;
   background: none;
   font-family: 'PopLight';
-  font-size: 13px;
+  font-size: 16px;
   color: white;
   div {
     label {
@@ -109,7 +154,7 @@ const SelectListBox = styled.div`
   width: 120px;
   position: relative;
   top: 30px;
-  right: 60px;
+  right: 170px;
   z-index: 1;
 `;
 
