@@ -1,52 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled, { css } from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
-import nike from '../images/nikebanner.jpg';
-
-const throttle = function (callback, waitTime) {
-  let timerId = null;
-  return (e) => {
-    if (timerId) return;
-    timerId = setTimeout(() => {
-      callback.call(this, e);
-      timerId = null;
-    }, waitTime);
-  };
-};
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const ProgressDetail = () => {
-  const [hide, setHide] = useState(false);
-  const [pageY, setPageY] = useState(0);
-  const documentRef = useRef(document);
+  const navigate = useNavigate();
 
-  const handleScroll = () => {
-    const { pageYOffset } = window;
-    const deltaY = pageYOffset - pageY;
-    const hide = pageYOffset !== 0 && deltaY >= 0;
-    setHide(hide);
-    setPageY(pageYOffset);
-  };
-
-  const throttleScroll = throttle(handleScroll, 50);
-
-  useEffect(() => {
-    documentRef.current.addEventListener('scroll', throttleScroll);
-    return () =>
-      documentRef.current.removeEventListener('scroll', throttleScroll);
-  }, [pageY]);
-  const myToken = getCookieToken();
-  const refreshToken = getRefreshToken();
+  const [mainSlick, setMainSlick] = useState(null);
+  const [pagingSlick, setPagingSlick] = useState(null);
+  const mainSlickRef = useRef(null);
+  const pagingSlickRef = useRef(null);
 
   const baseURL = process.env.REACT_APP_API_KEY;
   const params = useParams();
-
   const [Data, setData] = useState([]);
 
   const getProgressData = () => {
@@ -55,167 +27,280 @@ const ProgressDetail = () => {
       .get(url)
       .then(function (response) {
         setData(response.data.data);
+        console.log(response.data.data);
       })
       .catch(function (error) {
         console.log('error');
       });
   };
 
+  const test = Data.frameImgList;
+  const tests = test?.reverse();
+
   const imgList = Data.frameImgList;
+  const Topics = Data && Data.topic;
+
+  const Move = () => {
+    navigate(`/post-topic-relay/${params.id}`);
+  };
 
   useEffect(() => {
     getProgressData();
   }, []);
 
-  const settings = {
-    dots: true,
+  useEffect(() => {
+    setMainSlick(mainSlickRef.current);
+    setPagingSlick(pagingSlickRef.current);
+  }, []);
+
+  const onClickPrev = useCallback((ref) => () => ref.current.slickPrev(), []);
+  const onClickNext = useCallback((ref) => () => ref.current.slickNext(), []);
+
+  const showMaxCnt = 6;
+
+  const mainSettings = {
+    dots: false,
+    // centerMode: true,
+    arrows: false,
     infinite: true,
-    speed: 800,
-    slidesToShow: 6,
+    slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: false,
-    autoplaySpeed: 3000,
-    pauseOnHover: true,
   };
+
+  const pagingSettings = {
+    dots: true,
+    arrows: false,
+    infinite: imgList?.length > showMaxCnt,
+    slidesToShow: showMaxCnt,
+    swipeToSlide: true,
+    focusOnSelect: true,
+  };
+
   return (
-    <ProContainer>
-      <ImgBox className={hide && 'hide'}>
+    <>
+      <ImgBox>
         <span>PROGRESS</span>
       </ImgBox>
-      <Firstimg img={Data.imgUrl} />
+      <Wrap>
+        <Inner>
+          <Slider ref={mainSlickRef} asNavFor={pagingSlick} {...mainSettings}>
+            {tests &&
+              tests.map((item, index) => {
+                return (
+                  <MainSlickItems key={item}>
+                    <img src={item.imgUrl} alt="" />
+                  </MainSlickItems>
+                );
+              })}
+          </Slider>
+          <>
+            <PrevButton onClick={onClickPrev(pagingSlickRef)}>
+              <PrevIcon />
+            </PrevButton>
 
-      <Bannerbox>
-        <style>{cssstyle}</style>
-        <Slider {...settings}>
-          {imgList &&
-            imgList.map((item, index) => {
-              return (
-                <Box key={item}>
-                  <img src={item.imgUrl} alt="" />
-                </Box>
-              );
-            })}
-          <Box>
-            <img img={nike} alt="" />
-          </Box>
-          <Box>
-            <img img={nike} alt="" />
-          </Box>
+            <NextButton onClick={onClickNext(pagingSlickRef)}>
+              <NextIcon />
+            </NextButton>
+          </>
+        </Inner>
 
-          <Box>
-            <img img={nike} alt="" />
-          </Box>
+        <Inner>
+          <Slider ref={pagingSlickRef} asNavFor={mainSlick} {...pagingSettings}>
+            <ProgressButton
+              onClick={() => {
+                Move();
+              }}
+            />
+            {imgList &&
+              imgList.map((item, index) => {
+                return (
+                  <PagingItems key={item} className="paging_items">
+                    <img src={item.imgUrl} alt="" />
+                  </PagingItems>
+                );
+              })}
+          </Slider>
 
-          <Box>
-            <img img={nike} alt="" />
-          </Box>
+          <>
+            <PrevButton onClick={onClickPrev(pagingSlickRef)}>
+              <PrevIcon />
+            </PrevButton>
 
-          <Box>
-            <img img={nike} alt="" />
-          </Box>
-        </Slider>
-      </Bannerbox>
-      <ButtonBox>
-        <ToEnter>TO ENTER</ToEnter>
-      </ButtonBox>
+            <NextButton onClick={onClickNext(pagingSlickRef)}>
+              <NextIcon />
+            </NextButton>
+          </>
+        </Inner>
+        <HR />
+        <TopicBox>
+          <Topic>{Topics}</Topic>
+        </TopicBox>
+      </Wrap>
       <Footer />
-    </ProContainer>
+    </>
   );
 };
 
 export default ProgressDetail;
 
-const ProContainer = styled.div`
-  width: 100%;
+const Wrap = styled.div`
+  overflow: hidden;
+  margin-top: 50px;
+
+  & > div + div {
+    margin-top: 20px;
+  }
 `;
 
+//배너
 const ImgBox = styled.div`
   width: 100%;
-  height: 300px;
+  height: 200px;
   ${({ theme }) => theme.flexSet('column', 'space-between', 'center')}
   text-align: center;
   background: #f4f4f4;
   border: 0.5px solid #a3a3a3;
   span {
-    margin-top: 140px;
+    margin-top: 50px;
     font-family: 'SilkLight';
     font-size: 80px;
     line-height: 102px;
     font-weight: 400;
   }
 
-  position: sticky;
   top: 0;
   left: 0;
   z-index: 1;
   transition: 0.4s ease;
   &.hide {
-    transform: translateY(-250px);
+    transform: translateY(-150px);
   }
 `;
+const Inner = styled.div`
+  position: relative;
 
-const Firstimg = styled.div`
-  width: 500px;
-  height: 500px;
-  margin: auto;
-  margin-top: 20px;
-  background: red;
-  background: url(${(props) => props.img});
-  ${({ theme }) => theme.backgroundSet('contain')};
-`;
+  .paging_items {
+    filter: grayscale(1);
 
-const Bannerbox = styled.div`
-  max-width: 1800px;
-  height: 400px;
-  margin: auto;
-`;
-
-const Box = styled.div`
-  width: 280px;
-  height: 250px;
-  display: block;
-  &:hover {
-    border: 3px solid #000;
-  }
-`;
-
-const cssstyle = css`
-  img {
-    width: 280px;
-    height: 250px;
-    color: #fff;
-    font-size: 36px;
-    margin: 10px;
-    position: relative;
-    text-align: center;
     &:hover {
-      background: gray;
+      filter: none;
     }
   }
 
-  .slick-next:before,
-  .slick-prev:before {
-    color: #000;
+  .slick-current .paging_items {
+    filter: none;
+  }
+
+  .slick-slide {
+    padding-right: 60px;
+  }
+  .slick-list {
+    margin-right: -110px;
   }
 `;
 
-const ButtonBox = styled.div`
-  max-width: 1800px;
+const defaultItemStyle = styled.div`
+  width: 100%;
+  text-align: center;
+
+  img {
+    height: 100%;
+    vertical-align: top;
+  }
+`;
+
+// 메인 이미지
+const MainSlickItems = styled(defaultItemStyle)`
+  width: 100%;
+  height: 350px;
+
+  img {
+    max-width: 100%;
+    margin: auto;
+  }
+`;
+
+//리스트 이미지
+const PagingItems = styled(defaultItemStyle)`
+  max-width: 1200px;
   height: 200px;
-  margin: auto;
-  ${({ theme }) => theme.flexSet('row', 'flex-end', 'center')};
+  cursor: pointer;
+
+  img {
+    width: 200px;
+    height: 200px;
+  }
 `;
 
-const ToEnter = styled.button`
+const ProgressButton = styled.button`
   width: 200px;
+  height: 200px;
+
+  background: #f8f8f8;
+`;
+
+const HR = styled.hr`
+  max-width: 1200px;
+  margin-top: 90px;
+  border: 0;
+  height: 1px;
+  background: #ccc;
+`;
+
+const TopicBox = styled.div`
+  max-width: 1200px;
   height: 50px;
-  border: 1px solid white;
-  border-radius: 10px;
-  font-family: 'SilkLight';
-  font-size: 20px;
-  color: white;
-  background: black;
+  margin: auto;
+  ${({ theme }) => theme.flexSet('column', 'flex-start', 'flex-start')}
+`;
+
+const Topic = styled.div`
+  font-size: 30px;
+  line-height: 150%;
+  font-family: 'NotoLight';
+`;
+
+// 화살표 버튼
+
+const defaultButtonStyle = css`
+  position: absolute;
+  top: 50%;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  line-height: 1;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  outline: none;
+  transform: translateY(-50%);
+  cursor: pointer;
+`;
+
+const PrevButton = styled.button`
+  ${defaultButtonStyle}
+  left: 0;
+`;
+
+const NextButton = styled.button`
+  ${defaultButtonStyle}
+  right: 0;
+`;
+
+const defaultIconStyle = css`
+  font-size: 22px;
+  color: #dedede;
+
+  &:focus,
   &:hover {
-    background: white;
+    color: #666;
   }
+`;
+
+const PrevIcon = styled(LeftOutlined)`
+  ${defaultIconStyle}
+`;
+
+const NextIcon = styled(RightOutlined)`
+  ${defaultIconStyle}
 `;
