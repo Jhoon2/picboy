@@ -213,7 +213,13 @@ const PostTopicRelay = () => {
 
     return (
         <div>
-            <PostTitle>FREE</PostTitle>
+
+
+            {
+                countFrame.topic === null
+                    ? <PostTitle>FREE</PostTitle>
+                    : <PostTitle>TOPIC</PostTitle>
+            }
             {/*  */}
             <PostContentsWrap>
                 <CanvasWrap>
