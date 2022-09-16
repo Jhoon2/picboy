@@ -35,9 +35,9 @@ const UserProfile = () => {
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
-
-
     const [postCount, setPostCount] = useState(false)
+
+   
 
     const readUser = useCallback(
         async () => {
@@ -66,11 +66,11 @@ const UserProfile = () => {
             }
 
             })
-            console.log(response&&response.data)
+            // console.log(response&&response.data)
         setRandomData(randomData.concat(response&&response.data.data));
     }
-
-  //observe 콜백 함수
+    
+    //observe 콜백 함수
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -225,7 +225,7 @@ const UserProfile = () => {
                     <CardContainer>
                         {randomData && randomData.map((data, i) => {
                             return (
-                                <GifCard key={i} data={data} />
+                                <GifCard key={i} data={data} myImg={myContext.imgAddress} />
                             )
                         })}
                     </CardContainer>

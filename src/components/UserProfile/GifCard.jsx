@@ -1,14 +1,42 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
+
+import axios from 'axios'
 import styled from 'styled-components'
 import download from '../../images/download-btn.png'
 import heart from '../../images/like-before.png'
+import AllParticipants from './AllParticipants'
 import MySpecialButton from './MySpecialButton'
-const GifCard = ({ data }) => {
-  // console.log(data)
+
+
+
+const GifCard = ({ data, myImg }) => {
+  //서버주소
+  const baseURL = process.env.REACT_APP_API_KEY;
+  //토큰
+  const myToken = getCookieToken();
+  const refreshToken = getRefreshToken();
+
   const navigate = useNavigate();
+  // console.log(data.postId)
+  // 참여자들 보여주기
+  const [allParticipants, setAllParticipants] = useState(false)
+  const [peopleData, setPeopleData] = useState()
+  const showAllParticipants = async(e) => {
+    e.stopPropagation();
+    const peopleData = await axios.get(`${baseURL}/post/join-list/${data.postId}`,
+        {
+            headers: {
+                Authorization: myToken,
+                'refresh-token': refreshToken
+            }
+      })
+      setPeopleData(peopleData&&peopleData.data.data)
+    setAllParticipants(!allParticipants)
+  }
+
   //완료 페이지, 진행중 페이지 이동
-  // console.log(data)
   const movePage = () => {
     if (data.status === 1) {
       navigate(`/progressdetail/${data.postId}`)
@@ -27,35 +55,38 @@ const GifCard = ({ data }) => {
 
   return (
     <CardContainer>
-      <GifImg src={data.imgUrl} />
-      <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
-        <HoverSideButton onClick={buttonCollection}>···</HoverSideButton>
-        <HoverContent>
-        <div style={{color:'white'
-        }}>{data.topic ? data.topic : null}</div>
-          <div style={{display :'flex'}}>
-            <ClickCircle src={download}/>
-            <ClickCircle src={heart} />
+      <div onClick={()=> console.log('눌리나?')}>
+        <GifImg src={data.imgUrl} />
+        <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
+          <HoverSideButton onClick={buttonCollection}>···</HoverSideButton>
+          <HoverContent>
+          <div style={{color:'white'
+          }}>{data.topic ? data.topic : null}</div>
+            <div style={{display :'flex'}}>
+              <ClickCircle src={download}/>
+              <ClickCircle src={heart} />
+            </div>
+          </HoverContent>
+        </OverlayImg>
+        <GifContents>
+          <UserProfileContent>
+            <ProfileImage src={myImg} onClick={showAllParticipants} />
+            <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>
+            <div style={{ marginTop: '15px', marginLeft: '15px' }}>{data.nickname} 외 {data.memberCount}명</div>
+          </UserProfileContent>
+          <div style={{display:'flex'}}>
+            <div style={{ marginLeft: '15px', fontSize: '30px' }}>♥</div>
+            <div style={{ marginTop: '7px', marginLeft: '10px', fontSize: '20px' }}>{data.likeCount}</div>
           </div>
-        </HoverContent>
-      </OverlayImg>
-     
-      <GifContents>
-        <UserProfileContent>
-          {/* <ProfileImage src={data.imgUrl} /> */}
-          <ProfileImage />
-
-          <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>
-          <div style={{ marginTop: '15px', marginLeft: '15px' }}>{data.nickname} 외 {data.memberCount}명</div>
-        </UserProfileContent>
-        <div style={{display:'flex'}}>
-          <div style={{ marginLeft: '15px', fontSize: '30px' }}>♥</div>
-          <div style={{ marginTop: '7px', marginLeft: '10px', fontSize: '20px' }}>{data.likeCount}</div>
-        </div>
-      </GifContents>
+        </GifContents>
+      </div>
 
       {/* ...버튼 */}
       <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal} /> 
+      {/* 참여자들 */}
+      {allParticipants ?
+        <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData} />
+        : null}
     </CardContainer>
     
   )
@@ -68,6 +99,18 @@ const CardContainer = styled.div`
   margin-right: 10px;
   position: relative;
 `
+const Overlay = styled.div`
+   /* position: absolute;
+    width: 100vw;
+    height: 100vh;
+    bottom: 0; */
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */ 
+
+`
+
+
 const GifImg = styled.img`
   width: 100%;
   height: 316px;
