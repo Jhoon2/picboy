@@ -1,4 +1,3 @@
-
 import React, { useCallback } from 'react'
 import { useState,useRef } from 'react'
 import { useEffect } from 'react'
@@ -6,12 +5,12 @@ import axios from "axios"
 
 import styled from 'styled-components'
 import GifCard from '../components/UserProfile/GifCard'
-// import CategoryModal from '../components/UserProfile/CategoryModal'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import { getCookieToken, getRefreshToken } from '../shared/Cookie'
 import UseGet from '../hooks/UseGetUser'
 import { useMyContext } from '../shared/ContextApi'
 import basicImg from '../images/basicImg.jpg'
+import CategoryOpen from '../components/UserProfile/CategoryOpen'
 
 
 const myToken = getCookieToken();
@@ -30,41 +29,46 @@ const UserProfile = () => {
     const [page, setPage] = useState(0);
     const lastIntersectingData = useRef(null);
 
-    const [isOpenCategory, setIsOpenCategory] = useState(false)
+    // const [isOpenCategory, setIsOpenCategory] = useState(false)
     // const [imageUrl, setImageUrl] = useState(); 
     const [imgFile, setImgFile] = useState(null)
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
-    const [categoryContent, setCategoryContent] = useState('all')
-    const [filter, setFilter] = useState(false);
+
+
     const [postCount, setPostCount] = useState(false)
 
     const readUser = useCallback(
         async () => {
+            //////////////////////////////////////////////////////////
+            //다른 사람들 페이지로 갈 수 있을 때 userinfo?.data?.data.nickname 대신 사람들의 닉네임을 받기
             const response = await axios.get(`${baseURL}/mypage/user-info?nickname=${ userinfo?.data?.data.nickname}`)
             setUser(response)
             const nickname = response.data.data.nickname
             setLoadMyNickName(nickname)
             setPostCount(response.data.data.postCount)
             myContext.setImgAddress(response.data.data.profilImg)
-
+            readMypage(nickname)
             //컴포넌트 다시
-            const readMypage = async () => {
-                const response =  await axios.get(`${baseURL}/mypage/post/${0}/${1}?nickname=${nickname}&page=${page}&size=6`,
-                {
-                    headers: {
-                        Authorization: myToken,
-                        'refresh-token': refreshToken
-                    }
-
-                    })
-                
-                setRandomData(randomData.concat(response.data.data));
-            }
-        readMypage()
-    }, [userinfo,page])
+           
+    }, [userinfo,page,myContext.tabNum,myContext.categoryNum])
         
+    const readMypage = async (nickname) => {
+        console.log(myContext.tabNum)
+        console.log(myContext.categoryNum,'카테고리넘버')
+        const response =  await axios.get(`${baseURL}/mypage/post/${myContext.tabNum}/${myContext.categoryNum}?nickname=${nickname}&page=${page}&size=6`,
+        {
+            headers: {
+                Authorization: myToken,
+                'refresh-token': refreshToken
+            }
+
+            })
+            // console.log(response&&response.data)
+        setRandomData(randomData.concat(response&&response.data.data));
+    }
+
   //observe 콜백 함수
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
@@ -122,7 +126,6 @@ const UserProfile = () => {
         const info = {
             nickname: loadMyNickname
         }
-        console.log(info)
         const response = await axios.put(`${baseURL}/mypage/update-nickname`,info,
         {
             headers: {
@@ -175,6 +178,7 @@ const UserProfile = () => {
                         <TextProfileContents>
                             <TextContentContainer>
                                 <TextContent>아이디</TextContent>
+                                
                                 <Texts>{user && user.data.data.username}</Texts>
                             </TextContentContainer>
                             <TextContentContainer>
@@ -210,16 +214,8 @@ const UserProfile = () => {
                 </ProfileContainer>
                 <ProfileBorder />
                 {/* 카테고리별 */}
-
-                <CategoryContainer>
-                    <CategoryDisplay>
-                        <CategoryContent id='all' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>전체</CategoryContent>
-                        <CategoryContent id='start' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>작성한 글</CategoryContent>
-                        <CategoryContent id='participate' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>참여한 글</CategoryContent>
-                        <CategoryContent id='behind' onClick={(e) => setCategoryContent(e.target.id)} categoryContent={categoryContent}>숨긴 글</CategoryContent>
-                    </CategoryDisplay>
-                    <CategoryButton id='categoryBtn' onClick={() => { setIsOpenCategory(!isOpenCategory) }} >카테고리 ▼</CategoryButton>
-                </CategoryContainer>
+                <CategoryOpen />
+               
 
 
                 {/* 카드 */}
@@ -239,8 +235,7 @@ const UserProfile = () => {
         {/* 프로필이미지 모달창 */}
             {user && user.data.data.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
                 close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
-         {/* 카테고리모달창 */}
-<CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }} /> 
+        
 
         </UserProfileContainer>
     )
@@ -335,32 +330,6 @@ const ValidationNickname = styled.div`
     display: flex;
 `
 
-const CategoryContainer = styled.div`
-    margin-top: 100px;
-    display: flex;
-    justify-content: space-between;
-`
-const CategoryDisplay = styled.div`
-    display: flex;
-`
-
-const CategoryContent = styled.div`
-    margin-right: 20px;
-    font-size: 20px;
-    font-weight: 400;
-    color:${(props) => (props.id === props.categoryContent) ? '#000000' : '#A3A3A3'};
-    border-bottom: 1px solid ${(props) => (props.id === props.categoryContent) ? '#000000' : '#fff'};
-    cursor: pointer;
-`
-
-const CategoryButton = styled.button`
-    margin-right: 15px;
-    font-size: 20px;
-    font-weight: 400;
-    border: none;
-    cursor: pointer;
-    background-color: transparent;
-`
 
 const CardContainer = styled.div`
     position: relative;

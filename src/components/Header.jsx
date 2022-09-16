@@ -41,7 +41,7 @@ const Header = () => {
   if (location.pathname === '/join') return null;
 
 
-  const throttleScroll = throttle(handleScroll, 50);
+  // const throttleScroll = throttle(handleScroll, 50);
 
 
   return (
