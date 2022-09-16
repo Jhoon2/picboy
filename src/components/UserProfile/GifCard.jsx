@@ -69,8 +69,8 @@ const GifCard = ({ data, myImg }) => {
           </HoverContent>
         </OverlayImg>
         <GifContents>
-          <UserProfileContent>
-            <ProfileImage src={myImg} onClick={showAllParticipants} />
+          <UserProfileContent onClick={showAllParticipants} >
+            <ProfileImage src={myImg} />
             <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>
             <div style={{ marginTop: '15px', marginLeft: '15px' }}>{data.nickname} 외 {data.memberCount}명</div>
           </UserProfileContent>
@@ -171,12 +171,14 @@ const GifContents = styled.div`
 `
 const UserProfileContent = styled.div`
   display: flex;
+  cursor: pointer;
 `
 
 const ProfileImage = styled.img`
   width: 57px;
   height: 57px;
   border-radius: 50px;
+  cursor: pointer;
 `
 
 const Participants = styled.div`

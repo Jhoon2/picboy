@@ -1,5 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
+import basicImg from '../../images/basicImg.jpg'
+
 const AllParticipants = ({ shown, close, data}) => {
   return shown ? (
     <FullOverLay onClick={()=>{close()}}>
@@ -12,7 +14,7 @@ const AllParticipants = ({ shown, close, data}) => {
                 console.log(person)
                 return (
                 <DataPersonContainer key={idx}>
-                  <PersonImg src={person.img} ></PersonImg>
+                  <PersonImg src={!person.img?basicImg : person.img} ></PersonImg>
                   <PersonText>{person.nickname}</PersonText>
                 </DataPersonContainer>
                 )
@@ -48,19 +50,22 @@ const OverlayContainer = styled.div`
 const OverlayPosition = styled.div`
   height: 30px;
   position:relative;
-  top: -330px;
-  left: 270px;
+  top: -400px;
+  left: 250px;
 `
 const ModalContainer = styled.div`
   width: 202px;
-  height: 30px;
+  height: 230px;
+  overflow: auto;
   position: absolute;
   z-index: 2;
   border: 2px solid #000000;
   background-color: white;
 `
 const DataPersonContainer = styled.div`
-  
+  margin-top: 6px;
+  padding: 0.6rem;
+  display: flex;
 `
 
 const PersonImg = styled.img`
@@ -69,6 +74,7 @@ const PersonImg = styled.img`
   border-radius: 50px;
 `
 const PersonText = styled.div`
-  
+  margin-top: 9px;
+  margin-left: 10px;
 `
 export default AllParticipants
