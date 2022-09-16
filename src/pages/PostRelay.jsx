@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+import { useParams } from 'react-router-dom';
 
 // import component
 import Footer from '../components/Footer'
@@ -25,7 +26,7 @@ import waterdrop from "../images/waterdrop.png";
 
 const PostTopicRelay = () => {
 
-    
+
     /////////////////////////////////
     // canvas
     // useRef를 이용해 canvas 엘리먼트에 접근
@@ -158,13 +159,13 @@ const PostTopicRelay = () => {
     const accessToken = getCookieToken();
     const refreshToken = getRefreshToken();
     const baseURL = process.env.REACT_APP_API_KEY;
+    const params = useParams();
 
     // get
     const [countFrame, setCountFrame] = useState("");
     const [lastImg, setLastImg] = useState("");
 
-    // const imgInfoUrl = `${baseURL}/post/gif/images/detail/${postid}`;
-    const imgInfoUrl = `${baseURL}/post/gif/images/detail`;
+    const imgInfoUrl = `${baseURL}/post/gif/images/detail/${params.id}`;
     axios
         .get(imgInfoUrl)
         .then(function (response) {
@@ -181,7 +182,6 @@ const PostTopicRelay = () => {
         const canvas = canvasRef.current;
         const imgDataUrl = canvas.toDataURL('image/png');
         axios.post(
-            // `${baseURL}/post/relay/${postid}`,
             `${baseURL}/post/relay`,
             {
                 "file": imgDataUrl,
@@ -208,6 +208,8 @@ const PostTopicRelay = () => {
     const toggleHandler = () => {
         setToggleBoolean(!toggleBoolean);
     }
+
+    const topicBoolean = useState(false);
 
     return (
         <div>
@@ -324,7 +326,12 @@ const PostTopicRelay = () => {
                         </ModeTitleWrap>
                         <ModeFrameWrap style={{ marginBottom: '32px' }}>
                             <ModeFrameTitle>제시어</ModeFrameTitle>
-                            <ModeFrameArticle>{countFrame.topic}</ModeFrameArticle>
+                            {
+                                countFrame.topic === null
+                                    ? <ModeFrameArticle>제시어가 없습니다. 자유롭게 그려보세요!</ModeFrameArticle>
+                                    :
+                                    <ModeFrameArticle>{countFrame.topic}</ModeFrameArticle>
+                            }
                         </ModeFrameWrap>
                         <ModeFrameWrap>
                             <ModeFrameTitle>프레임</ModeFrameTitle>
@@ -385,6 +392,7 @@ const PostTitle = styled.div`
 
 const LastImgStyle = styled.img`
     position: absolute;
+    margin-left: 100px;
     opacity: 0.1;
     pointer-events: none; 
 `;
