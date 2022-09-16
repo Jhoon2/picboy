@@ -30,7 +30,7 @@ const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
     //   myContext.setImgAddress(base64data)
     // }
     // reader.readAsDataURL(file);
-    console.log(myContext.imgAddress)
+    // console.log(myContext.imgAddress)
     setSelectIcon(false)
     close();
     myContext.setIsOpenProfileImg(false)

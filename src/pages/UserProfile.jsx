@@ -21,7 +21,7 @@ const UserProfile = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
     const params = useParams();
-    console.log(params)
+    // console.log(params)
     //로그인 정보
     const userinfo = UseGet();
 
@@ -44,7 +44,7 @@ const UserProfile = () => {
     //로그인한 유저 정보로 
     const readUser = useCallback(
         async () => {
-            console.log('위에꺼')
+            // console.log('위에꺼')
             const response = await axios.get(`${baseURL}/mypage/user-info?nickname=${ userinfo?.data?.data.nickname}`)
             setUser(response)
             const nickname = response.data.data.nickname
@@ -58,15 +58,15 @@ const UserProfile = () => {
     
     ////////////
     ///////////// 작업중
-    console.log(params.id)
+    // console.log(params.id)
     //다른 사람 정보 부르기
     const readOther = useCallback(
         async () => {
-        console.log('나오나', params.id)
+        // console.log('나오나', params.id)
             //////////////////////////////////////////////////////////
             //다른 사람들 페이지로 갈 수 있을 때 userinfo?.data?.data.nickname 대신 사람들의 닉네임을 받기
             const response = await axios.get(`${baseURL}/mypage/user-info?nickname=${params.id}`)
-            console.log(response&&response)
+            // console.log(response&&response)
 
             setUser(response)
             const nickname = response.data.data.nickname
@@ -108,7 +108,7 @@ const UserProfile = () => {
   };
     // console.log('페이지나와라2',page)
     
-  console.log('유저정보', userinfo)
+//   console.log('유저정보', userinfo)
     //유저 정보 있을시
     useEffect(() => {
         if (userinfo && userinfo.data.data.nickname === params.id) {

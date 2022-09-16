@@ -3,13 +3,13 @@ import styled from 'styled-components'
 
 const MySpecialButton = ({ shown, close, setOpenSpecialModal }) => {
   const hide = (e) => {
-    console.log(e.target.id)
+    // console.log(e.target.id)
   }
   const declaration = (e) => {
-    console.log(e.target.id)
+    // console.log(e.target.id)
   }
   const deletePost = (e) => {
-    console.log(e.target.id)
+    // console.log(e.target.id)
   }
   return shown ? (
     <FullOverLay onClick={()=>{close()}}>

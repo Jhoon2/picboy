@@ -8,19 +8,14 @@ const CategoryModal = ({children, shown, close}) => {
   const myContext = useMyContext();
 
   const recent = (e) => {
-    console.log(e.target.id)
     setCategoryContent(e.target.id)
     myContext.setCategoryNum(1)
   }
   const liked = (e) => {
-    console.log(e.target.id)
-
     setCategoryContent(e.target.id)
     myContext.setCategoryNum(2)
   }
   const comments = (e) => {
-    console.log(e.target.id)
-
     setCategoryContent(e.target.id)
     myContext.setCategoryNum(3)
   }
@@ -29,7 +24,6 @@ const CategoryModal = ({children, shown, close}) => {
     <Overlay onClick={()=>{close()}}>
       <OverlayPosition >
         <OverlayContainer>
-          {console.log('ss',categoryContent)}
           <ModalContainer onClick={e => {e.stopPropagation();}}>
             <ModalText id='recent' name='1' onClick={recent} categoryContent={myContext.categoryNum} >
               최신순

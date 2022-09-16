@@ -144,7 +144,7 @@ const SignUp = () => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(5);
   const phoneCheck = () => {
-    console.log('전송시작');
+    // console.log('전송시작');
     setPhoneValid(false);
     myContext.setTimerMessage(true);
     setTimeout(() => {
