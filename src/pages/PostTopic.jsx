@@ -25,7 +25,7 @@ const PostTopic = () => {
     const [canvasDone, setCanvasDone] = useState();
     const accessToken = getCookieToken();
     const refreshToken = getRefreshToken();
-    
+
     const frameCount = (e) => {
         const target = e.target;
         if (target.id === "6") {
