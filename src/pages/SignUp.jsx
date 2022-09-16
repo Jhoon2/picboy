@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import axios from 'axios';
 import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components';
-import SignupErrorModal from '../components/signup/SignupErrorModal';
+import SignupErrorModal from '../components/Signup/SignupErrorModal';
 import UseTimer from '../elem/UseTimer';
 
 const SignUp = () => {

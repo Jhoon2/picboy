@@ -12,10 +12,17 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 const ProgressDetail = () => {
   const navigate = useNavigate();
 
+  //토픽이 있을 때
   const [mainSlick, setMainSlick] = useState(null);
   const [pagingSlick, setPagingSlick] = useState(null);
   const mainSlickRef = useRef(null);
   const pagingSlickRef = useRef(null);
+
+  //토픽이 없을 때
+  const [mainSlick2, setMainSlick2] = useState(null);
+  const [pagingSlick2, setPagingSlick2] = useState(null);
+  const mainSlickRef2 = useRef(null);
+  const pagingSlickRef2 = useRef(null);
 
   const baseURL = process.env.REACT_APP_API_KEY;
   const params = useParams();
@@ -34,11 +41,13 @@ const ProgressDetail = () => {
       });
   };
 
-  const test = Data.frameImgList;
-  const tests = test?.reverse();
+  // const test = Data.frameImgList;
+  // const tests = test?.reverse();
 
   const imgList = Data.frameImgList;
   const Topics = Data && Data.topic;
+
+  console.log(Data.imgUrl);
 
   const Move = () => {
     navigate(`/post-topic-relay/${params.id}`);
@@ -51,6 +60,8 @@ const ProgressDetail = () => {
   useEffect(() => {
     setMainSlick(mainSlickRef.current);
     setPagingSlick(pagingSlickRef.current);
+    setMainSlick2(mainSlickRef2.current);
+    setPagingSlick2(pagingSlickRef2.current);
   }, []);
 
   const onClickPrev = useCallback((ref) => () => ref.current.slickPrev(), []);
@@ -60,83 +71,171 @@ const ProgressDetail = () => {
 
   const mainSettings = {
     dots: false,
-    // centerMode: true,
+    initialSlide: imgList && imgList.length - 1,
     arrows: false,
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
+    touchThreshold: 100,
   };
 
   const pagingSettings = {
     dots: true,
     arrows: false,
+    initialSlide: imgList && imgList.length - 1,
     infinite: imgList?.length > showMaxCnt,
     slidesToShow: showMaxCnt,
+    slidesToScroll: 6,
     swipeToSlide: true,
     focusOnSelect: true,
+    touchThreshold: 100,
   };
 
   return (
     <>
-      <ImgBox>
-        <span>PROGRESS</span>
-      </ImgBox>
-      <Wrap>
-        <Inner>
-          <Slider ref={mainSlickRef} asNavFor={pagingSlick} {...mainSettings}>
-            {tests &&
-              tests.map((item, index) => {
-                return (
-                  <MainSlickItems key={item}>
-                    <img src={item.imgUrl} alt="" />
-                  </MainSlickItems>
-                );
-              })}
-          </Slider>
-          <>
-            <PrevButton onClick={onClickPrev(pagingSlickRef)}>
-              <PrevIcon />
-            </PrevButton>
+      {Topics === null ? (
+        <>
+          <ImgBox>
+            <span>PROGRESS</span>
+          </ImgBox>
+          <Wrap>
+            <Inner>
+              <Slider
+                ref={mainSlickRef2}
+                asNavFor={pagingSlick2}
+                {...mainSettings}
+              >
+                {imgList.map((item, index) => {
+                  {
+                    console.log(imgList);
+                  }
+                  return (
+                    <MainSlickItems key={item}>
+                      <img src={Data.imgUrl} alt="" />
+                    </MainSlickItems>
+                  );
+                })}
+              </Slider>
+              <>
+                <PrevButton onClick={onClickPrev(pagingSlickRef2)}>
+                  <PrevIcon />
+                </PrevButton>
 
-            <NextButton onClick={onClickNext(pagingSlickRef)}>
-              <NextIcon />
-            </NextButton>
-          </>
-        </Inner>
+                <NextButton onClick={onClickNext(pagingSlickRef2)}>
+                  <NextIcon />
+                </NextButton>
+              </>
+            </Inner>
+            <Inner2>
+              <Slider
+                ref={pagingSlickRef2}
+                asNavFor={mainSlick2}
+                {...pagingSettings}
+              >
+                {imgList.map((item, index) => {
+                  return (
+                    <PagingItems key={item} className="paging_items">
+                      <img
+                        src={
+                          'https://doker-bucket.s3.ap-northeast-2.amazonaws.com/picboy/images/post245/2a6e0afd-92fc-4555-b4a9-3a0f43b865f1-post245'
+                        }
+                        alt=""
+                      />
+                    </PagingItems>
+                  );
+                })}
+                <ProgressButton
+                  onClick={() => {
+                    Move();
+                  }}
+                />
+              </Slider>
+              <>
+                <PrevButton onClick={onClickPrev(pagingSlickRef2)}>
+                  <PrevIcon />
+                </PrevButton>
 
-        <Inner>
-          <Slider ref={pagingSlickRef} asNavFor={mainSlick} {...pagingSettings}>
-            <ProgressButton
-              onClick={() => {
-                Move();
-              }}
-            />
-            {imgList &&
-              imgList.map((item, index) => {
-                return (
-                  <PagingItems key={item} className="paging_items">
-                    <img src={item.imgUrl} alt="" />
-                  </PagingItems>
-                );
-              })}
-          </Slider>
+                <NextButton onClick={onClickNext(pagingSlickRef2)}>
+                  <NextIcon />
+                </NextButton>
+              </>
+            </Inner2>
+            <HR />
+            <TopicBox>
+              <Topic>{Topics}</Topic>
+            </TopicBox>
+          </Wrap>
+          <Footer />
+        </>
+      ) : (
+        <>
+          <ImgBox>
+            <span>PROGRESS</span>
+          </ImgBox>
+          <Wrap>
+            <Inner>
+              <Slider
+                ref={mainSlickRef}
+                asNavFor={pagingSlick}
+                {...mainSettings}
+              >
+                {imgList &&
+                  imgList.map((item, index) => {
+                    return (
+                      <MainSlickItems key={item}>
+                        <img src={item.imgUrl} alt="" />
+                      </MainSlickItems>
+                    );
+                  })}
+              </Slider>
+              <>
+                <PrevButton onClick={onClickPrev(pagingSlickRef)}>
+                  <PrevIcon />
+                </PrevButton>
 
-          <>
-            <PrevButton onClick={onClickPrev(pagingSlickRef)}>
-              <PrevIcon />
-            </PrevButton>
+                <NextButton onClick={onClickNext(pagingSlickRef)}>
+                  <NextIcon />
+                </NextButton>
+              </>
+            </Inner>
+            <Inner>
+              <Slider
+                ref={pagingSlickRef}
+                asNavFor={mainSlick}
+                {...pagingSettings}
+              >
+                {imgList &&
+                  imgList.map((item, index) => {
+                    return (
+                      <PagingItems key={item} className="paging_items">
+                        <img src={item.imgUrl} alt="" />
+                      </PagingItems>
+                    );
+                  })}
+                <ProgressButton
+                  onClick={() => {
+                    Move();
+                  }}
+                />
+              </Slider>
+              <>
+                <PrevButton onClick={onClickPrev(pagingSlickRef)}>
+                  <PrevIcon />
+                </PrevButton>
 
-            <NextButton onClick={onClickNext(pagingSlickRef)}>
-              <NextIcon />
-            </NextButton>
-          </>
-        </Inner>
-        <HR />
-        <TopicBox>
-          <Topic>{Topics}</Topic>
-        </TopicBox>
-      </Wrap>
-      <Footer />
+                <NextButton onClick={onClickNext(pagingSlickRef)}>
+                  <NextIcon />
+                </NextButton>
+              </>
+            </Inner>
+            <HR />
+            <TopicBox>
+              <Topic>{Topics}</Topic>
+            </TopicBox>
+          </Wrap>
+          <Footer />
+        </>
+      )}
     </>
   );
 };
@@ -189,6 +288,28 @@ const Inner = styled.div`
 
   .slick-current .paging_items {
     filter: none;
+  }
+
+  .slick-slide {
+    padding-right: 60px;
+  }
+  .slick-list {
+    margin-right: -110px;
+  }
+`;
+
+const Inner2 = styled.div`
+  position: relative;
+
+  .paging_items {
+  }
+
+  &:hover {
+    filter: none;
+  }
+
+  .slick-current .paging_items {
+    filter: blur(1px);
   }
 
   .slick-slide {
