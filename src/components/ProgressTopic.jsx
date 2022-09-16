@@ -20,7 +20,7 @@ const ProgressTopic = () => {
         return;
       }
       setRandomData(randomData.concat(data.data));
-      console.log(data.data);
+      // console.log(data.data);
     } catch (error) {
       console.log(error);
     }

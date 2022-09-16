@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+import { useParams } from 'react-router-dom';
 
 // import component
 import Footer from '../components/Footer'
@@ -25,7 +26,7 @@ import waterdrop from "../images/waterdrop.png";
 
 const PostTopicRelay = () => {
 
-    
+
     /////////////////////////////////
     // canvas
     // useRef를 이용해 canvas 엘리먼트에 접근
@@ -45,6 +46,7 @@ const PostTopicRelay = () => {
     const [canvasDone, setCanvasDone] = useState();
 
     useEffect(() => {
+        Callaxios();
         const canvas = canvasRef.current;
         canvas.width = 688;
         canvas.height = 688;
@@ -57,7 +59,7 @@ const PostTopicRelay = () => {
         const Y = e.clientY - canvasRef.current.offsetTop + window.scrollY;
         if (isPainting === true) {
             if (rectState === true) {
-                console.log('hi')
+                // console.log('hi')
                 ctx.strokeRect(X, Y, X - canvasRef.current.offsetLeft, Y - canvasRef.current.offsetTop);
             } else if (eraserState === true) {
                 ctx.strokeStyle = "white";
@@ -158,31 +160,34 @@ const PostTopicRelay = () => {
     const accessToken = getCookieToken();
     const refreshToken = getRefreshToken();
     const baseURL = process.env.REACT_APP_API_KEY;
+    const params = useParams();
 
     // get
     const [countFrame, setCountFrame] = useState("");
     const [lastImg, setLastImg] = useState("");
 
-    // const imgInfoUrl = `${baseURL}/post/gif/images/detail/${postid}`;
-    const imgInfoUrl = `${baseURL}/post/gif/images/detail`;
-    axios
-        .get(imgInfoUrl)
-        .then(function (response) {
-            const imgData = response.data.data;
-            setCountFrame(imgData);
-            setLastImg(imgData.imgUrl);
-        })
-        .catch(function (error) {
-            console.log(error)
-        })
+    const imgInfoUrl = `${baseURL}/post/gif/images/detail/${params.id}`;
+
+    const Callaxios = () => {
+        axios
+            .get(imgInfoUrl)
+            .then(function (response) {
+                const imgData = response && response.data.data;
+                setCountFrame(imgData);
+                setLastImg(imgData.imgUrl);
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
 
     // post
     const submitImg = () => {
         const canvas = canvasRef.current;
         const imgDataUrl = canvas.toDataURL('image/png');
         axios.post(
-            // `${baseURL}/post/relay/${postid}`,
-            `${baseURL}/post/relay`,
+            `${baseURL}/post/relay/${params.id}`,
             {
                 "file": imgDataUrl,
             },
@@ -209,9 +214,17 @@ const PostTopicRelay = () => {
         setToggleBoolean(!toggleBoolean);
     }
 
+    const topicBoolean = useState(false);
+
     return (
         <div>
-            <PostTitle>FREE</PostTitle>
+
+
+            {
+                countFrame.topic === null
+                    ? <PostTitle>FREE</PostTitle>
+                    : <PostTitle>TOPIC</PostTitle>
+            }
             {/*  */}
             <PostContentsWrap>
                 <CanvasWrap>
@@ -324,7 +337,12 @@ const PostTopicRelay = () => {
                         </ModeTitleWrap>
                         <ModeFrameWrap style={{ marginBottom: '32px' }}>
                             <ModeFrameTitle>제시어</ModeFrameTitle>
-                            <ModeFrameArticle>{countFrame.topic}</ModeFrameArticle>
+                            {
+                                countFrame.topic === null
+                                    ? <ModeFrameArticle>제시어가 없습니다. 자유롭게 그려보세요!</ModeFrameArticle>
+                                    :
+                                    <ModeFrameArticle>{countFrame.topic}</ModeFrameArticle>
+                            }
                         </ModeFrameWrap>
                         <ModeFrameWrap>
                             <ModeFrameTitle>프레임</ModeFrameTitle>
@@ -385,6 +403,7 @@ const PostTitle = styled.div`
 
 const LastImgStyle = styled.img`
     position: absolute;
+    margin-left: 100px;
     opacity: 0.1;
     pointer-events: none; 
 `;

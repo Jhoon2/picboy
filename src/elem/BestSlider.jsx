@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import Slider from 'react-slick';
+import { useSelector, useDispatch } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useSelector, useDispatch } from 'react-redux';
 import { __getBest } from '../redux/modules/Best';
 
 const BestSlider = () => {
@@ -19,14 +19,13 @@ const BestSlider = () => {
     className: 'center',
     centerMode: true,
     infinite: true,
-    focusOnSelect: true,
-    centerPadding: '10px',
     speed: 3000,
     slidesToShow: 1,
-    autoplay: true,
+    slidesToScroll: 1,
+    centerPadding: '30px',
+    // autoplay: true,
     autoplaySpeed: 3000,
     addaptiveHeight: true,
-    cssEase: 'linear',
     responsive: [
       // 반응형 웹 구현 옵션
       {
@@ -42,24 +41,13 @@ const BestSlider = () => {
   return (
     <>
       <Container>
-        <link
-          rel="stylesheet"
-          type="text/css"
-          charset="UTF-8"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-        />
         <style>{cssstyle}</style>
         <Slider {...settings}>
           <>
             {bests.map((item, index) => {
               return (
-                <Box>
-                  <Bannerimage key={item.id} img={item.gifUrl} />
+                <Box key={item.id}>
+                  <Bannerimage key={item.id} src={item.gifUrl} alt="" />
                 </Box>
               );
             })}
@@ -84,10 +72,11 @@ const Box = styled.div`
 `;
 
 const Bannerimage = styled.img`
-  height: 300px;
-  background: url(${(props) => props.img});
-  ${({ theme }) => theme.backgroundSet('contain')};
-
+  height: 100px;
+  margin: auto;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
 `;
 
 const cssstyle = css`
@@ -99,10 +88,9 @@ const cssstyle = css`
     opacity: 1;
     -ms-transform: scale(1.1);
     transform: scale(1.1);
-    display: flex;
   }
   .center div {
-    padding: 0px 60px 0px 30px;
+    padding: 0px 0px 0px 0px;
     transition: all 0.3s ease;
   }
 `;

@@ -41,7 +41,7 @@ const PostFree = () => {
     }
   }
 
-  console.log(frame)
+  // console.log(frame)
 
   ///////////////////////////
   // ajax
@@ -108,7 +108,7 @@ const PostFree = () => {
     const Y = e.clientY - canvasRef.current.offsetTop + window.scrollY;
     if (isPainting === true) {
       if (rectState === true) {
-        console.log('hi')
+        // console.log('hi')
         ctx.strokeRect(X, Y, X - canvasRef.current.offsetLeft, Y - canvasRef.current.offsetTop);
       } else if (eraserState === true) {
         ctx.strokeStyle = "white";
