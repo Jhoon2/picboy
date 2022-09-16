@@ -25,7 +25,7 @@ const Router = () => {
   return (
     <Context>
       <BrowserRouter>
-          <Header /> 
+        <Header />
         <Routes>
           {/* 종훈님 */}
           <Route path="/" element={<Main />} />
@@ -41,7 +41,7 @@ const Router = () => {
           <Route path="post-free" element={<PostFree />} />
           <Route path="post-topic" element={<PostTopic />} />
           <Route path="post-free-relay" element={<PostFreeRelay />} />
-          <Route path="post-topic-relay" element={<PostTopicRelay />} />
+          <Route path="/post-topic-relay/:id" element={<PostTopicRelay />} />
           <Route path="complete-detail/:id" element={<CompleteDetail />} />
         </Routes>
       </BrowserRouter>

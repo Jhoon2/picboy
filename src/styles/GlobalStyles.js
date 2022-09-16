@@ -25,6 +25,10 @@ font: inherit;
 vertical-align: baseline;
 }
 
+.slick-slide {
+	  display: inline-block;
+  }
+
 * {
 box-sizing: border-box;
 }
