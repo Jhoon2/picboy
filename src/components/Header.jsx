@@ -9,7 +9,9 @@ import {
   removeCookieToken,
   removeRefreshCookieToken,
 } from '../shared/Cookie';
-
+import UseGetUser from '../hooks/UseGetUser' 
+import ClickProfileModal from './Header/ClickProfileModal';
+import { useMyContext } from '../shared/ContextApi';
 
 
 const myToken = getCookieToken();
@@ -26,16 +28,25 @@ const throttle = function (callback, waitTime) {
 };
 
 const Header = () => {
+  const useGet = UseGetUser();
+  const loginUser = useGet && useGet.data.data.profileImg
+  console.log(loginUser)
+
+  useEffect(() => {
+
+  }, [loginUser])
+  
   const navigate = useNavigate();
-  const [hide, setHide] = useState(false);
-  const [pageY, setPageY] = useState(0);
   const documentRef = useRef(document);
   const location = useLocation();
+  const myContext = useMyContext();
+  const [hide, setHide] = useState(false);
+  const [pageY, setPageY] = useState(0);
+  const [openProfile, setOpenProfile] = useState(false)
 
-  const logoutFeat = () => {
-    removeCookieToken();
-    window.location.href = '/';
-  };
+  const clickOpenModal = () => {
+    myContext.setLogonProfileImg(!myContext.logonOpenProfileImg)
+  }
 
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
@@ -48,7 +59,7 @@ const Header = () => {
     <HeaderArea>
       <HeaderContainer>
         <HeaderBox>
-          <Logo
+          <Logo src={logo}
             onClick={() => {
               navigate('/');
             }}
@@ -58,18 +69,21 @@ const Header = () => {
               navigate('/list');
             }}
           >
-            Proceeding
+            PROCEEDING
           </ProceedingButton>
           <CompleteButton
             onClick={() => {
               navigate('/CompList');
             }}
           >
-            Complete
+            COMPLETE
           </CompleteButton>
           <PostCategories />
           {myToken ? (
-            <LogoutButton onClick={logoutFeat}>LOGOUT</LogoutButton>
+            <div>
+              <LoginUserImg src={loginUser} onClick={clickOpenModal}></LoginUserImg>
+              
+            </div>
           ) : (
             <LoginButton
               onClick={() => {
@@ -80,6 +94,8 @@ const Header = () => {
             </LoginButton>
           )}
         </HeaderBox>
+        {myContext.logonOpenProfileImg ? <ClickProfileModal shown={myContext.logonOpenProfileImg}
+                close={() => { myContext.setLogonProfileImg(false) }}/> : null}
       </HeaderContainer>
     </HeaderArea>
   );
@@ -118,48 +134,44 @@ const HeaderContainer = styled.div`
 const HeaderBox = styled.div`
   max-width: 1200px;
   width: 100%;
-  height: 80px;
+  height: 100px;
   margin: auto;
   ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
 `;
 
-const Logo = styled(Button)`
+const Logo = styled.img`
+  width: 104px;
   height: 30px;
-  padding-bottom: 5px;
-  border-radius: 10px;
-  background: url(${logo});
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  /* font-family: 'SilkBold';
-  font-size: 35px;
-  -webkit-text-stroke: 2px black;
-  text-shadow: 5px 5px black; */
+  margin-right: 100px;
+  cursor: pointer;
 `;
 
 const ProceedingButton = styled(Button)`
   width: 150px;
+  margin-right: 60px;
   background: none;
-
+  font-size: 20px;
   color: white;
 `;
 
 const CompleteButton = styled(Button)`
   width: 150px;
   margin-right: 420px;
+  font-size: 20px;
   background: none;
 `;
 
 const LoginButton = styled(Button)`
   width: 80px;
   ${({ theme }) => theme.backgroundSet('cover')}
-
-  font-size: 13px;
+  font-size: 16px;
 `;
 
-const LogoutButton = styled(Button)`
-  width: 80px;
-  ${({ theme }) => theme.backgroundSet('cover')}
+const LoginUserImg = styled.img`
+  width: 58px;
+  height: 58px;
+  border-radius: 58px;
+  cursor: pointer;
+  
+`
 
-  font-size: 13px;
-`;

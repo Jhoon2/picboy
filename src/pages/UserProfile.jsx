@@ -266,7 +266,7 @@ const ProfileImage = styled.img`
     width: 218px;
     height: 218px;
     border-radius: 150px;
-    background-color: pink;
+    background-color: white;
 `
 const ProfileBorder = styled.div`
     margin-top: 116px;

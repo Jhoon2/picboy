@@ -18,6 +18,7 @@ export const Context = (props) => {
     const [categoryNum, setCategoryNum] = React.useState(1);
 
     const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)  
+    const [logonOpenProfileImg, setLogonProfileImg] = React.useState(false)  
 
 
     const value = {
@@ -37,7 +38,11 @@ export const Context = (props) => {
 
         //카테고리넘버
         categoryNum,
-        setCategoryNum
+        setCategoryNum,
+
+        //로그온 멤버
+        logonOpenProfileImg,
+        setLogonProfileImg
     };
 
     return (

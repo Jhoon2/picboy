@@ -12,9 +12,11 @@ const Categories = (props) => {
     return (
         <>
             <SelectBox>
-                <Select>
-                    <div onClick={() => setSelect(!select)}>Drawing</div>
-                </Select>
+                <DrawingBox onClick={() => setSelect(!select)}>
+                  <Select >
+                      <div  >DRAWING</div>
+                  </Select>
+                </DrawingBox>
             </SelectBox>
             <SelectListBox>
                 {/* {select && ( */}
@@ -88,12 +90,23 @@ const SelectBox = styled.div`
   display: flex;
 `;
 
+const DrawingBox = styled.div`
+  width: 170px;
+  height: 45px;
+  margin-left: -50px;
+  text-align: center;
+  border: 1px white solid;
+    cursor: pointer;
+
+`
+
 const Select = styled.button`
+  margin-top: 7px;
   margin-left: auto;
   position: relative;
   background: none;
   font-family: 'PopLight';
-  font-size: 13px;
+  font-size: 16px;
   color: white;
   div {
     label {
@@ -109,7 +122,7 @@ const SelectListBox = styled.div`
   width: 120px;
   position: relative;
   top: 30px;
-  right: 60px;
+  right: 170px;
   z-index: 1;
 `;
 
