@@ -24,7 +24,7 @@ import stroke from "../images/stroke.png";
 import waterdrop from "../images/waterdrop.png";
 
 
-const PostTopicRelay = () => {
+const PostRelay = () => {
 
 
     /////////////////////////////////
@@ -46,6 +46,7 @@ const PostTopicRelay = () => {
     const [canvasDone, setCanvasDone] = useState();
 
     useEffect(() => {
+        Callaxios();
         const canvas = canvasRef.current;
         canvas.width = 688;
         canvas.height = 688;
@@ -58,7 +59,6 @@ const PostTopicRelay = () => {
         const Y = e.clientY - canvasRef.current.offsetTop + window.scrollY;
         if (isPainting === true) {
             if (rectState === true) {
-                console.log('hi')
                 ctx.strokeRect(X, Y, X - canvasRef.current.offsetLeft, Y - canvasRef.current.offsetTop);
             } else if (eraserState === true) {
                 ctx.strokeStyle = "white";
@@ -166,6 +166,18 @@ const PostTopicRelay = () => {
     const [lastImg, setLastImg] = useState("");
 
     const imgInfoUrl = `${baseURL}/post/gif/images/detail/${params.id}`;
+    const Callaxios = () => {
+        axios
+            .get(imgInfoUrl)
+            .then(function (response) {
+                const imgData = response && response.data.data;
+                setCountFrame(imgData);
+                setLastImg(imgData.imgUrl);
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
     axios
         .get(imgInfoUrl)
         .then(function (response) {
@@ -213,7 +225,12 @@ const PostTopicRelay = () => {
 
     return (
         <div>
-            <PostTitle>FREE</PostTitle>
+
+            {
+                countFrame.topic === null
+                    ? <PostTitle>FREE</PostTitle>
+                    : <PostTitle>TOPIC</PostTitle>
+            }
             {/*  */}
             <PostContentsWrap>
                 <CanvasWrap>
@@ -555,4 +572,4 @@ const RangeWrap = styled.div`
   flex-direction: column;
 `;
 
-export default PostTopicRelay;
+export default PostRelay;

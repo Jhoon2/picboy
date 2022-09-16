@@ -52,7 +52,7 @@ const Canvas = () => {
         const Y = e.clientY - canvasRef.current.offsetTop + window.scrollY;
         if (isPainting === true) {
             if (rectState === true) {
-                console.log('hi')
+                // console.log('hi')
                 ctx.strokeRect(X, Y, X - canvasRef.current.offsetLeft, Y - canvasRef.current.offsetTop);
             } else if (eraserState === true) {
                 ctx.strokeStyle = "white";
@@ -305,7 +305,6 @@ const IcButton = styled.div`
 `;
 
 const Table = styled.table`
-    c
     border: 2px solid #000;
     border-collapse: collapse;
     position: absolute;

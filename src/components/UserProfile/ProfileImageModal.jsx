@@ -26,7 +26,7 @@ const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
   const onChangeImage =  (e) => {
     const reader = new FileReader();
     const file = imgRef.current.files[0];
-    console.log(imgRef.current.files)
+    // console.log(imgRef.current.files)
     reader.onloadend = () => {
       const base64data = reader.result;
       setImgUrl(base64data);

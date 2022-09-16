@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components';
 import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
@@ -11,8 +12,7 @@ import {
 } from '../shared/Cookie';
 import UseGetUser from '../hooks/UseGetUser' 
 import ClickProfileModal from './Header/ClickProfileModal';
-import { useMyContext } from '../shared/ContextApi';
-
+import basicImg from '../images/basicImg.jpg'
 
 const myToken = getCookieToken();
 
@@ -31,6 +31,7 @@ const Header = () => {
   const useGet = UseGetUser();
   const loginUser = useGet && useGet.data.data.profileImg
   // console.log(loginUser)
+
 
   useEffect(() => {
 
@@ -81,7 +82,7 @@ const Header = () => {
           <PostCategories />
           {myToken ? (
             <div>
-              <LoginUserImg src={loginUser} onClick={clickOpenModal}></LoginUserImg>
+              <LoginUserImg src={!loginUser? basicImg : loginUser}  onClick={clickOpenModal}></LoginUserImg>
               
             </div>
           ) : (
