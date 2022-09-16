@@ -5,15 +5,20 @@ import {
 } from '../../shared/Cookie';
 import { useMyContext } from '../../shared/ContextApi';
 import { useNavigate } from 'react-router-dom';
+import UseGetUser from '../../hooks/UseGetUser';
 
 const ClickProfileModal = ({shown, close}) => {
   const myContext = useMyContext();
+  const logonUser = UseGetUser();
+  // console.log(logonUser)
+  const logonNick =logonUser && logonUser.data.data.nickname;
+
   const [selectContent, setSelectContent] = useState('myPage')
 
   const navigate = useNavigate();
   const myPage = (e) => {
     setSelectContent(e.target.id)
-    navigate('/user-profile')
+    navigate(`/user-profile/${logonNick}`)
     myContext.setLogonProfileImg(false)
   }
   const Logout = (e) => {

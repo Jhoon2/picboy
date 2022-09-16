@@ -34,7 +34,7 @@ const ProgressDetail = () => {
       .get(url)
       .then(function (response) {
         setData(response.data.data);
-        console.log(response.data.data);
+        // console.log(response.data.data);
       })
       .catch(function (error) {
         console.log('error');
@@ -47,7 +47,7 @@ const ProgressDetail = () => {
   const imgList = Data.frameImgList;
   const Topics = Data && Data.topic;
 
-  console.log(Data.imgUrl);
+  // console.log(Data.imgUrl);
 
   const Move = () => {
     navigate(`/post-relay/${params.id}`);
@@ -107,7 +107,7 @@ const ProgressDetail = () => {
               >
                 {imgList.map((item, index) => {
                   {
-                    console.log(imgList);
+                    // console.log(imgList);
                   }
                   return (
                     <MainSlickItems key={item}>
