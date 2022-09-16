@@ -11,7 +11,7 @@ const ClickProfileModal = ({shown, close}) => {
   const myContext = useMyContext();
   const logonUser = UseGetUser();
   // console.log(logonUser)
-  const logonNick = logonUser.data.data.nickname;
+  const logonNick =logonUser && logonUser.data.data.nickname;
 
   const [selectContent, setSelectContent] = useState('myPage')
 

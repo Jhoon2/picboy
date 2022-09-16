@@ -11,6 +11,7 @@ import UseGet from '../hooks/UseGetUser'
 import { useMyContext } from '../shared/ContextApi'
 import basicImg from '../images/basicImg.jpg'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
+import { useParams } from 'react-router-dom'
 
 
 const myToken = getCookieToken();
@@ -19,6 +20,8 @@ const refreshToken = getRefreshToken();
 const UserProfile = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
+    const params = useParams();
+    console.log(params)
     //로그인 정보
     const userinfo = UseGet();
 
@@ -38,11 +41,10 @@ const UserProfile = () => {
     const [postCount, setPostCount] = useState(false)
 
    
-
+    //로그인한 유저 정보로 
     const readUser = useCallback(
         async () => {
-            //////////////////////////////////////////////////////////
-            //다른 사람들 페이지로 갈 수 있을 때 userinfo?.data?.data.nickname 대신 사람들의 닉네임을 받기
+            console.log('위에꺼')
             const response = await axios.get(`${baseURL}/mypage/user-info?nickname=${ userinfo?.data?.data.nickname}`)
             setUser(response)
             const nickname = response.data.data.nickname
@@ -53,7 +55,28 @@ const UserProfile = () => {
             //컴포넌트 다시
            
     }, [userinfo,page,myContext.tabNum,myContext.categoryNum])
-        
+    
+    ////////////
+    ///////////// 작업중
+    console.log(params.id)
+    //다른 사람 정보 부르기
+    const readOther = useCallback(
+        async () => {
+        console.log('나오나', params.id)
+            //////////////////////////////////////////////////////////
+            //다른 사람들 페이지로 갈 수 있을 때 userinfo?.data?.data.nickname 대신 사람들의 닉네임을 받기
+            const response = await axios.get(`${baseURL}/mypage/user-info?nickname=${params.id}`)
+            console.log(response&&response)
+
+            setUser(response)
+            const nickname = response.data.data.nickname
+            setLoadMyNickName(nickname)
+            setPostCount(response.data.data.postCount)
+            myContext.setImgAddress(response.data.data.profilImg)
+            readMypage(nickname)
+            //컴포넌트 다시
+           
+    }, [page,myContext.tabNum,myContext.categoryNum])
     const readMypage = async (nickname) => {
         // console.log(myContext.tabNum)
         // console.log(myContext.categoryNum,'카테고리넘버')
@@ -77,20 +100,23 @@ const UserProfile = () => {
         //조건이 트루
         //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
         setPage((page) => page + 1);
-        console.log('페이지나와라', page)
+        // console.log('페이지나와라', page)
         // 현재 타겟을 observe한다.
         observer.observe(entry.target); // unobserve가 아님
       }
     });
   };
-    console.log('페이지나와라2',page)
+    // console.log('페이지나와라2',page)
     
-
+  console.log('유저정보', userinfo)
+    //유저 정보 있을시
     useEffect(() => {
-        if (userinfo) {
+        if (userinfo && userinfo.data.data.nickname === params.id) {
             readUser()
+        } else {
+            readOther()
         }
-      }, [page,userinfo,readUser,imgFile]);
+      }, [page,userinfo,readUser,readOther,imgFile]);
 
     
   useEffect(() => {
