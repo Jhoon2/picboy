@@ -225,7 +225,7 @@ const UserProfile = () => {
                     <CardContainer>
                         {randomData && randomData.map((data, i) => {
                             return (
-                                <GifCard key={i} data={data} myImg={myContext.imgAddress} />
+                                <GifCard key={i} data={data} myImg={myContext.imgAddress} myNickname={userinfo.data.data.nickname} />
                             )
                         })}
                     </CardContainer>

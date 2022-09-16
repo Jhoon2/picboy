@@ -1,19 +1,27 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import basicImg from '../../images/basicImg.jpg'
 
-const AllParticipants = ({ shown, close, data}) => {
+const AllParticipants = ({ shown, close, data, myNickname }) => {
+  const acceptMeData = data && data.filter((person) => 
+    person.nickname !== myNickname
+  )
+
+  //다른 사람 이동
+  const native = useNavigate();
+  const moveOtherPerson = (id) => {
+    native(`user-profile/${id}`)
+  }
   return shown ? (
     <FullOverLay onClick={()=>{close()}}>
       <Overlay >
         <OverlayPosition >
           <OverlayContainer>
             <ModalContainer onClick={e => { e.stopPropagation() }}>
-              {console.log(data)}
-              {data && data.map((person, idx) => {
-                console.log(person)
+              {acceptMeData && acceptMeData.map((person, idx) => {
                 return (
-                <DataPersonContainer key={idx}>
+                <DataPersonContainer key={idx} onClick={() => moveOtherPerson(person.nickname)}>
                   <PersonImg src={!person.img?basicImg : person.img} ></PersonImg>
                   <PersonText>{person.nickname}</PersonText>
                 </DataPersonContainer>
@@ -50,12 +58,12 @@ const OverlayContainer = styled.div`
 const OverlayPosition = styled.div`
   height: 30px;
   position:relative;
-  top: -400px;
+  top: -330px;
   left: 250px;
 `
 const ModalContainer = styled.div`
   width: 202px;
-  height: 230px;
+  height: 160px;
   overflow: auto;
   position: absolute;
   z-index: 2;
@@ -66,6 +74,7 @@ const DataPersonContainer = styled.div`
   margin-top: 6px;
   padding: 0.6rem;
   display: flex;
+  cursor: pointer;
 `
 
 const PersonImg = styled.img`

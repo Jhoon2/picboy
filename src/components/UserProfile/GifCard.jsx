@@ -11,7 +11,7 @@ import MySpecialButton from './MySpecialButton'
 
 
 
-const GifCard = ({ data, myImg }) => {
+const GifCard = ({ data, myImg, myNickname }) => {
   //서버주소
   const baseURL = process.env.REACT_APP_API_KEY;
   //토큰
@@ -19,7 +19,7 @@ const GifCard = ({ data, myImg }) => {
   const refreshToken = getRefreshToken();
 
   const navigate = useNavigate();
-  // console.log(data.postId)
+
   // 참여자들 보여주기
   const [allParticipants, setAllParticipants] = useState(false)
   const [peopleData, setPeopleData] = useState()
@@ -32,8 +32,13 @@ const GifCard = ({ data, myImg }) => {
                 'refresh-token': refreshToken
             }
       })
-      setPeopleData(peopleData&&peopleData.data.data)
-    setAllParticipants(!allParticipants)
+    const datas = peopleData && peopleData.data.data
+    if (datas.length <= 1) {
+      setAllParticipants(false)
+    } else {
+      setPeopleData(datas)
+      setAllParticipants(!allParticipants)
+    }
   }
 
   //완료 페이지, 진행중 페이지 이동
@@ -55,7 +60,7 @@ const GifCard = ({ data, myImg }) => {
 
   return (
     <CardContainer>
-      <div onClick={()=> console.log('눌리나?')}>
+      <div >
         <GifImg src={data.imgUrl} />
         <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
           <HoverSideButton onClick={buttonCollection}>···</HoverSideButton>
@@ -85,7 +90,7 @@ const GifCard = ({ data, myImg }) => {
       <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal} /> 
       {/* 참여자들 */}
       {allParticipants ?
-        <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData} />
+        <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData} myNickname={myNickname} />
         : null}
     </CardContainer>
     

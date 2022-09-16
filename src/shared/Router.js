@@ -34,7 +34,7 @@ const Router = () => {
           {/* 민희님 */}
           <Route path="login" element={<Login />} />
           <Route path="join" element={<SignUp />} />
-          <Route path="user-profile" element={<UserProfile />} />
+          <Route path="user-profile/:id" element={<UserProfile />} />
           {/* 다솜님 */}
           <Route path="complist" element={<CompList />} />
           <Route path="post-free" element={<PostFree />} />
