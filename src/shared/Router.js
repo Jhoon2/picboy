@@ -15,7 +15,6 @@ import UserProfile from '../pages/UserProfile';
 import CompList from '../pages/CompList';
 import { Context } from './ContextApi';
 import Header from '../components/Header';
-import PostFreeRelay from '../pages/PostFreeRelay';
 import PostTopicRelay from '../pages/PostTopicRelay';
 // import { getCookieToken } from '../shared/Cookie'
 
@@ -40,8 +39,7 @@ const Router = () => {
           <Route path="complist" element={<CompList />} />
           <Route path="post-free" element={<PostFree />} />
           <Route path="post-topic" element={<PostTopic />} />
-          <Route path="post-free-relay" element={<PostFreeRelay />} />
-          <Route path="/post-topic-relay/:id" element={<PostTopicRelay />} />
+          <Route path="post-relay/:id" element={<PostTopicRelay />} />
           <Route path="complete-detail/:id" element={<CompleteDetail />} />
         </Routes>
       </BrowserRouter>
