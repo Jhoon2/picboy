@@ -46,6 +46,7 @@ const PostTopicRelay = () => {
     const [canvasDone, setCanvasDone] = useState();
 
     useEffect(() => {
+        Callaxios();
         const canvas = canvasRef.current;
         canvas.width = 688;
         canvas.height = 688;
@@ -166,23 +167,27 @@ const PostTopicRelay = () => {
     const [lastImg, setLastImg] = useState("");
 
     const imgInfoUrl = `${baseURL}/post/gif/images/detail/${params.id}`;
-    axios
-        .get(imgInfoUrl)
-        .then(function (response) {
-            const imgData = response.data.data;
-            setCountFrame(imgData);
-            setLastImg(imgData.imgUrl);
-        })
-        .catch(function (error) {
-            console.log(error)
-        })
+
+    const Callaxios = () => {
+        axios
+            .get(imgInfoUrl)
+            .then(function (response) {
+                const imgData = response && response.data.data;
+                setCountFrame(imgData);
+                setLastImg(imgData.imgUrl);
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
 
     // post
     const submitImg = () => {
         const canvas = canvasRef.current;
         const imgDataUrl = canvas.toDataURL('image/png');
         axios.post(
-            `${baseURL}/post/relay`,
+            `${baseURL}/post/relay/${params.id}`,
             {
                 "file": imgDataUrl,
             },
