@@ -214,7 +214,7 @@ const UserProfile = () => {
                 </ProfileContainer>
                 <ProfileBorder />
                 {/* 카테고리별 */}
-                <CategoryOpen />
+                <CategoryOpen value={user && user.data.data.username === userinfo.data.data.username} />
                
 
 
@@ -236,7 +236,7 @@ const UserProfile = () => {
             {user && user.data.data.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
                 close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
         
-
+        
         </UserProfileContainer>
     )
 }

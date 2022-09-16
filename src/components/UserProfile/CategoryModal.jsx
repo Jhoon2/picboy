@@ -69,7 +69,7 @@ const OverlayContainer = styled.div`
 const OverlayPosition = styled.div`
   height: 30px;
   position:relative;
-  top:865px;
+  top:880px;
   left: 450px;
 `
 const ModalContainer = styled.div`

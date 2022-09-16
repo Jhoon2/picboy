@@ -32,7 +32,7 @@ const CommentBox = ({ commentList }) => {
     }
     //삭제
   const deleteBtn = () => {
-    console.log(commentList.commentId)
+    // console.log(commentList.commentId)
       dispatch(__deleteComment(commentList.commentId))
       alert('삭제완료!')
   }

@@ -8,11 +8,12 @@ const GifCard = ({ data }) => {
   // console.log(data)
   const navigate = useNavigate();
   //완료 페이지, 진행중 페이지 이동
+  // console.log(data)
   const movePage = () => {
     if (data.status === 1) {
       navigate(`/progressdetail/${data.postId}`)
     } else {
-      navigate(`/completedetail/${data.postId}`)
+      navigate(`/complete-detail/${data.postId}`)
     }
   }
 
@@ -20,9 +21,10 @@ const GifCard = ({ data }) => {
   const [openSpecialModal, setOpenSpecialModal] =useState(false)
   const buttonCollection = (e) => {
     e.stopPropagation();
+    // console.log('눌러라')
     setOpenSpecialModal(!openSpecialModal)
   }
-  console.log(data)
+
   return (
     <CardContainer>
       <GifImg src={data.imgUrl} />
@@ -51,6 +53,8 @@ const GifCard = ({ data }) => {
           <div style={{ marginTop: '7px', marginLeft: '10px', fontSize: '20px' }}>{data.likeCount}</div>
         </div>
       </GifContents>
+
+      {/* ...버튼 */}
       <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal} /> 
     </CardContainer>
     
@@ -77,7 +81,7 @@ const OverlayImg = styled.div`
   left: 0;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
+  opacity: ${(props) => props.openSpecialModal ? 1 : 0};
   cursor: pointer;
 
   &:hover {

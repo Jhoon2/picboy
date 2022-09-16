@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-
+import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 // import component
 import Footer from '../components/Footer'
 
@@ -23,7 +23,9 @@ import waterdrop from "../images/waterdrop.png";
 const PostTopic = () => {
     const [frame, setFrame] = useState(0);
     const [canvasDone, setCanvasDone] = useState();
-
+    const accessToken = getCookieToken();
+    const refreshToken = getRefreshToken();
+    
     const frameCount = (e) => {
         const target = e.target;
         if (target.id === "6") {
@@ -163,8 +165,8 @@ const PostTopic = () => {
     ///////////////////////////
     // ajax
 
-    const accessToken = localStorage.getItem("Authorization");
-    const refreshToken = localStorage.getItem("Refresh-Token");
+    // const accessToken = localStorage.getItem("Authorization");
+    // const refreshToken = localStorage.getItem("Refresh-Token");
     const baseURL = process.env.REACT_APP_API_KEY;
 
     // get
@@ -189,7 +191,7 @@ const PostTopic = () => {
 
     const topicInput = (e) => {
         setTopicInputState(e.target.value);
-        console.log(topicInputState);
+        // console.log(topicInputState);
     }
 
 

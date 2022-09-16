@@ -17,7 +17,7 @@ const ProgressAll = () => {
         `${baseURL}/post/gif/images/0?size=6&page=${page}`
       );
       setRandomData(randomData.concat(data.data));
-      console.log(data.data);
+      // console.log(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -35,7 +35,7 @@ const ProgressAll = () => {
       }
     });
   };
-  console.log(page);
+  // console.log(page);
 
   useEffect(() => {
     getRandomData();

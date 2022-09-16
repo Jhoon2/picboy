@@ -3,7 +3,8 @@ import styled from 'styled-components'
 import CategoryModal from './CategoryModal'
 import { useMyContext } from '../../shared/ContextApi'
 
-const CategoryOpen = () => {
+const CategoryOpen = ({ value }) => {
+  // console.log(value)
   const [categoryContent, setCategoryContent] = useState('all')
   const [isOpenCategory, setIsOpenCategory] = useState(false)
   const myContext = useMyContext();
@@ -35,7 +36,8 @@ const CategoryOpen = () => {
             <CategoryContent id='all' onClick={all} categoryContent={categoryContent}>전체</CategoryContent>
             <CategoryContent id='start' onClick={start} categoryContent={categoryContent}>작성한 글</CategoryContent>
             <CategoryContent id='participate' onClick={participate} categoryContent={categoryContent}>참여한 글</CategoryContent>
-            <CategoryContent id='behind' onClick={behind} categoryContent={categoryContent}>숨긴 글</CategoryContent>
+          {value  ? <CategoryContent id='behind' onClick={behind} categoryContent={categoryContent}>숨긴 글</CategoryContent>
+            : null}
         </CategoryDisplay>
         <CategoryButton id='categoryBtn' onClick={() => { setIsOpenCategory(!isOpenCategory) }} >카테고리 ▼</CategoryButton>
       </CategoryContainer>

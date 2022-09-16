@@ -30,7 +30,7 @@ const throttle = function (callback, waitTime) {
 const Header = () => {
   const useGet = UseGetUser();
   const loginUser = useGet && useGet.data.data.profileImg
-  console.log(loginUser)
+  // console.log(loginUser)
 
   useEffect(() => {
 
