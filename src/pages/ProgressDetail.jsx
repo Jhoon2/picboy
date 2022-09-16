@@ -50,7 +50,7 @@ const ProgressDetail = () => {
   console.log(Data.imgUrl);
 
   const Move = () => {
-    navigate(`/post-topic-relay/${params.id}`);
+    navigate(`/post-Relay/${params.id}`);
   };
 
   useEffect(() => {

@@ -182,7 +182,7 @@ const PostTopicRelay = () => {
         const canvas = canvasRef.current;
         const imgDataUrl = canvas.toDataURL('image/png');
         axios.post(
-            `${baseURL}/post/relay`,
+            `${baseURL}/post/relay/${params.id}`,
             {
                 "file": imgDataUrl,
             },
