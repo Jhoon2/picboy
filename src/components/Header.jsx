@@ -81,10 +81,10 @@ const Header = () => {
           </CompleteButton>
           <PostCategories />
           {myToken ? (
-            <div>
+            <ProfileImgBackground>
               <LoginUserImg src={!loginUser? basicImg : loginUser}  onClick={clickOpenModal}></LoginUserImg>
               
-            </div>
+            </ProfileImgBackground>
           ) : (
             <LoginButton
               onClick={() => {
@@ -95,8 +95,10 @@ const Header = () => {
             </LoginButton>
           )}
         </HeaderBox>
-        {myContext.logonOpenProfileImg ? <ClickProfileModal shown={myContext.logonOpenProfileImg}
-                close={() => { myContext.setLogonProfileImg(false) }}/> : null}
+        {myContext.logonOpenProfileImg ? 
+          <ClickProfileModal shown={myContext.logonOpenProfileImg}
+                  close={() => { myContext.setLogonProfileImg(false) }}/>
+       : null}
       </HeaderContainer>
     </HeaderArea>
   );
@@ -176,3 +178,10 @@ const LoginUserImg = styled.img`
   
 `
 
+const ProfileImgBackground = styled.div`
+   width: 58px;
+  height: 58px;
+  border-radius: 58px;
+   background-color: white;
+
+`
