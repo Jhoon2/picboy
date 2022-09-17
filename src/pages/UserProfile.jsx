@@ -182,7 +182,7 @@ const UserProfile = () => {
         const response = await axios.get(
             `${baseURL}/user/nickname-double-check/${loadMyNickname}`
             );
-            console.log(loadMyNickname)
+            // console.log(loadMyNickname)
         if (!response.data.success) {
             setExistedNick(true);
         } else {

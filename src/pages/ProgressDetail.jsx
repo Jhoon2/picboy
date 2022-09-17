@@ -137,7 +137,7 @@ const ProgressDetail = () => {
                     <PagingItems key={item} className="paging_items">
                       <img
                         src={
-                          'https://doker-bucket.s3.ap-northeast-2.amazonaws.com/picboy/images/post245/2a6e0afd-92fc-4555-b4a9-3a0f43b865f1-post245'
+                          'https://doker-bucket.s3.ap-northeast-2.amazonaws.com/picboy/images/dummy.png'
                         }
                         alt=""
                       />
