@@ -1,8 +1,12 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../images/logo.svg';
 
 const Footer = () => {
+  const location = useLocation();
+  if (location.pathname === '/login') return null;
+  if (location.pathname === '/join') return null;
   return (
     <FooterContainer>
       <LogoBox>

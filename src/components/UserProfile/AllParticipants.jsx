@@ -11,6 +11,7 @@ const AllParticipants = ({ shown, close, data, myNickname }) => {
   //다른 사람 이동
   const native = useNavigate();
   const moveOtherPerson = (id) => {
+    console.log(id)
     native(`user-profile/${id}`)
   }
   return shown ? (

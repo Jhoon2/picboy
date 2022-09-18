@@ -112,7 +112,7 @@ const LoginContainer = styled.div`
 const FormContainer = styled.div`
     max-width: 1200px;
     height: 50vh;
-    margin-top: 236px;
+    margin-top: 160px;
 
 `
 const InputBox = styled.div`

@@ -16,6 +16,7 @@ import CompList from '../pages/CompList';
 import { Context } from './ContextApi';
 import Header from '../components/Header';
 import PostRelay from '../pages/PostRelay';
+import Footer from '../components/Footer';
 // import { getCookieToken } from '../shared/Cookie'
 
 const Router = () => {
@@ -42,6 +43,7 @@ const Router = () => {
           <Route path="post-relay/:id" element={<PostRelay />} />
           <Route path="complete-detail/:id" element={<CompleteDetail />} />
         </Routes>
+        <Footer/>
       </BrowserRouter>
     </Context>
   );

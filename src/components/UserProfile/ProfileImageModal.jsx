@@ -65,6 +65,7 @@ const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
 
   //기본 이미지로 설정
   const clickBasic = (e) => {
+    sendApi(basicImg)
     setSelectIcon(false)
     setProfileChange(e.target.id)
     myContext.setImgAddress(basicImg)
