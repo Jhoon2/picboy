@@ -67,11 +67,11 @@ const UserProfile = () => {
     
     const {userPage} = useSelector((state) => state.userpage)
     const UserPage = userPage && userPage.data
-    // console.log(UserPage && UserPage.username)
+    console.log(UserPage && UserPage)
     
 
     const {userData}  = useSelector((state) => state.userdata)
-    // console.log(userData&&userData)
+    console.log(userData&&userData)
 
     useEffect(() => {
         dispatch(__getUserPage({username:params.id}))
@@ -163,7 +163,7 @@ const UserProfile = () => {
                 {/* 프로필 */}
                 <ProfileContainer>
                     <ProfileInner>
-                        <ProfileImage src={myContext.imgAddress&&myContext.imgAddress ? myContext.imgAddress : basicImg} onContextMenu={RightMouseClick} />
+                        <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onContextMenu={RightMouseClick} />
                         <TextProfileContents>
                             <TextContentContainer>
                                 <TextContent>아이디</TextContent>
@@ -210,7 +210,7 @@ const UserProfile = () => {
                     <CardContainer>
                         {userData.content && userData.content.map((data, i) => {
                             return (
-                                <GifCard key={i} data={data} myImg={UserPage&&UserPage.profileImg} myNickname={UserPage&&UserPage.nickname} />
+                                <GifCard key={i} data={data} myImg={UserPage&&UserPage.profilImg} myNickname={UserPage&&UserPage.nickname} />
                             )
                         })}
                     </CardContainer>
@@ -254,6 +254,7 @@ const ProfileImage = styled.img`
     height: 218px;
     border-radius: 150px;
     background-color: white;
+    background-size: contain;
 `
 const ProfileBorder = styled.div`
     margin-top: 116px;

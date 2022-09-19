@@ -8,7 +8,7 @@ export const useMyContext = () => {
 
 
 export const Context = (props) => {
-    const [imgAddress, setImgAddress] = React.useState();
+    // const [imgAddress, setImgAddress] = React.useState();
     const [timerMessage, setTimerMessage] = React.useState(false)
     const [btnOpen, setBtnOpen] = React.useState(false);
     const btnClickOff = () => setBtnOpen(false);
@@ -22,8 +22,8 @@ export const Context = (props) => {
 
 
     const value = {
-        imgAddress,
-        setImgAddress,
+        // imgAddress,
+        // setImgAddress,
         timerMessage,
         setTimerMessage,
         btnOpen,

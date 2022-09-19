@@ -5,6 +5,8 @@ import ProfileImageIcons from './ProfileImageIcons'
 import basicImg from '../../images/basicImg.jpg'
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
 import { useMyContext } from '../../shared/ContextApi'
+import { __putEditProfileImg } from '../../redux/modules/UserPage'
+import { useDispatch } from 'react-redux'
 
 const myToken = getCookieToken();
 const refreshToken = getRefreshToken();
@@ -12,10 +14,13 @@ const refreshToken = getRefreshToken();
 const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
   const baseURL = process.env.REACT_APP_API_KEY;
   const myContext = useMyContext();
+  const dispatch = useDispatch();
+
   const [profileChange, setProfileChange] = useState(false)
   const [selectIcon, setSelectIcon] = useState(false)
   const [imgUrl, setImgUrl] = useState(false)
   // const [changeImg, setChangeImg] = useState(imgFile)
+
   // 내 PC에서 가져오기
   const FromMyPc = (e) => {
     setSelectIcon(false)
@@ -26,36 +31,19 @@ const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
   const onChangeImage =  (e) => {
     const reader = new FileReader();
     const file = imgRef.current.files[0];
-    // console.log(imgRef.current.files)
     reader.onloadend = () => {
       const base64data = reader.result;
       setImgUrl(base64data);
-      sendApi(base64data);
-      myContext.setImgAddress(base64data)
+      dispatch(__putEditProfileImg({ img: base64data }))
     }
     reader.readAsDataURL(file);
     close();
   }
   
-  const sendApi = async (data) => {
-    try {
-      const response = await axios.put(`${baseURL}/mypage/update-image`, { img: data },
-        {
-          headers: {
-            Authorization: myToken,
-            'refresh-token': refreshToken
-          }
-        }
-      )
 
-
-    } catch (error) {
-      console.log(error)
-    }
-  }
   useEffect(() => {
     
-  },[imgUrl])
+  },[imgUrl,dispatch])
   // 아이콘 고르기
   const clickSelect = (e) => {
     
@@ -65,10 +53,11 @@ const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
 
   //기본 이미지로 설정
   const clickBasic = (e) => {
-    sendApi(basicImg)
     setSelectIcon(false)
     setProfileChange(e.target.id)
-    myContext.setImgAddress(basicImg)
+    dispatch(__putEditProfileImg({ img: basicImg }))
+
+    // myContext.setImgAddress(basicImg)
     close();
   }
 

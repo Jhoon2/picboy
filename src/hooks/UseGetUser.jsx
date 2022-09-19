@@ -21,9 +21,9 @@ const UseGetUser = () => {
   }
   
   useEffect(() => {
-    readUser() 
+    if (myToken) { readUser() }
 
-  }, [])
+  }, [myToken])
 
   return user
 }

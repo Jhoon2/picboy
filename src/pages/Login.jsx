@@ -19,13 +19,13 @@ const Login = () => {
 
   const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm();
   
-  //카카오 로그인버튼
-  const loginWithKakao = () => {
-    // console.log('hello');
-    Kakao.Auth.authorize({
-      redirectUri: 'http://localhost:8080/user/kakao',
-    });
-  };
+  // //카카오 로그인버튼
+  // const loginWithKakao = () => {
+  //   // console.log('hello');
+  //   Kakao.Auth.authorize({
+  //     redirectUri: 'http://localhost:3000/user/kakao',
+  //   });
+  // };
   
   
   //일반 로그인버튼
@@ -35,24 +35,25 @@ const Login = () => {
       password: data.password
     }
     const response = await axios.post(`${baseURL}/user/login`, info)
-    try {
-      console.log(response)
-      // 헤더로 받는 것으로 추후 수정 예정
+      // 헤더로 받는 것으로 수정됨
       setAccessToken(response.headers.authorization);
       setRefreshToken(response.headers['refresh-token'])
       // 바디로 받는 값
       // setAccessToken(response.data.data.authorization);
       // setRefreshToken(response.data.data.refreshToken)
-      if (response.status === 200) {window.location.href = '/';}
-    } catch (error) {
-      //에러메시지 모달창
-      if (response.data.errorResponse.status === 400) {
+    if (response.data.success) { window.location.href = '/'; }
+    else {
         myContext.btnClickOn();
-     }
-    }
+      }
 
   }
 
+  // //카카오 로그인버튼
+  // const handleKakao = () => {
+  //   console.log('1')
+  //   window.location.href = KAKAO_AUTH_URL
+  //   console.log('2')
+  // }
 
 
   return (
@@ -99,7 +100,8 @@ const Login = () => {
           </form>
 
           {/* <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton> */}
-            <a onClick={loginWithKakao}>
+            <a href={KAKAO_AUTH_URL}>
+            {/* <div onClick={loginWithKakao}> */}
               <KakaoButton src={kakaoImg} />
             </a>
           <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>

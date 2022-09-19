@@ -60,6 +60,47 @@ export const __putEditNickname = createAsyncThunk(
     }
   }
 )
+
+export const __putEditProfileImg = createAsyncThunk(
+  'editProfileImg /putEditProfileImg ',
+  async (payload, thunkAPI) => {
+    try {
+      const data = await axios.put(`${baseURL}/mypage/update-image`, payload,
+      {
+          headers: {
+            Authorization: myToken,
+            'refresh-token': refreshToken,
+          },
+        }
+      )
+      return thunkAPI.fulfillWithValue(payload);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+)
+
+//아이콘으로 사진 클릭시
+export const __selectIconImg = createAsyncThunk(
+  'IconImg/selectIconImg',
+  async (payload, thunkAPI) => {
+    console.log(payload)
+    try {
+      const response = await axios.put(
+        `${baseURL}/mypage/update-image/`, payload,
+        {
+          headers: {
+            Authorization: myToken,
+            'refresh-token': refreshToken,
+          },
+        }
+      );
+      return thunkAPI.fulfillWithValue(payload);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const userPageSlice = createSlice({
   name: 'userPage',
   initialState:{
@@ -81,8 +122,13 @@ export const userPageSlice = createSlice({
           state.error = action.payload;
     },
     [__putEditNickname.fulfilled]: (state, action) => {
-      console.log(action.payload)
       state.userPage.data.nickname = action.payload.nickname
+    },
+    [__putEditProfileImg.fulfilled]: (state, action) => {
+      state.userPage.data.profilImg = action.payload.img
+    },
+    [__selectIconImg.fulfilled]: (state, action) => {
+      state.userPage.data.profilImg = action.payload.img
     }
   }
 })

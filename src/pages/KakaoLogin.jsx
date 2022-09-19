@@ -13,36 +13,36 @@ const KakaoLogin = () => {
   const navigate = useNavigate();
 
   const code = new URL(window.location.href).searchParams.get('code');
-  // const KAKAO_CODE = location.search.split('=')[1]
+  const KAKAO_CODE = location.search.split('=')[1]
 
-  // console.log(KAKAO_CODE)
-
+  console.log(KAKAO_CODE)
+  // useEffect(() => {
+  
+  //   axios
+  //       .get(`http://localhost:3000/user/kakao/callback?code=${code}`)
+  //       .then((res) => {
+  //         console.log(res,'나와라 axios정보')
+  //         setAccessToken(res.headers.authorization);
+  //         // navigate('/');
+  //         window.location.reload();
+  //       });
+   
+  // }, [code]);
   useEffect(() => {
-    const kakao = async () => {
-      return await axios
-        .get(`http://localhost:8080/user/kakao/callback?code=${code}`)
-        .then((res) => {
-          setAccessToken(res.headers.authorization);
-          setRefreshToken(res.headers.authorization)
-          navigate('/');
-          window.location.reload();
-        });
-    }
-        if (code) {
-          kakao();
-        }
-    // fetch(`${REDIRECT_URI}/code=${KAKAO_CODE}`,
-    //   {
-    //   method: 'GET',
-    //   })
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     console.log(data)
-    //     setAccessToken(data.token)
-    //     setRefreshToken(data.token)
-    //     navigate('/')
-    //   })
-  },[code, navigate])
+    // console.log(`${REDIRECT_URI}/redirect?code=${KAKAO_CODE}`)
+    //아래는 백엔드 주소임
+    fetch(`${REDIRECT_URI}/redirect?code=${KAKAO_CODE}`, 
+      {
+      method: 'GET',
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        setAccessToken(data.token)
+        setRefreshToken(data.token)
+        navigate('/')
+      })
+  },[])
   return (
     <div>KakaoLogin</div>
   )

@@ -37,7 +37,7 @@ const Header = () => {
 
   useEffect(() => {
     
-  }, [loginUser])
+  }, [loginUser,myToken])
   
   const navigate = useNavigate();
   const documentRef = useRef(document);

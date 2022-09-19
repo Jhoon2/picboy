@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import basicImg from '../../images/basicImg.jpg'
 
 const AllParticipants = ({ shown, close, data, myNickname }) => {
-  console.log(data)
   const acceptMeData = data && data.filter((person) => 
     person.nickname !== myNickname
   )
