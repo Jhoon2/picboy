@@ -7,7 +7,9 @@ import axios from "axios"
 import { setAccessToken, setRefreshToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi'
 import LoginErrorModal from '../components/login/LoginErrorModal'
-
+import {KAKAO_AUTH_URL} from '../shared/Kakao_oauth'
+import kakaoImg from '../images/kakao_login_medium.png'
+const { Kakao } = window;
 
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -16,7 +18,17 @@ const Login = () => {
   const [focusedInput, setFocusedInput] = useState('')
 
   const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm();
-
+  
+  //카카오 로그인버튼
+  const loginWithKakao = () => {
+    // console.log('hello');
+    Kakao.Auth.authorize({
+      redirectUri: 'http://localhost:8080/user/kakao',
+    });
+  };
+  
+  
+  //일반 로그인버튼
   const onClickLogin = async (data) => {
     const info = {
       username: data.userId,
@@ -24,10 +36,13 @@ const Login = () => {
     }
     const response = await axios.post(`${baseURL}/user/login`, info)
     try {
-      // console.log(response.data.data)
+      console.log(response)
       // 헤더로 받는 것으로 추후 수정 예정
-      setAccessToken(response.data.data.authorization);
-      setRefreshToken(response.data.data.refreshToken)
+      setAccessToken(response.headers.authorization);
+      setRefreshToken(response.headers['refresh-token'])
+      // 바디로 받는 값
+      // setAccessToken(response.data.data.authorization);
+      // setRefreshToken(response.data.data.refreshToken)
       if (response.status === 200) {window.location.href = '/';}
     } catch (error) {
       //에러메시지 모달창
@@ -83,8 +98,10 @@ const Login = () => {
             <LoginButton type='submit' disabled={isSubmitting}>로그인</LoginButton>
           </form>
 
-          <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton>
-          {/* <img src={kakaoButton} style={{width:'200px'}}></img> */}
+          {/* <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton> */}
+            <a onClick={loginWithKakao}>
+              <KakaoButton src={kakaoImg} />
+            </a>
           <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
         </InputBox>
       </FormContainer>
@@ -140,14 +157,14 @@ const TextAndInput = styled.div`
   margin-left: 160px;
   padding: 0.7rem;
   display: flex;
-  border-bottom: 1.5px solid ${(props) => ('userId' === props.focusedInput) ? 'lightgray' : 'black'};
+  border-bottom: 2px solid ${(props) => ('userId' === props.focusedInput) ? 'black' : 'lightgray'};
 `
 const TextAndInput2 = styled.div`
   width: 585px;
   margin-left: 160px;
   padding: 0.7rem;
   display: flex;
-  border-bottom: 2px solid ${(props) => ('password' === props.focusedInput) ? 'lightgray' : 'black'};
+  border-bottom: 2px solid ${(props) => ('password' === props.focusedInput) ? 'black' : 'lightgray'};
   `
 
 const SignupText = styled.div`
@@ -186,7 +203,7 @@ const LoginButton = styled.button`
   background-color: black;
 `
 
-const KakaoButton = styled.button`
+const KakaoButton = styled.img`
   width: 585px;
   height: 90px;
   margin-top: 32px;

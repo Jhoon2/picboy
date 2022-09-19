@@ -10,8 +10,9 @@ const refreshToken = getRefreshToken();
 export const __getUserPage = createAsyncThunk(
   'userPage/getUserPage',
   async (payload, thunkAPI) => {
+    console.log(payload)
     try {
-      const data = await axios.get(`${baseURL}/mypage/user-info?nickname=${payload}`
+      const data = await axios.get(`${baseURL}/mypage/user-info?username=${payload.username}`
       )
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -25,7 +26,7 @@ export const __getUserData = createAsyncThunk(
     console.log(payload)
     try {
       const data = await axios.get
-      (`${baseURL}/mypage/post/0/1?nickname=${payload}&page=0&size=6`,
+      (`${baseURL}/mypage/post/0/1?username=${payload.username}&page=0&size=6`,
   {
       headers: {
           Authorization: myToken,
@@ -44,7 +45,6 @@ export const __getUserData = createAsyncThunk(
 export const __putEditNickname = createAsyncThunk(
   'editNickname /putEditNickname ',
   async (payload, thunkAPI) => {
-    console.log(payload)
     try {
       const data = await axios.put(`${baseURL}/mypage/update-nickname`, payload,
       {

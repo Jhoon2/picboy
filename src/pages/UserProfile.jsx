@@ -24,10 +24,8 @@ const UserProfile = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
     const params = useParams();
-    // console.log(params)
 
     const dispatch = useDispatch();
-    //nickname 넘기기
 
     // console.log(UserPage)
 
@@ -37,12 +35,9 @@ const UserProfile = () => {
 
     const [user, setUser] = useState(null)
 
-    const [randomData, setRandomData] = useState();
     const [page, setPage] = useState(-1);
     const lastIntersectingData = useRef(null);
 
-    // const [isOpenCategory, setIsOpenCategory] = useState(false)
-    // const [imageUrl, setImageUrl] = useState(); 
     const [imgFile, setImgFile] = useState(null)
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
@@ -69,26 +64,19 @@ const UserProfile = () => {
     // console.log('페이지나와라2',page)
     
 
-////////////////////
-//유저 정보 있을시
     
     const {userPage} = useSelector((state) => state.userpage)
     const UserPage = userPage && userPage.data
-    console.log(UserPage && UserPage.nickname)
+    // console.log(UserPage && UserPage.username)
     
-    const dd = useSelector((state) => state)
-    console.log(dd)
 
     const {userData}  = useSelector((state) => state.userdata)
-    console.log(userData&&userData)
+    // console.log(userData&&userData)
 
-//   console.log(params)
     useEffect(() => {
-        
-        dispatch(__getUserPage(userinfo && userinfo ? userinfo : params.id))
-        dispatch(__getUserData(userinfo && userinfo ? userinfo : params.id))
-
-    
+        dispatch(__getUserPage({username:params.id}))
+        dispatch(__getUserData({username:params.id}))
+            
     }, [dispatch]);
     
 
@@ -124,7 +112,7 @@ const UserProfile = () => {
         }
         else { setEditNickValue('2글자 이상 8글자 이하로 입력해주세요') }
     }
-    ///////////////////////////
+
     //닉네임 수정 완료
     const completeBtn = async () => {
         if (editMyNickname === '') setEditMyNickName(false)
@@ -154,7 +142,6 @@ const UserProfile = () => {
         const response = await axios.get(
             `${baseURL}/user/nickname-double-check/${loadMyNickname}`
             );
-            // console.log(loadMyNickname)
         if (!response.data.success) {
             setExistedNick(true);
         } else {
@@ -172,6 +159,7 @@ const UserProfile = () => {
     return (
         <UserProfileContainer>
             <ContainerInner >
+
                 {/* 프로필 */}
                 <ProfileContainer>
                     <ProfileInner>
@@ -209,9 +197,7 @@ const UserProfile = () => {
                             </TextContentContainer>
                         </TextProfileContents>
                     </ProfileInner>
-
                         {UserPage&&UserPage.username === userinfo.data.data.username ? button : null}
-
                 </ProfileContainer>
                 <ProfileBorder />
                 {/* 카테고리별 */}
@@ -222,7 +208,7 @@ const UserProfile = () => {
                 {/* 카드 */}
                 <>
                     <CardContainer>
-                        {userData && userData.map((data, i) => {
+                        {userData.content && userData.content.map((data, i) => {
                             return (
                                 <GifCard key={i} data={data} myImg={UserPage&&UserPage.profileImg} myNickname={UserPage&&UserPage.nickname} />
                             )
@@ -233,8 +219,8 @@ const UserProfile = () => {
             </ContainerInner>
 
 
-        {/* 프로필이미지 모달창 */}
-            {user && user.data.data.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
+            {/* 프로필이미지 모달창 */}
+            {UserPage&&UserPage.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
                 close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
         
         

@@ -28,19 +28,21 @@ const throttle = function (callback, waitTime) {
 };
 
 const Header = () => {
+
+
   const useGet = UseGetUser();
+  console.log(useGet)
   const loginUser = useGet && useGet.data.data.profileImg
-  // console.log(loginUser)
 
 
   useEffect(() => {
-
+    
   }, [loginUser])
   
   const navigate = useNavigate();
   const documentRef = useRef(document);
-  const location = useLocation();
   const myContext = useMyContext();
+  const location = useLocation();
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
   const [openProfile, setOpenProfile] = useState(false)
@@ -52,6 +54,7 @@ const Header = () => {
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
 
+ 
 
   // const throttleScroll = throttle(handleScroll, 50);
 

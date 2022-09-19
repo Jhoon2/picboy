@@ -17,6 +17,7 @@ import { Context } from './ContextApi';
 import Header from '../components/Header';
 import PostRelay from '../pages/PostRelay';
 import Footer from '../components/Footer';
+import KakaoLogin from '../pages/KakaoLogin';
 // import { getCookieToken } from '../shared/Cookie'
 
 const Router = () => {
@@ -36,6 +37,8 @@ const Router = () => {
           <Route path="login" element={<Login />} />
           <Route path="join" element={<SignUp />} />
           <Route path="user-profile/:id" element={<UserProfile />} />
+          <Route path="user/kakao" element={<KakaoLogin />} />
+
           {/* 다솜님 */}
           <Route path="complist" element={<CompList />} />
           <Route path="post-free" element={<PostFree />} />

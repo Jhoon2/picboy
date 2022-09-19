@@ -1,18 +1,16 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import basicImg from '../../images/basicImg.jpg'
 
 const AllParticipants = ({ shown, close, data, myNickname }) => {
+  console.log(data)
   const acceptMeData = data && data.filter((person) => 
     person.nickname !== myNickname
   )
 
   //다른 사람 이동
-  const native = useNavigate();
   const moveOtherPerson = (id) => {
-    console.log(id)
-    native(`user-profile/${id}`)
+    window.location.href = `/user-profile/${id}`
   }
   return shown ? (
     <FullOverLay onClick={()=>{close()}}>
@@ -22,7 +20,7 @@ const AllParticipants = ({ shown, close, data, myNickname }) => {
             <ModalContainer onClick={e => { e.stopPropagation() }}>
               {acceptMeData && acceptMeData.map((person, idx) => {
                 return (
-                <DataPersonContainer key={idx} onClick={() => moveOtherPerson(person.nickname)}>
+                <DataPersonContainer key={idx} onClick={() => moveOtherPerson(person.username)}>
                   <PersonImg src={!person.img?basicImg : person.img} ></PersonImg>
                   <PersonText>{person.nickname}</PersonText>
                 </DataPersonContainer>
@@ -47,7 +45,7 @@ const Overlay = styled.div`
   position: absolute;
   /* width: 100vw; */
   /* height: ; */
-  top: 1450px;
+  top: 1150px;
   bottom: 0;
   left: -450px;
   z-index: 9999;

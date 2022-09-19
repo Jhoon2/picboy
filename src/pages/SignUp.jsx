@@ -16,6 +16,7 @@ const SignUp = () => {
 
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
+  const [focusedInput, setFocusedInput] = useState('')
 
   //유효성검사
   const schema = yup.object().shape({
@@ -85,7 +86,9 @@ const SignUp = () => {
     }
   };
   //ID input창 빈값
-  const IDinputVacant = () => {
+  const IDinputVacant = (e) => {
+    // console.log(e)
+    setFocusedInput(e.target.name)
     setExistedId(false);
     setAvailableId(false);
   };
@@ -170,7 +173,9 @@ const SignUp = () => {
       const response = await axios.post(`${baseURL}/user/signup`, info);
       if (response.status === 200) {
         reset();
-        navigate('/login');
+        ////
+        //회원가입 완료 창 만들기
+        // navigate('/login');
       }
     } catch (error) {
       console.log(error);
@@ -190,10 +195,9 @@ const SignUp = () => {
             <Title>JOIN</Title>
             <InputBoxInner>
               <InputFlex>
-                <TextAndInput>
+                <TextAndInput onFocus={IDinputVacant} focusedInput ={focusedInput}>
                   <SignupText>아이디</SignupText>
                   <InputWithButton
-                    onFocus={IDinputVacant}
                     id="userId"
                     name="id"
                     placeholder="ID를 입력해주세요"
@@ -216,7 +220,7 @@ const SignUp = () => {
               </NoErrorsmessage>
 
               <InputFlex>
-                <NoButtonInput>
+                <NoButtonInput onFocus={IDinputVacant} focusedInput ={focusedInput}>
                   <SignupText>비밀번호</SignupText>
                   <OnlyInput
                     id="password"
@@ -233,7 +237,7 @@ const SignUp = () => {
               <Errorsmessage>{errors.pw?.message}</Errorsmessage>
 
               <InputFlex>
-                <NoButtonInput>
+                <NoButtonInput onFocus={IDinputVacant} focusedInput ={focusedInput}>
                   <SignupText>비밀번호 확인</SignupText>
                   <OnlyInput
                     id="checkPsasword"
@@ -385,13 +389,14 @@ const TextAndInput = styled.div`
   width: 450px;
   padding: 0.8rem;
   display: flex;
-  border-bottom: 2px solid lightgray;
+  border-bottom: 2px solid ${(props) => console.log(props)};
+  /* border-bottom: 2px solid ${(props) => props.focusedInput  ? 'black' :'lightgray'}; */
 `;
 const NoButtonInput = styled.div`
   width: 575px;
   padding: 0.8rem;
   display: flex;
-  border-bottom: 2px solid lightgray;
+  border-bottom: 2px solid  ${(props) => props.focusedInput  ? 'black' :'lightgray'};
 `;
 const PhoneTextAndInput = styled.div`
   width: 450px;

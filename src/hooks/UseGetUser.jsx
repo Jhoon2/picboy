@@ -9,18 +9,20 @@ const myToken = getCookieToken();
 const UseGetUser = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
   const [user, setUser] = useState('')
-
   const readUser = async () => {
-    const response = await axios.get(`${baseURL}/main/user-info`, 
+    // console.log('문제?')
+    const response = await axios.get(`${baseURL}/main/user-info`,
       { headers: {
         Authorization: myToken,
         'refresh-token': getRefreshToken()
         }})
+        // console.log(response)
     setUser(response)
   }
   
   useEffect(() => {
-    readUser()
+    readUser() 
+
   }, [])
 
   return user
