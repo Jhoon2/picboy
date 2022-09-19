@@ -346,10 +346,10 @@ const PostTopic = () => {
                             </ModeFrameBtnWrap>
                             <ModeFrameTitle style={{ marginTop: '32px' }}>프레임</ModeFrameTitle>
                             <ModeFrameBtnWrap>
-                                <ModeFrameBtn onClick={frameCount} id="6">6개</ModeFrameBtn>
-                                <ModeFrameBtn onClick={frameCount} id="12">12개</ModeFrameBtn>
-                                <ModeFrameBtn onClick={frameCount} id="18">18개</ModeFrameBtn>
-                                <ModeFrameBtn onClick={frameCount} id="24">24개</ModeFrameBtn>
+                                <ModeFrameBtn onClick={frameCount} id="6" style={frame === 6 ? { backgroundColor: 'black', color: 'white' } : {}}>6개</ModeFrameBtn>
+                                <ModeFrameBtn onClick={frameCount} id="12" style={frame === 12 ? { backgroundColor: 'black', color: 'white' } : {}}>12개</ModeFrameBtn>
+                                <ModeFrameBtn onClick={frameCount} id="18" style={frame === 18 ? { backgroundColor: 'black', color: 'white' } : {}}>18개</ModeFrameBtn>
+                                <ModeFrameBtn onClick={frameCount} id="24" style={frame === 24 ? { backgroundColor: 'black', color: 'white' } : {}}>24개</ModeFrameBtn>
                             </ModeFrameBtnWrap>
                         </ModeFrameWrap>
                         <PostBtn onClick={submitImg}>추가하기</PostBtn>
