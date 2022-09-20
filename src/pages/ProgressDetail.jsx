@@ -163,6 +163,7 @@ const ProgressDetail = () => {
                         </PagingItems>
                       </Container>
                     </div>
+
                   );
                 })}
 
