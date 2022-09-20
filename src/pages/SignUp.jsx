@@ -85,9 +85,14 @@ const SignUp = () => {
       console.log(error);
     }
   };
+
+
+  ////////////////////////
   //ID input창 빈값
+  const [any, setAny] = useState(0)
   const IDinputVacant = (e) => {
     // console.log(e)
+    
     setFocusedInput(e.target.name)
     setExistedId(false);
     setAvailableId(false);

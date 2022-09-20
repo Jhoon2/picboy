@@ -7,6 +7,25 @@ const baseURL = process.env.REACT_APP_API_KEY;
 const myToken = getCookieToken();
 const refreshToken = getRefreshToken();
 
+//로그온유저정보
+export const __getLogonUser = createAsyncThunk(
+  'logon/getLogonUser',
+  async (payload, thunkAPI) => {
+    try {
+      const response = await axios.get(`${baseURL}/main/user-info`,
+      { headers: {
+        Authorization: myToken,
+        'refresh-token': getRefreshToken()
+        }
+        })
+      return thunkAPI.fulfillWithValue(response.data.data);
+    } catch (error) {
+      // return thunkAPI.rejectWithValue(error);
+    }
+  }
+)
+
+//페이지주인 정보 접근
 export const __getUserPage = createAsyncThunk(
   'userPage/getUserPage',
   async (payload, thunkAPI) => {
@@ -80,6 +99,7 @@ export const __putEditProfileImg = createAsyncThunk(
   }
 )
 
+
 //아이콘으로 사진 클릭시
 export const __selectIconImg = createAsyncThunk(
   'IconImg/selectIconImg',
@@ -101,6 +121,32 @@ export const __selectIconImg = createAsyncThunk(
     }
   }
 );
+
+
+//로그온 유저 정보
+export const logonUserSlice = createSlice({
+  name: 'logonUser',
+  initialState:{
+      logonUser: [],
+      isLoading: false,
+      error: null,
+  },
+  reducers: {},
+  extraReducers: {
+      [__getLogonUser.pending]: (state) => {
+          state.isLoading = true;
+      },
+    [__getLogonUser.fulfilled]: (state, action) => {
+      state.isLoading = false;
+          state.logonUser = action.payload;
+      },
+    // [__getLogonUser.rejected]: (state, action) => {
+    //   state.isLoading = false;
+    //   state.error = action.payload;
+    // }
+  }
+  })
+  
 export const userPageSlice = createSlice({
   name: 'userPage',
   initialState:{

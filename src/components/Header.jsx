@@ -28,21 +28,21 @@ const throttle = function (callback, waitTime) {
 };
 
 const Header = () => {
-
-
+  const location = useLocation();
   const useGet = UseGetUser();
-  console.log(useGet)
   const loginUser = useGet && useGet.data.data.profileImg
 
+    //usegetuser 훅을 쓸지 RTK로 할지 고민중
+    // const dispatch = useDispatch();
+    // const  getLogonUser  = useSelector((state) => state && state.logonUser)
+    // const loginUser = getLogonUser.logonUser&&getLogonUser.logonUser.profileImg
 
   useEffect(() => {
-    
-  }, [loginUser,myToken])
+  }, [loginUser])
   
   const navigate = useNavigate();
   const documentRef = useRef(document);
   const myContext = useMyContext();
-  const location = useLocation();
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
   const [openProfile, setOpenProfile] = useState(false)

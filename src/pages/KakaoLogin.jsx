@@ -10,41 +10,26 @@ axios.defaults.withCredentials = true;
 
 const KakaoLogin = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const baseURL = process.env.REACT_APP_API_KEY;
 
-  const code = new URL(window.location.href).searchParams.get('code');
   const KAKAO_CODE = location.search.split('=')[1]
 
-  console.log(KAKAO_CODE)
-  // useEffect(() => {
-  
-  //   axios
-  //       .get(`http://localhost:3000/user/kakao/callback?code=${code}`)
-  //       .then((res) => {
-  //         console.log(res,'나와라 axios정보')
-  //         setAccessToken(res.headers.authorization);
-  //         // navigate('/');
-  //         window.location.reload();
-  //       });
-   
-  // }, [code]);
+
   useEffect(() => {
-    // console.log(`${REDIRECT_URI}/redirect?code=${KAKAO_CODE}`)
-    //아래는 백엔드 주소임
-    fetch(`${REDIRECT_URI}/redirect?code=${KAKAO_CODE}`, 
-      {
-      method: 'GET',
-      })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        setAccessToken(data.token)
-        setRefreshToken(data.token)
-        navigate('/')
-      })
+    const sendAxios = async () => {
+      const response = await axios.get(`${baseURL}/user/kakao?code=${KAKAO_CODE}`)
+      // 헤더로 받는 것으로 수정됨
+      // console.log('res', response)
+      setAccessToken(response.headers.authorization);
+      setRefreshToken(response.headers['refresh-token'])
+      window.location.href='/'
+    }
+    sendAxios()
   },[])
+
+
   return (
-    <div>KakaoLogin</div>
+    <></>
   )
 }
 
