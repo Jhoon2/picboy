@@ -1,19 +1,26 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Loadings from '../../global/Loading';
 import user from '../../images/user.png';
+import LikeButton from '../../images/Com/like.svg';
+import DownButton from '../../images/Com/download.svg';
 import bubble1 from '../../images/bubble1.png';
+import Comm from '../../images/Com/Comm.svg';
+import Heart from '../../images/Com/Heart.svg';
 
 const All = () => {
   const navigate = useNavigate();
-  const [randomData, setRandomData] = useState([]);
   const [page, setPage] = useState(0);
-  const lastIntersectingData = useRef(null);
+  const [load, setLoad] = useState(false);
+  const [newData, setNewdata] = useState([]);
+  const [check, setCheck] = useState([]);
+  const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
 
-  //최신순
-  const AllNewData = async () => {
+  const getCompleteData = async () => {
+    setLoad(true);
     try {
       const { data } = await axios.get(
         `${baseURL}/post/gif/1?size=6&page=${page}`
@@ -21,81 +28,94 @@ const All = () => {
       if (!data) {
         return;
       }
-      setRandomData(randomData.concat(data.data));
+      setNewdata(newData.concat(data.data));
+      setCheck(check.concat(data));
     } catch (error) {
       console.log(error);
     }
+    setLoad(false);
   };
 
-  //observe 콜백 함수
+  console.log(check[0]);
+
+  useEffect(() => {
+    getCompleteData();
+  }, [page]);
+
+  useEffect(() => {
+    window.onbeforeunload = function pushRefresh() {
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
+  const options = {
+    rootMargin: '30px',
+    threshold: 0.5,
+  };
+
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        //조건이 트루
-        //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
         setPage((page) => page + 1);
-        // 현재 타겟을 observe한다.
-        observer.observe(entry.target); // unobserve가 아님
+
+        observer.observe(entry.target);
       }
     });
   };
 
   useEffect(() => {
-    AllNewData();
-  }, [page]);
-
-  useEffect(() => {
-    //observer 인스턴스를 생성한 후 구독
     let observer;
-    if (lastIntersectingData) {
-      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
-      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
-      observer.observe(lastIntersectingData.current);
+    if (ref) {
+      observer = new IntersectionObserver(onIntersect, options);
+      setTimeout(() => {
+        observer.observe(ref);
+      }, 500);
     }
     return () => observer && observer.disconnect();
-  }, [lastIntersectingData]);
+  }, [ref]);
 
   return (
     <ListBox>
+      {load === true ? <Loadings /> : null}
+      {newData.map((item, index) => {
+        return (
+          <BestBox
+            key={item.id}
+            onClick={() => {
+              navigate(`/complete-detail/${item.id}`);
+            }}
+          >
+            <div style={{ position: 'relative' }}>
+              <OverlayWrap productImg={item?.gifUrl}>
+                <Overlay>
+                  <DescBox>
+                    <Keyword>{item?.topic}</Keyword>
+                    <Download />
+                    <Like />
+                  </DescBox>
+                </Overlay>
+              </OverlayWrap>
+              <BestImg />
+            </div>
+            <BestDesc>
+              <Profile img={user} />
+              <Nickname>
+                {item?.nickname} 등 {item?.participantCount} 명
+              </Nickname>
+              <CommentBox>
+                <CommentImg />
+                <DescText>{item?.commentCount}</DescText>
+              </CommentBox>
+              <LikeBox>
+                <LikesImg />
+                <DescText>{item?.likeCount}</DescText>
+              </LikeBox>
+            </BestDesc>
+          </BestBox>
+        );
+      })}
       <>
-        {randomData.map((item, index) => {
-          return (
-            <BestBox
-              key={item.id}
-              onClick={() => {
-                navigate(`/complete-detail/${item.id}`);
-              }}
-            >
-              <div style={{ position: 'relative' }}>
-                <OverlayWrap productImg={item?.imgUrl}>
-                  <Overlay>
-                    <DescBox>
-                      <Keyword>{item?.topic}</Keyword>
-                      <Download />
-                      <Like />
-                    </DescBox>
-                  </Overlay>
-                </OverlayWrap>
-                <BestImg />
-              </div>
-              <BestDesc>
-                <Profile />
-                <Nickname>
-                  {item?.nickname} 외 {item?.participantCount} 명
-                </Nickname>
-                <CommentBox>
-                  <CommentImg />
-                  <DescText>{item?.commentCount}</DescText>
-                </CommentBox>
-                <LikeBox>
-                  <LikesImg />
-                  <DescText>{item?.likeCount}</DescText>
-                </LikeBox>
-              </BestDesc>
-            </BestBox>
-          );
-        })}
-        <div ref={lastIntersectingData}>.</div>
+        <div ref={setRef}>isLoading</div>
       </>
     </ListBox>
   );
@@ -132,15 +152,16 @@ const DescBox = styled(Width)`
 `;
 
 const Button = styled.button`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 `;
 
 const Profile = styled(Button)`
   margin-right: 20px;
   border-radius: 50%;
-  background: url(${user});
+  background: url(${(props) => props.img});
   ${({ theme }) => theme.backgroundSet('contain')};
+  background-size: 100% 95%;
 `;
 
 const Span = styled.span`
@@ -149,36 +170,41 @@ const Span = styled.span`
 `;
 
 const Keyword = styled(Span)`
-  padding-top: 20px;
+  padding-top: 230px;
   padding-left: 10px;
   font-family: 'Noto Bold';
   font-size: 20px;
   color: white;
 `;
 
-const Download = styled.div`
+const Download = styled.button`
   width: 50px;
   height: 50px;
-  background: white;
   border-radius: 50px;
   position: absolute;
+  top: 130px;
   right: 70px;
+  background: url(${DownButton});
+  ${({ theme }) => theme.backgroundSet('contain')};
 `;
 
 const Like = styled(Download)`
-  background: white;
   right: 10px;
+  background: url(${LikeButton});
 `;
 
 const Nickname = styled(Span)`
-  font-family: 'NotoLight';
-  font-size: 13px;
-  margin-right: 20px;
-  color: #2e3248;
+  margin-right: 60px;
   display: inline-block;
   padding: 15px 0;
   position: relative;
-  text-decoration: none;
+  font-family: 'NotoBold';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  color: #2e3248;
+  line-height: 180%;
+  letter-spacing: -0.02em;
 `;
 
 const OverlaySize = css`
@@ -191,7 +217,11 @@ const Overlay = styled.div`
   margin-top: 100%;
   height: 200px;
   background: rgb(212, 212, 212);
-  background: linear-gradient(360deg, rgba(103, 103, 103, 0) 67.83%);
+  background: linear-gradient(
+    360deg,
+    #000000 -90.11%,
+    rgba(103, 103, 103, 0) 67.83%
+  );
   transition: all 1s;
 `;
 
@@ -207,7 +237,7 @@ const OverlayWrap = styled.div`
     transform: scale(1.05);
   }
   &:hover ${Overlay} {
-    margin-top: 60%;
+    margin-top: 30%;
   }
 `;
 
@@ -224,17 +254,19 @@ const CommentBox = styled.div`
 `;
 
 const CommentImg = styled.div`
-  width: 20px;
-  height: 20px;
-  background: url(${bubble1});
+  width: 18px;
+  height: 15px;
+  background: url(${Comm});
   ${({ theme }) => theme.backgroundSet('contain')}
+`;
+
+const LikesImg = styled(CommentImg)`
+  background: url(${Heart});
 `;
 
 const LikeBox = styled(CommentBox)`
   margin-left: 10px;
 `;
-
-const LikesImg = styled(CommentImg)``;
 
 const DescText = styled.span`
   margin-left: 5px;

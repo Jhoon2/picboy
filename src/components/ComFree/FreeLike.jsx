@@ -2,17 +2,20 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Loadings from '../../global/Loading';
 import user from '../../images/user.png';
 import bubble1 from '../../images/bubble1.png';
 
 const FreeLike = () => {
   const navigate = useNavigate();
-  const [randomData, setRandomData] = useState([]);
   const [page, setPage] = useState(0);
-  const lastIntersectingData = useRef(null);
+  const [load, setLoad] = useState(false);
+  const [newData, setNewdata] = useState([]);
+  const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
 
-  const FreeLikeData = async () => {
+  const getCompleteData = async () => {
+    setLoad(true);
     try {
       const { data } = await axios.get(
         `${baseURL}/post/gif/topic-no/2?size=6&page=${page}`
@@ -20,82 +23,90 @@ const FreeLike = () => {
       if (!data) {
         return;
       }
-      setRandomData(randomData.concat(data.data));
-      // console.log(data.data);
+      setNewdata(newData.concat(data.data));
     } catch (error) {
       console.log(error);
     }
+
+    setLoad(false);
   };
 
   useEffect(() => {
-    FreeLikeData();
+    getCompleteData();
   }, [page]);
 
-  //observe 콜백 함수
+  useEffect(() => {
+    window.onbeforeunload = function pushRefresh() {
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
+  const options = {
+    rootMargin: '30px',
+    threshold: 0.5,
+  };
+
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        //조건이 트루
-        //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
         setPage((page) => page + 1);
-        // 현재 타겟을 observe한다.
-        observer.observe(entry.target); // unobserve가 아님
+
+        observer.observe(entry.target);
       }
     });
   };
 
   useEffect(() => {
-    //observer 인스턴스를 생성한 후 구독
     let observer;
-    if (lastIntersectingData) {
-      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
-      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
-      observer.observe(lastIntersectingData.current);
+    if (ref) {
+      observer = new IntersectionObserver(onIntersect, options);
+      setTimeout(() => {
+        observer.observe(ref);
+      }, 500);
     }
     return () => observer && observer.disconnect();
-  }, [lastIntersectingData]);
+  }, [ref]);
 
   return (
     <ListBox>
-      <>
-        {randomData.map((item, index) => {
-          return (
-            <BestBox
-              key={item.id}
-              onClick={() => {
-                navigate(`/complete-detail/${item.id}`);
-              }}
-            >
-              <div style={{ position: 'relative' }}>
-                <OverlayWrap productImg={item?.imgUrl}>
-                  <Overlay>
-                    <DescBox>
-                      <Download />
-                      <Like />
-                    </DescBox>
-                  </Overlay>
-                </OverlayWrap>
-                <BestImg />
-              </div>
-              <BestDesc>
-                <Profile />
-                <Nickname>
-                  {item?.nickname} 외 {item?.participantCount}
-                </Nickname>
-                <CommentBox>
-                  <CommentImg />
-                  <DescText>{item?.commentCount}</DescText>
-                </CommentBox>
-                <LikeBox>
-                  <LikesImg />
-                  <DescText>{item?.likeCount}</DescText>
-                </LikeBox>
-              </BestDesc>
-            </BestBox>
-          );
-        })}
-        <div ref={lastIntersectingData}>.</div>
-      </>
+      {/* {load === true ? <Loadings /> : null} */}
+      {newData.map((item, index) => {
+        return (
+          <BestBox
+            key={item.id}
+            onClick={() => {
+              navigate(`/complete-detail/${item.id}`);
+            }}
+          >
+            <div style={{ position: 'relative' }}>
+              <OverlayWrap productImg={item?.gifUrl}>
+                <Overlay>
+                  <DescBox>
+                    <Download />
+                    <Like />
+                  </DescBox>
+                </Overlay>
+              </OverlayWrap>
+              <BestImg />
+            </div>
+            <BestDesc>
+              <Profile />
+              <Nickname>
+                {item?.nickname} 외 {item?.participantCount}
+              </Nickname>
+              <CommentBox>
+                <CommentImg />
+                <DescText>{item?.commentCount}</DescText>
+              </CommentBox>
+              <LikeBox>
+                <LikesImg />
+                <DescText>{item?.likeCount}</DescText>
+              </LikeBox>
+            </BestDesc>
+          </BestBox>
+        );
+      })}
+      <div ref={setRef}></div>
     </ListBox>
   );
 };
