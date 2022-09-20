@@ -14,7 +14,7 @@ import SignUp from '../pages/SignUp';
 import UserProfile from '../pages/UserProfile';
 import CompList from '../pages/CompList';
 import { Context } from './ContextApi';
-import Header from '../components/Header';
+import Header from '../global/Header';
 import PostRelay from '../pages/PostRelay';
 // import { getCookieToken } from '../shared/Cookie'
 

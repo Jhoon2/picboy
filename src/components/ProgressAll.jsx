@@ -1,95 +1,101 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import user from '../images/user.png';
+import Loadings from '../global/Loading';
 
 const ProgressAll = () => {
   const navigate = useNavigate();
-  const [randomData, setRandomData] = useState([]);
+  const [newData, setNewdata] = useState([]);
   const [page, setPage] = useState(0);
-  const lastIntersectingData = useRef(null);
+  const [load, setLoad] = useState(false);
+  const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
 
-  const getRandomData = async () => {
+  const getProgressData = async () => {
+    setLoad(true);
     try {
       const { data } = await axios.get(
         `${baseURL}/post/gif/images/0?size=6&page=${page}`
       );
-      setRandomData(randomData.concat(data.data));
-      // console.log(data.data);
+      if (!data) {
+        return;
+      }
+      setNewdata(newData.concat(data.data));
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
+
+    setLoad(false);
   };
 
-  //observe 콜백 함수
+  useEffect(() => {
+    getProgressData();
+  }, [page]);
+
+  useEffect(() => {
+    window.onbeforeunload = function pushRefresh() {
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
+  const options = {
+    rootMargin: '30px',
+    threshold: 0.5,
+  };
+
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        //조건이 트루
-        //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
         setPage((page) => page + 1);
-        // 현재 타겟을 observe한다.
-        observer.observe(entry.target); // unobserve가 아님
+
+        observer.observe(entry.target);
       }
     });
   };
-  // console.log(page);
 
   useEffect(() => {
-    getRandomData();
-  }, [page]);
-
-  // const options = {
-  //   rootMargin: '30px', // 관찰하는 뷰포트의 마진 지정
-  //   threshold: 1.0, // 관찰요소와 얼만큼 겹쳤을 때 콜백을 수행하도록 지정하는 요소
-  // };
-
-  useEffect(() => {
-    //observer 인스턴스를 생성한 후 구독
     let observer;
-    if (lastIntersectingData) {
-      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
-      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
-      observer.observe(lastIntersectingData.current);
+    if (ref) {
+      observer = new IntersectionObserver(onIntersect, options);
+      setTimeout(() => {
+        observer.observe(ref);
+      }, 500);
     }
     return () => observer && observer.disconnect();
-  }, [lastIntersectingData]);
+  }, [ref]);
 
   return (
     <ListBox>
+      {load === true ? <Loadings /> : null}
+      {newData?.map((item, index) => (
+        <BestBox
+          key={item.id}
+          onClick={() => {
+            navigate(`/progressdetail/${item.id}`);
+          }}
+        >
+          <div style={{ position: 'relative' }}>
+            <OverlayWrap productImg={item?.imgUrl}>
+              <Overlay>
+                <DescBox>
+                  <Keyword> {item?.topic}</Keyword>
+                </DescBox>
+              </Overlay>
+            </OverlayWrap>
+            <BestImg />
+          </div>
+          <BestDesc>
+            <Profile img={item?.profileImg} />
+            <Nickname>
+              {item?.nickname} 등 {item?.participantCount} 명
+            </Nickname>
+          </BestDesc>
+        </BestBox>
+      ))}
       <>
-        {randomData.map((item, index) => {
-          return (
-            <BestBox
-              key={item.id}
-              onClick={() => {
-                navigate(`/progressdetail/${item.id}`);
-              }}
-            >
-              <div style={{ position: 'relative' }}>
-                <OverlayWrap productImg={item?.imgUrl}>
-                  <Overlay>
-                    <DescBox>
-                      <Keyword>{item?.topic}</Keyword>
-                    </DescBox>
-                  </Overlay>
-                </OverlayWrap>
-                <BestImg />
-              </div>
-              <BestDesc>
-                <Profile></Profile>
-                <Nickname>
-                  {item?.nickname} 외 {item?.participantCount} 명
-                </Nickname>
-              </BestDesc>
-            </BestBox>
-          );
-        })}
-      </>
-      <>
-        <div ref={lastIntersectingData}>.</div>
+        <div ref={setRef}>isLoading</div>
       </>
     </ListBox>
   );
@@ -125,15 +131,16 @@ const DescBox = styled(Width)`
 `;
 
 const Button = styled.button`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 `;
 
 const Profile = styled(Button)`
   margin-right: 20px;
   border-radius: 50%;
-  background: url(${user});
+  background: url(${(props) => props.img});
   ${({ theme }) => theme.backgroundSet('contain')};
+  background-size: 100% 95%;
 `;
 
 const Span = styled.span`
@@ -142,7 +149,7 @@ const Span = styled.span`
 `;
 
 const Keyword = styled(Span)`
-  padding-top: 20px;
+  padding-top: 370px;
   padding-left: 10px;
   font-family: 'Noto Bold';
   font-size: 20px;
@@ -150,14 +157,17 @@ const Keyword = styled(Span)`
 `;
 
 const Nickname = styled(Span)`
-  font-family: 'NotoLight';
-  font-size: 16px;
   margin-right: 100px;
-  color: #2e3248;
   display: inline-block;
   padding: 15px 0;
   position: relative;
-  text-decoration: none;
+  font-family: 'NotoBold';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #2e3248;
+  line-height: 180%;
+  letter-spacing: -0.02em;
 `;
 
 const OverlaySize = css`
@@ -168,9 +178,13 @@ const OverlaySize = css`
 const Overlay = styled.div`
   ${OverlaySize}
   margin-top: 100%;
-  height: 200px;
+  height: 350px;
   background: rgb(212, 212, 212);
-  background: linear-gradient(360deg, rgba(103, 103, 103, 0) 67.83%);
+  background: linear-gradient(
+    360deg,
+    #000000 -90.11%,
+    rgba(103, 103, 103, 0) 67.83%
+  );
   transition: all 1s;
 `;
 
@@ -186,7 +200,7 @@ const OverlayWrap = styled.div`
     transform: scale(1.05);
   }
   &:hover ${Overlay} {
-    margin-top: 60%;
+    margin-top: 10%;
   }
 `;
 

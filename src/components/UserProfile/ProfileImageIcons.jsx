@@ -1,20 +1,20 @@
-import React from 'react'
-import { useRef } from 'react'
-import { useMyContext } from '../../shared/ContextApi'
-import styled from 'styled-components'
-import icon from '../../images/icon.png'
-import reactlogo from '../../images/logo512.png'
-import user from '../../images/user.png'
-import topbutton from '../../images/TopButton.png'
-import line from '../../images/line.png'
-import rectangle from '../../images/rectangle.png'
+import React from 'react';
+import { useRef } from 'react';
+import { useMyContext } from '../../shared/ContextApi';
+import styled from 'styled-components';
+import reactlogo from '../../images/logo512.png';
+import basicImg from '../../images/basicImg.jpg';
+import user from '../../images/user.png';
+import topbutton from '../../images/topbutton.svg';
+import line from '../../images/line.png';
+import rectangle from '../../images/rectangle.png';
 
 const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
   const myContext = useMyContext();
   const imgRef = useRef();
 
   const clickIcon = (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     // console.log(e.target)
     // const reader = new FileReader();
     // const file = e.target.src;
@@ -31,50 +31,84 @@ const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
     // }
     // reader.readAsDataURL(file);
     // console.log(myContext.imgAddress)
-    setSelectIcon(false)
+    setSelectIcon(false);
     close();
-    myContext.setIsOpenProfileImg(false)
-  }
+    myContext.setIsOpenProfileImg(false);
+  };
   const closeBox = () => {
     close();
-    setSelectIcon(false)
-  }
+    setSelectIcon(false);
+  };
   return shown ? (
     <Overlay onClick={closeBox}>
-    <OverlayPosition >
-        <ModalContainer onClick={e => {e.stopPropagation();}}>
+      <OverlayPosition>
+        <ModalContainer
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <TitleIconModal>아이콘을 선택하세요.</TitleIconModal>
           <IconsContainer>
             <IconCard>
-              <IconImage id='fisrt'  ref={imgRef} src={icon} onClick={clickIcon}></IconImage>
+              <IconImage
+                id="fisrt"
+                ref={imgRef}
+                src={basicImg}
+                onClick={clickIcon}
+              ></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='second' ref={imgRef} src={reactlogo} onClick={clickIcon}></IconImage>
+              <IconImage
+                id="second"
+                ref={imgRef}
+                src={reactlogo}
+                onClick={clickIcon}
+              ></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='third'ref={imgRef} src={user} onClick={clickIcon}></IconImage>
+              <IconImage
+                id="third"
+                ref={imgRef}
+                src={user}
+                onClick={clickIcon}
+              ></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='fourth' ref={imgRef} src={topbutton} onClick={clickIcon}></IconImage>
+              <IconImage
+                id="fourth"
+                ref={imgRef}
+                src={topbutton}
+                onClick={clickIcon}
+              ></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='fifth' ref={imgRef} src={line} onClick={clickIcon}></IconImage>
+              <IconImage
+                id="fifth"
+                ref={imgRef}
+                src={line}
+                onClick={clickIcon}
+              ></IconImage>
               <IconName>이름</IconName>
             </IconCard>
             <IconCard>
-              <IconImage id='sixth' ref={imgRef} src={rectangle} onClick={clickIcon}></IconImage>
+              <IconImage
+                id="sixth"
+                ref={imgRef}
+                src={rectangle}
+                onClick={clickIcon}
+              ></IconImage>
               <IconName>이름</IconName>
             </IconCard>
           </IconsContainer>
         </ModalContainer>
-    </OverlayPosition>
-  </Overlay>
-  ) : null
-}
+      </OverlayPosition>
+    </Overlay>
+  ) : null;
+};
 
 const Overlay = styled.div`
   position: absolute;
@@ -87,14 +121,14 @@ const Overlay = styled.div`
   z-index: 9999;
   display: flex;
   justify-content: center;
-`
+`;
 
 const OverlayPosition = styled.div`
   height: 30px;
-  position:relative;
-  top:0px;
+  position: relative;
+  top: 0px;
   left: 100px;
-`
+`;
 const ModalContainer = styled.div`
   width: 420px;
   height: 420px;
@@ -102,7 +136,7 @@ const ModalContainer = styled.div`
   z-index: 2;
   border: 2px solid #000000;
   background-color: white;
-`
+`;
 const TitleIconModal = styled.div`
   padding: 2rem;
   text-align: center;
@@ -110,31 +144,31 @@ const TitleIconModal = styled.div`
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
-`
+`;
 const IconsContainer = styled.div`
   width: 380px;
   height: 300px;
   margin-left: 14px;
   display: flex;
   flex-wrap: wrap;
-`
+`;
 
 const IconCard = styled.div`
   width: 125px;
   height: 150px;
   padding: 1rem;
-`
+`;
 
 const IconImage = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 100px;
-  background: #D9D9D9;
-`
+  background: #d9d9d9;
+`;
 
 const IconName = styled.div`
   margin-top: 10px;
   text-align: center;
-`
+`;
 
-export default ProfileImageIcons
+export default ProfileImageIcons;

@@ -4,6 +4,10 @@ import GlobalFonts from './styles/GlobalFonts';
 import {
   color,
   fontSizes,
+  letters,
+  lines,
+  thickness,
+  icons,
   device,
   flexSet,
   backgroundSet,
@@ -21,7 +25,17 @@ root.render(
   // <React.StrictMode>
   <Provider store={store}>
     <ThemeProvider
-      theme={{ ...color, ...fontSizes, device, flexSet, backgroundSet }}
+      theme={{
+        ...color,
+        ...fontSizes,
+        ...letters,
+        ...lines,
+        ...thickness,
+        ...icons,
+        device,
+        flexSet,
+        backgroundSet,
+      }}
     >
       <GlobalStyle />
       <GlobalFonts />
