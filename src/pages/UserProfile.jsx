@@ -1,17 +1,20 @@
 import React, { useCallback } from 'react'
 import { useState,useRef } from 'react'
 import { useEffect } from 'react'
+import { useMyContext } from '../shared/ContextApi'
+import { useParams } from 'react-router-dom'
+import { useDispatch,useSelector } from 'react-redux'
 import axios from "axios"
+import { getCookieToken, getRefreshToken } from '../shared/Cookie'
+import { __getUserData, __getUserPage } from '../redux/modules/UserPage'
+import { __putEditNickname } from '../redux/modules/UserPage'
 
+import UseGet from '../hooks/UseGetUser'
 import styled from 'styled-components'
 import GifCard from '../components/UserProfile/GifCard'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
-import { getCookieToken, getRefreshToken } from '../shared/Cookie'
-import UseGet from '../hooks/UseGetUser'
-import { useMyContext } from '../shared/ContextApi'
-import basicImg from '../images/basicImg.jpg'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
-import { useParams } from 'react-router-dom'
+import basicImg from '../images/basicImg.jpg'
 
 
 const myToken = getCookieToken();
@@ -21,19 +24,20 @@ const UserProfile = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
     const params = useParams();
-    // console.log(params)
+
+    const dispatch = useDispatch();
+
+    // console.log(UserPage)
+
     //로그인 정보
     const userinfo = UseGet();
 
 
     const [user, setUser] = useState(null)
 
-    const [randomData, setRandomData] = useState([]);
     const [page, setPage] = useState(-1);
     const lastIntersectingData = useRef(null);
 
-    // const [isOpenCategory, setIsOpenCategory] = useState(false)
-    // const [imageUrl, setImageUrl] = useState(); 
     const [imgFile, setImgFile] = useState(null)
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
@@ -41,57 +45,8 @@ const UserProfile = () => {
     const [postCount, setPostCount] = useState(false)
 
    
-    //로그인한 유저 정보로 
-    const readUser = useCallback(
-        async () => {
-            // console.log('위에꺼')
-            const response = await axios.get(`${baseURL}/mypage/user-info?nickname=${ userinfo?.data?.data.nickname}`)
-            setUser(response)
-            const nickname = response.data.data.nickname
-            setLoadMyNickName(nickname)
-            setPostCount(response.data.data.postCount)
-            myContext.setImgAddress(response.data.data.profilImg)
-            readMypage(nickname)
-            //컴포넌트 다시
-           
-    }, [userinfo,page,myContext.tabNum,myContext.categoryNum])
     
-    ////////////
-    ///////////// 작업중
-    // console.log(params.id)
-    //다른 사람 정보 부르기
-    const readOther = useCallback(
-        async () => {
-        // console.log('나오나', params.id)
-            //////////////////////////////////////////////////////////
-            //다른 사람들 페이지로 갈 수 있을 때 userinfo?.data?.data.nickname 대신 사람들의 닉네임을 받기
-            const response = await axios.get(`${baseURL}/mypage/user-info?nickname=${params.id}`)
-            // console.log(response&&response)
 
-            setUser(response)
-            const nickname = response.data.data.nickname
-            setLoadMyNickName(nickname)
-            setPostCount(response.data.data.postCount)
-            myContext.setImgAddress(response.data.data.profilImg)
-            readMypage(nickname)
-            //컴포넌트 다시
-           
-    }, [page,myContext.tabNum,myContext.categoryNum])
-    const readMypage = async (nickname) => {
-        // console.log(myContext.tabNum)
-        // console.log(myContext.categoryNum,'카테고리넘버')
-        const response = await axios.get
-            (`${baseURL}/mypage/post/${myContext.tabNum}/${myContext.categoryNum}?nickname=${nickname}&page=${page}&size=6`,
-        {
-            headers: {
-                Authorization: myToken,
-                'refresh-token': refreshToken
-            }
-
-            })
-            // console.log(response&&response.data)
-        setRandomData(randomData.concat(response&&response.data.data));
-    }
     
     //observe 콜백 함수
   const onIntersect = (entries, observer) => {
@@ -108,17 +63,29 @@ const UserProfile = () => {
   };
     // console.log('페이지나와라2',page)
     
-//   console.log('유저정보', userinfo)
-    //유저 정보 있을시
-    useEffect(() => {
-        if (userinfo && userinfo.data.data.nickname === params.id) {
-            readUser()
-        } else {
-            readOther()
-        }
-      }, [page,userinfo,readUser,readOther,imgFile]);
 
     
+    const {userPage} = useSelector((state) => state.userpage)
+    const UserPage = userPage && userPage.data
+    // console.log(UserPage && UserPage)
+    
+
+    const {userData}  = useSelector((state) => state.userdata)
+    // console.log(userData&&userData)
+
+    useEffect(() => {
+        dispatch(__getUserPage({username:params.id}))
+        dispatch(__getUserData({
+            tab:1,
+            username: params.id,
+        }))
+            
+    }, [dispatch]);
+    
+
+
+
+        
   useEffect(() => {
     //observer 인스턴스를 생성한 후 구독
     let observer;
@@ -148,19 +115,15 @@ const UserProfile = () => {
         }
         else { setEditNickValue('2글자 이상 8글자 이하로 입력해주세요') }
     }
+
+    //닉네임 수정 완료
     const completeBtn = async () => {
         if (editMyNickname === '') setEditMyNickName(false)
         //서버에 전송
         const info = {
-            nickname: loadMyNickname
+            nickname:loadMyNickname
         }
-        const response = await axios.put(`${baseURL}/mypage/update-nickname`,info,
-        {
-            headers: {
-              Authorization: myToken,
-              'refresh-token': refreshToken,
-            },
-          })
+        dispatch(__putEditNickname(info))
         setEditMyNickName(false)
     }
 
@@ -182,7 +145,6 @@ const UserProfile = () => {
         const response = await axios.get(
             `${baseURL}/user/nickname-double-check/${loadMyNickname}`
             );
-            // console.log(loadMyNickname)
         if (!response.data.success) {
             setExistedNick(true);
         } else {
@@ -200,21 +162,22 @@ const UserProfile = () => {
     return (
         <UserProfileContainer>
             <ContainerInner >
+
                 {/* 프로필 */}
                 <ProfileContainer>
                     <ProfileInner>
-                        <ProfileImage src={myContext.imgAddress ? myContext.imgAddress : basicImg} onContextMenu={RightMouseClick} />
+                        <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onContextMenu={RightMouseClick} />
                         <TextProfileContents>
                             <TextContentContainer>
                                 <TextContent>아이디</TextContent>
                                 
-                                <Texts>{user && user.data.data.username}</Texts>
+                                <Texts>{UserPage&&UserPage.username}</Texts>
                             </TextContentContainer>
                             <TextContentContainer>
                                 <TextContent>닉네임</TextContent>
                                 <Texts >{editMyNickname ? 
-                                    <EditInput placeholder={loadMyNickname} onChange={editNickChange} onFocus={NickinputVacant} />
-                                    : loadMyNickname}
+                                    <EditInput placeholder={UserPage&&UserPage.nickname} onChange={editNickChange} onFocus={NickinputVacant} />
+                                    : UserPage&&UserPage.nickname}
                                 </Texts>
                                 {editMyNickname ? 
                                 <ValidationNickname>
@@ -233,26 +196,24 @@ const UserProfile = () => {
 
                             <TextContentContainer>
                                 <TextContent>게시물</TextContent>
-                                <Texts>{postCount}개</Texts>
+                                <Texts>{UserPage&&UserPage.postCount}개</Texts>
                             </TextContentContainer>
                         </TextProfileContents>
                     </ProfileInner>
-
-                        {user && user.data.data.username === userinfo.data.data.username ? button : null}
-
+                        {UserPage&&UserPage.username === userinfo.data.data.username ? button : null}
                 </ProfileContainer>
                 <ProfileBorder />
                 {/* 카테고리별 */}
-                <CategoryOpen value={user && user.data.data.username === userinfo.data.data.username} />
+                <CategoryOpen value={UserPage&&UserPage.username === userinfo.data.data.username} />
                
 
 
                 {/* 카드 */}
                 <>
                     <CardContainer>
-                        {randomData && randomData.map((data, i) => {
+                        {userData.content && userData.content.map((data, i) => {
                             return (
-                                <GifCard key={i} data={data} myImg={myContext.imgAddress} myNickname={userinfo.data.data.nickname} />
+                                <GifCard key={i} data={data} myImg={UserPage&&UserPage.profilImg} myNickname={UserPage&&UserPage.nickname} />
                             )
                         })}
                     </CardContainer>
@@ -261,8 +222,8 @@ const UserProfile = () => {
             </ContainerInner>
 
 
-        {/* 프로필이미지 모달창 */}
-            {user && user.data.data.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
+            {/* 프로필이미지 모달창 */}
+            {UserPage&&UserPage.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
                 close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
         
         
@@ -296,6 +257,7 @@ const ProfileImage = styled.img`
     height: 218px;
     border-radius: 150px;
     background-color: white;
+    background-size: contain;
 `
 const ProfileBorder = styled.div`
     margin-top: 116px;

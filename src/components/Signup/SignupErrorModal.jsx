@@ -2,13 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import { useMyContext } from '../../shared/ContextApi'
 
-const SignupErrorModal = () => {
+const SignupErrorModal = ({codeTrue}) => {
   const myContext = useMyContext();
 
   return (
     <ErrorContainer onClick={(e) => { e.stopPropagation(); }}>
       <div style={{textAlign:'center'}}>
-        <ErrorContent>중복확인 버튼을 눌러주세요</ErrorContent>
+        <ErrorContent>{!codeTrue ? '핸드폰 인증 해주세요': '중복확인 버튼을 눌러주세요' }</ErrorContent>
         <ErrorButton onClick={()=>myContext.btnClickOff()}><div style={{marginTop:'13px'}}>확인</div></ErrorButton>
       </div>
     </ErrorContainer>

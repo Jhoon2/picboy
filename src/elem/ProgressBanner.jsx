@@ -42,21 +42,21 @@ const ProgressBanner = (props) => {
             props.setProTap(0);
           }}
         >
-          <Underline>ALL</Underline>
+          <Underline>전체</Underline>
         </SelectButton>
         <SelectButton
           onClick={() => {
             props.setProTap(1);
           }}
         >
-          <Underline>TOPIC</Underline>
+          <Underline>제시어</Underline>
         </SelectButton>
         <SelectButton
           onClick={() => {
             props.setProTap(2);
           }}
         >
-          <Underline>FREE</Underline>
+          <Underline>자유</Underline>
         </SelectButton>
       </SelectBox>
     </ImgBox>
@@ -75,9 +75,9 @@ const ImgBox = styled.div`
   span {
     margin-top: 140px;
     font-family: 'SilkLight';
-    font-size: 80px;
-    line-height: 102px;
-    font-weight: 400;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 65px;
   }
 
   position: sticky;
@@ -101,18 +101,22 @@ const SelectButton = styled.button`
   height: 50px;
   background: none;
 
-  font-family: 'NotoBold';
-  font-size: 13px;
-  line-height: 30px;
+  font-family: 'Noto Bold';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 180%;
+  color: #a3a3a3;
 `;
 
-const ListBox = styled.div``;
-
 const Underline = styled.p`
-  color: #2e3248;
+  color: #a3a3a3;
   display: inline-block;
   position: relative;
   text-decoration: none;
+  &:hover {
+    color: black;
+  }
   ::after {
     background: none repeat scroll 0 0 transparent;
     background: #2e3248;

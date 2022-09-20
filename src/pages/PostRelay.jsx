@@ -6,7 +6,7 @@ import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 import { useParams } from 'react-router-dom';
 
 // import component
-import Footer from '../components/Footer'
+// import Footer from '../components/Footer'
 
 // image import
 import modeIc from '../images/pen.png'
@@ -363,7 +363,7 @@ const PostRelay = () => {
                     </ModeWrap>
                 </ContetnsWrap>
             </PostContentsWrap>
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 };

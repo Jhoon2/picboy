@@ -8,6 +8,7 @@ import download from '../../images/download-btn.png'
 import heart from '../../images/like-before.png'
 import AllParticipants from './AllParticipants'
 import MySpecialButton from './MySpecialButton'
+import basicImg from '../../images/basicImg.jpg'
 
 
 
@@ -19,7 +20,6 @@ const GifCard = ({ data, myImg, myNickname }) => {
   const refreshToken = getRefreshToken();
 
   const navigate = useNavigate();
-
   // 참여자들 보여주기
   const [allParticipants, setAllParticipants] = useState(false)
   const [peopleData, setPeopleData] = useState()
@@ -75,9 +75,9 @@ const GifCard = ({ data, myImg, myNickname }) => {
         </OverlayImg>
         <GifContents>
           <UserProfileContent onClick={showAllParticipants} >
-            <ProfileImage src={myImg} />
+            <ProfileImage src={!myImg ? basicImg : myImg}/>
             <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>
-            <div style={{ marginTop: '15px', marginLeft: '15px' }}>{data.nickname} 외 {data.memberCount}명</div>
+            <div style={{ marginTop: '15px', marginLeft: '15px' }}>{myNickname} 외 {data.memberCount}명</div>
           </UserProfileContent>
           <div style={{display:'flex'}}>
             <div style={{ marginLeft: '15px', fontSize: '30px' }}>♥</div>
@@ -90,7 +90,7 @@ const GifCard = ({ data, myImg, myNickname }) => {
       <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal} /> 
       {/* 참여자들 */}
       {allParticipants ?
-        <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData} myNickname={myNickname} />
+        <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData}  myNickname={myNickname} />
         : null}
     </CardContainer>
     
@@ -183,6 +183,7 @@ const ProfileImage = styled.img`
   width: 57px;
   height: 57px;
   border-radius: 50px;
+  /* background-color: gray; */
   cursor: pointer;
 `
 

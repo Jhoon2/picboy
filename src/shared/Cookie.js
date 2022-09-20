@@ -5,7 +5,8 @@ const cookies = new Cookies();
 
 export const setAccessToken = (accessToken) => {
   const today = new Date();
-  const expireDate = today.setDate(today.getDate() + 7);
+  // const expireDate = today.setDate(today.getDate() + 7);
+  const expireDate = new Date(new Date().getTime() + 60 * 1000* 60 *24);
   return cookies.set('user_token', accessToken, {
     samSite: 'strict',
     path: '/',
@@ -15,8 +16,11 @@ export const setAccessToken = (accessToken) => {
 
 export const setRefreshToken = (refreshtoken) => {
   const today = new Date();
-  const expireDate = today.setDate(today.getDate() + 7);
+  const expireDate = new Date(new Date().getTime() + 60 * 1000* 60* 24);
 
+  // const expireDate = today.setDate(today.getDate() + 7);
+  // const expireDate = new Date(new Date().getTime() + 60 * 1000);
+  // console.log(expireDate)
   return cookies.set("fresh_token", refreshtoken, {
     sameSite: "strict",
     path: "/",
