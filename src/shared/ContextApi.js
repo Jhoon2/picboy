@@ -8,7 +8,6 @@ export const useMyContext = () => {
 
 
 export const Context = (props) => {
-    // const [imgAddress, setImgAddress] = React.useState();
     const [timerMessage, setTimerMessage] = React.useState(false)
     const [btnOpen, setBtnOpen] = React.useState(false);
     const btnClickOff = () => setBtnOpen(false);
@@ -20,10 +19,13 @@ export const Context = (props) => {
     const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)  
     const [logonOpenProfileImg, setLogonProfileImg] = React.useState(false)  
 
+    const [signUpBtn, setSignUpBtn]= React.useState(false)
+    const signUpBtnClickOff = () => setSignUpBtn(false)
+    const signUpBtnClickOn = () => setSignUpBtn(!signUpBtn)
+
 
     const value = {
-        // imgAddress,
-        // setImgAddress,
+  
         timerMessage,
         setTimerMessage,
         btnOpen,
@@ -32,6 +34,10 @@ export const Context = (props) => {
         isOpenProfileImg,
         setIsOpenProfileImg,
 
+        //회원가입 창
+        signUpBtn,
+        signUpBtnClickOn,
+        signUpBtnClickOff,
         //탭넘버
         tabNum,
         setTabNum,

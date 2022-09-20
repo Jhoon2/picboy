@@ -67,15 +67,18 @@ const UserProfile = () => {
     
     const {userPage} = useSelector((state) => state.userpage)
     const UserPage = userPage && userPage.data
-    console.log(UserPage && UserPage)
+    // console.log(UserPage && UserPage)
     
 
     const {userData}  = useSelector((state) => state.userdata)
-    console.log(userData&&userData)
+    // console.log(userData&&userData)
 
     useEffect(() => {
         dispatch(__getUserPage({username:params.id}))
-        dispatch(__getUserData({username:params.id}))
+        dispatch(__getUserData({
+            tab:1,
+            username: params.id,
+        }))
             
     }, [dispatch]);
     

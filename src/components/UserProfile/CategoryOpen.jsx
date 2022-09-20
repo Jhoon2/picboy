@@ -12,6 +12,7 @@ const CategoryOpen = ({ value }) => {
   const myContext = useMyContext();
   const dispatch = useDispatch();
 
+  //event 함수를 쓸 때는 event에 대한 이름으로 작성 ex) handleClickAll
   const all = (e) => {
     setCategoryContent(e.target.id)
     myContext.setTabNum(0)

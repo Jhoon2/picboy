@@ -4,18 +4,18 @@ import { useState } from 'react'
 import { useMyContext } from '../../shared/ContextApi'
 import {__selectIconImg} from '../../redux/modules/UserPage'
 import styled from 'styled-components'
-import robot1 from '../../images/robot1.png'
-import robot2 from '../../images/robot2.png'
-import robot3 from '../../images/robot3.png'
-import robot4 from '../../images/robot4.png'
-import robot5 from '../../images/robot5.png'
-import robot6 from '../../images/robot6.png'
-import robotClick1 from '../../images/robotClick1.png'
-import robotClick2 from '../../images/robotClick2.png'
-import robotClick3 from '../../images/robotClick3.png'
-import robotClick4 from '../../images/robotClick4.png'
-import robotClick5 from '../../images/robotClick5.png'
-import robotClick6 from '../../images/robotClick6.png'
+import robot1 from '../../images/mypage/robot1.png'
+import robot2 from '../../images/mypage/robot2.png'
+import robot3 from '../../images/mypage/robot3.png'
+import robot4 from '../../images/mypage/robot4.png'
+import robot5 from '../../images/mypage/robot5.png'
+import robot6 from '../../images/mypage/robot6.png'
+import robotClick1 from '../../images/mypage/robotClick1.png'
+import robotClick2 from '../../images/mypage/robotClick2.png'
+import robotClick3 from '../../images/mypage/robotClick3.png'
+import robotClick4 from '../../images/mypage/robotClick4.png'
+import robotClick5 from '../../images/mypage/robotClick5.png'
+import robotClick6 from '../../images/mypage/robotClick6.png'
 import { useDispatch } from 'react-redux'
 
 
@@ -49,37 +49,19 @@ const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
     setPath(6)
     dispatch(__selectIconImg({ img: robot6 }))
   }
-  const clickIcon = (e) => {
-    e.stopPropagation()
-    setPath(1)
-    // console.log(e.target)
-    // const reader = new FileReader();
-    // const file = e.target.src;
-    // reader.readAsDataURL(file);
 
-    // console.log(file)
-    // const aa = reader.readAsDataURL(file)
-    // console.log(aa)
-    // reader.onloadend = () => {
-    //   const base64data = reader.result;
-    //   // setImgUrl(base64data);
-    //   // sendApi(base64data);
-    //   myContext.setImgAddress(base64data)
-    // }
-    // reader.readAsDataURL(file);
-    // console.log(myContext.imgAddress)
-    // setSelectIcon(false)
-    // close();
-    // myContext.setIsOpenProfileImg(false)
-  }
   const closeBox = () => {
     close();
-    setSelectIcon(false)
-  }
+    setSelectIcon(false);
+  };
   return shown ? (
     <Overlay onClick={closeBox}>
-    <OverlayPosition >
-        <ModalContainer onClick={e => {e.stopPropagation();}}>
+      <OverlayPosition>
+        <ModalContainer
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <TitleIconModal>아이콘을 선택하세요.</TitleIconModal>
           <IconsContainer>
             <IconCard>
@@ -108,10 +90,10 @@ const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
             </IconCard>
           </IconsContainer>
         </ModalContainer>
-    </OverlayPosition>
-  </Overlay>
-  ) : null
-}
+      </OverlayPosition>
+    </Overlay>
+  ) : null;
+};
 
 const Overlay = styled.div`
   position: absolute;
@@ -124,14 +106,14 @@ const Overlay = styled.div`
   z-index: 9999;
   display: flex;
   justify-content: center;
-`
+`;
 
 const OverlayPosition = styled.div`
   height: 30px;
-  position:relative;
-  top:0px;
+  position: relative;
+  top: 0px;
   left: 100px;
-`
+`;
 const ModalContainer = styled.div`
   width: 420px;
   height: 420px;
@@ -139,7 +121,7 @@ const ModalContainer = styled.div`
   z-index: 2;
   border: 2px solid #000000;
   background-color: white;
-`
+`;
 const TitleIconModal = styled.div`
   padding: 2rem;
   text-align: center;
@@ -147,32 +129,32 @@ const TitleIconModal = styled.div`
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
-`
+`;
 const IconsContainer = styled.div`
   width: 380px;
   height: 300px;
   margin-left: 14px;
   display: flex;
   flex-wrap: wrap;
-`
+`;
 
 const IconCard = styled.div`
   width: 125px;
   height: 150px;
   padding: 1rem;
-`
+`;
 
 const IconImage = styled.img`
   width: 100px;
   height: 100px;
   cursor: pointer;
   border-radius: 100px;
-  background: #D9D9D9;
-`
+  background: #d9d9d9;
+`;
 
 const IconName = styled.div`
   margin-top: 10px;
   text-align: center;
-`
+`;
 
-export default ProfileImageIcons
+export default ProfileImageIcons;

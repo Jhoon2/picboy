@@ -29,7 +29,7 @@ export const __getLogonUser = createAsyncThunk(
 export const __getUserPage = createAsyncThunk(
   'userPage/getUserPage',
   async (payload, thunkAPI) => {
-    console.log(payload)
+    // console.log(payload)
     try {
       const data = await axios.get(`${baseURL}/mypage/user-info?username=${payload.username}`
       )
@@ -42,7 +42,7 @@ export const __getUserPage = createAsyncThunk(
 export const __getUserData = createAsyncThunk(
   'userData/getUserData',
   async (payload, thunkAPI) => {
-    console.log(payload)
+    // console.log(payload)
     try {
       const data = await axios.get
       (`${baseURL}/mypage/post/0/1?username=${payload.username}&page=0&size=6`,
@@ -104,7 +104,7 @@ export const __putEditProfileImg = createAsyncThunk(
 export const __selectIconImg = createAsyncThunk(
   'IconImg/selectIconImg',
   async (payload, thunkAPI) => {
-    console.log(payload)
+    // console.log(payload)
     try {
       const response = await axios.put(
         `${baseURL}/mypage/update-image/`, payload,
@@ -193,7 +193,7 @@ export const userdataSlice = createSlice({
       },
       [__getUserData.fulfilled]: (state, action) => {
         state.isLoading = false;
-        console.log(action.payload)
+        // console.log(action.payload)
           state.userData = action.payload;
       },
       [__getUserData.rejected]: (state, action) => {

@@ -9,6 +9,7 @@ import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components';
 import SignupErrorModal from '../components/Signup/SignupErrorModal';
 import UseTimer from '../elem/UseTimer';
+import SignUpDone from '../components/Signup/SignUpDone';
 
 const SignUp = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -95,7 +96,7 @@ const SignUp = () => {
 
     setFocusedInput(e.target.name)
     setExistedId(false);
-    setAvailableId(false);
+    // setAvailableId(false);
     setPhoneValid(false)
     setCodeError(false)
     // setCodeTrue(false)
@@ -104,7 +105,7 @@ const SignUp = () => {
   // NickName 중복확인
   const [existedNick, setExistedNick] = useState(false);
   const [availableNick, setAvailableNick] = useState(false);
-
+  
   const checkSameNick = async () => {
     const nickname = watch().nickname;
     if (nickname.length < 2 || nickname.length > 10) return;
@@ -137,6 +138,7 @@ const SignUp = () => {
   };
 
   useEffect(() => {
+    myContext.signUpBtnClickOff();
     if (inputValue.length === 10) {
       setInputValue(inputValue.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
     }
@@ -159,7 +161,9 @@ const SignUp = () => {
   //핸드폰 유효시간
   const [minutes, setMinutes] = useState(2);
   const [seconds, setSeconds] = useState(59);
+
   const phoneCheck = async () => {
+    if(inputValue.length <= 9) return
     setCodeTrue(false)
 
     setNoSendPhone(true)
@@ -214,11 +218,14 @@ const SignUp = () => {
   }
 
   //회원가입 버튼
+  const [openSignupDone, setOpenSignupDone] = useState(false)
+  const [myNickname, setMyNickname] = useState()
+
   const onClickSignUp = async (data) => {
     if (!codeTrue) return myContext.btnClickOn();
     if (!availableId) return myContext.btnClickOn();
     if (!availableNick) return myContext.btnClickOn();
-
+    setMyNickname(data.nickname)
     const info = {
       username: data.id,
       nickname: data.nickname,
@@ -229,9 +236,11 @@ const SignUp = () => {
     try {
       const response = await axios.post(`${baseURL}/user/signup`, info);
       if (response.status === 200) {
-        reset();
+        // reset();
         ////
         //회원가입 완료 창 만들기
+        myContext.signUpBtnClickOn();
+        // setOpenSignupDone(true)
         // navigate('/login');
       }
     } catch (error) {
@@ -241,6 +250,9 @@ const SignUp = () => {
 
   return (
     <LoginContainer>
+      {myContext.signUpBtn ? <ErrorBox>
+        <SignUpDone nickname={myNickname} />
+      </ErrorBox> : null}
       {myContext.btnOpen ? (
         <ErrorBox onClick={() => myContext.btnClickOff()}>
           <SignupErrorModal codeTrue={codeTrue} />
@@ -458,13 +470,23 @@ const TextAndInput = styled.div`
   width: 450px;
   padding: 0.8rem;
   display: flex;
-  /* border-bottom: 2px solid ${(props) => props.focusedInput  ? 'black' :'lightgray'}; */
-`;
+  border-bottom: 1px solid lightgray;
+
+  &:focus-within {
+    border-bottom: 2px solid black
+  }
+`
+  
+
 const NoButtonInput = styled.div`
   width: 575px;
   padding: 0.8rem;
   display: flex;
-  border-bottom: 2px solid  ${(props) => props.focusedInput  ? 'black' :'lightgray'};
+  border-bottom: 1px solid lightgray;
+  
+  &:focus-within {
+    border-bottom: 2px solid black
+  }
 `;
 const PhoneTextAndInput = styled.div`
   width: 450px;

@@ -4,7 +4,6 @@ import { useMyContext } from '../../shared/ContextApi'
 
 const SignupErrorModal = ({codeTrue}) => {
   const myContext = useMyContext();
-  console.log(codeTrue)
 
   return (
     <ErrorContainer onClick={(e) => { e.stopPropagation(); }}>

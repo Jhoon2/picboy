@@ -1,11 +1,26 @@
 import React, { useRef } from 'react';
 import styled, { css } from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import Fade from 'react-reveal/Fade';
 import BestSlider from '../elem/BestSlider';
-import icon from '../images/icon.png';
-import first from '../images/1번.gif';
+import Howarrow from '../images/mainDesc/Howarrow.svg';
+import Howfirst from '../images/mainDesc/HowFirst.gif';
+import Howsecond from '../images/mainDesc/Howsecond.gif';
+import Howthird from '../images/mainDesc/Howthird.gif';
+import Howfour from '../images/mainDesc/Howfour.gif';
+import Heart from '../images/mainDesc/Heart.svg';
+import Heart1 from '../images/mainDesc/Heart2.svg';
+import Heart2 from '../images/mainDesc/Heart3.svg';
+import topic from '../images/mainDesc/topic.png';
+import free from '../images/mainDesc/free.png';
+import Buttonarrow from '../images/mainDesc/Buttonarrow.svg';
+import Desc1 from '../images/mainDesc/Desc1.gif';
+import Desc2 from '../images/mainDesc/Desc2.gif';
+import Desc3 from '../images/mainDesc/Desc3.gif';
+import Desc4 from '../images/mainDesc/Desc4.gif';
 
 const MainDesc = ({ moveRef, move2Ref }) => {
+  const navigate = useNavigate();
   const TopicgRef = useRef();
   const FreeRef = useRef();
 
@@ -36,9 +51,9 @@ const MainDesc = ({ moveRef, move2Ref }) => {
               handleMoves();
             }}
           >
-            TOPIC
+            ABOUT PICBOY
             <br />
-            <span>뉴비에게 추천!</span>
+            <span>픽보이 알아보기</span>
           </TopicButton>
         </Fade>
         <Fade right>
@@ -47,14 +62,14 @@ const MainDesc = ({ moveRef, move2Ref }) => {
               handleMove();
             }}
           >
-            FREE
+            HOW TO
             <br />
-            <span>고인물에게 추천!</span>
+            <span>사용방법</span>
           </FreeButton>
         </Fade>
       </ButtonBox>
       <DescBox1 ref={TopicgRef}>
-        <Descimg1 img={first} />
+        <Descimg1 img={Desc1} />
         <DescFirst>
           <Fade bottom>
             <Number1>#1</Number1>
@@ -77,22 +92,26 @@ const MainDesc = ({ moveRef, move2Ref }) => {
         <DescSecond>
           <Fade left>
             <Number2>#2</Number2>
-            <Title2>멀티 플레이</Title2>
+            <Title2>컨텐츠</Title2>
             <Des2>
-              PC, 모바일을 통해 혼자 또는 다른 사용자들과
+              2개의 컨텐츠 중 선택하고 사용자들과
               <br />
               함께 만들수 있어요.
             </Des2>
           </Fade>
         </DescSecond>
-        <Descimg2 />
+        <Descimg2 img={Desc2} />
       </DescBox2>
       <DescBox3>
-        <Descimg3 />
+        <Descimg3 img={Desc3} />
         <DescThird>
           <Fade right>
             <Number3>#3</Number3>
-            <Title3>다른 유저와 공유 및 저장</Title3>
+            <Title3>
+              자유롭게 저장하고
+              <br />
+              공유 및 소통
+            </Title3>
             <Des3>
               유저들과 같이 만드는 움짤을 공유, 소통하고 마음에 드는
               <br />
@@ -101,10 +120,10 @@ const MainDesc = ({ moveRef, move2Ref }) => {
           </Fade>
         </DescThird>
       </DescBox3>
-      <DescBox4 ref={FreeRef}>
+      <DescBox4>
         <Fade bottom>
           <DescFourth>
-            <Number4>#1</Number4>
+            <Number4>#4</Number4>
             <Title4>
               유저들과
               <br />
@@ -116,46 +135,59 @@ const MainDesc = ({ moveRef, move2Ref }) => {
               의미를 찾고 예측할 수 없는 움짤을 만들어 보세요.
             </Des4>
           </DescFourth>
-          <Descimg4 />
+          <Descimg4 img={Desc4} />
         </Fade>
       </DescBox4>
-      <HowContainer ref={moveRef}>
-        <HowTitle>How To Use ?</HowTitle>
+      <HowContainer ref={FreeRef}>
+        <HowTitle>사용 방법</HowTitle>
+        <HowTitleDesc>
+          제시어 없이 오직 유저들의 그림을 보고 <br />
+          의미를 찾고 예측할 수 없는 움짤을 만들어 보세요.
+        </HowTitleDesc>
         <HowBox>
-          <Fade bottom>
-            <HowElem>
-              <HowImg />
-              <HowSub>Start</HowSub>
-              <HowDesc>Drawing 버튼 클릭</HowDesc>
-            </HowElem>
-
-            <HowElem2>
-              <HowImg />
-              <HowSub>Drawing</HowSub>
-              <HowDesc>
-                제시어(FREE일 경우 PASS)
-                <br />
-                프레임 선택 후 그리기
-              </HowDesc>
-            </HowElem2>
-
-            <HowElem>
-              <HowImg />
-              <HowSub>Progress</HowSub>
-              <HowDesc>진행중인 그림 감상</HowDesc>
-            </HowElem>
-
-            <HowElem>
-              <HowImg />
-              <HowSub>Complete</HowSub>
-              <HowDesc>프레임 수 채워지면 완성버튼 클릭</HowDesc>
-            </HowElem>
-          </Fade>
+          <HowBoxNumber>
+            <HowTitleNumber>
+              <HowNum>1</HowNum>
+              <HowNum>2</HowNum>
+              <HowNum>3</HowNum>
+              <HowNum>4</HowNum>
+            </HowTitleNumber>
+            <Fade bottom>
+              <Howimage>
+                <HowImg img={Howfirst} />
+                <img src={Howarrow} alt="" />
+                <HowImg img={Howsecond} />
+                <img src={Howarrow} alt="" />
+                <HowImg img={Howthird} />
+                <img src={Howarrow} alt="" />
+                <HowImg img={Howfour} />
+              </Howimage>
+              <HowSubBox>
+                <HowSub>시작</HowSub>
+                <HowSub>그리기</HowSub>
+                <HowSub1>진행중</HowSub1>
+                <HowSub>완성</HowSub>
+              </HowSubBox>
+              <HowDescBox>
+                <HowDesc>드로잉 버튼 클릭</HowDesc>
+                <HowDesc>
+                  제시어(FREE일 경우 PASS) <br />
+                  프레임 선택 후 그리기
+                </HowDesc>
+                <HowDesc1>진행중인 그림 감상</HowDesc1>
+                <HowDesc>
+                  프레임 수 채워지면 <br />
+                  완성버튼 클릭!
+                </HowDesc>
+              </HowDescBox>
+            </Fade>
+          </HowBoxNumber>
         </HowBox>
       </HowContainer>
       <BestContainer>
-        <BestImg left={'580px'} bottom={'600px'} />
-        {/* <BestImg left={'1300px'} top={'220px'} /> */}
+        <BestImg />
+        <BestImg1 />
+        <BestImg2 />
         <Fade bottom>
           <BestTitle>내가 PICBOY 왕!</BestTitle>
           <BestDesc>
@@ -171,18 +203,44 @@ const MainDesc = ({ moveRef, move2Ref }) => {
 
       <StartBox>
         <Fade bottom>
-          <StartTitle>시작해볼까요?</StartTitle>
+          <StartTitle>그럼, 시작해볼까요?</StartTitle>
+          <StartDesc>
+            제시어와 자유주제를 골라서 창의력을 발휘해보세요! <br />
+            예측하지못한 즐거움이 기다리고 있습니다.
+          </StartDesc>
           <StartButtonBox>
-            <StartTopic>
-              TOPIC
-              <br />
-              <span>뉴비에게 추천!</span>
-            </StartTopic>
-            <StartFree>
-              FREE
-              <br />
-              <span>고인물에게 추천!</span>
-            </StartFree>
+            <TopicBox>
+              <Startimg src={topic} alt="" />
+              <StartTitles>제시어</StartTitles>
+              <StartDescs>
+                제시어를 설정하여 <br />
+                유저들과 그림을 그릴 수 있어요!
+              </StartDescs>
+              <StartButton
+                onClick={() => {
+                  navigate('/post-topic');
+                }}
+              >
+                제시어 그리러 가기
+                <Arrow src={Buttonarrow} alt="" />
+              </StartButton>
+            </TopicBox>
+            <FreeBox>
+              <Startimg src={free} alt="" />
+              <StartTitles>자유</StartTitles>
+              <StartDescs>
+                제시어 없이 <br />
+                유저들과 그림을 그릴 수 있어요!
+              </StartDescs>
+              <StartButton
+                onClick={() => {
+                  navigate('/post-free');
+                }}
+              >
+                자유주제 그리러 가기
+                <Arrow src={Buttonarrow} alt="" />
+              </StartButton>
+            </FreeBox>
           </StartButtonBox>
         </Fade>
       </StartBox>
@@ -202,38 +260,40 @@ const DescContainer = styled.div`
 
 const DescTitle = styled.div`
   margin: auto;
-  min-width: 1200px;
-  padding-top: 150px;
+  min-width: 75rem;
+  padding-top: 200px;
   text-align: center;
   line-height: 150%;
   font-family: 'NotoBold';
-  font-size: 80px;
+  font-weight: 700;
+  font-size: 3.5rem;
   color: white;
   @media ${({ theme }) => theme.device.laptop} {
-    padding-top: 100px;
+    padding-top: 6.25rem;
   }
 `;
 
 const DescButton = styled.button`
-  width: 400px;
-  height: 100px;
-  font-family: 'SilkLight';
-  font-size: '30px';
-  font-size: 30px;
+  width: 15rem;
+  height: 6.25rem;
+  font-family: 'SilkBold';
+  font-size: 1rem;
   span {
     font-family: "'NotoLight";
-    font-size: 15px;
+    font-size: 0.75rem;
   }
 `;
 
 const ButtonBox = styled.div`
-  padding-top: 200px;
-  ${({ theme }) => theme.flexSet('row', 'space-evenly', 'center')}
+  width: 62.5rem;
+  margin: auto;
+  padding-top: 140px;
+  ${({ theme }) => theme.flexSet('row', 'center', 'center')}
 `;
 
 const TopicButton = styled(DescButton)`
   background: #161616;
-  border: 1px solid white;
+  border: 0.0625rem solid white;
   color: white;
   &:hover {
     background: white;
@@ -244,6 +304,7 @@ const TopicButton = styled(DescButton)`
 const FreeButton = styled(DescButton)`
   border: none;
   background: white;
+  margin-left: 3.125rem;
   &:hover {
     background: black;
     color: white;
@@ -251,20 +312,18 @@ const FreeButton = styled(DescButton)`
 `;
 
 const DescBox = styled.div`
-  max-width: 1200px;
-  height: 1000px;
+  max-width: 75rem;
+  height: 800px;
   margin: auto;
-  margin-top: 100px;
-  ${({ theme }) => theme.flexSet('row', 'space-evenly', 'center')}
+  ${({ theme }) => theme.flexSet('row', 'space-around', 'center')}
   @media ${({ theme }) => theme.device.laptop} {
-    height: 800px;
+    height: 50rem;
   }
 `;
 
 const Descimg = styled.div`
-  width: 200px;
-  height: 200px;
-  background: url(${icon});
+  width: 12.5rem;
+  height: 12.5rem;
   ${({ theme }) => theme.backgroundSet('contain')}
 
   animation-duration: 1.5s;
@@ -277,7 +336,7 @@ const Descimg = styled.div`
       transform: translateY(0);
     }
     50% {
-      transform: translateY(-20px);
+      transform: translateY(-1.25rem);
     }
     100% {
       transform: translateY(0);
@@ -286,36 +345,40 @@ const Descimg = styled.div`
 `;
 
 const DescTextBox = css`
-  width: 500px;
-  height: 700px;
-  ${({ theme }) => theme.flexSet('column', 'space-evenly', 'flex-start')}
+  width: 31.25rem;
+  height: 43.75rem;
+  ${({ theme }) => theme.flexSet('column', 'center', 'flex-start')}
 `;
 
 const Number = styled.span`
   font-family: 'SilkLight';
-  font-size: 30px;
+  font-size: 1.1875rem;
   color: white;
-  border: 1px solid white;
 `;
 
 const Title = css`
   font-family: 'NotoBold';
-  font-size: 50px;
-  line-height: 72px;
+  font-size: 2.625rem;
+  line-height: 4.5rem;
+  font-weight: 700;
+  line-height: 150%;
   color: white;
 `;
 const Desc = css`
   font-family: 'NotoLight';
-  font-size: 20px;
-  line-height: 200%;
+  font-size: 1rem;
+  line-height: 180%;
+  font-weight: 400;
   color: white;
 `;
 
-const DescBox1 = styled(DescBox)``;
+const DescBox1 = styled(DescBox)`
+  margin-top: 100px;
+`;
 
 const Descimg1 = styled(Descimg)`
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
   background: url(${(props) => props.img});
   animation-name: none;
 `;
@@ -326,16 +389,23 @@ const DescFirst = styled.div`
 
 const Number1 = styled(Number)``;
 
-const Title1 = styled.span`
+const Title1 = styled.div`
+  margin-top: 6.25rem;
   ${Title}
 `;
-const Des1 = styled.span`
+const Des1 = styled.div`
+  margin-top: 3.125rem;
   ${Desc}
 `;
 
 const DescBox2 = styled(DescBox)``;
 
-const Descimg2 = styled(Descimg)``;
+const Descimg2 = styled(Descimg)`
+  width: 37.5rem;
+  height: 31.25rem;
+  background: url(${(props) => props.img});
+  animation-name: none;
+`;
 
 const DescSecond = styled.div`
   ${DescTextBox}
@@ -343,16 +413,23 @@ const DescSecond = styled.div`
 
 const Number2 = styled(Number)``;
 
-const Title2 = styled.span`
+const Title2 = styled.div`
+  margin-top: 6.25rem;
   ${Title}
 `;
-const Des2 = styled.span`
+const Des2 = styled.div`
+  margin-top: 3.125rem;
   ${Desc}
 `;
 
 const DescBox3 = styled(DescBox)``;
 
-const Descimg3 = styled(Descimg)``;
+const Descimg3 = styled(Descimg)`
+  width: 600px;
+  height: 600px;
+  background: url(${(props) => props.img});
+  animation-name: none;
+`;
 
 const DescThird = styled.div`
   ${DescTextBox}
@@ -360,142 +437,337 @@ const DescThird = styled.div`
 
 const Number3 = styled(Number)``;
 
-const Title3 = styled.span`
+const Title3 = styled.div`
+  margin-top: 6.25rem;
   ${Title}
 `;
-const Des3 = styled.span`
+const Des3 = styled.div`
+  margin-top: 3.125rem;
   ${Desc}
 `;
 
 const DescBox4 = styled(DescBox)`
-  height: 1040px;
   @media ${({ theme }) => theme.device.laptop} {
-    height: 800px;
+    height: 50rem;
   }
 `;
 
-const Descimg4 = styled(Descimg)``;
+const Descimg4 = styled(Descimg)`
+  width: 600px;
+  height: 400px;
+  margin-bottom: 60px;
+  background: url(${(props) => props.img});
+  animation-name: none;
+`;
 
 const DescFourth = styled.div`
   ${DescTextBox}
 `;
 
-const Number4 = styled(Number)`
-  border: none;
-  background: white;
-  color: black;
-`;
+const Number4 = styled(Number)``;
 
 const Title4 = styled.div`
+  margin-top: 6.25rem;
   ${Title}
 `;
 const Des4 = styled.div`
+  margin-top: 3.125rem;
   ${Desc}
 `;
 
 const HowContainer = styled.div`
-  height: 920px;
+  height: 57.6rem;
   background: white;
   ${({ theme }) => theme.flexSet('column', 'center', 'center')}
   text-align: center;
 `;
 
 const HowTitle = styled.span`
-  width: 300px;
-  height: 40px;
-  background: black;
-  border-radius: 10px;
-  font-family: 'SilkLight';
-  font-size: 30px;
-  color: white;
+  width: 18.75rem;
+  height: 3.125rem;
+  font-weight: 700;
+  line-height: 150%;
+  font-family: 'NotoBold';
+  font-size: 2.625rem;
+`;
+
+const HowTitleDesc = styled.span`
+  width: 25rem;
+  height: 3.125rem;
+  margin-top: 3.125rem;
+  font-family: 'NotoLight';
+  font-size: 1rem;
+  line-height: 180%;
+  font-weight: 400;
 `;
 
 const HowBox = styled.div`
-  width: 1300px;
-  margin-top: 200px;
-  ${({ theme }) => theme.flexSet('row', 'space-evenly', 'center')}
+  width: 100%;
+  height: 25rem;
+  margin-top: 3.125rem;
+  background: #f8f8f8;
+  ${({ theme }) => theme.flexSet('column', 'space-evenly', 'center')}
   @media ${({ theme }) => theme.device.laptop} {
-    max-width: 1200px;
+    max-width: 75rem;
   }
 `;
 
-const HowElem = styled.div`
+const HowBoxNumber = styled.div`
+  width: 68.75rem;
+  height: 25rem;
   ${({ theme }) => theme.flexSet('column', 'space-evenly', 'center')}
 `;
 
-const HowElem2 = styled(HowElem)`
-  margin-top: 24px;
+const HowTitleNumber = styled.div`
+  width: 68.75rem;
+  height: 3.125rem;
+  ${({ theme }) => theme.flexSet('row', 'space-between', 'center')}
+`;
+
+const Numbers = css`
+  font-family: 'SilkLight';
+  font-size: 1rem;
+  line-height: 200%;
+`;
+
+const HowNum = styled.div`
+  width: 1.875rem;
+  width: 1.875rem;
+  background: #d9d9d9;
+  border-radius: 50%;
+  ${Numbers}
+`;
+
+const Howimage = styled.div`
+  width: 73.4375rem;
+  ${({ theme }) => theme.flexSet('row', 'space-between', 'center')}
 `;
 
 const HowImg = styled.div`
-  width: 100px;
-  height: 100px;
-  background: black;
+  width: 6.25rem;
+  height: 6.25rem;
+  background: url(${(props) => props.img});
+  ${({ theme }) => theme.backgroundSet('contain')}
+`;
+
+const HowSubBox = styled.div`
+  width: 69.25rem;
+  ${({ theme }) => theme.flexSet('row', 'space-between', 'center')}
 `;
 
 const HowSub = styled.span`
-  padding-top: 10px;
   font-family: 'NotoBold';
-  font-size: 20px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 200%;
+  letter-spacing: -0.04em;
+`;
+
+const HowSub1 = styled.span`
+  margin-right: 5px;
+  font-family: 'NotoBold';
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 200%;
+  letter-spacing: -0.04em;
+`;
+
+const HowDescBox = styled.div`
+  width: 1190px;
+  ${({ theme }) => theme.flexSet('row', 'space-between', 'center')}
 `;
 
 const HowDesc = styled.span`
-  padding-top: 10px;
   font-family: 'NotoLight';
-  font-size: 20px;
+  font-size: 1rem;
+  line-height: 180%;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+`;
+
+const HowDesc1 = styled.span`
+  margin-right: 20px;
+  font-family: 'NotoLight';
+  font-size: 1rem;
+  line-height: 180%;
+  font-weight: 400;
+  letter-spacing: -0.02em;
 `;
 
 const BestContainer = styled.div`
-  height: 600px;
+  height: 37.5rem;
   position: relative;
   ${({ theme }) => theme.flexSet('column', 'center', 'center')};
   text-align: center;
   background: white;
 `;
 
-const BestTitle = styled.span`
+const BestTitle = styled.div`
   font-family: 'NotoBold';
-  font-size: 80px;
-`;
-
-const BestDesc = styled.span`
-  margin-top: 20px;
-  font-family: 'NotoLight';
-  font-size: 30px;
+  font-size: 2.625rem;
   line-height: 150%;
+  font-weight: 700;
 `;
 
-const BestImg = styled(Descimg)`
-  width: 100px;
-  height: 100px;
+const BestDesc = styled.div`
+  margin-top: 1.25rem;
+  font-family: 'NotoLight';
+  font-size: 1rem;
+  line-height: 180%;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+`;
+
+const BestImg = styled.div`
+  width: 65px;
+  height: 60px;
   position: absolute;
-  top: ${(props) => props.top};
-  left: ${(props) => props.left};
-  bottom: ${(props) => props.bottom};
+  ${({ theme }) => theme.backgroundSet('contain')};
+  background: url(${Heart});
+  top: -10%;
+  left: 37%;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-name: bounce;
+  animation-timing-function: linear;
+  @keyframes bounce {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-1.25rem);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+`;
+
+const BestImg1 = styled.div`
+  width: 49px;
+  height: 45px;
+  position: absolute;
+  ${({ theme }) => theme.backgroundSet('contain')};
+  background: url(${Heart1});
+  top: 5%;
+  left: 33%;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-name: bounce1;
+  animation-timing-function: linear;
+  @keyframes bounce1 {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-1.35rem);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+`;
+
+const BestImg2 = styled.div`
+  width: 79px;
+  height: 73px;
+  position: absolute;
+  ${({ theme }) => theme.backgroundSet('contain')};
+  background: url(${Heart2});
+  top: -5%;
+  left: 60%;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-name: bounce2;
+  animation-timing-function: linear;
+  @keyframes bounce2 {
+    0% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-1.3rem);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
 `;
 
 const SlideContainer = styled.div`
   width: 100%;
-  height: 500px;
-  margin-top: 100px;
+  height: 31.25rem;
+  margin-top: 6.25rem;
 `;
 
 const StartBox = styled.div`
-  height: 600px;
-  background: white;
-  ${({ theme }) => theme.flexSet('column', 'space-around', 'center')};
+  height: 1090px;
+
+  background: #f8f8f8;
+  ${({ theme }) => theme.flexSet('column', 'center', 'center')};
+  text-align: center;
 `;
 
 const StartTitle = styled(BestTitle)``;
 
+const StartDesc = styled(BestDesc)`
+  margin-bottom: 300px;
+`;
+
 const StartButtonBox = styled.div`
-  width: 1000px;
-  height: 100px;
-  margin-bottom: 100px;
+  width: 62.5rem;
+  height: 6.25rem;
+  margin-bottom: 6.25rem;
   ${({ theme }) => theme.flexSet('row', 'space-around', 'center')};
 `;
 
-const StartTopic = styled(TopicButton)``;
-const StartFree = styled(FreeButton)`
-  background: #f7f7f7;
+const TopicBox = styled.div`
+  width: 450px;
+  height: 550px;
+  background: #ffffff;
+  box-shadow: 0px 6px 10px 6px rgba(0, 0, 0, 0.1);
+  ${({ theme }) => theme.flexSet('column', 'center', 'center')};
+`;
+const FreeBox = styled(TopicBox)``;
+
+const StartTitles = styled.span`
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-family: 'NotoBold';
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 150%;
+  letter-spacing: -0.04em;
+`;
+
+const Startimg = styled.img`
+  width: 200px;
+`;
+
+const StartDescs = styled.span`
+  padding-bottom: 50px;
+  font-family: 'NotoLight';
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 180%;
+  letter-spacing: -0.02em;
+`;
+
+const StartButton = styled.button`
+  width: 280px;
+  height: 60px;
+  font-family: 'NotoLight';
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 180%;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    #000000;
+
+  color: #a3a3a3;
+  &:hover {
+    color: white;
+  }
+`;
+
+const Arrow = styled.img`
+  margin-left: 10px;
 `;

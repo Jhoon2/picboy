@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import '../elem/Down.css';
 import Down from '../elem/Down';
 import bubble1 from '../images/bubble1.png';
 import right from '../images/right.png';
-import UseGetUser from '../hooks/UseGetUser'
-import { useMyContext } from '../shared/ContextApi'
+import UseGetUser from '../hooks/UseGetUser';
+import { useMyContext } from '../shared/ContextApi';
 
-import AnyModal from '../elem/AnyModal'
+import AnyModal from '../elem/AnyModal';
 
-const Categories = (props) => {
+const Categories = () => {
   const navigate = useNavigate();
   const myContext = useMyContext();
 
@@ -19,68 +19,63 @@ const Categories = (props) => {
   const [select, setSelect] = useState(false);
 
   const moveTopic = () => {
-    setSelect(false)
-    if ( !logonUser ) return myContext.btnClickOn()
-    navigate('/post-topic')
-  }
+    setSelect(false);
+    if (!logonUser) return myContext.btnClickOn();
+    navigate('/post-topic');
+  };
   const moveFree = () => {
-    setSelect(false)
-    if ( !logonUser ) return myContext.btnClickOn()
-    navigate('/post-free')
-  }
-    return (
-      <>
-        {myContext.btnOpen ? 
-          <ErrorBox onClick={() => myContext.btnClickOff()}>
-        <AnyModal title ='회원정보' content = '로그인 후 가능합니다'/>
+    setSelect(false);
+    if (!logonUser) return myContext.btnClickOn();
+    navigate('/post-free');
+  };
+
+  return (
+    <>
+      {myContext.btnOpen ? (
+        <ErrorBox onClick={() => myContext.btnClickOff()}>
+          <AnyModal title="회원정보" content="로그인 후 가능합니다" />
         </ErrorBox>
-          : null}
-            <SelectBox>
-                <DrawingBox onClick={() => setSelect(!select)}>
-                  <Select >
-                      <div  >DRAWING</div>
-                  </Select>
-                </DrawingBox>
-            </SelectBox>
-            <SelectListBox>
-                {/* {select && ( */}
-                <Down select={select}>
-                    <ul>
-                        <Topic
-                            onClick={moveTopic}
-                        >
-                            <Title>
-                                <TopicBubble />
-                                TOPIC
-                                <Right left={'110px'} />
-                            </Title>
-                            <Desc>
-                                제시어를 설정해 유저들과 그림을
-                                <br />
-                                그릴 수 있어요!
-                            </Desc>
-                        </Topic>
-                        <HR />
-                        <Free
-                            onClick={moveFree}
-                        >
-                            <Title>
-                                <TopicBubble />
-                                Free
-                                <Right left={'122px'} />
-                            </Title>
-                            <Desc>
-                                제시어 없이 유저들과 그림을
-                                <br />
-                                그릴 수 있어요!
-                            </Desc>
-                        </Free>
-                    </ul>
-                </Down>
-                {/* // )} */}
-            </SelectListBox>
-        </>
-    );
+      ) : null}
+      <SelectBox>
+        <DrawingBox onClick={() => setSelect(!select)}>
+          <Select>
+            <div>DRAWING</div>
+          </Select>
+        </DrawingBox>
+      </SelectBox>
+      <SelectListBox>
+        <Down select={select}>
+          <ul>
+            <Topic onClick={moveTopic}>
+              <Title>
+                <TopicBubble />
+                TOPIC
+                <Right left={'110px'} />
+              </Title>
+              <Desc>
+                제시어를 설정해 유저들과 그림을
+                <br />
+                그릴 수 있어요!
+              </Desc>
+            </Topic>
+            <HR />
+            <Free onClick={moveFree}>
+              <Title>
+                <TopicBubble />
+                Free
+                <Right left={'122px'} />
+              </Title>
+              <Desc>
+                제시어 없이 유저들과 그림을
+                <br />
+                그릴 수 있어요!
+              </Desc>
+            </Free>
+          </ul>
+        </Down>
+      </SelectListBox>
+    </>
+  );
 };
 
 export default Categories;
@@ -96,7 +91,7 @@ const ErrorBox = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 2;
-`
+`;
 const Label = css`
   width: 100px;
   max-width: 110px;
@@ -123,14 +118,13 @@ const SelectBox = styled.div`
 `;
 
 const DrawingBox = styled.div`
-  width: 170px;
-  height: 45px;
+  width: 175px;
+  height: 40px;
   margin-left: -50px;
   text-align: center;
-  border: 1px white solid;
-    cursor: pointer;
-
-`
+  border: 1px #a3a3a3 solid;
+  cursor: pointer;
+`;
 
 const Select = styled.button`
   margin-top: 7px;
@@ -138,8 +132,11 @@ const Select = styled.button`
   position: relative;
   background: none;
   font-family: 'PopLight';
-  font-size: 16px;
-  color: white;
+  font-size: 15px;
+  color: #a3a3a3;
+  &:hover {
+    color: white;
+  }
   div {
     label {
       ${Label}
@@ -158,19 +155,6 @@ const SelectListBox = styled.div`
   z-index: 1;
 `;
 
-const SelectList = styled.div`
-  position: absolute;
-  cursor: pointer;
-  ul {
-    width: 240px;
-    min-height: 100px;
-    background: white;
-    border: 3px solid black;
-    padding: 20px;
-    transform: ${({ select }) => (select ? 'rotate(0deg)' : 'rotate(180deg)')};
-  }
-`;
-
 const Topic = styled.li`
   ${({ theme }) => theme.flexSet('column', 'flex-start', 'flex-start')}
   font-family: 'NotoBold';
@@ -185,17 +169,23 @@ const Free = styled(Topic)``;
 const Desc = styled.span`
   padding-top: 10px;
   font-family: 'NotoLight';
-  font-size: 13px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
 `;
 
 const Title = styled.div`
+  font-family: 'NotoBold';
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 180%;
   ${({ theme }) => theme.flexSet('row', 'flex-start', 'flex-start')}
 `;
 
 const TopicBubble = styled.div`
   width: 20px;
   height: 20px;
-  margin-top: 2px;
+  margin-top: 7px;
   margin-right: 5px;
   background: url(${bubble1});
   ${({ theme }) => theme.backgroundSet('contain')}
