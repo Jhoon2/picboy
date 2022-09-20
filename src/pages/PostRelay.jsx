@@ -6,22 +6,22 @@ import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 import { useParams } from 'react-router-dom';
 
 // import component
-import Footer from '../global/Footer';
+// import Footer from '../components/Footer'
 
 // image import
-import modeIc from '../images/pen.png';
-import paint from '../images/paint.png';
-import pen from '../images/pen.png';
-import eraser from '../images/eraser.png';
-import brush from '../images/brush.png';
-import rectangle from '../images/rectangle.png';
-import line from '../images/line.png';
-import triangle from '../images/triangle.png';
-import circle from '../images/circle.png';
-import undo from '../images/undo.png';
-import redo from '../images/redo.png';
-import stroke from '../images/stroke.png';
-import waterdrop from '../images/waterdrop.png';
+import modeIc from '../images/pen.png'
+import paint from "../images/paint.png";
+import pen from "../images/pen.png";
+import eraser from "../images/eraser.png";
+import brush from "../images/brush.png";
+import rectangle from "../images/rectangle.png";
+import line from "../images/line.png";
+import triangle from "../images/triangle.png";
+import circle from "../images/circle.png";
+import undo from "../images/undo.png";
+import redo from "../images/redo.png";
+import stroke from "../images/stroke.png";
+import waterdrop from "../images/waterdrop.png";
 
 
 const PostRelay = () => {
@@ -329,130 +329,74 @@ const PostRelay = () => {
                         onMouseDown={startPainting}
                         onMouseUp={cancelPainting}
                         onMouseLeave={cancelPainting}
+                    />
+                    <LastImgStyle src={countFrame.imgUrl} style={toggleBoolean ? { display: 'none' } : {}} />
+                </CanvasWrap>
+                {/*  */}
 
-                    />
-                  </Td>
-                </tr>
-                <tr>
-                  <Td>
-                    <ColorOption
-                      color={'#CCCCCC'}
-                      onClick={colorChange}
-                      id="#CCCCCC"
-                    />
-                  </Td>
-                  <Td>
-                    <ColorOption
-                      color={'#3139FF'}
-                      onClick={colorChange}
-                      id="#3139FF"
-                    />
-                  </Td>
-                </tr>
-                <tr>
-                  <Td>
-                    <ColorOption
-                      color={'#FFFFFF'}
-                      onClick={colorChange}
-                      id="#FFFFFF"
-                    />
-                  </Td>
-                  <Td>
-                    <ColorOption
-                      color={'#BD00FF'}
-                      onClick={colorChange}
-                      id="#BD00FF"
-                    />
-                  </Td>
-                </tr>
-              </tbody>
-            </Table>
-          </PaintOptionWrap>
-          <canvas
-            ref={canvasRef}
-            style={canvasStyle}
-            onMouseMove={draw}
-            onMouseDown={startPainting}
-            onMouseUp={cancelPainting}
-            onMouseLeave={cancelPainting}
-          />
-          <LastImgStyle
-            src={countFrame.imgUrl}
-            style={toggleBoolean ? { display: 'none' } : {}}
-          />
-        </CanvasWrap>
-        {/*  */}
-
-        <ContetnsWrap>
-          {/* <Canvas setCanvasDone={setCanvasDone} /> */}
-          <ModeWrap>
-            <ModeTitleWrap>
-              <img src={modeIc} alt="" />
-              <ModeTitle>진행중인 캔버스</ModeTitle>
-            </ModeTitleWrap>
-            <ModeFrameWrap style={{ marginBottom: '32px' }}>
-              <ModeFrameTitle>제시어</ModeFrameTitle>
-              {countFrame.topic === null ? (
-                <ModeFrameArticle>
-                  제시어가 없습니다. 자유롭게 그려보세요!
-                </ModeFrameArticle>
-              ) : (
-                <ModeFrameArticle>{countFrame.topic}</ModeFrameArticle>
-              )}
-            </ModeFrameWrap>
-            <ModeFrameWrap>
-              <ModeFrameTitle>프레임</ModeFrameTitle>
-              <ModeFrameArticle>
-                {countFrame.frameTotal}번째 중 {countFrame.frameNum}번째
-              </ModeFrameArticle>
-            </ModeFrameWrap>
-            <ToggleWrap>
-              <ToggleInput type="checkbox" onClick={toggleHandler} />
-              <ToggleCheck style={toggleBoolean ? { left: '68%' } : {}} />
-            </ToggleWrap>
-            <span
-              style={{ position: 'absolute', bottom: '110px', left: '110px' }}
-            >
-              이전 프레임 안 보고 그릴래요
-            </span>
-            <PostBtn onClick={submitImg}>추가하기</PostBtn>
-          </ModeWrap>
-        </ContetnsWrap>
-      </PostContentsWrap>
-      <Footer />
-    </div>
-  );
+                <ContetnsWrap>
+                    {/* <Canvas setCanvasDone={setCanvasDone} /> */}
+                    <ModeWrap>
+                        <ModeTitleWrap>
+                            <img src={modeIc} alt="" />
+                            <ModeTitle>진행중인 캔버스</ModeTitle>
+                        </ModeTitleWrap>
+                        <ModeFrameWrap style={{ marginBottom: '32px' }}>
+                            <ModeFrameTitle>제시어</ModeFrameTitle>
+                            {
+                                countFrame.topic === null
+                                    ? <ModeFrameArticle>제시어가 없습니다. 자유롭게 그려보세요!</ModeFrameArticle>
+                                    :
+                                    <ModeFrameArticle>{countFrame.topic}</ModeFrameArticle>
+                            }
+                        </ModeFrameWrap>
+                        <ModeFrameWrap>
+                            <ModeFrameTitle>프레임</ModeFrameTitle>
+                            <ModeFrameArticle>{countFrame.frameTotal}번째 중 {countFrame.frameNum}번째</ModeFrameArticle>
+                        </ModeFrameWrap>
+                        <ToggleWrap>
+                            <ToggleInput type="checkbox" onClick={toggleHandler} />
+                            <ToggleCheck style={toggleBoolean ? { left: '68%' } : {}} />
+                        </ToggleWrap>
+                        <span style={{ position: 'absolute', bottom: '110px', left: '110px' }}>이전 프레임 안 보고 그릴래요</span>
+                        <PostBtn onClick={submitImg}>추가하기</PostBtn>
+                    </ModeWrap>
+                </ContetnsWrap>
+            </PostContentsWrap>
+            {/* <Footer /> */}
+        </div>
+    );
 };
 
 const ToggleWrap = styled.label`
-  width: 65px;
-  height: 26px;
-  display: flex;
-  position: relative;
-  position: absolute;
-  bottom: 110px;
-  display: inline-block;
-  background-color: #d9d9d9;
-  border-radius: 14px;
-  cursor: pointer;
+    width: 65px;
+    height: 26px;
+    display: flex;
+    position: relative;
+    position: absolute;
+    bottom: 110px;
+    display: inline-block;
+    background-color: #D9D9D9;
+    border-radius: 14px;
+    cursor: pointer;
 `;
 
 const ToggleInput = styled.input`
-  opacity: 0;
+    opacity: 0;
 `;
 
 const ToggleCheck = styled.span`
-  width: 16px;
-  height: 16px;
-  position: absolute;
-  top: 20.2%;
-  left: 11%;
-  border-radius: 50%;
-  background-color: #fff;
-  transition: all 0.3s;
-  &:after {
-    background-color: red;
-  }
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 20.2%;
+    left: 11%;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: all 0.3s;
+    &:after{
+        background-color: red;
+    }
 `;
 
 const PostTitle = styled.div`
@@ -464,10 +408,10 @@ const PostTitle = styled.div`
 `;
 
 const LastImgStyle = styled.img`
-  position: absolute;
-  margin-left: 100px;
-  opacity: 0.1;
-  pointer-events: none;
+    position: absolute;
+    margin-left: 100px;
+    opacity: 0.1;
+    pointer-events: none; 
 `;
 
 const PostContentsWrap = styled.div`
@@ -505,7 +449,8 @@ const ModeTitle = styled.div`
   margin: 4px 0 0 4px;
 `;
 
-const ModeFrameWrap = styled.div``;
+const ModeFrameWrap = styled.div`
+`;
 
 const ModeFrameTitle = styled.div`
   font-size: 16px;
@@ -514,8 +459,8 @@ const ModeFrameTitle = styled.div`
 `;
 
 const ModeFrameArticle = styled.div`
-  font-size: 16px;
-  font-weight: 400;
+    font-size: 16px;
+    font-weight: 400;
 `;
 
 const PostBtn = styled.div`
@@ -530,14 +475,15 @@ const PostBtn = styled.div`
   cursor: pointer;
 `;
 
-//
+
+// 
 
 const canvasStyle = {
-  width: '688px',
-  height: '688px',
-  border: '2px solid #000',
-  backgroundColor: '#fff',
-};
+    width: '688px',
+    height: '688px',
+    border: '2px solid #000',
+    backgroundColor: '#fff'
+}
 
 const CanvasWrap = styled.div`
   display: flex;
@@ -605,8 +551,9 @@ const ColorOption = styled.div`
   width: 36px;
   height: 36px;
   border: 2px solid #fff;
-  background-color: ${(props) => props.color};
+  background-color: ${props => props.color};
 `;
+
 
 const ToolBox = styled.div`
   height: 200px;
@@ -624,6 +571,5 @@ const RangeWrap = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
 
 export default PostRelay;

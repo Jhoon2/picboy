@@ -28,18 +28,24 @@ const throttle = function (callback, waitTime) {
 };
 
 const Header = () => {
-  const useGet = UseGetUser();
-  const loginUser = useGet && useGet.data.data.profileImg;
-
-  useEffect(() => {}, [loginUser]);
-
-  const navigate = useNavigate();
   const location = useLocation();
+  const useGet = UseGetUser();
+  const loginUser = useGet && useGet.data.data.profileImg
+
+    //usegetuser 훅을 쓸지 RTK로 할지 고민중
+    // const dispatch = useDispatch();
+    // const  getLogonUser  = useSelector((state) => state && state.logonUser)
+    // const loginUser = getLogonUser.logonUser&&getLogonUser.logonUser.profileImg
+
+  useEffect(() => {
+  }, [loginUser])
+  
+  const navigate = useNavigate();
+  const documentRef = useRef(document);
   const myContext = useMyContext();
 
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
-  const documentRef = useRef(document);
 
   const handleScroll = () => {
     const { pageYOffset } = window;
@@ -63,6 +69,8 @@ const Header = () => {
 
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
+
+ 
 
   // const throttleScroll = throttle(handleScroll, 50);
 
@@ -93,12 +101,10 @@ const Header = () => {
           </CompleteButton>
           <PostCategories />
           {myToken ? (
-            <div>
-              <LoginUserImg
-                src={!loginUser ? basicImg : loginUser}
-                onClick={clickOpenModal}
-              ></LoginUserImg>
-            </div>
+            // <ProfileImgBackground>
+              <LoginUserImg src={!loginUser? basicImg : loginUser}  onClick={clickOpenModal}></LoginUserImg>
+              
+            // </ProfileImgBackground>
           ) : (
             <LoginButton
               onClick={() => {
@@ -109,14 +115,10 @@ const Header = () => {
             </LoginButton>
           )}
         </HeaderBox>
-        {myContext.logonOpenProfileImg ? (
-          <ClickProfileModal
-            shown={myContext.logonOpenProfileImg}
-            close={() => {
-              myContext.setLogonProfileImg(false);
-            }}
-          />
-        ) : null}
+        {myContext.logonOpenProfileImg ? 
+          <ClickProfileModal shown={myContext.logonOpenProfileImg}
+                  close={() => { myContext.setLogonProfileImg(false) }}/>
+       : null}
       </HeaderContainer>
     </HeaderArea>
   );
@@ -201,8 +203,19 @@ const LoginButton = styled(Button)`
 `;
 
 const LoginUserImg = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 58px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  background-color: white;
+
   cursor: pointer;
-`;
+  
+`
+
+const ProfileImgBackground = styled.div`
+   /* width: 58px;
+  height: 50px;
+  border-radius: 58px;
+   background-color: white; */
+
+`

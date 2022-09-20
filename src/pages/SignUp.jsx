@@ -9,6 +9,7 @@ import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components';
 import SignupErrorModal from '../components/Signup/SignupErrorModal';
 import UseTimer from '../elem/UseTimer';
+import SignUpDone from '../components/Signup/SignUpDone';
 
 const SignUp = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -16,6 +17,7 @@ const SignUp = () => {
 
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
+  const [focusedInput, setFocusedInput] = useState('')
 
   //유효성검사
   const schema = yup.object().shape({
@@ -42,10 +44,10 @@ const SignUp = () => {
       .oneOf([yup.ref('pw'), null], '비밀번호가 일치하지 않습니다')
       .required('비밀번호를 한번 더 입력해주세요'),
 
-    // phone_number: yup.string()
-    // .required(),
+    // phone_number: yup.number()
+    // .required('핸드폰 인증을 해주세요.'),
 
-    phone_valid_number: yup.string().required(),
+    phone_valid_number: yup.string().required('핸드폰 인증을 해주세요'),
 
     nickname: yup
       .string()
@@ -84,16 +86,26 @@ const SignUp = () => {
       console.log(error);
     }
   };
+
+
+  ////////////////////////
   //ID input창 빈값
-  const IDinputVacant = () => {
+  const [any, setAny] = useState(0)
+  const IDinputVacant = (e) => {
+    // console.log(e)
+
+    setFocusedInput(e.target.name)
     setExistedId(false);
-    setAvailableId(false);
+    // setAvailableId(false);
+    setPhoneValid(false)
+    setCodeError(false)
+    // setCodeTrue(false)
   };
 
   // NickName 중복확인
   const [existedNick, setExistedNick] = useState(false);
   const [availableNick, setAvailableNick] = useState(false);
-
+  
   const checkSameNick = async () => {
     const nickname = watch().nickname;
     if (nickname.length < 2 || nickname.length > 10) return;
@@ -126,6 +138,7 @@ const SignUp = () => {
   };
 
   useEffect(() => {
+    myContext.signUpBtnClickOff();
     if (inputValue.length === 10) {
       setInputValue(inputValue.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'));
     }
@@ -140,37 +153,95 @@ const SignUp = () => {
 
   //핸드폰 코드 전송 버튼
   const [phoneValid, setPhoneValid] = useState(false);
+  const [noSendPhone, setNoSendPhone] = useState(false);
+  //핸드폰 인증버튼
+  const [codeTrue, setCodeTrue] = useState(false)
+  const [codeError, setCodeError] = useState(false)
+
   //핸드폰 유효시간
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(5);
-  const phoneCheck = () => {
-    // console.log('전송시작');
+  const [minutes, setMinutes] = useState(2);
+  const [seconds, setSeconds] = useState(59);
+
+  const phoneCheck = async () => {
+    if(inputValue.length <= 9) return
+    setCodeTrue(false)
+
+    setNoSendPhone(true)
+    const info = {
+      phoneNum: inputValue
+    }
+    try {
+      const response = await axios.post(`${baseURL}/user/phonenumber-send`,info);
+    } catch (error) {
+      console.log(error);
+    }
     setPhoneValid(false);
     myContext.setTimerMessage(true);
+
     setTimeout(() => {
       myContext.setTimerMessage(false);
-      setPhoneValid(true);
-      setMinutes(0);
-      setSeconds(5);
-    }, 6000);
+      if (!codeTrue) { setPhoneValid(true) }
+      setNoSendPhone(false)
+    }, 180000);
+    
   };
 
+
+
+  const validatePhone = async () => {
+    //핸드폰 인증번호 감지
+    const phone_valid_number = watch().phone_valid_number;
+    // console.log(phone_valid_number)
+
+    const info = {
+      phoneNum: inputValue,
+      numStr: phone_valid_number
+    }
+    console.log(info)
+    try {
+      const response = await axios.post(`${baseURL}/user/code-send`, info);
+      console.log(response)
+      if (response.data.success) {
+        setPhoneValid(false);
+        setCodeTrue(true)
+        myContext.setTimerMessage(false);
+        // setMinutes(0);
+        // setSeconds(0);
+        setNoSendPhone(false)
+
+      } else {
+        setCodeError(true)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   //회원가입 버튼
+  const [openSignupDone, setOpenSignupDone] = useState(false)
+  const [myNickname, setMyNickname] = useState()
+
   const onClickSignUp = async (data) => {
+    if (!codeTrue) return myContext.btnClickOn();
     if (!availableId) return myContext.btnClickOn();
     if (!availableNick) return myContext.btnClickOn();
-
+    setMyNickname(data.nickname)
     const info = {
       username: data.id,
       nickname: data.nickname,
       password: data.pw,
-      phoneNumber: data.phone_number,
+      phoneNumber: inputValue,
     };
+    console.log(info)
     try {
       const response = await axios.post(`${baseURL}/user/signup`, info);
       if (response.status === 200) {
-        reset();
-        navigate('/login');
+        // reset();
+        ////
+        //회원가입 완료 창 만들기
+        myContext.signUpBtnClickOn();
+        // setOpenSignupDone(true)
+        // navigate('/login');
       }
     } catch (error) {
       console.log(error);
@@ -179,9 +250,12 @@ const SignUp = () => {
 
   return (
     <LoginContainer>
+      {myContext.signUpBtn ? <ErrorBox>
+        <SignUpDone nickname={myNickname} />
+      </ErrorBox> : null}
       {myContext.btnOpen ? (
         <ErrorBox onClick={() => myContext.btnClickOff()}>
-          <SignupErrorModal />
+          <SignupErrorModal codeTrue={codeTrue} />
         </ErrorBox>
       ) : null}
       <FormContainer>
@@ -190,10 +264,9 @@ const SignUp = () => {
             <Title>JOIN</Title>
             <InputBoxInner>
               <InputFlex>
-                <TextAndInput>
+                <TextAndInput onFocus={IDinputVacant} focusedInput ={focusedInput}>
                   <SignupText>아이디</SignupText>
                   <InputWithButton
-                    onFocus={IDinputVacant}
                     id="userId"
                     name="id"
                     placeholder="ID를 입력해주세요"
@@ -216,7 +289,7 @@ const SignUp = () => {
               </NoErrorsmessage>
 
               <InputFlex>
-                <NoButtonInput>
+                <NoButtonInput onFocus={IDinputVacant} focusedInput ={focusedInput}>
                   <SignupText>비밀번호</SignupText>
                   <OnlyInput
                     id="password"
@@ -233,7 +306,7 @@ const SignUp = () => {
               <Errorsmessage>{errors.pw?.message}</Errorsmessage>
 
               <InputFlex>
-                <NoButtonInput>
+                <NoButtonInput onFocus={IDinputVacant} focusedInput ={focusedInput}>
                   <SignupText>비밀번호 확인</SignupText>
                   <OnlyInput
                     id="checkPsasword"
@@ -259,9 +332,10 @@ const SignUp = () => {
                     type="text"
                     value={inputValue}
                     onChange={numberAddHyphen}
+                    onFocus={IDinputVacant}
                   />
                 </TextAndInput>
-                <CheckButton type="button" onClick={phoneCheck}>
+                <CheckButton type="button" disabled={noSendPhone? true:false} onClick={phoneCheck}>
                   코드전송
                 </CheckButton>
               </InputFlex>
@@ -274,7 +348,11 @@ const SignUp = () => {
                       id="phone_valid_number"
                       name="phone_valid_number"
                       placeholder="인증번호를 입력해주세요"
-                      {...register('phone_valid_number')}
+                      // onChange={checkValidatePhone}
+                      onFocus={IDinputVacant}
+                      {...register('phone_valid_number', {
+                        required: true,
+                      })}
                     />
                   </div>
                   <div style={{ color: 'red' }}>
@@ -288,14 +366,21 @@ const SignUp = () => {
                     ) : null}
                   </div>
                 </PhoneTextAndInput>
-                <CheckButton>인증확인</CheckButton>
+                <CheckButton type='button'
+                  disabled={!noSendPhone ? true : false}
+                  onClick={validatePhone}>인증확인</CheckButton>
               </InputFlex>
+              <Errorsmessage>{errors.phone_valid_number?.message}</Errorsmessage>
+
               <div
                 style={{ color: 'red', marginLeft: '130px', fontSize: '13px' }}
               >
                 {phoneValid ? '유효시간이 만료되었습니다' : false}
+                {codeError? '인증번호를 다시 입력해주세요' : false}
               </div>
-
+              <div style={{ color: 'green', marginLeft: '130px', fontSize: '13px' }}>
+                {codeTrue? '인증되었습니다' :null}
+              </div>
               <InputFlex>
                 <TextAndInput>
                   <SignupText>닉네임</SignupText>
@@ -385,13 +470,23 @@ const TextAndInput = styled.div`
   width: 450px;
   padding: 0.8rem;
   display: flex;
-  border-bottom: 2px solid lightgray;
-`;
+  border-bottom: 1px solid lightgray;
+
+  &:focus-within {
+    border-bottom: 2px solid black
+  }
+`
+  
+
 const NoButtonInput = styled.div`
   width: 575px;
   padding: 0.8rem;
   display: flex;
-  border-bottom: 2px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  
+  &:focus-within {
+    border-bottom: 2px solid black
+  }
 `;
 const PhoneTextAndInput = styled.div`
   width: 450px;
