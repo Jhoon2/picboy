@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 // import Header from '../components/Header';
-import Footer from '../global/Footer';
+// import Footer from '../components/Footer';
 import TopScroll from '../global/TopScroll';
 import MainDesc from '../components/MainDesc';
 import down from '../images/main/down.png';
@@ -49,7 +49,7 @@ const Main = () => {
         />
       </VideoContainer>
       <MainDesc moveRef={moveRef} move2Ref={move2Ref} />
-      <Footer />
+      {/* <Footer /> */}
     </MainContainer>
   );
 };

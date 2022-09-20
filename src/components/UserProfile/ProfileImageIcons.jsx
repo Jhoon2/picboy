@@ -1,40 +1,55 @@
-import React from 'react';
-import { useRef } from 'react';
-import { useMyContext } from '../../shared/ContextApi';
-import styled from 'styled-components';
-import reactlogo from '../../images/logo512.png';
-import basicImg from '../../images/basicImg.jpg';
-import user from '../../images/user.png';
-import topbutton from '../../images/topbutton.svg';
-import line from '../../images/line.png';
-import rectangle from '../../images/rectangle.png';
+import React from 'react'
+import { useRef } from 'react'
+import { useState } from 'react'
+import { useMyContext } from '../../shared/ContextApi'
+import {__selectIconImg} from '../../redux/modules/UserPage'
+import styled from 'styled-components'
+import robot1 from '../../images/mypage/robot1.png'
+import robot2 from '../../images/mypage/robot2.png'
+import robot3 from '../../images/mypage/robot3.png'
+import robot4 from '../../images/mypage/robot4.png'
+import robot5 from '../../images/mypage/robot5.png'
+import robot6 from '../../images/mypage/robot6.png'
+import robotClick1 from '../../images/mypage/robotClick1.png'
+import robotClick2 from '../../images/mypage/robotClick2.png'
+import robotClick3 from '../../images/mypage/robotClick3.png'
+import robotClick4 from '../../images/mypage/robotClick4.png'
+import robotClick5 from '../../images/mypage/robotClick5.png'
+import robotClick6 from '../../images/mypage/robotClick6.png'
+import { useDispatch } from 'react-redux'
+
 
 const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
   const myContext = useMyContext();
   const imgRef = useRef();
+  const dispatch = useDispatch();
+  const [path, setPath] = useState(0)
 
-  const clickIcon = (e) => {
-    e.stopPropagation();
-    // console.log(e.target)
-    // const reader = new FileReader();
-    // const file = e.target.src;
-    // reader.readAsDataURL(file);
+  const clickIcon1 = () => {
+    setPath(1)
+    dispatch(__selectIconImg({ img: robot1 }))
+  }
+  const clickIcon2 = () => {
+    setPath(2)
+    dispatch(__selectIconImg({ img: robot2 }))
+  }
+  const clickIcon3 = () => {
+    setPath(3)
+    dispatch(__selectIconImg({ img: robot3 }))
+  }
+  const clickIcon4 = () => {
+    setPath(4)
+    dispatch(__selectIconImg({ img: robot4 }))
+  }
+  const clickIcon5 = () => {
+    setPath(5)
+    dispatch(__selectIconImg({ img: robot5 }))
+  }
+  const clickIcon6 = () => {
+    setPath(6)
+    dispatch(__selectIconImg({ img: robot6 }))
+  }
 
-    // console.log(file)
-    // const aa = reader.readAsDataURL(file)
-    // console.log(aa)
-    // reader.onloadend = () => {
-    //   const base64data = reader.result;
-    //   // setImgUrl(base64data);
-    //   // sendApi(base64data);
-    //   myContext.setImgAddress(base64data)
-    // }
-    // reader.readAsDataURL(file);
-    // console.log(myContext.imgAddress)
-    setSelectIcon(false);
-    close();
-    myContext.setIsOpenProfileImg(false);
-  };
   const closeBox = () => {
     close();
     setSelectIcon(false);
@@ -50,58 +65,28 @@ const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
           <TitleIconModal>아이콘을 선택하세요.</TitleIconModal>
           <IconsContainer>
             <IconCard>
-              <IconImage
-                id="fisrt"
-                ref={imgRef}
-                src={basicImg}
-                onClick={clickIcon}
-              ></IconImage>
-              <IconName>이름</IconName>
+              <IconImage id='fisrt'  ref={imgRef} src={path ===1 ? robotClick1: robot1} onClick={clickIcon1}></IconImage>
+              {/* <IconName>이름</IconName> */}
             </IconCard>
             <IconCard>
-              <IconImage
-                id="second"
-                ref={imgRef}
-                src={reactlogo}
-                onClick={clickIcon}
-              ></IconImage>
-              <IconName>이름</IconName>
+              <IconImage id='second' ref={imgRef} src={path ===2 ? robotClick2: robot2} onClick={clickIcon2}></IconImage>
+              {/* <IconName>이름</IconName> */}
             </IconCard>
             <IconCard>
-              <IconImage
-                id="third"
-                ref={imgRef}
-                src={user}
-                onClick={clickIcon}
-              ></IconImage>
-              <IconName>이름</IconName>
+              <IconImage id='third'ref={imgRef} src={path ===3 ? robotClick3: robot3} onClick={clickIcon3}></IconImage>
+              {/* <IconName>이름</IconName> */}
             </IconCard>
             <IconCard>
-              <IconImage
-                id="fourth"
-                ref={imgRef}
-                src={topbutton}
-                onClick={clickIcon}
-              ></IconImage>
-              <IconName>이름</IconName>
+              <IconImage id='fourth' ref={imgRef} src={path ===4 ? robotClick4: robot4} onClick={clickIcon4}></IconImage>
+              {/* <IconName>이름</IconName> */}
             </IconCard>
             <IconCard>
-              <IconImage
-                id="fifth"
-                ref={imgRef}
-                src={line}
-                onClick={clickIcon}
-              ></IconImage>
-              <IconName>이름</IconName>
+              <IconImage id='fifth' ref={imgRef} src={path ===5 ? robotClick5: robot5} onClick={clickIcon5}></IconImage>
+              {/* <IconName>이름</IconName> */}
             </IconCard>
             <IconCard>
-              <IconImage
-                id="sixth"
-                ref={imgRef}
-                src={rectangle}
-                onClick={clickIcon}
-              ></IconImage>
-              <IconName>이름</IconName>
+              <IconImage id='sixth' ref={imgRef} src={path ===6 ? robotClick6: robot6} onClick={clickIcon6}></IconImage>
+              {/* <IconName>이름</IconName> */}
             </IconCard>
           </IconsContainer>
         </ModalContainer>
@@ -162,6 +147,7 @@ const IconCard = styled.div`
 const IconImage = styled.img`
   width: 100px;
   height: 100px;
+  cursor: pointer;
   border-radius: 100px;
   background: #d9d9d9;
 `;
