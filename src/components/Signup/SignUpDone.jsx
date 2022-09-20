@@ -1,10 +1,19 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import { useMyContext } from '../../shared/ContextApi'
 
 const SignUpDone = () => {
   const myContext = useMyContext();
-
+  const navigate = useNavigate();
+  const loginButton = () => {
+    // myContext.btnClickOff()
+    navigate('/login')
+  }
+  const goHome = () => {
+    // myContext.btnClickOff()
+    navigate('/')
+  }
 return (
   <SignupDontContainer onClick={(e) => { e.stopPropagation(); }}>
     <div style={{textAlign:'center'}}>
@@ -14,8 +23,8 @@ return (
         반가워요. 닉네임님!<br />
         예측할 수 없는 즐거움을 만나보세요!
       </SignupContent>
-      <SignupButton onClick={() => myContext.btnClickOff()}><div style={{ marginTop: '13px' }}>로그인</div></SignupButton>
-      <SignupButton onClick={()=>myContext.btnClickOff()}><div style={{marginTop:'13px'}}>홈으로</div></SignupButton>
+      <SignupButton onClick={loginButton}><div style={{ marginTop: '13px' }}>로그인</div></SignupButton>
+      <SignupButton onClick={goHome}><div style={{marginTop:'13px'}}>홈으로</div></SignupButton>
     </div>
   </SignupDontContainer>
 )

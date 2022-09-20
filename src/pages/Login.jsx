@@ -19,14 +19,6 @@ const Login = () => {
 
   const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm();
   
-  // //카카오 로그인버튼
-  // const loginWithKakao = () => {
-  //   // console.log('hello');
-  //   Kakao.Auth.authorize({
-  //     redirectUri: 'http://localhost:3000/user/kakao',
-  //   });
-  // };
-  
   
   //일반 로그인버튼
   const onClickLogin = async (data) => {
@@ -47,13 +39,6 @@ const Login = () => {
       }
 
   }
-
-  // //카카오 로그인버튼
-  // const handleKakao = () => {
-  //   console.log('1')
-  //   window.location.href = KAKAO_AUTH_URL
-  //   console.log('2')
-  // }
 
 
   return (
@@ -99,9 +84,7 @@ const Login = () => {
             <LoginButton type='submit' disabled={isSubmitting}>로그인</LoginButton>
           </form>
 
-          {/* <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton> */}
             <a href={KAKAO_AUTH_URL}>
-            {/* <div onClick={loginWithKakao}> */}
               <KakaoButton src={kakaoImg} />
             </a>
           <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
