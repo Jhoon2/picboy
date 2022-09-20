@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Fade from 'react-reveal/Fade';
-import bubble1 from '../images/bubble1.png';
+import NewBef from '../images/listCategory/ListNewBef.svg';
+import NewAft from '../images/listCategory/ListNewAft.svg';
+import LikeBef from '../images/listCategory/ListHeartBef.svg';
+import CommBef from '../images/listCategory/ListCommBef.svg';
 
 const ListCategories = (props) => {
   const [select, setSelect] = useState(false);
@@ -11,7 +13,7 @@ const ListCategories = (props) => {
       <SelectBox>
         <Select>
           <div onClick={() => setSelect(!select)}>
-            {select ? 'Close' : 'CATEGORY'}
+            {select ? '닫기' : '카테고리'}
             <SelectImg
               select={select}
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAYUlEQVR4Ae2UQQ5AEQxE5yhz/0s5yv8WXSAStLOiL2kiTF83AJLkKlirWBFiaOLPSjqEjbwMayIIJ8LZnky+cxaWn2Tcck/W13DSsx309C4D0SGqu83B1Q2QPBz0X0ryAj9fvT8BBg0rqgAAAABJRU5ErkJggg=="
@@ -30,7 +32,7 @@ const ListCategories = (props) => {
                     props.setTap(0);
                   }}
                 >
-                  <TopicBubble />
+                  <Newimg img={NewBef} />
                   최신순
                 </Title>
               </New>
@@ -41,7 +43,7 @@ const ListCategories = (props) => {
                     props.setTap(1);
                   }}
                 >
-                  <TopicBubble />
+                  <Likeimg img={LikeBef} />
                   좋아요
                 </Title>
               </Like>
@@ -52,7 +54,7 @@ const ListCategories = (props) => {
                     props.setTap(2);
                   }}
                 >
-                  <TopicBubble />
+                  <Commimg img={CommBef} />
                   댓글 많은 순
                 </Title>
               </Comm>
@@ -66,7 +68,12 @@ const ListCategories = (props) => {
 
 export default ListCategories;
 
-const SelectContainer = styled.div``;
+const SelectContainer = styled.div`
+  max-width: 1200px;
+  height: 30px;
+  position: relative;
+  ${({ theme }) => theme.flexSet('row', 'flex-end', 'flex-start')};
+`;
 
 const HR = styled.hr`
   width: 110px;
@@ -76,17 +83,17 @@ const HR = styled.hr`
 `;
 
 const SelectBox = styled.div`
-  position: relative;
-  left: 30px;
+  position: absolute;
 `;
 
 const Select = styled.button`
-  margin-left: auto;
-  position: relative;
+  margin-left: -130px;
+  position: absolute;
   background: none;
   font-family: 'NotoBold';
-  line-height: 30px;
-  font-size: 13px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 180%;
   div {
     ::after {
       background: none repeat scroll 0 0 transparent;
@@ -121,8 +128,8 @@ const SelectImg = styled.img`
 const SelectListBox = styled.div`
   width: 120px;
   position: relative;
-  top: 20px;
-  left: 30px;
+  top: 40px;
+  right: 60px;
   z-index: 1;
 `;
 
@@ -130,8 +137,8 @@ const SelectList = styled.div`
   position: absolute;
   cursor: pointer;
   ul {
-    width: 160px;
-    min-height: 100px;
+    width: 145px;
+    min-height: 154px;
     background: white;
     border: 3px solid black;
     padding: 20px;
@@ -141,7 +148,9 @@ const SelectList = styled.div`
 const New = styled.li`
   ${({ theme }) => theme.flexSet('column', 'flex-start', 'flex-start')}
   font-family: 'NotoBold';
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 180%;
   color: #a3a3a3;
   &:hover {
     color: black;
@@ -154,11 +163,26 @@ const Title = styled.div`
   ${({ theme }) => theme.flexSet('row', 'flex-start', 'flex-start')}
 `;
 
-const TopicBubble = styled.div`
+const Newimg = styled.div`
   width: 20px;
   height: 20px;
-  margin-top: 2px;
-  margin-right: 5px;
-  background: url(${bubble1});
+  margin-top: 5px;
+  margin-right: 7px;
+  background: url(${(props) => props.img});
   ${({ theme }) => theme.backgroundSet('contain')}
+  &:hover {
+    background: url(${NewAft});
+  }
+`;
+
+const Likeimg = styled(Newimg)`
+  &:hover {
+    background: url(${NewAft});
+  }
+`;
+
+const Commimg = styled(Newimg)`
+  &:hover {
+    background: url(${NewAft});
+  }
 `;

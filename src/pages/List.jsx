@@ -5,7 +5,7 @@ import ProgressAll from '../components/ProgressAll';
 import ProgressFree from '../components/ProgressFree';
 import ProgressTopic from '../components/ProgressTopic';
 import ProgressBanner from '../elem/ProgressBanner';
-import TopScroll from '../elem/TopScroll';
+import TopScroll from '../global/TopScroll';
 
 const List = () => {
   const [proTap, setProTap] = useState(0);

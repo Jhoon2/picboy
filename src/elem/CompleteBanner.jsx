@@ -1,10 +1,37 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
+const throttle = function (callback, waitTime) {
+  let timerId = null;
+  return (e) => {
+    if (timerId) return;
+    timerId = setTimeout(() => {
+      callback.call(this, e);
+      timerId = null;
+    }, waitTime);
+  };
+};
+
 const CompleteBanner = (props) => {
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
   const documentRef = useRef(document);
+
+  const handleScroll = () => {
+    const { pageYOffset } = window;
+    const deltaY = pageYOffset - pageY;
+    const hide = pageYOffset !== 0 && deltaY >= 0;
+    setHide(hide);
+    setPageY(pageYOffset);
+  };
+
+  const throttleScroll = throttle(handleScroll, 50);
+
+  useEffect(() => {
+    documentRef.current.addEventListener('scroll', throttleScroll);
+    return () =>
+      documentRef.current.removeEventListener('scroll', throttleScroll);
+  }, [pageY]);
 
   return (
     <ImgBox className={hide && 'hide'}>
@@ -15,21 +42,21 @@ const CompleteBanner = (props) => {
             props.setProTap(0);
           }}
         >
-          <Underline>ALL</Underline>
+          <Underline>전체</Underline>
         </SelectButton>
         <SelectButton
           onClick={() => {
             props.setProTap(1);
           }}
         >
-          <Underline>TOPIC</Underline>
+          <Underline>제시어</Underline>
         </SelectButton>
         <SelectButton
           onClick={() => {
             props.setProTap(2);
           }}
         >
-          <Underline>FREE</Underline>
+          <Underline>자유</Underline>
         </SelectButton>
       </SelectBox>
     </ImgBox>
@@ -48,12 +75,12 @@ const ImgBox = styled.div`
   span {
     margin-top: 140px;
     font-family: 'SilkLight';
-    font-size: 80px;
-    line-height: 102px;
-    font-weight: 400;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 65px;
   }
 
-  /* position: sticky; */
+  position: sticky;
   top: 0;
   left: 0;
   z-index: 1;
@@ -74,18 +101,22 @@ const SelectButton = styled.button`
   height: 50px;
   background: none;
 
-  font-family: 'NotoBold';
-  font-size: 13px;
-  line-height: 30px;
+  font-family: 'Noto Bold';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 180%;
+  color: #a3a3a3;
 `;
 
-const ListBox = styled.div``;
-
 const Underline = styled.p`
-  color: #2e3248;
+  color: #a3a3a3;
   display: inline-block;
   position: relative;
   text-decoration: none;
+  &:hover {
+    color: black;
+  }
   ::after {
     background: none repeat scroll 0 0 transparent;
     background: #2e3248;
