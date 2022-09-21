@@ -3,9 +3,9 @@ import styled from 'styled-components'
 import basicImg from '../../images/basicImg.jpg'
 
 const AllParticipants = ({ shown, close, data, myNickname }) => {
-  const acceptMeData = data && data.filter((person) => 
-    person.nickname !== myNickname
-  )
+  // const acceptMeData = data && data.filter((person) => 
+  //   person.nickname !== myNickname
+  // )
 
   //다른 사람 이동
   const moveOtherPerson = (id) => {
@@ -17,7 +17,7 @@ const AllParticipants = ({ shown, close, data, myNickname }) => {
         <OverlayPosition >
           <OverlayContainer>
             <ModalContainer onClick={e => { e.stopPropagation() }}>
-              {acceptMeData && acceptMeData.map((person, idx) => {
+              {data && data.map((person, idx) => {
                 return (
                 <DataPersonContainer key={idx} onClick={() => moveOtherPerson(person.username)}>
                   <PersonImg src={!person.img?basicImg : person.img} ></PersonImg>

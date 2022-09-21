@@ -1,30 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 import ProfileImageIcons from './ProfileImageIcons'
 import basicImg from '../../images/basicImg.jpg'
-import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
-import { useMyContext } from '../../shared/ContextApi'
 import { __putEditProfileImg } from '../../redux/modules/UserPage'
 import { useDispatch } from 'react-redux'
+import arrow from '../../images/keyboard-arrow-right-2.png'
 
-const myToken = getCookieToken();
-const refreshToken = getRefreshToken();
 
-const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
-  const baseURL = process.env.REACT_APP_API_KEY;
-  const myContext = useMyContext();
+const ProfileImageModal = ({ shown, close, }) => {
   const dispatch = useDispatch();
 
-  const [profileChange, setProfileChange] = useState(false)
   const [selectIcon, setSelectIcon] = useState(false)
   const [imgUrl, setImgUrl] = useState(false)
-  // const [changeImg, setChangeImg] = useState(imgFile)
 
+  const [path, setPath] = useState(false)
   // 내 PC에서 가져오기
   const FromMyPc = (e) => {
     setSelectIcon(false)
-    setProfileChange(e.target.id)
   }
   const imgRef = useRef();
 
@@ -40,32 +32,28 @@ const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
     close();
   }
   
-
   useEffect(() => {
     
-  },[imgUrl,dispatch])
+  }, [imgUrl, dispatch])
+  
   // 아이콘 고르기
   const clickSelect = (e) => {
-    
-    setProfileChange(e.target.id)
+    setPath(!path)
     setSelectIcon(!selectIcon)
   }
 
   //기본 이미지로 설정
   const clickBasic = (e) => {
     setSelectIcon(false)
-    setProfileChange(e.target.id)
     dispatch(__putEditProfileImg({ img: basicImg }))
-
-    // myContext.setImgAddress(basicImg)
     close();
   }
-
   const closeOuter = () => {
     close();
     setSelectIcon(false)
+    setPath(false)
   }
-
+  
   return shown ? (
     <Overlay onClick={closeOuter}>
       <OverlayPosition >
@@ -80,15 +68,28 @@ const ProfileImageModal = ({ shown, close, imgFile, setImgFile }) => {
                 onChange={onChangeImage}
                 ref={imgRef}
               />
-              <ModalText id='myPc' onClick={FromMyPc} profileChange={profileChange} >
-                내 PC에서 가져오기</ModalText>
+            <ModalText name='myPc' onClick={FromMyPc}  >
+              <ImgTextContainer >
+                <div>내 PC에서 가져오기</div>
+                <img src={arrow} />
+              </ImgTextContainer>
+            </ModalText>
         </label>
             <TextBr />
-          <ModalText id='select' onClick={clickSelect} profileChange={profileChange}>
-            아이콘 고르기</ModalText>
+          <ModalText name='select' onClick={clickSelect}
+            style={path? { color: '#000000', fontWeight:'700'} : {color:'#A3A3A3',fontWeight:'400'}}>
+            <ImgTextContainer >
+              <div >아이콘 고르기</div>
+              <img src={arrow} />
+            </ImgTextContainer>
+          </ModalText>
             <TextBr />
-          <ModalText id='noImg' onClick={clickBasic} profileChange={profileChange}>
-            기본이미지로</ModalText>
+          <ModalText name='noImg' onClick={clickBasic}  >
+            <ImgTextContainer >
+              <div>기본이미지로</div>
+              <img src={arrow} />
+            </ImgTextContainer>
+          </ModalText>
         </ModalContainer>
         
         {/* 아이콘 고르기 모달창 */}
@@ -119,8 +120,8 @@ const OverlayPosition = styled.div`
   left: -520px;
 `
 const ModalContainer = styled.div`
-  width: 200px;
-  height: 149px;
+  width: 216px;
+  height: 154px;
   position: absolute;
   z-index: 2;
   border: 2px solid #000000;
@@ -130,7 +131,7 @@ const ModalContainer = styled.div`
 const ModalText = styled.div`
   width: 200px;
   height: 23px;
-  margin-top: 10px;
+  margin-top: 11px;
   padding: 15px 24px;
   display: flex;
   flex-direction: column;
@@ -139,24 +140,30 @@ const ModalText = styled.div`
   gap: 10px;
   font-family: 'Noto Sans KR';
   font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  color: ${(props)=> (props.id === props.profileChange) ? '#000000' : '#A3A3A3'} ;
+  font-size: ${(props) => props.theme.Caption2};
+  color: ${(props) => props.theme.inactive};
+
   cursor: pointer;
 
   :first-child {
     margin-top: 15px;
   }
+
 `
+const ImgTextContainer = styled.div`
+  width: 180px;
+  display: flex;
+  justify-content: space-between;
+`
+
 const TextBr = styled.div`
-  width: 150px;
-  height: 0px;
+  width: 210px;
+  /* height: 1px; */
   margin-top: 5px;
-  margin-left: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  border: 0.5px solid #A3A3A3;
+  border: 1px solid #D9D9D9;
 `
 export default ProfileImageModal

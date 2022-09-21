@@ -5,7 +5,7 @@ import axios from "axios";
 
 //////////////////////////
 //배포할때 배포주소로 localhost 바꾸기
-export const REDIRECT_URI='http://localhost:3000/user/kakao'
+export const REDIRECT_URI='https://picboy.co.kr/user/kakao'
 
 
 export const KAKAO_AUTH_URL =

@@ -7,7 +7,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import Footer from '../global/Footer';
 import plusButton from '../images/plusButton.svg';
 import basicImg from '../images/basicImg.jpg';
 
@@ -195,7 +194,6 @@ const ProgressDetail = () => {
               </Topic>
             </TopicBox>
           </Wrap>
-          <Footer />
         </>
       ) : (
         <>
@@ -287,7 +285,6 @@ const ProgressDetail = () => {
               </Topic>
             </TopicBox>
           </Wrap>
-          <Footer />
         </>
       )}
     </>

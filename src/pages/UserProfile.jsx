@@ -15,8 +15,9 @@ import GifCard from '../components/UserProfile/GifCard'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
 import basicImg from '../images/basicImg.jpg'
-
-
+import smallpencil from '../images/smallpencil.png'
+import camera from '../images/Camera.png'
+import TopScroll from '../global/TopScroll'
 const myToken = getCookieToken();
 const refreshToken = getRefreshToken();
 
@@ -24,10 +25,8 @@ const UserProfile = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
     const params = useParams();
-
     const dispatch = useDispatch();
 
-    // console.log(UserPage)
 
     //로그인 정보
     const userinfo = UseGet();
@@ -35,33 +34,42 @@ const UserProfile = () => {
 
     const [user, setUser] = useState(null)
 
-    const [page, setPage] = useState(-1);
+    let page = 0;
     const lastIntersectingData = useRef(null);
+    const [ref, setRef] = useState(null);
 
-    const [imgFile, setImgFile] = useState(null)
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
-    const [postCount, setPostCount] = useState(false)
 
-   
+   //외부 클릭시 모달창  끄기
+    const allComponentCloseModal = () => {
+        myContext.setIsOpenProfileImg(false)
+        // myContext.setAllParticipants(false)
+    }
     
 
     
     //observe 콜백 함수
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
+        if (entry.isIntersecting) {
+            page++
+            dispatch(__getUserData({
+                username:params.id,
+                'page': page
+            }))
         //조건이 트루
         //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
-        setPage((page) => page + 1);
-        // console.log('페이지나와라', page)
+
         // 현재 타겟을 observe한다.
-        observer.observe(entry.target); // unobserve가 아님
+            observer.observe(entry.target)
+        // unobserve가 아님
+        } else {
+            console.log('여기서 취소?')
       }
     });
   };
-    // console.log('페이지나와라2',page)
     
 
     
@@ -69,15 +77,16 @@ const UserProfile = () => {
     const UserPage = userPage && userPage.data
     // console.log(UserPage && UserPage)
     
-
     const {userData}  = useSelector((state) => state.userdata)
     // console.log(userData&&userData)
 
     useEffect(() => {
         dispatch(__getUserPage({username:params.id}))
         dispatch(__getUserData({
-            tab:1,
+            tab: 0,
+            category:1,
             username: params.id,
+            page:0
         }))
             
     }, [dispatch]);
@@ -92,10 +101,13 @@ const UserProfile = () => {
     if (lastIntersectingData) {
       observer = new IntersectionObserver(onIntersect, { threshold: 1 });
       //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
-      observer.observe(lastIntersectingData.current);
+      setTimeout(() => {
+          observer.observe(lastIntersectingData.current);
+          // observer.observe(ref);
+            }, 500);
     }
     return () => observer && observer.disconnect();
-  }, [lastIntersectingData]);
+  }, [lastIntersectingData,ref]);
 
 
     const RightMouseClick = (e) => {
@@ -118,11 +130,12 @@ const UserProfile = () => {
 
     //닉네임 수정 완료
     const completeBtn = async () => {
-        if (editMyNickname === '') setEditMyNickName(false)
+        if (loadMyNickname === '') return setEditMyNickName(false)
         //서버에 전송
         const info = {
             nickname:loadMyNickname
         }
+        // console.log(info)
         dispatch(__putEditNickname(info))
         setEditMyNickName(false)
     }
@@ -132,7 +145,11 @@ const UserProfile = () => {
     if (editMyNickname) {
         button = <EditDone onClick={completeBtn}>완료</EditDone>
     } else {
-        button = <EditButton onClick={editNickname}>수정</EditButton>
+        button = <EditButton onClick={editNickname}>
+            <PenContainer >
+                <PenImg src={smallpencil} />
+            </PenContainer>
+        </EditButton>
     }
 
 
@@ -162,11 +179,16 @@ const UserProfile = () => {
     return (
         <UserProfileContainer>
             <ContainerInner >
-
+                <TopScroll />
                 {/* 프로필 */}
                 <ProfileContainer>
                     <ProfileInner>
-                        <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onContextMenu={RightMouseClick} />
+                        <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onClick={RightMouseClick} />
+                        {UserPage&&UserPage.username === userinfo.data.data.username ?<CameraBox>
+                            <CameraContainer>
+                                <CameraImg src={camera} />
+                            </CameraContainer>
+                        </CameraBox>: null}
                         <TextProfileContents>
                             <TextContentContainer>
                                 <TextContent>아이디</TextContent>
@@ -204,9 +226,8 @@ const UserProfile = () => {
                 </ProfileContainer>
                 <ProfileBorder />
                 {/* 카테고리별 */}
-                <CategoryOpen value={UserPage&&UserPage.username === userinfo.data.data.username} />
+                <CategoryOpen value={UserPage && UserPage.username === userinfo.data.data.username} username={UserPage && UserPage.username} />
                
-
 
                 {/* 카드 */}
                 <>
@@ -217,15 +238,14 @@ const UserProfile = () => {
                             )
                         })}
                     </CardContainer>
-                    <div style={{ width: '100px', height: '20px', backgroundColor: 'gray' }} ref={page === 0 ? null : lastIntersectingData}>.</div>
+                    <div style={{ width: '100px', height: '20px', backgroundColor: 'gray' }} ref={ lastIntersectingData}>.</div>
                 </>
             </ContainerInner>
 
 
             {/* 프로필이미지 모달창 */}
             {UserPage&&UserPage.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
-                close={() => { myContext.setIsOpenProfileImg(false) }} imgFile={imgFile} setImgFile={setImgFile}/> : null}  
-        
+                close={allComponentCloseModal} /> : null}  
         
         </UserProfileContainer>
     )
@@ -256,9 +276,37 @@ const ProfileImage = styled.img`
     width: 218px;
     height: 218px;
     border-radius: 150px;
+    border: ${(props) => props.theme.inactive} 2px solid;
     background-color: white;
     background-size: contain;
 `
+const CameraBox = styled.div`
+    width: 100px;
+    height: 100px;
+    margin-top: 100px;
+    margin-left: -50px;
+    /* background-color: gray; */
+    position: relative;
+`
+
+const CameraContainer = styled.div`
+    width: 35px;
+    height: 35px;
+    border-radius: 35px;
+    position: absolute;
+    top: 80px;
+    left: 0px;
+    background-color:${(props) => props.theme.ShadeRegular} ;
+    z-index: 3;
+`
+
+const CameraImg = styled.img`
+    width: 16px;
+    margin-top: 10px;
+    margin-left: 9px;
+`
+
+
 const ProfileBorder = styled.div`
     margin-top: 116px;
     border: 1px solid #000000;
@@ -279,12 +327,12 @@ const TextContent = styled.div`
     width: 80px;
     height: 50px;
     display: flex;
-    font-size: 16px;
+    font-size:  ${(props) => props.theme.Caption3};
 `
 const Texts = styled.div`
-    margin-top: -12px;
-    margin-left: 20px;
-    font-size: 30px;
+    margin-top: -5px;
+    margin-left: -10px;
+    font-size:  18px;
     font-weight: 400;
 `
 const EditInput = styled.input`
@@ -304,17 +352,36 @@ const EditDone = styled.button`
     margin-right: 50px;
     border-radius: 50px;
     border: none;
-    background-color: black;
-    color: white;
+    /* background-color: black; */
+    /* color: white; */
 `
 
+
 const EditButton = styled.button`
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     margin-top: 100px;
     margin-right: 50px;
     border-radius: 50px;
     border: none;
+    background-color: transparent;
+`
+const PenContainer = styled.div`
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: ${(props) => props.theme.inactive} 2px solid;
+
+`
+
+const PenImg = styled.img`
+    width: 30px;
+    height: 30px;
+    margin-top: 8px;
+    border-radius: 30px;
+    background-color: white;
+    background-size: cover;
+    /* border: ${(props) => props.theme.inactive} 2px solid; */
 `
 const ValidationNickname = styled.div`
     width: 50%;

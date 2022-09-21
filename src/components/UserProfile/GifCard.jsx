@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
-
+import { useMyContext } from '../../shared/ContextApi'
+import instance from '../../shared/apis'
 import axios from 'axios'
 import styled from 'styled-components'
 import download from '../../images/download-btn.png'
@@ -9,35 +10,25 @@ import heart from '../../images/like-before.png'
 import AllParticipants from './AllParticipants'
 import MySpecialButton from './MySpecialButton'
 import basicImg from '../../images/basicImg.jpg'
-
-
+import favorite from '../../images/favorite@2x.png'
+import moreHoriz from '../../images/More horiz@2x.png'
+import textbox from '../../images/Textsms.png'
 
 const GifCard = ({ data, myImg, myNickname }) => {
-  //서버주소
-  const baseURL = process.env.REACT_APP_API_KEY;
-  //토큰
-  const myToken = getCookieToken();
-  const refreshToken = getRefreshToken();
-
+  const myContext = useMyContext();
   const navigate = useNavigate();
   // 참여자들 보여주기
-  const [allParticipants, setAllParticipants] = useState(false)
   const [peopleData, setPeopleData] = useState()
   const showAllParticipants = async(e) => {
     e.stopPropagation();
-    const peopleData = await axios.get(`${baseURL}/post/join-list/${data.postId}`,
-        {
-            headers: {
-                Authorization: myToken,
-                'refresh-token': refreshToken
-            }
-      })
+    const peopleData = await instance.get(`/post/join-list/${data.postId}`,
+       )
     const datas = peopleData && peopleData.data.data
     if (datas.length <= 1) {
-      setAllParticipants(false)
+      myContext.setAllParticipants(false)
     } else {
       setPeopleData(datas)
-      setAllParticipants(!allParticipants)
+      myContext.setAllParticipants(!myContext.allParticipants)
     }
   }
 
@@ -57,31 +48,40 @@ const GifCard = ({ data, myImg, myNickname }) => {
     // console.log('눌러라')
     setOpenSpecialModal(!openSpecialModal)
   }
-
+  
   return (
     <CardContainer>
       <div >
         <GifImg src={data.imgUrl} />
+        {/* {console.log(data.imgUrl)} */}
         <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
-          <HoverSideButton onClick={buttonCollection}>···</HoverSideButton>
+          <HoverSideButton onClick={buttonCollection}><HorizBtn src={moreHoriz} /></HoverSideButton>
           <HoverContent>
           <div style={{color:'white'
           }}>{data.topic ? data.topic : null}</div>
             <div style={{display :'flex'}}>
-              <ClickCircle src={download}/>
-              <ClickCircle src={heart} />
+              <a href='#' download='' onClick={(e)=>e.stopPropagation()}>
+                <ClickCircle src={download}/>
+              </a>
+              <ClickCircle src={heart} onClick={(e)=>e.stopPropagation()}/>
             </div>
           </HoverContent>
         </OverlayImg>
         <GifContents>
           <UserProfileContent onClick={showAllParticipants} >
-            <ProfileImage src={!myImg ? basicImg : myImg}/>
+            <ProfileImage src={!data.profileImg ? basicImg : data.profileImg}/>
             <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>
-            <div style={{ marginTop: '15px', marginLeft: '15px' }}>{myNickname} 외 {data.memberCount}명</div>
+            <Texts >{data.nickname} 외 {data.memberCount}명</Texts>
           </UserProfileContent>
-          <div style={{display:'flex'}}>
-            <div style={{ marginLeft: '15px', fontSize: '30px' }}>♥</div>
-            <div style={{ marginTop: '7px', marginLeft: '10px', fontSize: '20px' }}>{data.likeCount}</div>
+          <div style={{ display: 'flex' }}>
+            <div style={{ marginLeft: '15px', fontSize: '30px' }}>
+              <img style={{ width: '16px' }} src={textbox} />
+            </div>
+              <LikeCount >{data.reportCount}</LikeCount>
+            <div style={{ marginLeft: '15px', fontSize: '30px' }}>
+              <img style={{width:'16px'}} src={favorite} />
+            </div>
+            <LikeCount >{data.likeCount}</LikeCount>
           </div>
         </GifContents>
       </div>
@@ -89,8 +89,8 @@ const GifCard = ({ data, myImg, myNickname }) => {
       {/* ...버튼 */}
       <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal} /> 
       {/* 참여자들 */}
-      {allParticipants ?
-        <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData}  myNickname={myNickname} />
+      {myContext.allParticipants ?
+        <AllParticipants shown={myContext.allParticipants} close={() => { myContext.setAllParticipants(false) }} data={peopleData}  myNickname={myNickname} />
         : null}
     </CardContainer>
     
@@ -144,6 +144,10 @@ const HoverSideButton = styled.button`
   cursor: pointer;
   background-color: transparent;
 `
+const HorizBtn = styled.img`
+  width: 30px;
+  height: 30px;
+`
 
 const HoverContent = styled.div`
   margin-top: 260px;
@@ -154,11 +158,12 @@ const HoverContent = styled.div`
   display: flex;
   justify-content: space-between;
 `
+
 const ClickCircle = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 46px;
   margin-top: -18px;
-  border-radius: 50px;
+  border-radius: 46px;
   cursor: pointer;
   /* background-color: gray; */
 
@@ -183,8 +188,22 @@ const ProfileImage = styled.img`
   width: 57px;
   height: 57px;
   border-radius: 50px;
+  border: 2px lightgray solid;
   /* background-color: gray; */
   cursor: pointer;
+`
+const Texts = styled.div`
+  margin-top: 17px;
+  margin-left: 15px;
+  font-size : ${(props) => props.theme.Caption2};
+`
+const LikeCount = styled.div`
+  margin-top: 13px;
+  margin-left: 3px;
+  font-weight : ${(props) => props.theme.HeadlineRG};
+  font-size : ${(props) => props.theme.Caption2};
+  color : ${(props) => props.theme.inactive};
+
 `
 
 const Participants = styled.div`
@@ -193,7 +212,9 @@ const Participants = styled.div`
   position: absolute;
   left: 60px;
   border-radius: 24px;
-  background-color: #D9D9D9;
+  font-size: 9px;
+  color: white;
+  background-color: black;
 `
 
 export default GifCard

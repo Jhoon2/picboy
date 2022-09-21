@@ -22,6 +22,9 @@ export const Context = (props) => {
     const [signUpBtn, setSignUpBtn]= React.useState(false)
     const signUpBtnClickOff = () => setSignUpBtn(false)
     const signUpBtnClickOn = () => setSignUpBtn(!signUpBtn)
+   
+    //모든 참가자 보기 모달창 관련
+    const [allParticipants, setAllParticipants] = React.useState(false)
 
 
     const value = {
@@ -48,7 +51,11 @@ export const Context = (props) => {
 
         //로그온 멤버
         logonOpenProfileImg,
-        setLogonProfileImg
+        setLogonProfileImg,
+
+        //모든 참가자 모달창
+        allParticipants,
+        setAllParticipants
     };
 
     return (
