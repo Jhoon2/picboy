@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 
 import { getCookieToken, getRefreshToken } from "../shared/Cookie";
@@ -11,14 +11,16 @@ const UseGetUser = () => {
   const [user, setUser] = useState('')
 
   const readUser = async () => {
-    const response = await axios.get(`${baseURL}/main/user-info`, 
-      { headers: {
-        Authorization: myToken,
-        'refresh-token': getRefreshToken()
-        }})
+    const response = await axios.get(`${baseURL}/main/user-info`,
+      {
+        headers: {
+          Authorization: myToken,
+          'refresh-token': getRefreshToken()
+        }
+      })
     setUser(response)
   }
-  
+
   useEffect(() => {
     readUser()
   }, [])

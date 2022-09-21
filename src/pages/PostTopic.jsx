@@ -360,6 +360,8 @@ const PostTopic = () => {
         </div>
     );
 };
+
+
 const PostTitle = styled.div`
   font-family: 'SilkLight';
   font-size: 80px;

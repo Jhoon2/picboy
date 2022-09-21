@@ -6,141 +6,259 @@ import styled from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { __getComment, __postComment } from '../redux/modules/comments';
+import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+
 
 // img
 import Download from '../images/download-btn.png';
 import LikeBefore from '../images/like-before.png';
+import LikeClick from '../images/like-click.png'
 import LikeCount from '../images/like-count.png';
 
-import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { __getComment, __postComment } from '../redux/modules/comments';
+// components
 import CommentBox from '../components/completeDetail/CommentBox';
+import Footer from '../components/Footer'
 
 const CompleteDetail = () => {
-    const baseURL = process.env.REACT_APP_API_KEY;
-    const params = useParams();
+  const baseURL = process.env.REACT_APP_API_KEY;
+  const params = useParams();
 
-    //redux
-    const [commentInput, setCommentInput] = useState('')
-    const { comments } = useSelector((state) => state.comments)
-    const dispatch = useDispatch();
-    // console.log(commentInput)
-    //댓글등록
-    const commentChange = (e) => {
-        setCommentInput(e.target.value)
-    }
-  
-    const commentApply = () => {
-        if(commentInput === '') return
+  //redux
+  const [commentInput, setCommentInput] = useState('')
+  const { comments } = useSelector((state) => state.comments)
+  const dispatch = useDispatch();
 
-        const payload = {
-            id: params.id,
-            content: commentInput
-        }
-        dispatch(__postComment(payload))
-        setCommentInput('')
+  ///////////////////////
+  //댓글등록
+  const commentChange = (e) => {
+    setCommentInput(e.target.value)
+  }
+
+  const commentApply = () => {
+    if (commentInput === '') return
+
+    const payload = {
+      id: params.id,
+      content: commentInput
     }
-  
+    dispatch(__postComment(payload))
+    setCommentInput('')
+  }
+
 
   useEffect(() => {
     dispatch(__getComment(params.id))
-    },[dispatch])
-    // axios 
+  }, [dispatch])
 
-    const [gif, setGif] = useState("");
+  /////////////////////////
+  // axios get
 
-    const gifApi = () => {
-        const url = `${baseURL}/post/gif/detail/${params.id}`;
-        axios
-            .get(url)
-            .then(function (response) {
-                setGif(response.data.data);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+  const [gif, setGif] = useState("");
+
+  const gifApi = () => {
+    const url = `${baseURL}/post/gif/detail/${params.id}`;
+    axios.get(`${baseURL}/post/gif/detail/${params.id}`,
+      {
+        headers: { "Authorization": accessToken, "Refresh-Token": refreshToken }
+      }
+    )
+      .then(function (response) {
+        setGif(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    gifApi();
+  }, []);
+
+
+  // carousel
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 6
+  };
+
+  const imgList = gif.frameImgList;
+
+  ////////////////////////////
+  // like
+  const [likeState, setLikeState] = useState(false);
+  const [likeApi, setLikeApi] = useState();
+  const accessToken = getCookieToken();
+  const refreshToken = getRefreshToken();
+
+  const likeHandler = (e) => {
+
+    if (accessToken === undefined) {
+      alert('로그인 후 이용 가능합니다.');
+    } else {
+      setLikeState(!likeState);
+      axios.post(
+        `${baseURL}/post/like/${params.id}`, {
+        like: 0,
+      },
+        {
+          headers: { "Authorization": accessToken, "Refresh-Token": refreshToken }
+        }
+      )
+        .then(function (response) {
+          setLikeApi(response.data.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
+  }
 
-    useEffect(() => {
-        gifApi();
-    }, []);
+  useEffect(() => {
+    console.log(gif.liked);
+  }, [likeApi])
+
+  /////////////////
+  // toggle
+  const [toggleBoolean, setToggleBoolean] = useState(false);
+
+  const toggleHandler = () => {
+    setToggleBoolean(!toggleBoolean);
+  }
+
+  return (
+    <>
+      <TitleBanner>
+        <ContentsTitle>COMPLETE</ContentsTitle>
+      </TitleBanner>
+      <WidthWrap>
 
 
-    // carousel
-    var settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 6,
-        slidesToScroll: 6
-    };
+        {/* git / img info start */}
+        <GifInfo>
+          <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
+          <ImgListToggleWrap>
+            <ImgListToggleText>사용자 정보 한번에 보기</ImgListToggleText>
+            <ToggleWrap>
+              <ToggleInput type="checkbox" onClick={toggleHandler} />
+              <ToggleCheck style={toggleBoolean ? { left: '68%' } : {}} />
+            </ToggleWrap>
+          </ImgListToggleWrap>
+          <Slider {...settings}>
+            {
+              imgList && imgList.map((img) => (
+                <ImgListWrap key={img.frameNum} >
+                  <ImgList src={img.imgUrl} alt="" />
+                  <ImgListHoverInfoWrap
+                    style={toggleBoolean ? { backgroundColor: 'rgba(0, 0, 0, 0.5)', border: '3px solid #000' } : { opacity: '0' }}
+                  >
+                    <ImgListHoverFrameInfo>{img.frameNum}/{gif.frameTotal}</ImgListHoverFrameInfo>
+                    <ImgListHoverUserInfoWrap>
+                      <ImgListHoverUserProfile src={img.profileimg} alt="" />
+                      <ImgListHoverUserNickName>{img.nickname}</ImgListHoverUserNickName>
+                    </ImgListHoverUserInfoWrap>
+                  </ImgListHoverInfoWrap>
+                </ImgListWrap>
+              ))
+            }
+          </Slider>
+          {/* git / img info end */}
 
-    const imgList = gif.frameImgList;
 
-    // time moment
+          {/* topic info start */}
+          <Community>
+            <ContentsBtn>
+              <BtnImg src={Download} alt="" />
+              {
+                gif.liked ?
+                  <BtnImg src={LikeClick} onClick={likeHandler} alt="" /> : <BtnImg src={LikeBefore} onClick={likeHandler} alt="" />
+              }
+            </ContentsBtn>
+            <ContentsLine />
+            <SuggestionInfo>
+              <SuggestionInfoTitleWrap>
+                <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
+                <SuggestionInfoLikeCountWrap>
+                  <img src={LikeCount} alt="" />
+                  <SuggestionInfoLikeCount>{gif.likeCount}</SuggestionInfoLikeCount>
+                </SuggestionInfoLikeCountWrap>
+              </SuggestionInfoTitleWrap>
+              <Suggestion>{
+                gif.topic === null ? <div>제시어가 없습니다.</div> : `${gif.topic}`
+              }</Suggestion>
+            </SuggestionInfo>
+            {/* topic info end */}
 
-    return (
-        <>
-            <TitleBanner>
-                <ContentsTitle>COMPLETE</ContentsTitle>
-            </TitleBanner>
-            <WidthWrap>
-                <GifInfo>
-                    <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
-                    <Slider {...settings}>
-                        {
-                            imgList && imgList.map((list) => {
-                                    <>
-                                        <ImgListWrap>
-                                            <ImgGrey />
-                                            <ImgList key={list.id} src={list.imgUrl} alt="" />
-                                        </ImgListWrap>
-                                    </>
-                            })
-                        }
-                    </Slider>
-                    <Community>
-                        <ContentsBtn>
-                            <BtnImg src={Download} alt="" />
-                            <BtnImg src={LikeBefore} alt="" />
-                        </ContentsBtn>
-                        <ContentsLine />
-                        <SuggestionInfo>
-                            <SuggestionInfoTitleWrap>
-                                <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
-                                <SuggestionInfoLikeCountWrap>
-                                    <img src={LikeCount} alt="" />
-                                    <SuggestionInfoLikeCount>
-                                        {gif.likeCount}
-                                    </SuggestionInfoLikeCount>
-                                </SuggestionInfoLikeCountWrap>
-                            </SuggestionInfoTitleWrap>
-                            <Suggestion>{gif.topic}</Suggestion>
-                        </SuggestionInfo>
-                        <CommentWrap>
-                            <CommentTitle>댓글<div>{ }</div></CommentTitle>
-                            <ContentsLine />
-                            <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
-                            <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
-                            <CommentList>
-                                {
-                                    comments && comments.map((commentList,idx) => 
-                                        <CommentBox commentList={commentList} key={idx} />
-                                    )
-                                }
-                            </CommentList>
-                        </CommentWrap>
-                    </Community>
-                </GifInfo>
 
-            </WidthWrap>
-        </>
-)
-    
+            {/* comment start */}
+            <CommentWrap>
+              <CommentTitle>댓글<div>{ }</div></CommentTitle>
+              <ContentsLine />
+              <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
+              <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
+              <CommentList style={comments.length === 0 ? { border: 'none' } : {}}>
+                {
+                  comments && comments.map((commentList, idx) =>
+                    <CommentBox commentList={commentList} key={idx} />
+                  )
+                }
+              </CommentList>
+            </CommentWrap>
+            {/* comment end */}
+          </Community>
+        </GifInfo>
+      </WidthWrap>
+      <Footer />
+    </>
+  )
+
 
 }
 
+const ImgListToggleWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+`;
+
+const ImgListToggleText = styled.div`
+  margin-right: 16px;
+`;
+
+const ToggleWrap = styled.label`
+    width: 65px;
+    height: 26px;
+    margin-bottom: 26px;
+    display: flex;
+    position: relative;
+    display: inline-block;
+    background-color: #D9D9D9;
+    border-radius: 14px;
+    cursor: pointer;
+`;
+
+const ToggleInput = styled.input`
+    opacity: 0;
+`;
+
+const ToggleCheck = styled.span`
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 20.2%;
+    left: 11%;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: all 0.3s;
+    &:after{
+        background-color: red;
+    }
+`;
 
 const TitleBanner = styled.div`
   width: 100%;
@@ -153,7 +271,7 @@ const TitleBanner = styled.div`
 
 const WidthWrap = styled.div`
   width: 1200px;
-  margin: 0 auto;
+  margin: 120px auto;
 `;
 
 const ContentsTitle = styled.div`
@@ -180,25 +298,56 @@ const GifWrap = styled.img`
 `;
 
 const ImgListWrap = styled.div`
-  width: 175px;
-  height: 175px;
-  margin-left: 12px;
-  margin-bottom: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
-  &:hover {
-    border: 3px solid #000;
-  }
 `;
 
 const ImgList = styled.img`
-  width: 169px;
-  height: 169px;
+  width: 175px;
+  height: 175px;
+  transition: 0.2s;
+  &:hover{
+    border: 3px solid #000;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 `;
 
-const ImgGrey = styled.img``;
+const ImgListHoverInfoWrap = styled.div`
+  position: absolute;
+  top: 0;
+  width: 175px;
+  height: 175px;
+`;
+
+const ImgListHoverFrameInfo = styled.div`
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+`;
+
+const ImgListHoverUserInfoWrap = styled.div`
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+`;
+
+const ImgListHoverUserProfile = styled.img`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-right: 8px;
+`;
+
+const ImgListHoverUserNickName = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  margin-top: 2px;
+`;
 
 const BtnImg = styled.img`
   cursor: pointer;
