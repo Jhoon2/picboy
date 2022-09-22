@@ -1,24 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import Listarrow from '../images/listCategory/Listarrow.svg';
 import NewBef from '../images/listCategory/ListNewBef.svg';
-import NewAft from '../images/listCategory/ListNewAft.svg';
 import LikeBef from '../images/listCategory/ListHeartBef.svg';
 import CommBef from '../images/listCategory/ListCommBef.svg';
+import NewAft from '../images/listCategory/ListNewAft.svg';
+import LikeAft from '../images/listCategory/ListHeartAft.svg';
+import CommAft from '../images/listCategory/ListCommAft.svg';
+import ViewBef from '../images/listCategory/ViewBef.svg';
+import ViewAft from '../images/listCategory/ViewAft.svg';
 
 const ListCategories = (props) => {
   const [select, setSelect] = useState(false);
 
+  const node = useRef();
+
+  useEffect(() => {
+    const clickOutside = (e) => {
+      // 모달이 열려 있고 모달의 바깥쪽을 눌렀을 때 창 닫기
+      if (select && node.current && !node.current.contains(e.target)) {
+        setSelect(false);
+      }
+    };
+
+    document.addEventListener('mousedown', clickOutside);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener('mousedown', clickOutside);
+    };
+  }, [select]);
+
   return (
-    <SelectContainer>
+    <SelectContainer ref={node}>
       <SelectBox>
         <Select>
           <div onClick={() => setSelect(!select)}>
             {select ? '닫기' : '카테고리'}
-            <SelectImg
-              select={select}
-              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAYUlEQVR4Ae2UQQ5AEQxE5yhz/0s5yv8WXSAStLOiL2kiTF83AJLkKlirWBFiaOLPSjqEjbwMayIIJ8LZnky+cxaWn2Tcck/W13DSsx309C4D0SGqu83B1Q2QPBz0X0ryAj9fvT8BBg0rqgAAAABJRU5ErkJggg=="
-              alt=""
-            />
+            <SelectImg select={select} src={Listarrow} alt="" />
           </div>
         </Select>
       </SelectBox>
@@ -32,8 +51,9 @@ const ListCategories = (props) => {
                     props.setTap(0);
                   }}
                 >
-                  <Newimg img={NewBef} />
-                  최신순
+                  <Newimg img={NewBef}>
+                    <Text>최신순</Text>
+                  </Newimg>
                 </Title>
               </New>
               <HR />
@@ -43,8 +63,9 @@ const ListCategories = (props) => {
                     props.setTap(1);
                   }}
                 >
-                  <Likeimg img={LikeBef} />
-                  좋아요
+                  <Likeimg img={LikeBef}>
+                    <Text>좋아요</Text>
+                  </Likeimg>
                 </Title>
               </Like>
               <HR />
@@ -54,10 +75,23 @@ const ListCategories = (props) => {
                     props.setTap(2);
                   }}
                 >
-                  <Commimg img={CommBef} />
-                  댓글 많은 순
+                  <Commimg img={CommBef}>
+                    <Text>댓글순</Text>
+                  </Commimg>
                 </Title>
               </Comm>
+              <HR />
+              <View>
+                <Title
+                  onClick={() => {
+                    props.setTap(3);
+                  }}
+                >
+                  <Viewimg img={ViewBef}>
+                    <Text>조회순</Text>
+                  </Viewimg>
+                </Title>
+              </View>
             </ul>
           </SelectList>
         )}
@@ -122,7 +156,7 @@ const SelectImg = styled.img`
   height: 12px;
   margin-top: -5px;
   display: block;
-  transform: ${({ select }) => (select ? 'rotate(0deg)' : 'rotate(180deg)')};
+  transform: ${({ select }) => (select ? 'rotate(180deg)' : 'rotate(0deg)')};
 `;
 
 const SelectListBox = styled.div`
@@ -145,12 +179,9 @@ const SelectList = styled.div`
   }
 `;
 
-const New = styled.li`
-  ${({ theme }) => theme.flexSet('column', 'flex-start', 'flex-start')}
-  font-family: 'NotoBold';
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 180%;
+const New = styled.div`
+  ${({ theme }) => theme.flexSet('column', 'flex-start', 'center')}
+
   color: #a3a3a3;
   &:hover {
     color: black;
@@ -158,15 +189,18 @@ const New = styled.li`
 `;
 const Like = styled(New)``;
 const Comm = styled(New)``;
+const View = styled(New)``;
 
 const Title = styled.div`
-  ${({ theme }) => theme.flexSet('row', 'flex-start', 'flex-start')}
+  width: 100px;
+  height: 25px;
+  ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
 `;
 
 const Newimg = styled.div`
   width: 20px;
-  height: 20px;
-  margin-top: 5px;
+  height: 19px;
+  position: relative;
   margin-right: 7px;
   background: url(${(props) => props.img});
   ${({ theme }) => theme.backgroundSet('contain')}
@@ -177,12 +211,32 @@ const Newimg = styled.div`
 
 const Likeimg = styled(Newimg)`
   &:hover {
-    background: url(${NewAft});
+    background: url(${LikeAft});
   }
 `;
 
 const Commimg = styled(Newimg)`
   &:hover {
-    background: url(${NewAft});
+    background: url(${CommAft});
   }
+`;
+
+const Viewimg = styled(Newimg)`
+  width: 20px;
+  height: 14px;
+
+  &:hover {
+    background: url(${ViewAft});
+  }
+`;
+
+const Text = styled.div`
+  width: 50px;
+  margin-left: 30px;
+  position: absolute;
+  bottom: -4px;
+  font-family: 'NotoBold';
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 180%;
 `;

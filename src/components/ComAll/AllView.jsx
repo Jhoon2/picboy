@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -10,11 +10,11 @@ import userView from '../../images/Com/userView.svg';
 import userLike from '../../images/Com/userLike.svg';
 import userComm from '../../images/Com/userComm.svg';
 
-const FreeLike = () => {
+const AllView = () => {
   const navigate = useNavigate();
+  const [newData, setNewdata] = useState([]);
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
-  const [newData, setNewdata] = useState([]);
   const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
 
@@ -22,12 +22,13 @@ const FreeLike = () => {
     setLoad(true);
     try {
       const { data } = await axios.get(
-        `${baseURL}/post/gif/topic-no/2?size=6&page=${page}`
+        `${baseURL}/post/gif/4?size=6&page=${page}`
       );
       if (!data) {
         return;
       }
       setNewdata(newData.concat(data.data));
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -35,6 +36,7 @@ const FreeLike = () => {
     setLoad(false);
   };
 
+  console.log(page);
   useEffect(() => {
     getCompleteData();
   }, [page]);
@@ -70,7 +72,6 @@ const FreeLike = () => {
     }
     return () => observer && observer.disconnect();
   }, [ref]);
-
   return (
     <ListBox>
       {load === true ? <Loadings /> : null}
@@ -86,6 +87,7 @@ const FreeLike = () => {
                   }}
                 >
                   <DescBox>
+                    <Keyword>{item?.topic}</Keyword>
                     <Download />
                     <Like />
                   </DescBox>
@@ -95,6 +97,7 @@ const FreeLike = () => {
             </div>
             <BestDesc>
               <Profile img={item?.profileImg} />
+
               <Nickname>
                 {item?.nickname} 등 {item?.participantCount} 명
               </Nickname>
@@ -123,7 +126,7 @@ const FreeLike = () => {
   );
 };
 
-export default FreeLike;
+export default AllView;
 
 const Width = styled.div`
   width: 350px;
@@ -162,6 +165,14 @@ const Profile = styled(Button)`
 const Span = styled.span`
   font-size: 30px;
   font-weight: 800;
+`;
+
+const Keyword = styled(Span)`
+  padding-top: 290px;
+  padding-left: 10px;
+  font-family: 'Noto Bold';
+  font-size: 20px;
+  color: white;
 `;
 
 const Download = styled.button`
