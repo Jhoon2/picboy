@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import Grid from '../styles/Grid';
 import ProgressAll from '../components/ProgressAll';
@@ -6,6 +7,7 @@ import ProgressFree from '../components/ProgressFree';
 import ProgressTopic from '../components/ProgressTopic';
 import ProgressBanner from '../elem/ProgressBanner';
 import TopScroll from '../global/TopScroll';
+import { useMyContext } from '../shared/ContextApi';
 
 const List = () => {
   const [proTap, setProTap] = useState(0);
@@ -13,6 +15,7 @@ const List = () => {
   function ListComp({ proTap }) {
     return [<ProgressAll />, <ProgressTopic />, <ProgressFree />][proTap];
   }
+
   return (
     <ListContainer>
       <TopScroll />

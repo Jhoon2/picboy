@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 // import component
-import Footer from '../global/Footer';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -527,7 +526,6 @@ const PostTopic = () => {
           </ModeWrap>
         </ContetnsWrap>
       </PostContentsWrap>
-      <Footer />
     </div>
   );
 };

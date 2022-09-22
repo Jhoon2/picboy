@@ -169,7 +169,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
                 <HowSub>완성</HowSub>
               </HowSubBox>
               <HowDescBox>
-                <HowDesc>드로잉 버튼 클릭</HowDesc>
+                <HowDesc2>드로잉 버튼 클릭</HowDesc2>
                 <HowDesc>
                   제시어(FREE일 경우 PASS) <br />
                   프레임 선택 후 그리기
@@ -509,13 +509,14 @@ const HowBox = styled.div`
   ${({ theme }) => theme.flexSet('column', 'space-evenly', 'center')}
   @media ${({ theme }) => theme.device.laptop} {
     max-width: 75rem;
+    justify-content: space-around;
   }
 `;
 
 const HowBoxNumber = styled.div`
   width: 68.75rem;
   height: 25rem;
-  ${({ theme }) => theme.flexSet('column', 'space-evenly', 'center')}
+  ${({ theme }) => theme.flexSet('column', 'center', 'center')}
 `;
 
 const HowTitleNumber = styled.div`
@@ -533,6 +534,7 @@ const Numbers = css`
 const HowNum = styled.div`
   width: 1.875rem;
   width: 1.875rem;
+  margin-bottom: 40px;
   background: #d9d9d9;
   border-radius: 50%;
   ${Numbers}
@@ -564,7 +566,7 @@ const HowSub = styled.span`
 `;
 
 const HowSub1 = styled.span`
-  margin-right: 5px;
+  margin-right: 8px;
   font-family: 'NotoBold';
   font-weight: 700;
   font-size: 18px;
@@ -574,7 +576,7 @@ const HowSub1 = styled.span`
 
 const HowDescBox = styled.div`
   width: 1190px;
-  ${({ theme }) => theme.flexSet('row', 'space-between', 'center')}
+  ${({ theme }) => theme.flexSet('row', 'space-between', 'flex-start')}
 `;
 
 const HowDesc = styled.span`
@@ -585,17 +587,16 @@ const HowDesc = styled.span`
   letter-spacing: -0.02em;
 `;
 
-const HowDesc1 = styled.span`
+const HowDesc1 = styled(HowDesc)`
   margin-right: 20px;
-  font-family: 'NotoLight';
-  font-size: 1rem;
-  line-height: 180%;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+`;
+
+const HowDesc2 = styled(HowDesc)`
+  margin-left: 5px;
 `;
 
 const BestContainer = styled.div`
-  height: 37.5rem;
+  height: 800px;
   position: relative;
   ${({ theme }) => theme.flexSet('column', 'center', 'center')};
   text-align: center;
@@ -624,7 +625,7 @@ const BestImg = styled.div`
   position: absolute;
   ${({ theme }) => theme.backgroundSet('contain')};
   background: url(${Heart});
-  top: -10%;
+  top: 3%;
   left: 37%;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
@@ -649,7 +650,7 @@ const BestImg1 = styled.div`
   position: absolute;
   ${({ theme }) => theme.backgroundSet('contain')};
   background: url(${Heart1});
-  top: 5%;
+  top: 15%;
   left: 33%;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
@@ -674,7 +675,7 @@ const BestImg2 = styled.div`
   position: absolute;
   ${({ theme }) => theme.backgroundSet('contain')};
   background: url(${Heart2});
-  top: -5%;
+  top: 10%;
   left: 60%;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
