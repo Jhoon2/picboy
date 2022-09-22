@@ -2,22 +2,40 @@ import React from 'react'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { useMyContext } from '../../shared/ContextApi'
+import { __getUserData } from '../../redux/modules/UserPage'
+import { useDispatch } from 'react-redux'
 
-const CategoryModal = ({children, shown, close}) => {
+const CategoryModal = ({children, shown, close,username}) => {
   const [categoryContent, setCategoryContent] = useState('recent')
   const myContext = useMyContext();
-
+  const dispatch = useDispatch();
+  // console.log(myContext.categoryNum)
   const recent = (e) => {
     setCategoryContent(e.target.id)
     myContext.setCategoryNum(1)
+    dispatch(__getUserData({
+      tab: myContext.tabNum,
+      username:username,
+      category: 1
+  }))
   }
   const liked = (e) => {
     setCategoryContent(e.target.id)
     myContext.setCategoryNum(2)
+    dispatch(__getUserData({
+      tab: myContext.tabNum,
+      username:username,
+      category: 2
+  }))
   }
   const comments = (e) => {
     setCategoryContent(e.target.id)
     myContext.setCategoryNum(3)
+    dispatch(__getUserData({
+      tab: myContext.tabNum,
+      username:username,
+      category: 3
+  }))
   }
 
   return shown? (

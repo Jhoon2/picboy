@@ -7,48 +7,59 @@ export const useMyContext = () => {
 };
 
 export const Context = (props) => {
-  const [timerMessage, setTimerMessage] = React.useState(false);
-  const [btnOpen, setBtnOpen] = React.useState(false);
-  const btnClickOff = () => setBtnOpen(false);
-  const btnClickOn = () => setBtnOpen(!btnOpen);
+    const [timerMessage, setTimerMessage] = React.useState(false)
+    const [btnOpen, setBtnOpen] = React.useState(false);
+    const btnClickOff = () => setBtnOpen(false);
+    const btnClickOn = () => setBtnOpen(!btnOpen);
 
-  const [tabNum, setTabNum] = React.useState(0);
-  const [categoryNum, setCategoryNum] = React.useState(1);
+    const [tabNum, setTabNum] = React.useState(0);
+    const [categoryNum, setCategoryNum] = React.useState(1);
 
-  const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false);
-  const [logonOpenProfileImg, setLogonProfileImg] = React.useState(false);
+    const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)  
+    const [logonOpenProfileImg, setLogonProfileImg] = React.useState(false)  
 
-  const [signUpBtn, setSignUpBtn] = React.useState(false);
-  const signUpBtnClickOff = () => setSignUpBtn(false);
-  const signUpBtnClickOn = () => setSignUpBtn(!signUpBtn);
+    const [signUpBtn, setSignUpBtn]= React.useState(false)
+    const signUpBtnClickOff = () => setSignUpBtn(false)
+    const signUpBtnClickOn = () => setSignUpBtn(!signUpBtn)
+   
+    //모든 참가자 보기 모달창 관련
+    const [allParticipants, setAllParticipants] = React.useState(false)
 
-  const value = {
-    timerMessage,
-    setTimerMessage,
-    btnOpen,
-    btnClickOff,
-    btnClickOn,
-    isOpenProfileImg,
-    setIsOpenProfileImg,
 
-    //회원가입 창
-    signUpBtn,
-    signUpBtnClickOn,
-    signUpBtnClickOff,
-    //탭넘버
-    tabNum,
-    setTabNum,
+    const value = {
+  
+        timerMessage,
+        setTimerMessage,
+        btnOpen,
+        btnClickOff,
+        btnClickOn,
+        isOpenProfileImg,
+        setIsOpenProfileImg,
 
-    //카테고리넘버
-    categoryNum,
-    setCategoryNum,
+        //회원가입 창
+        signUpBtn,
+        signUpBtnClickOn,
+        signUpBtnClickOff,
+        //탭넘버
+        tabNum,
+        setTabNum,
 
-    //로그온 멤버
-    logonOpenProfileImg,
-    setLogonProfileImg,
-  };
+        //카테고리넘버
+        categoryNum,
+        setCategoryNum,
 
-  return (
-    <myContext.Provider value={value}>{props.children}</myContext.Provider>
-  );
+        //로그온 멤버
+        logonOpenProfileImg,
+        setLogonProfileImg,
+
+        // 모든 참가자 모달창
+        allParticipants,
+        setAllParticipants
+    };
+
+    return (
+        <myContext.Provider value={value} >
+            {props.children}
+        </myContext.Provider >
+    )
 };
