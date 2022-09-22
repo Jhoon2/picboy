@@ -7,8 +7,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import plusButton from '../images/plusButton.svg';
-import basicImg from '../images/basicImg.jpg';
+import addBef from '../images/detail/addBef.svg';
+import addAft from '../images/detail/addAft.svg';
+import noImage from '../images/detail/noImage.png';
+import Listbanner from '../images/Com/Listbanner.svg';
+import Listfooter from '../images/Com/Listfooter.svg';
 
 const ProgressDetail = () => {
   const navigate = useNavigate();
@@ -157,7 +160,7 @@ const ProgressDetail = () => {
                                 <LastNickname>{item.nickname}</LastNickname>
                               </ProBox>
                             </Overlay>
-                            <img src={basicImg} alt="" />
+                            <img src={noImage} alt="" />
                           </div>
                         </PagingItems>
                       </Container>
@@ -166,12 +169,14 @@ const ProgressDetail = () => {
                   );
                 })}
 
-                <ProgressButton
-                  onClick={() => {
-                    Move();
-                  }}
-                >
-                  <Buttonimg />
+                <ProgressButton>
+                  <AddButton
+                    onClick={() => {
+                      Move();
+                    }}
+                  >
+                    <Buttonimg />
+                  </AddButton>
                 </ProgressButton>
               </Slider>
               <>
@@ -193,6 +198,7 @@ const ProgressDetail = () => {
                 </span>
               </Topic>
             </TopicBox>
+            <Footerimg />
           </Wrap>
         </>
       ) : (
@@ -241,7 +247,9 @@ const ProgressDetail = () => {
                             <div style={{ position: 'relative' }}>
                               <Overlay>
                                 <Personnel>
-                                  {item.frameNum} / {Data.frameTotal}
+                                  <span>
+                                    {item.frameNum} / {Data.frameTotal}
+                                  </span>
                                 </Personnel>
                                 <ProBox>
                                   <Profileimg
@@ -257,12 +265,14 @@ const ProgressDetail = () => {
                       </div>
                     );
                   })}
-                <ProgressButton
-                  onClick={() => {
-                    Move();
-                  }}
-                >
-                  <Buttonimg />
+                <ProgressButton>
+                  <AddButton
+                    onClick={() => {
+                      Move();
+                    }}
+                  >
+                    <Buttonimg />
+                  </AddButton>
                 </ProgressButton>
               </Slider>
               <>
@@ -278,12 +288,14 @@ const ProgressDetail = () => {
             <HR />
             <TopicBox>
               <Topic>
-                <span>{Topics}</span>
+                <TopicText>제시어</TopicText>
                 <span>
                   {displayedAt(Data.createdAt)}~{displayedAt(Data.expiredAt)}
                 </span>
               </Topic>
+              <TopicName>{Topics}</TopicName>
             </TopicBox>
+            <Footerimg />
           </Wrap>
         </>
       )}
@@ -308,7 +320,7 @@ const ImgBox = styled.div`
   height: 300px;
   ${({ theme }) => theme.flexSet('column', 'space-between', 'center')}
   text-align: center;
-  background: #f4f4f4;
+  background: url(${Listbanner});
   border: 0.5px solid #a3a3a3;
   span {
     margin-top: 140px;
@@ -348,22 +360,23 @@ const Inner = styled.div`
 `;
 
 const Inner2 = styled.div`
+  width: 1200px;
+  margin: auto;
   position: relative;
-
   .paging_items {
-  }
+    filter: grayscale(1);
 
-  &:hover {
-    filter: none;
+    &:hover {
+      filter: none;
+    }
   }
 
   .slick-current .paging_items {
-    filter: blur(0px);
+    filter: none;
   }
 
-  .slick-slide {
-  }
-  .slick-list {
+  .slick-dots {
+    top: 200px;
   }
 `;
 
@@ -381,11 +394,12 @@ const defaultItemStyle = styled.div`
 const MainSlickItems = styled(defaultItemStyle)`
   width: 100%;
   height: 400px;
+  background: white;
 
   img {
     max-width: 100%;
     margin: auto;
-    border: 5px solid black;
+    border: 2px solid #e6e6e6;
   }
 `;
 
@@ -407,7 +421,8 @@ const PagingItems = styled(defaultItemStyle)`
   img {
     width: 170px;
     height: 170px;
-    border: 3px solid black;
+    margin: auto;
+    border: 2px solid #e6e6e6;
     display: block;
 
     &:hover ${Text} {
@@ -422,10 +437,11 @@ const Container = styled.div`
 
 const Overlay = styled.div`
   position: absolute;
+  left: 15px;
   width: 170px;
   height: 170px;
   ${({ theme }) => theme.flexSet('column', 'center', 'center')}
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.50);
   opacity: 0;
   transition: all 1s;
   &:hover {
@@ -434,12 +450,15 @@ const Overlay = styled.div`
 `;
 
 const Personnel = styled.div`
-  padding-bottom: 100px;
-  padding-left: 100px;
+  width: 40px;
+  height: 20px;
+  background: black;
+  margin-bottom: 100px;
+  margin-left: 110px;
   font-family: 'NotoLight';
   font-style: normal;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 10px;
   line-height: 180%;
   letter-spacing: -0.02em;
   color: white;
@@ -448,41 +467,54 @@ const Personnel = styled.div`
 const ProBox = styled.div`
   width: 170px;
   height: 30px;
-  background: red;
-  ${({ theme }) => theme.flexSet('row', 'space-around', 'center')}
+  ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
 `;
 
 const Profileimg = styled.div`
-  width: 35px;
-  height: 35px;
+  width: 20px;
+  height: 20px;
+  margin-left: 12px;
   border-radius: 50%;
   background: url(${(props) => props.img});
-  ${({ theme }) => theme.flexSet('contain')}
+  ${({ theme }) => theme.flexSet('cover')}
   background-size: 100% 100%;
 `;
 
 const LastNickname = styled.div`
+  margin-left: 12px;
   font-family: 'NotoLight';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 20px;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 180%;
+  /* or 18px */
+
+  letter-spacing: -0.02em;
   color: white;
   line-height: 20px;
 `;
 
-const ProgressButton = styled.button`
-  width: 130px;
+const ProgressButton = styled.div`
   height: 170px;
-  background: #f8f8f8;
+`;
+
+const AddButton = styled.button`
+  width: 170px;
+  height: 170px;
+  margin: auto;
+  border: 1px solid black;
+  background: none;
+  ${({ theme }) => theme.flexSet('column', 'center', 'center')}
 `;
 
 const Buttonimg = styled.div`
-  width: 50px;
-  height: 50px;
-  background: red;
+  width: 30px;
+  height: 30px;
   margin: auto;
-  background: url(${plusButton});
-  ${({ theme }) => theme.flexSet('cover')}
+  background: url(${addBef});
+  ${({ theme }) => theme.backgroundSet('cover')}
+  &:hover {
+    background: url(${addAft});
+  }
 `;
 
 const HR = styled.hr`
@@ -495,23 +527,58 @@ const HR = styled.hr`
 
 const TopicBox = styled.div`
   max-width: 1200px;
-  height: 50px;
+  height: 110px;
   margin: auto;
-  margin-top: 30px;
+  margin-top: 50px;
+`;
+
+const TopicText = styled.div`
+  font-family: 'NotoBold';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 150%;
+
+  letter-spacing: -0.04em;
+
+  color: #000000;
+`;
+
+const TopicName = styled.div`
+  font-family: 'NotoLight';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 200%;
+
+  letter-spacing: -0.04em;
+
+  color: #000000;
 `;
 
 const Topic = styled.div`
   font-family: 'NotoLight';
-  font-size: 24px;
   font-weight: 400;
-  font-size: 24px;
-  line-height: 150%;
+  font-size: 14px;
+  line-height: 180%;
+
+  letter-spacing: -0.02em;
+
+  color: #a3a3a3;
   ${({ theme }) => theme.flexSet('row', 'space-between', 'center')}
   @media ${({ theme }) => theme.device.laptop} {
     span {
       margin-left: 740px;
     }
   }
+`;
+
+const Footerimg = styled.div`
+  width: 100%;
+  height: 320px;
+  margin: auto;
+  background: url(${Listfooter});
+  ${({ theme }) => theme.backgroundSet('cover')}
 `;
 
 // 화살표 버튼
@@ -533,7 +600,6 @@ const defaultButtonStyle = css`
 
 const PrevButton = styled.button`
   ${defaultButtonStyle}
-  left: -30px;
 `;
 
 const NextButton = styled.button`

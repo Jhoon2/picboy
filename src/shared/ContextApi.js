@@ -1,11 +1,10 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext } from 'react';
 
 export const myContext = createContext();
 
 export const useMyContext = () => {
-    return useContext(myContext)
-}
-
+  return useContext(myContext);
+};
 
 export const Context = (props) => {
     const [timerMessage, setTimerMessage] = React.useState(false)

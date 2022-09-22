@@ -28,24 +28,24 @@ const GifCard = ({ data, myImg, myNickname }) => {
        )
     const datas = peopleData && peopleData.data.data
     if (datas.length <= 1) {
-      setAllParticipants(false)
+      setAllParticipants(false);
     } else {
-      setPeopleData(datas)
-      setAllParticipants(!allParticipants)
+      setPeopleData(datas);
+      setAllParticipants(!allParticipants);
     }
-  }
+  };
 
   //완료 페이지, 진행중 페이지 이동
   const movePage = () => {
     if (data.status === 1) {
-      navigate(`/progressdetail/${data.postId}`)
+      navigate(`/progressdetail/${data.postId}`);
     } else {
-      navigate(`/complete-detail/${data.postId}`)
+      navigate(`/complete-detail/${data.postId}`);
     }
-  }
+  };
 
   //... 버튼
-  const [openSpecialModal, setOpenSpecialModal] =useState(false)
+  const [openSpecialModal, setOpenSpecialModal] = useState(false);
   const buttonCollection = (e) => {
     e.stopPropagation();
     // console.log('눌러라')
@@ -101,9 +101,8 @@ const GifCard = ({ data, myImg, myNickname }) => {
         </AllParticipantsContainer>
         </CardInner>
     </CardContainer>
-    
-  )
-}
+  );
+};
 
 const CardContainer = styled.div`
   width: 388px;
@@ -124,8 +123,8 @@ const CardInner = styled.div`
 const GifImg = styled.img`
   width: 100%;
   height: 316px;
-  background-color: #E6E6E6;
-`
+  background-color: #e6e6e6;
+`;
 const OverlayImg = styled.div`
   width: 388px;
   height: 316px;
@@ -134,13 +133,13 @@ const OverlayImg = styled.div`
   left: 0;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.5);
-  opacity: ${(props) => props.openSpecialModal ? 1 : 0};
+  opacity: ${(props) => (props.openSpecialModal ? 1 : 0)};
   cursor: pointer;
 
   &:hover {
     opacity: 1;
   }
-`
+`;
 const HoverSideButton = styled.button`
   padding: 1rem;
   font-size: 30px;
@@ -175,7 +174,7 @@ const ClickCircle = styled.img`
   :first-child {
     margin-right: 10px;
   }
-`
+`;
 
 const GifContents = styled.div`
   margin-top: 10px;
@@ -183,11 +182,11 @@ const GifContents = styled.div`
   margin-right: 20px;
   display: flex;
   justify-content: space-between;
-`
+`;
 const UserProfileContent = styled.div`
   display: flex;
   cursor: pointer;
-`
+`;
 
 const ProfileImage = styled.img`
   width: 57px;
@@ -227,4 +226,4 @@ const Participants = styled.div`
   background-color: black;
 `
 
-export default GifCard
+export default GifCard;

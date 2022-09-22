@@ -10,7 +10,7 @@ import userView from '../../images/Com/userView.svg';
 import userLike from '../../images/Com/userLike.svg';
 import userComm from '../../images/Com/userComm.svg';
 
-const FreeLike = () => {
+const TopicView = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
@@ -22,7 +22,7 @@ const FreeLike = () => {
     setLoad(true);
     try {
       const { data } = await axios.get(
-        `${baseURL}/post/gif/topic-no/2?size=6&page=${page}`
+        `${baseURL}/post/gif/topic-ok/4?size=6&page=${page}`
       );
       if (!data) {
         return;
@@ -70,7 +70,6 @@ const FreeLike = () => {
     }
     return () => observer && observer.disconnect();
   }, [ref]);
-
   return (
     <ListBox>
       {load === true ? <Loadings /> : null}
@@ -86,6 +85,7 @@ const FreeLike = () => {
                   }}
                 >
                   <DescBox>
+                    <Keyword>{item?.topic}</Keyword>
                     <Download />
                     <Like />
                   </DescBox>
@@ -123,7 +123,7 @@ const FreeLike = () => {
   );
 };
 
-export default FreeLike;
+export default TopicView;
 
 const Width = styled.div`
   width: 350px;
@@ -162,6 +162,14 @@ const Profile = styled(Button)`
 const Span = styled.span`
   font-size: 30px;
   font-weight: 800;
+`;
+
+const Keyword = styled(Span)`
+  padding-top: 290px;
+  padding-left: 10px;
+  font-family: 'Noto Bold';
+  font-size: 20px;
+  color: white;
 `;
 
 const Download = styled.button`

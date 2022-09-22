@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loadings from '../global/Loading';
+import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 
 const ProgressAll = () => {
   const navigate = useNavigate();
@@ -22,7 +23,6 @@ const ProgressAll = () => {
         return;
       }
       setNewdata(newData.concat(data.data));
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -70,14 +70,14 @@ const ProgressAll = () => {
     <ListBox>
       {load === true ? <Loadings /> : null}
       {newData?.map((item, index) => (
-        <BestBox
-          key={item.id}
-          onClick={() => {
-            navigate(`/progressdetail/${item.id}`);
-          }}
-        >
+        <BestBox key={item.id}>
           <div style={{ position: 'relative' }}>
-            <OverlayWrap productImg={item?.imgUrl}>
+            <OverlayWrap
+              productImg={item?.imgUrl}
+              onClick={() => {
+                navigate(`/progressdetail/${item.id}`);
+              }}
+            >
               <Overlay>
                 <DescBox>
                   <Keyword> {item?.topic}</Keyword>
@@ -117,6 +117,7 @@ const BestBox = styled(Width)`
   margin-top: 50px;
   display: inline-block;
   margin-left: 35px;
+  background: white;
 `;
 
 const BestDesc = styled(Width)`
@@ -139,8 +140,7 @@ const Profile = styled(Button)`
   margin-right: 20px;
   border-radius: 50%;
   background: url(${(props) => props.img});
-  ${({ theme }) => theme.backgroundSet('contain')};
-  background-size: 100% 95%;
+  ${({ theme }) => theme.backgroundSet('cover')};
 `;
 
 const Span = styled.span`
@@ -179,7 +179,9 @@ const Overlay = styled.div`
   ${OverlaySize}
   margin-top: 100%;
   height: 350px;
-  background: rgb(212, 212, 212);
+  background: white;
+
+  cursor: pointer;
   background: linear-gradient(
     360deg,
     #000000 -90.11%,
@@ -196,6 +198,7 @@ const OverlayWrap = styled.div`
   ${({ theme }) => theme.backgroundSet('contain')};
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
   transition: 0.2s ease-in;
+
   &:hover {
     transform: scale(1.05);
   }

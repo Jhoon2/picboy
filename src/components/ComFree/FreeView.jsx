@@ -10,7 +10,7 @@ import userView from '../../images/Com/userView.svg';
 import userLike from '../../images/Com/userLike.svg';
 import userComm from '../../images/Com/userComm.svg';
 
-const FreeLike = () => {
+const FreeView = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
@@ -22,7 +22,7 @@ const FreeLike = () => {
     setLoad(true);
     try {
       const { data } = await axios.get(
-        `${baseURL}/post/gif/topic-no/2?size=6&page=${page}`
+        `${baseURL}/post/gif/topic-no/4?size=6&page=${page}`
       );
       if (!data) {
         return;
@@ -70,7 +70,6 @@ const FreeLike = () => {
     }
     return () => observer && observer.disconnect();
   }, [ref]);
-
   return (
     <ListBox>
       {load === true ? <Loadings /> : null}
@@ -123,7 +122,7 @@ const FreeLike = () => {
   );
 };
 
-export default FreeLike;
+export default FreeView;
 
 const Width = styled.div`
   width: 350px;
