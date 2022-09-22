@@ -29,8 +29,24 @@ const Categories = () => {
     navigate('/post-free');
   };
 
+  //모달창 닫기
+  const node = useRef();
+  useEffect(() => {
+    const clickOutside = (e) => {
+      if (select && node.current && !node.current.contains(e.target)) {
+        setSelect(false);
+      }
+    };
+
+    document.addEventListener('mousedown', clickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', clickOutside);
+    };
+  }, [select]);
+
   return (
-    <>
+    <div ref={node}>
       {myContext.btnOpen ? (
         <ErrorBox onClick={() => myContext.btnClickOff()}>
           <AnyModal title="회원정보" content="로그인 후 가능합니다" />
@@ -74,7 +90,7 @@ const Categories = () => {
           </ul>
         </Down>
       </SelectListBox>
-    </>
+    </div>
   );
 };
 
@@ -118,24 +134,26 @@ const SelectBox = styled.div`
 `;
 
 const DrawingBox = styled.div`
-  width: 175px;
+  width: 140px;
   height: 40px;
-  margin-left: -50px;
+  margin-left: -120px;
   text-align: center;
   border: 1px #a3a3a3 solid;
   cursor: pointer;
+  &:hover {
+    background: white;
+  }
 `;
 
 const Select = styled.button`
-  margin-top: 7px;
+  margin-top: 10px;
   margin-left: auto;
   position: relative;
   background: none;
   font-family: 'PopLight';
-  font-size: 15px;
+  font-size: 12px;
   color: #a3a3a3;
   &:hover {
-    color: white;
   }
   div {
     label {
@@ -150,7 +168,7 @@ const Select = styled.button`
 const SelectListBox = styled.div`
   width: 120px;
   position: relative;
-  top: 30px;
+  top: 10px;
   right: 170px;
   z-index: 1;
 `;

@@ -1,16 +1,14 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
 
-import axios from 'axios'
-import styled from 'styled-components'
-import download from '../../images/download-btn.png'
-import heart from '../../images/like-before.png'
-import AllParticipants from './AllParticipants'
-import MySpecialButton from './MySpecialButton'
-import basicImg from '../../images/basicImg.jpg'
-
-
+import axios from 'axios';
+import styled from 'styled-components';
+import download from '../../images/download-btn.png';
+import heart from '../../images/like-before.png';
+import AllParticipants from './AllParticipants';
+import MySpecialButton from './MySpecialButton';
+import basicImg from '../../images/basicImg.jpg';
 
 const GifCard = ({ data, myImg, myNickname }) => {
   //서버주소
@@ -21,81 +19,112 @@ const GifCard = ({ data, myImg, myNickname }) => {
 
   const navigate = useNavigate();
   // 참여자들 보여주기
-  const [allParticipants, setAllParticipants] = useState(false)
-  const [peopleData, setPeopleData] = useState()
-  const showAllParticipants = async(e) => {
+  const [allParticipants, setAllParticipants] = useState(false);
+  const [peopleData, setPeopleData] = useState();
+  const showAllParticipants = async (e) => {
     e.stopPropagation();
-    const peopleData = await axios.get(`${baseURL}/post/join-list/${data.postId}`,
-        {
-            headers: {
-                Authorization: myToken,
-                'refresh-token': refreshToken
-            }
-      })
-    const datas = peopleData && peopleData.data.data
+    const peopleData = await axios.get(
+      `${baseURL}/post/join-list/${data.postId}`,
+      {
+        headers: {
+          Authorization: myToken,
+          'refresh-token': refreshToken,
+        },
+      }
+    );
+    const datas = peopleData && peopleData.data.data;
     if (datas.length <= 1) {
-      setAllParticipants(false)
+      setAllParticipants(false);
     } else {
-      setPeopleData(datas)
-      setAllParticipants(!allParticipants)
+      setPeopleData(datas);
+      setAllParticipants(!allParticipants);
     }
-  }
+  };
 
   //완료 페이지, 진행중 페이지 이동
   const movePage = () => {
     if (data.status === 1) {
-      navigate(`/progressdetail/${data.postId}`)
+      navigate(`/progressdetail/${data.postId}`);
     } else {
-      navigate(`/complete-detail/${data.postId}`)
+      navigate(`/complete-detail/${data.postId}`);
     }
-  }
+  };
 
   //... 버튼
-  const [openSpecialModal, setOpenSpecialModal] =useState(false)
+  const [openSpecialModal, setOpenSpecialModal] = useState(false);
   const buttonCollection = (e) => {
     e.stopPropagation();
     // console.log('눌러라')
-    setOpenSpecialModal(!openSpecialModal)
-  }
+    setOpenSpecialModal(!openSpecialModal);
+  };
 
   return (
     <CardContainer>
-      <div >
+      <div>
         <GifImg src={data.imgUrl} />
         <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
           <HoverSideButton onClick={buttonCollection}>···</HoverSideButton>
           <HoverContent>
-          <div style={{color:'white'
-          }}>{data.topic ? data.topic : null}</div>
-            <div style={{display :'flex'}}>
-              <ClickCircle src={download}/>
+            <div style={{ color: 'white' }}>
+              {data.topic ? data.topic : null}
+            </div>
+            <div style={{ display: 'flex' }}>
+              <ClickCircle src={download} />
               <ClickCircle src={heart} />
             </div>
           </HoverContent>
         </OverlayImg>
         <GifContents>
-          <UserProfileContent onClick={showAllParticipants} >
-            <ProfileImage src={!myImg ? basicImg : myImg}/>
-            <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>
-            <div style={{ marginTop: '15px', marginLeft: '15px' }}>{myNickname} 외 {data.memberCount}명</div>
+          <UserProfileContent onClick={showAllParticipants}>
+            <ProfileImage src={!myImg ? basicImg : myImg} />
+            <Participants>
+              <div
+                style={{
+                  marginTop: '5px',
+                  marginLeft: '5px',
+                  fontSize: '10px',
+                }}
+              >
+                +{data.memberCount}
+              </div>
+            </Participants>
+            <div style={{ marginTop: '15px', marginLeft: '15px' }}>
+              {myNickname} 외 {data.memberCount}명
+            </div>
           </UserProfileContent>
-          <div style={{display:'flex'}}>
+          <div style={{ display: 'flex' }}>
             <div style={{ marginLeft: '15px', fontSize: '30px' }}>♥</div>
-            <div style={{ marginTop: '7px', marginLeft: '10px', fontSize: '20px' }}>{data.likeCount}</div>
+            <div
+              style={{ marginTop: '7px', marginLeft: '10px', fontSize: '20px' }}
+            >
+              {data.likeCount}
+            </div>
           </div>
         </GifContents>
       </div>
 
       {/* ...버튼 */}
-      <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal} /> 
+      <MySpecialButton
+        shown={openSpecialModal}
+        close={() => {
+          setOpenSpecialModal(false);
+        }}
+        setOpenSpecialModal={setOpenSpecialModal}
+      />
       {/* 참여자들 */}
-      {allParticipants ?
-        <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData}  myNickname={myNickname} />
-        : null}
+      {allParticipants ? (
+        <AllParticipants
+          shown={allParticipants}
+          close={() => {
+            setAllParticipants(false);
+          }}
+          data={peopleData}
+          myNickname={myNickname}
+        />
+      ) : null}
     </CardContainer>
-    
-  )
-}
+  );
+};
 
 const CardContainer = styled.div`
   width: 388px;
@@ -103,24 +132,22 @@ const CardContainer = styled.div`
   margin-top: 50px;
   margin-right: 10px;
   position: relative;
-`
+`;
 const Overlay = styled.div`
-   /* position: absolute;
+  /* position: absolute;
     width: 100vw;
     height: 100vh;
     bottom: 0; */
   /* display: flex;
   justify-content: center;
-  align-items: center; */ 
-
-`
-
+  align-items: center; */
+`;
 
 const GifImg = styled.img`
   width: 100%;
   height: 316px;
-  background-color: #E6E6E6;
-`
+  background-color: #e6e6e6;
+`;
 const OverlayImg = styled.div`
   width: 388px;
   height: 316px;
@@ -129,13 +156,13 @@ const OverlayImg = styled.div`
   left: 0;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.5);
-  opacity: ${(props) => props.openSpecialModal ? 1 : 0};
+  opacity: ${(props) => (props.openSpecialModal ? 1 : 0)};
   cursor: pointer;
 
   &:hover {
     opacity: 1;
   }
-`
+`;
 const HoverSideButton = styled.button`
   padding: 1rem;
   font-size: 30px;
@@ -143,7 +170,7 @@ const HoverSideButton = styled.button`
   float: right;
   cursor: pointer;
   background-color: transparent;
-`
+`;
 
 const HoverContent = styled.div`
   margin-top: 260px;
@@ -153,7 +180,7 @@ const HoverContent = styled.div`
   font-weight: 400;
   display: flex;
   justify-content: space-between;
-`
+`;
 const ClickCircle = styled.img`
   width: 50px;
   height: 50px;
@@ -165,7 +192,7 @@ const ClickCircle = styled.img`
   :first-child {
     margin-right: 10px;
   }
-`
+`;
 
 const GifContents = styled.div`
   margin-top: 10px;
@@ -173,11 +200,11 @@ const GifContents = styled.div`
   margin-right: 20px;
   display: flex;
   justify-content: space-between;
-`
+`;
 const UserProfileContent = styled.div`
   display: flex;
   cursor: pointer;
-`
+`;
 
 const ProfileImage = styled.img`
   width: 57px;
@@ -185,7 +212,7 @@ const ProfileImage = styled.img`
   border-radius: 50px;
   /* background-color: gray; */
   cursor: pointer;
-`
+`;
 
 const Participants = styled.div`
   width: 24px;
@@ -193,7 +220,7 @@ const Participants = styled.div`
   position: absolute;
   left: 60px;
   border-radius: 24px;
-  background-color: #D9D9D9;
-`
+  background-color: #d9d9d9;
+`;
 
-export default GifCard
+export default GifCard;
