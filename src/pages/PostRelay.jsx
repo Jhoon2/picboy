@@ -6,7 +6,7 @@ import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 import { useParams } from 'react-router-dom';
 
 // import component
-import Footer from '../global/Footer';
+// import Footer from '../components/Footer'
 
 // image import
 import modeIc from '../images/pen.png';
@@ -23,7 +23,7 @@ import redo from '../images/redo.png';
 import stroke from '../images/stroke.png';
 import waterdrop from '../images/waterdrop.png';
 
-const PostTopicRelay = () => {
+const PostRelay = () => {
   /////////////////////////////////
   // canvas
   // useRef를 이용해 canvas 엘리먼트에 접근
@@ -56,7 +56,6 @@ const PostTopicRelay = () => {
     const Y = e.clientY - canvasRef.current.offsetTop + window.scrollY;
     if (isPainting === true) {
       if (rectState === true) {
-        // console.log('hi')
         ctx.strokeRect(
           X,
           Y,
@@ -164,7 +163,6 @@ const PostTopicRelay = () => {
   const [lastImg, setLastImg] = useState('');
 
   const imgInfoUrl = `${baseURL}/post/gif/images/detail/${params.id}`;
-
   const Callaxios = () => {
     axios
       .get(imgInfoUrl)
@@ -177,6 +175,16 @@ const PostTopicRelay = () => {
         console.log(error);
       });
   };
+  axios
+    .get(imgInfoUrl)
+    .then(function (response) {
+      const imgData = response.data.data;
+      setCountFrame(imgData);
+      setLastImg(imgData.imgUrl);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 
   // post
   const submitImg = () => {
@@ -514,7 +522,7 @@ const PostTopicRelay = () => {
           </ModeWrap>
         </ContetnsWrap>
       </PostContentsWrap>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
@@ -720,4 +728,4 @@ const RangeWrap = styled.div`
   flex-direction: column;
 `;
 
-export default PostTopicRelay;
+export default PostRelay;

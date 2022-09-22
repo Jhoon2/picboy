@@ -3,18 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components';
+// 소켓
+import { Stomp } from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
 import {
   getCookieToken,
   removeCookieToken,
   removeRefreshCookieToken,
+  getRefreshToken,
 } from '../shared/Cookie';
 import UseGetUser from '../hooks/UseGetUser';
 import ClickProfileModal from '../components/Header/ClickProfileModal';
 import basicImg from '../images/basicImg.jpg';
-
-const myToken = getCookieToken();
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -29,17 +31,59 @@ const throttle = function (callback, waitTime) {
 
 const Header = () => {
   const useGet = UseGetUser();
+  const usernames = useGet.data?.data.username;
   const loginUser = useGet && useGet.data.data.profileImg;
+  const myToken = getCookieToken();
+  ////////////////////////////////////////////////////
+  const [messageList, setMessageList] = useState([]);
+  const refreshToken = getRefreshToken();
+  const baseURL = process.env.REACT_APP_API_KEY;
+  const socket = new SockJS(`${baseURL}/socket/`, '', {
+    headers: {
+      Authorization: myToken,
+      'refresh-token': refreshToken,
+    },
+  });
+
+  const stompClient = Stomp.over(socket);
+
+  useEffect(() => {
+    stompConnect();
+  });
+
+  const stompConnect = () => {
+    try {
+      stompClient.connect(
+        () => {
+          stompClient.subscribe(`/sub/${usernames}`, (data) => {
+            const returnMessage = JSON.parse(data.body);
+
+            setMessageList(returnMessage.message);
+          });
+        },
+        () => {}
+      );
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  //////////////////////////////////////////////////////
+  const location = useLocation();
+
+  //usegetuser 훅을 쓸지 RTK로 할지 고민중
+  // const dispatch = useDispatch();
+  // const  getLogonUser  = useSelector((state) => state && state.logonUser)
+  // const loginUser = getLogonUser.logonUser&&getLogonUser.logonUser.profileImg
 
   useEffect(() => {}, [loginUser]);
 
   const navigate = useNavigate();
-  const location = useLocation();
+  const documentRef = useRef(document);
   const myContext = useMyContext();
 
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
-  const documentRef = useRef(document);
 
   const handleScroll = () => {
     const { pageYOffset } = window;
@@ -63,8 +107,6 @@ const Header = () => {
 
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
-
-  // const throttleScroll = throttle(handleScroll, 50);
 
   return (
     <HeaderArea>
@@ -93,13 +135,13 @@ const Header = () => {
           </CompleteButton>
           <PostCategories />
           {myToken ? (
-            <div>
-              <LoginUserImg
-                src={!loginUser ? basicImg : loginUser}
-                onClick={clickOpenModal}
-              ></LoginUserImg>
-            </div>
+            // <ProfileImgBackground>
+            <LoginUserImg
+              src={!loginUser ? basicImg : loginUser}
+              onClick={clickOpenModal}
+            ></LoginUserImg>
           ) : (
+            // </ProfileImgBackground>
             <LoginButton
               onClick={() => {
                 navigate('/login');
@@ -193,7 +235,7 @@ const CompleteButton = styled(Button)`
 const LoginButton = styled(Button)`
   width: 80px;
   ${({ theme }) => theme.backgroundSet('cover')}
-  font-size: 15px;
+  font-size: 12px;
   color: #a3a3a3;
   &:hover {
     color: white;
@@ -201,8 +243,17 @@ const LoginButton = styled(Button)`
 `;
 
 const LoginUserImg = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 58px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  background-color: white;
+
   cursor: pointer;
+`;
+
+const ProfileImgBackground = styled.div`
+  /* width: 58px;
+  height: 50px;
+  border-radius: 58px;
+   background-color: white; */
 `;

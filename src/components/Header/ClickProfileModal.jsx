@@ -1,52 +1,68 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
-import {
-  removeCookieToken,
-} from '../../shared/Cookie';
+import { removeCookieToken } from '../../shared/Cookie';
 import { useMyContext } from '../../shared/ContextApi';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import UseGetUser from '../../hooks/UseGetUser';
 
-const ClickProfileModal = ({shown, close}) => {
+const ClickProfileModal = ({ shown, close }) => {
   const myContext = useMyContext();
   const logonUser = UseGetUser();
   // console.log(logonUser)
-  const logonNick =logonUser && logonUser.data.data.nickname;
+  const logonUsername = logonUser && logonUser.data.data.username;
 
-  const [selectContent, setSelectContent] = useState('myPage')
+  const [selectContent, setSelectContent] = useState('myPage');
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  console.log(logonUsername);
   const myPage = (e) => {
-    setSelectContent(e.target.id)
-    navigate(`/user-profile/${logonNick}`)
-    myContext.setLogonProfileImg(false)
-  }
+    setSelectContent(e.target.id);
+    // navigate(`/user-profile/${logonUsername}`)
+    window.location.href = `/user-profile/${logonUsername}`;
+    myContext.setLogonProfileImg(false);
+  };
   const Logout = (e) => {
-    setSelectContent(e.target.id)
+    setSelectContent(e.target.id);
     removeCookieToken();
     window.location.href = '/';
-  }
+  };
 
-
-  return shown? (
-    <Overlay onClick={()=>{close()}}>
-      <OverlayPosition >
+  return shown ? (
+    <Overlay
+      onClick={() => {
+        close();
+      }}
+    >
+      <OverlayPosition>
         <OverlayContainer>
-          <ModalContainer onClick={e => {e.stopPropagation();}}>
-            <ModalText id='myPage' name='myPage' onClick={myPage} selectContent={selectContent}
+          <ModalContainer
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <ModalText
+              id="myPage"
+              name="myPage"
+              onClick={myPage}
+              selectContent={selectContent}
             >
               마이페이지
-              </ModalText>
+            </ModalText>
             <TextBr />
-            <ModalText id='Logout' name='Logout'onClick={Logout} categoryContent={selectContent}>
+            <ModalText
+              id="Logout"
+              name="Logout"
+              onClick={Logout}
+              categoryContent={selectContent}
+            >
               로그아웃
             </ModalText>
           </ModalContainer>
         </OverlayContainer>
       </OverlayPosition>
     </Overlay>
-  ) : null
-}
+  ) : null;
+};
 
 const Overlay = styled.div`
   position: absolute;
@@ -59,17 +75,17 @@ const Overlay = styled.div`
   z-index: 9999;
   display: flex;
   justify-content: center;
-`
+`;
 const OverlayContainer = styled.div`
   width: 200px;
   position: absolute;
-`
+`;
 const OverlayPosition = styled.div`
   height: 30px;
-  position:relative;
+  position: relative;
   top: 100px;
   left: 530px;
-`
+`;
 const ModalContainer = styled.div`
   width: 132px;
   height: 100px;
@@ -77,7 +93,7 @@ const ModalContainer = styled.div`
   z-index: 2;
   border: 2px solid #000000;
   background-color: white;
-`
+`;
 
 const ModalText = styled.div`
   width: 132px;
@@ -93,13 +109,14 @@ const ModalText = styled.div`
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
-  color: ${(props)=> (props.name === (props.selectContent)) ? '#000000' : '#A3A3A3'} ;
+  color: ${(props) =>
+    props.name === props.selectContent ? '#000000' : '#A3A3A3'};
   cursor: pointer;
 
   :first-child {
     margin-top: 15px;
   }
-`
+`;
 const TextBr = styled.div`
   width: 84px;
   height: 0px;
@@ -109,7 +126,7 @@ const TextBr = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  border: 0.5px solid #A3A3A3;
-`
+  border: 0.5px solid #a3a3a3;
+`;
 
-export default ClickProfileModal
+export default ClickProfileModal;

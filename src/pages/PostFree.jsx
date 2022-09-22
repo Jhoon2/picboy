@@ -5,7 +5,7 @@ import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 
 // import component
-import Footer from '../global/Footer';
+// import Footer from '../global/Header';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -487,7 +487,7 @@ const PostFree = () => {
           </ModeWrap>
         </ContetnsWrap>
       </PostContentsWrap>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

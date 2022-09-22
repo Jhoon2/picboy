@@ -1,18 +1,27 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import CategoryModal from './CategoryModal'
 import { useMyContext } from '../../shared/ContextApi'
+import { __getUserData } from '../../redux/modules/UserPage'
 
 const CategoryOpen = ({ value }) => {
   // console.log(value)
   const [categoryContent, setCategoryContent] = useState('all')
   const [isOpenCategory, setIsOpenCategory] = useState(false)
   const myContext = useMyContext();
+  const dispatch = useDispatch();
 
+  //event 함수를 쓸 때는 event에 대한 이름으로 작성 ex) handleClickAll
   const all = (e) => {
     setCategoryContent(e.target.id)
     myContext.setTabNum(0)
     myContext.setCategoryNum(1)
+    // const tabInfo = {
+    //   tabNum: 0,
+    //   categoryNum:1
+    // }
+    // dispatch(__getUserData(tabInfo))
   }
   const start = (e) => {
     setCategoryContent(e.target.id)

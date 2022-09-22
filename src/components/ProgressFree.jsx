@@ -65,17 +65,19 @@ const BestFree = () => {
     return () => observer && observer.disconnect();
   }, [ref]);
 
+  console.log(newData);
+
   return (
     <ListBox>
       {load === true ? <Loadings /> : null}
       {newData.map((item, index) => (
-        <BestBox
-          key={item.id}
-          onClick={() => {
-            navigate(`/progressdetail/${item.id}`);
-          }}
-        >
-          <BestImg productImg={item?.imgUrl} />
+        <BestBox key={item.id}>
+          <BestImg
+            productImg={item?.imgUrl}
+            onClick={() => {
+              navigate(`/progressdetail/${item.id}`);
+            }}
+          />
           <BestDesc>
             <Profile img={item?.profileImg} />
             <Nickname>{item?.nickname}</Nickname>
@@ -114,6 +116,7 @@ const BestImg = styled.div`
 
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
   transition: 0.2s ease-in;
+  cursor: pointer;
   &:hover {
     transform: scale(1.05);
   }
@@ -134,8 +137,7 @@ const Profile = styled(Button)`
   margin-right: 20px;
   border-radius: 50%;
   background: url(${(props) => props.img});
-  ${({ theme }) => theme.backgroundSet('contain')};
-  background-size: 100% 95%;
+  ${({ theme }) => theme.backgroundSet('cover')};
 `;
 
 const Span = styled.span`

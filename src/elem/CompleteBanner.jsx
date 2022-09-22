@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import Listbanner from '../images/Com/Listbanner.svg';
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -70,7 +71,7 @@ const ImgBox = styled.div`
   height: 300px;
   ${({ theme }) => theme.flexSet('column', 'space-between', 'center')}
   text-align: center;
-  background: #f4f4f4;
+  background: url(${Listbanner});
   border: 0.5px solid #a3a3a3;
   span {
     margin-top: 140px;

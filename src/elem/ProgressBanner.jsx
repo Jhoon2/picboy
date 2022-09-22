@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import Listbanner from '../images/Com/Listbanner.svg';
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -67,11 +68,10 @@ export default ProgressBanner;
 
 const ImgBox = styled.div`
   width: 100%;
-  height: 300px;
+  height: 636px;
   ${({ theme }) => theme.flexSet('column', 'space-between', 'center')}
   text-align: center;
-  background: #f4f4f4;
-  border: 0.5px solid #a3a3a3;
+  background: url(${Listbanner});
   span {
     margin-top: 140px;
     font-family: 'SilkLight';
@@ -83,7 +83,7 @@ const ImgBox = styled.div`
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: -5;
   transition: 0.4s ease;
   &.hide {
     transform: translateY(-250px);

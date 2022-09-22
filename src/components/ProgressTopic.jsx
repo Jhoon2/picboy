@@ -69,14 +69,14 @@ const ProgressTopic = () => {
     <ListBox>
       {load === true ? <Loadings /> : null}
       {newData?.map((item, index) => (
-        <BestBox
-          key={item.id}
-          onClick={() => {
-            navigate(`/progressdetail/${item.id}`);
-          }}
-        >
+        <BestBox key={item.id}>
           <div style={{ position: 'relative' }}>
-            <OverlayWrap productImg={item?.imgUrl}>
+            <OverlayWrap
+              productImg={item?.imgUrl}
+              onClick={() => {
+                navigate(`/progressdetail/${item.id}`);
+              }}
+            >
               <Overlay>
                 <DescBox>
                   <Keyword> {item?.topic}</Keyword>
@@ -138,8 +138,7 @@ const Profile = styled(Button)`
   margin-right: 20px;
   border-radius: 50%;
   background: url(${(props) => props.img});
-  ${({ theme }) => theme.backgroundSet('contain')};
-  background-size: 100% 95%;
+  ${({ theme }) => theme.backgroundSet('cover')};
 `;
 
 const Span = styled.span`
@@ -148,13 +147,10 @@ const Span = styled.span`
 `;
 
 const Keyword = styled(Span)`
-  padding-top: 230px;
+  padding-top: 370px;
   padding-left: 10px;
   font-family: 'Noto Bold';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 200%;
+  font-size: 20px;
   color: white;
 `;
 
@@ -180,7 +176,7 @@ const OverlaySize = css`
 const Overlay = styled.div`
   ${OverlaySize}
   margin-top: 100%;
-  height: 200px;
+  height: 350px;
   background: rgb(212, 212, 212);
   background: linear-gradient(
     360deg,
@@ -198,11 +194,12 @@ const OverlayWrap = styled.div`
   ${({ theme }) => theme.backgroundSet('contain')};
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
   transition: 0.2s ease-in;
+  cursor: pointer;
   &:hover {
     transform: scale(1.05);
   }
   &:hover ${Overlay} {
-    margin-top: 30%;
+    margin-top: 10%;
   }
 `;
 

@@ -3,8 +3,12 @@ import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loadings from '../../global/Loading';
-import user from '../../images/user.png';
-import bubble1 from '../../images/bubble1.png';
+import Report from '../../elem/Report';
+import LikeButton from '../../images/Com/like.svg';
+import DownButton from '../../images/Com/download.svg';
+import userView from '../../images/Com/userView.svg';
+import userLike from '../../images/Com/userLike.svg';
+import userComm from '../../images/Com/userComm.svg';
 
 const Free = () => {
   const navigate = useNavigate();
@@ -72,41 +76,49 @@ const Free = () => {
   return (
     <ListBox>
       {load === true ? <Loadings /> : null}
-      {newData?.map((item, index) => (
-        <BestBox
-          key={item.id}
-          onClick={() => {
-            navigate(`/complete-detail/${item.id}`);
-          }}
-        >
-          <div style={{ position: 'relative' }}>
-            <OverlayWrap productImg={item?.gifUrl}>
-              <Overlay>
-                <DescBox>
-                  <Keyword>{item?.topic}</Keyword>
-                  <Download />
-                  <Like />
-                </DescBox>
-              </Overlay>
-            </OverlayWrap>
-            <BestImg />
-          </div>
-          <BestDesc>
-            <Profile />
-            <Nickname>
-              {item?.nickname} 외 {item?.participantCount} 명
-            </Nickname>
-            <CommentBox>
-              <CommentImg />
-              <DescText>{item?.commentCount}</DescText>
-            </CommentBox>
-            <LikeBox>
-              <LikesImg />
-              <DescText>{item?.likeCount}</DescText>
-            </LikeBox>
-          </BestDesc>
-        </BestBox>
-      ))}
+      {newData.map((item, index) => {
+        return (
+          <BestBox key={item.id}>
+            <div style={{ position: 'relative' }}>
+              <OverlayWrap productImg={item?.gifUrl}>
+                <Report item={item} />
+                <Overlay
+                  onClick={() => {
+                    navigate(`/complete-detail/${item.id}`);
+                  }}
+                >
+                  <DescBox>
+                    <Keyword>{item?.topic}</Keyword>
+                    <Download />
+                    <Like />
+                  </DescBox>
+                </Overlay>
+              </OverlayWrap>
+              <BestImg />
+            </div>
+            <BestDesc>
+              <Profile img={item?.profileImg} />
+              <Nickname>
+                {item?.nickname} 등 {item?.participantCount} 명
+              </Nickname>
+              <InforBox>
+                <ViewsBox>
+                  <ViewsImg />
+                  <DescText>{item?.viewCount}</DescText>
+                </ViewsBox>
+                <CommentBox>
+                  <CommentImg />
+                  <DescText>{item?.commentCount}</DescText>
+                </CommentBox>
+                <LikeBox>
+                  <LikesImg />
+                  <DescText>{item?.likeCount}</DescText>
+                </LikeBox>
+              </InforBox>
+            </BestDesc>
+          </BestBox>
+        );
+      })}
       <>
         <div ref={setRef}>isLoading</div>
       </>
@@ -132,12 +144,6 @@ const BestBox = styled(Width)`
   margin-left: 35px;
 `;
 
-const BestDesc = styled(Width)`
-  height: 50px;
-  margin-top: 15px;
-  ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
-`;
-
 const DescBox = styled(Width)`
   height: 110px;
   ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
@@ -145,15 +151,15 @@ const DescBox = styled(Width)`
 `;
 
 const Button = styled.button`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 `;
 
 const Profile = styled(Button)`
-  margin-right: 20px;
+  margin-right: 15px;
   border-radius: 50%;
-  background: url(${user});
-  ${({ theme }) => theme.backgroundSet('contain')};
+  background: url(${(props) => props.img});
+  ${({ theme }) => theme.backgroundSet('cover')};
 `;
 
 const Span = styled.span`
@@ -162,36 +168,27 @@ const Span = styled.span`
 `;
 
 const Keyword = styled(Span)`
-  padding-top: 20px;
+  padding-top: 290px;
   padding-left: 10px;
   font-family: 'Noto Bold';
   font-size: 20px;
   color: white;
 `;
 
-const Download = styled.div`
+const Download = styled.button`
   width: 50px;
   height: 50px;
-  background: white;
   border-radius: 50px;
   position: absolute;
+  top: 165px;
   right: 70px;
+  background: url(${DownButton});
+  ${({ theme }) => theme.backgroundSet('contain')};
 `;
 
 const Like = styled(Download)`
-  background: white;
   right: 10px;
-`;
-
-const Nickname = styled(Span)`
-  font-family: 'NotoLight';
-  font-size: 13px;
-  margin-right: 20px;
-  color: #2e3248;
-  display: inline-block;
-  padding: 15px 0;
-  position: relative;
-  text-decoration: none;
+  background: url(${LikeButton});
 `;
 
 const OverlaySize = css`
@@ -202,9 +199,12 @@ const OverlaySize = css`
 const Overlay = styled.div`
   ${OverlaySize}
   margin-top: 100%;
-  height: 200px;
-  background: rgb(212, 212, 212);
-  background: linear-gradient(360deg, rgba(103, 103, 103, 0) 67.83%);
+  height: 300px;
+  background: linear-gradient(
+    360deg,
+    #000000 -90.11%,
+    rgba(103, 103, 103, 0) 67.83%
+  );
   transition: all 1s;
 `;
 
@@ -220,8 +220,27 @@ const OverlayWrap = styled.div`
     transform: scale(1.05);
   }
   &:hover ${Overlay} {
-    margin-top: 60%;
+    margin-top: 20%;
   }
+`;
+
+const BestDesc = styled(Width)`
+  height: 50px;
+  margin-top: 15px;
+  position: relative;
+  ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
+`;
+
+//여기
+const Nickname = styled(Span)`
+  width: 150px;
+  font-family: 'NotoBold';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #2e3248;
+  line-height: 180%;
+  letter-spacing: -0.02em;
 `;
 
 const BestImg = styled.div`
@@ -230,29 +249,43 @@ const BestImg = styled.div`
   display: block;
 `;
 
+const InforBox = styled.div`
+  position: absolute;
+  right: 0;
+  ${({ theme }) => theme.flexSet('row', 'flex-end', 'center')};
+`;
+
 const CommentBox = styled.div`
-  width: 70px;
-  padding-left: 20px;
-  ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
+  width: 50px;
+  ${({ theme }) => theme.flexSet('row', 'flex-end', 'center')};
 `;
 
 const CommentImg = styled.div`
-  width: 20px;
-  height: 20px;
-  background: url(${bubble1});
-  ${({ theme }) => theme.backgroundSet('contain')}
+  width: 17px;
+  height: 15px;
+  background: url(${userComm});
+  ${({ theme }) => theme.backgroundSet('cover')}
+  background-size: 100% 100%;
 `;
 
-const LikeBox = styled(CommentBox)`
-  margin-left: 10px;
+const LikeBox = styled(CommentBox)``;
+
+const LikesImg = styled(CommentImg)`
+  background: url(${userLike});
 `;
 
-const LikesImg = styled(CommentImg)``;
+const ViewsBox = styled(CommentBox)``;
+
+const ViewsImg = styled(CommentImg)`
+  width: 14px;
+  height: 10px;
+  background: url(${userView});
+`;
 
 const DescText = styled.span`
   margin-left: 5px;
   font-family: 'NotoLight';
-  font-size: 15px;
+  font-size: 13px;
   line-height: 20px;
   color: #a3a3a3;
 `;
