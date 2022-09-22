@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
 import { useMyContext } from '../../shared/ContextApi'
+import welcomeimg from '../../images/welcome.png'
 
 const SignUpDone = ({nickname}) => {
   // const myContext = useMyContext();
@@ -14,6 +15,9 @@ const SignUpDone = ({nickname}) => {
   }
 return (
   <SignupDontContainer onClick={(e) => { e.stopPropagation(); }}>
+    <WelcomeContainer>
+      <img src={welcomeimg} />
+    </WelcomeContainer>
     <div style={{textAlign:'center'}}>
       <SignupTitle>회원가입이<br />완료되었습니다!
       </SignupTitle>
@@ -45,8 +49,13 @@ const SignupDontContainer = styled.div`
   background-color: white;
 `
 
+const WelcomeContainer = styled.div`
+  margin-top: 51px;
+  margin-left: 131px;
+`
+
 const SignupTitle = styled.div`
-  margin-top: 171px;
+  margin-top: 34px;
   font-size:  ${(props) => props.theme.SubTitle};
   font-weight: ${(props) => props.theme.SubTitleBD};
   line-height: 36px;
@@ -67,7 +76,7 @@ const SignupButton = styled.div`
   width: 175px;
   height: 49px;
   margin-top: 43px;
-  margin-left: 112px;
+  margin-left: 100px;
   font-size:  ${(props) => props.theme.Caption1};
   font-weight: ${(props) => props.theme.SubTitleBD};
   color: #FFFFFF;
@@ -84,7 +93,7 @@ const SignupButton1 = styled.div`
   width: 175px;
   height: 49px;
   margin-top: 43px;
-  margin-left: 112px;
+  margin-left: 100px;
   font-size:  ${(props) => props.theme.Caption1};
   font-weight: ${(props) => props.theme.SubTitleBD};
   color: #000000;
