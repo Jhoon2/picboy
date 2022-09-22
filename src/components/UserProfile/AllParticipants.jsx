@@ -1,12 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import basicImg from '../../images/basicImg.jpg'
+import grayPerson from '../../images/mypage/Person.png'
 
-const AllParticipants = ({ shown, close, data, myNickname }) => {
-  // const acceptMeData = data && data.filter((person) => 
+const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) => {
+  // const acceptMeData = data && data.filter((person) =>
   //   person.nickname !== myNickname
   // )
-
+  // data = data.substr(1)
+  console.log(data)
   //다른 사람 이동
   const moveOtherPerson = (id) => {
     window.location.href = `/user-profile/${id}`
@@ -17,12 +19,26 @@ const AllParticipants = ({ shown, close, data, myNickname }) => {
         <OverlayPosition >
           <OverlayContainer>
             <ModalContainer onClick={e => { e.stopPropagation() }}>
-              {data && data.map((person, idx) => {
+              <FirstAuthor style={{marginTop:'10px'}}>최초 작성자</FirstAuthor>
+              <div style={{display:'flex', padding:'10px', justifyContent:'space-between'}}>
+                <div style={{ display: 'flex' }}>
+                  <FirstImg src={FirstProfileImg} />
+                  <FirstNickname style={{marginTop:'3px'}}>{Firstickname }</FirstNickname>
+                </div>
+                <PersonImg1 src={grayPerson} />
+              </div>
+              <FirstAuthor>참여자</FirstAuthor>
+              {data && data.splice(1).map((person, idx) => {
                 return (
-                <DataPersonContainer key={idx} onClick={() => moveOtherPerson(person.username)}>
-                  <PersonImg src={!person.img?basicImg : person.img} ></PersonImg>
-                  <PersonText>{person.nickname}</PersonText>
-                </DataPersonContainer>
+                <div  key={idx} style={{display:'flex', padding:'10px', marginLeft:'-5px', justifyContent:'space-between'}}>
+                  <div>
+                    <DataPersonContainer  onClick={() => moveOtherPerson(person.username)}>
+                      <PersonImg src={!person.img?basicImg : person.img} ></PersonImg>
+                      <PersonText>{person.nickname}</PersonText>
+                      </DataPersonContainer>
+                  </div>
+                  <PersonImg1 src={grayPerson} style={{marginTop:'22px'}}/>
+                </div>
                 )
               })}
             </ModalContainer>
@@ -33,35 +49,32 @@ const AllParticipants = ({ shown, close, data, myNickname }) => {
   ) : null
 }
 const FullOverLay = styled.div`
+  width: 100vw;
+  height: 70vh;
+  margin-top: -1000px;
+  margin-left: -900px;
    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    bottom: 0;
-
+  /* background-color: gray; */
 `
 
 const Overlay = styled.div`
-  position: absolute;
-  /* width: 100vw; */
-  /* height: ; */
-  top: 1150px;
-  bottom: 0;
-  left: -450px;
   z-index: 9999;
 `
 const OverlayContainer = styled.div`
   /* width: 200px; */
+  /* position: absolute; */
   position: absolute;
+    top: 550px;
+    left: 1300px;
 `
 const OverlayPosition = styled.div`
   height: 30px;
-  position:relative;
-  top: -330px;
-  left: 250px;
+  position:absolute;
+
 `
 const ModalContainer = styled.div`
-  width: 202px;
-  height: 160px;
+  width: 234px;
+  height: 161px;
   overflow: auto;
   position: absolute;
   z-index: 2;
@@ -74,14 +87,38 @@ const DataPersonContainer = styled.div`
   display: flex;
   cursor: pointer;
 `
+const FirstAuthor = styled.div`
+  padding: 10px;
+  color: ${(props) => props.theme.inactive};
+`
+
+const FirstImg = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 32px;
+`
+const FirstNickname = styled.div`
+  margin-top: 3px;
+  margin-left: 10px;
+  color: ${(props) => props.theme.basic};
+  font-size: ${(props) => props.theme.Caption2};
+`
 
 const PersonImg = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
+  width: 32px;
+  height: 32px;
+  border-radius: 32px;
 `
+const PersonImg1 = styled.img`
+  width: 14px;
+  height: 14px;
+  margin-top: 10px;
+`
+
 const PersonText = styled.div`
   margin-top: 9px;
   margin-left: 10px;
+  color: ${(props) => props.theme.basic};
+  font-size: ${(props) => props.theme.Caption2};
 `
 export default AllParticipants

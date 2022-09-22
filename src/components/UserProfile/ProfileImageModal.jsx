@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import styled from 'styled-components'
 import ProfileImageIcons from './ProfileImageIcons'
-import basicImg from '../../images/basicImg.jpg'
+import basicImg from '../../images/mypage/basicImg.png'
 import { __putEditProfileImg } from '../../redux/modules/UserPage'
 import { useDispatch } from 'react-redux'
 import arrow from '../../images/keyboard-arrow-right-2.png'
-
+import lightArrow from '../../images/mypage/grayRightArrow.png'
 
 const ProfileImageModal = ({ shown, close, }) => {
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ const ProfileImageModal = ({ shown, close, }) => {
             <ModalText name='myPc' onClick={FromMyPc}  >
               <ImgTextContainer >
                 <div>내 PC에서 가져오기</div>
-                <img src={arrow} />
+                <img src={lightArrow} />
               </ImgTextContainer>
             </ModalText>
         </label>
@@ -80,14 +80,14 @@ const ProfileImageModal = ({ shown, close, }) => {
             style={path? { color: '#000000', fontWeight:'700'} : {color:'#A3A3A3',fontWeight:'400'}}>
             <ImgTextContainer >
               <div >아이콘 고르기</div>
-              <img src={arrow} />
+              <img src={path? arrow:lightArrow} />
             </ImgTextContainer>
           </ModalText>
             <TextBr />
           <ModalText name='noImg' onClick={clickBasic}  >
             <ImgTextContainer >
               <div>기본이미지로</div>
-              <img src={arrow} />
+              <img src={lightArrow} />
             </ImgTextContainer>
           </ModalText>
         </ModalContainer>
@@ -116,8 +116,8 @@ const OverlayPosition = styled.div`
   width: 300px;
   height: 30px;
   position:relative;
-  top:470px;
-  left: -520px;
+  top:400px;
+  left: -350px;
 `
 const ModalContainer = styled.div`
   width: 216px;

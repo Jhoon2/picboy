@@ -17,7 +17,10 @@ import textbox from '../../images/Textsms.png'
 const GifCard = ({ data, myImg, myNickname }) => {
   const myContext = useMyContext();
   const navigate = useNavigate();
+  // console.log('데이터', data)
   // 참여자들 보여주기
+  const [allParticipants, setAllParticipants] = React.useState(false)
+
   const [peopleData, setPeopleData] = useState()
   const showAllParticipants = async(e) => {
     e.stopPropagation();
@@ -25,10 +28,10 @@ const GifCard = ({ data, myImg, myNickname }) => {
        )
     const datas = peopleData && peopleData.data.data
     if (datas.length <= 1) {
-      myContext.setAllParticipants(false)
+      setAllParticipants(false)
     } else {
       setPeopleData(datas)
-      myContext.setAllParticipants(!myContext.allParticipants)
+      setAllParticipants(!allParticipants)
     }
   }
 
@@ -51,7 +54,7 @@ const GifCard = ({ data, myImg, myNickname }) => {
   
   return (
     <CardContainer>
-      <div >
+     
         <GifImg src={data.imgUrl} />
         {/* {console.log(data.imgUrl)} */}
         <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
@@ -70,7 +73,7 @@ const GifCard = ({ data, myImg, myNickname }) => {
         <GifContents>
           <UserProfileContent onClick={showAllParticipants} >
             <ProfileImage src={!data.profileImg ? basicImg : data.profileImg}/>
-            <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>
+          {data.memberCount ? <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>: null} 
             <Texts >{data.nickname} 외 {data.memberCount}명</Texts>
           </UserProfileContent>
           <div style={{ display: 'flex' }}>
@@ -84,14 +87,19 @@ const GifCard = ({ data, myImg, myNickname }) => {
             <LikeCount >{data.likeCount}</LikeCount>
           </div>
         </GifContents>
-      </div>
+      
 
       {/* ...버튼 */}
-      <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal} /> 
-      {/* 참여자들 */}
-      {myContext.allParticipants ?
-        <AllParticipants shown={myContext.allParticipants} close={() => { myContext.setAllParticipants(false) }} data={peopleData}  myNickname={myNickname} />
-        : null}
+      <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal}
+        postId={data.postId} /> 
+      {/* 참여자들 */}.
+      <CardInner >
+      <AllParticipantsContainer>
+        {allParticipants ?
+            <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData} Firstickname={data.nickname} FirstProfileImg={!data.profileImg ? basicImg : data.profileImg} />
+          : null}
+        </AllParticipantsContainer>
+        </CardInner>
     </CardContainer>
     
   )
@@ -104,17 +112,14 @@ const CardContainer = styled.div`
   margin-right: 10px;
   position: relative;
 `
-const Overlay = styled.div`
-   /* position: absolute;
-    width: 100vw;
-    height: 100vh;
-    bottom: 0; */
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */ 
 
+const CardInner = styled.div`
+  width: 300px;
+  height: 30px;
+  position:relative;
+  top:400px;
+  left: -350px;
 `
-
 
 const GifImg = styled.img`
   width: 100%;
@@ -204,6 +209,11 @@ const LikeCount = styled.div`
   font-size : ${(props) => props.theme.Caption2};
   color : ${(props) => props.theme.inactive};
 
+`
+const AllParticipantsContainer = styled.div`
+  width: 300px;
+  height: 300px;
+  position: relative;
 `
 
 const Participants = styled.div`

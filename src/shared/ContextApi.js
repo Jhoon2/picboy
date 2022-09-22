@@ -53,7 +53,7 @@ export const Context = (props) => {
         logonOpenProfileImg,
         setLogonProfileImg,
 
-        //모든 참가자 모달창
+        // 모든 참가자 모달창
         allParticipants,
         setAllParticipants
     };

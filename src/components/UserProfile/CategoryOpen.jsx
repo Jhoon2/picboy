@@ -79,7 +79,7 @@ const CategoryOpen = ({ value,username }) => {
       </CategoryContainer>
       {/* 카테고리모달창 */}
       <CategoryModal shown={isOpenCategory} close={() => { setIsOpenCategory(false) }}
-        select={select} setSelect={setSelect} /> 
+       username={username} /> 
     
     </>
       )

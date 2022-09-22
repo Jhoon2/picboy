@@ -25,7 +25,7 @@ export const __getLogonUser = createAsyncThunk(
 export const __getUserPage = createAsyncThunk(
   'userPage/getUserPage',
   async (payload, thunkAPI) => {
-    console.log(payload)
+    // console.log(payload)
     try {
       const data = await axios.get(`${baseURL}/mypage/user-info?username=${payload.username}`
       )
@@ -55,7 +55,22 @@ export const __getUserData = createAsyncThunk(
     }
   }
 )
-
+//숨기기 
+export const __hidePost = createAsyncThunk(
+  'userHidePost/hidePost',
+  async (payload, thunkAPI) => {
+    // console.log(payload)
+    try {
+      const response = await instance.post(
+        `mypage/post-hidden/${payload}`
+      );
+      return thunkAPI.fulfillWithValue(payload);
+    } catch (error) {
+      // return thunkAPI.rejectWithValue(error);
+      console.log(error)
+    }
+  }
+);
 export const __putEditNickname = createAsyncThunk(
   'editNickname /putEditNickname ',
   async (payload, thunkAPI) => {
@@ -98,6 +113,7 @@ export const __selectIconImg = createAsyncThunk(
     }
   }
 );
+
 
 
 //로그온 유저 정보
@@ -158,29 +174,35 @@ export const userPageSlice = createSlice({
 
 export const userdataSlice = createSlice({
   name: 'userData',
-  initialState:{
-      userData: [],
-      isLoading: false,
-      error: null,
+  initialState: {
+    userData: [],
+    isLoading: false,
+    error: null,
   },
   reducers: {},
   extraReducers: {
-      [__getUserData.pending]: (state) => {
-          state.isLoading = true;
-      },
-      [__getUserData.fulfilled]: (state, action) => {
-        state.isLoading = false;
-        // console.log('액션페이로드',action.payload)
-        if (action.payload.pageable.pageNumber === 0) {
-          state.userData = action.payload
-        } else {
-          state.userData.content = [...state.userData.content].concat(action.payload.content)
-        }
-      },
-      [__getUserData.rejected]: (state, action) => {
-          state.isLoading = false;
-          state.error = action.payload;
+    [__getUserData.pending]: (state) => {
+      state.isLoading = true;
     },
-
+    [__getUserData.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      // console.log('페이로드 페이지', action.payload.pageable.pageNumber)
+      // console.log('액션페이로드',action.payload)
+      if (action.payload.pageable.pageNumber === 0) {
+        state.userData = action.payload
+      } else {
+        state.userData.content = [...state.userData.content].concat(action.payload.content)
+      }
+    },
+    [__getUserData.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [__hidePost.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.userData.content = state.userData.content.filter(
+        (data) => data.postId !== action.payload
+      )
+    },
   }
 })

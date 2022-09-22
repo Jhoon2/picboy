@@ -5,7 +5,7 @@ import { useMyContext } from '../shared/ContextApi'
 import { useParams } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
 import axios from "axios"
-import { getCookieToken, getRefreshToken } from '../shared/Cookie'
+// import { getCookieToken, getRefreshToken } from '../shared/Cookie'
 import { __getUserData, __getUserPage } from '../redux/modules/UserPage'
 import { __putEditNickname } from '../redux/modules/UserPage'
 
@@ -17,9 +17,9 @@ import CategoryOpen from '../components/UserProfile/CategoryOpen'
 import basicImg from '../images/basicImg.jpg'
 import smallpencil from '../images/smallpencil.png'
 import camera from '../images/Camera.png'
+import editPencil from '../images/mypage/mode-edit-sharp.png'
 import TopScroll from '../global/TopScroll'
-const myToken = getCookieToken();
-const refreshToken = getRefreshToken();
+
 
 const UserProfile = () => {
     const baseURL = process.env.REACT_APP_API_KEY;
@@ -42,24 +42,41 @@ const UserProfile = () => {
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
 
-   //외부 클릭시 모달창  끄기
-    const allComponentCloseModal = () => {
-        myContext.setIsOpenProfileImg(false)
-        // myContext.setAllParticipants(false)
-    }
+    //store 데이터 호출
+    const { userPage } = useSelector((state) => state.userpage)
+    const UserPage = userPage && userPage.data
+    // console.log(UserPage && UserPage)
+    
+    const {userData}  = useSelector((state) => state.userdata)
+    const pageNumber = userData.pageable && userData.pageable.pageNumber
+    const totalPages = userData.pageable && userData.totalPages
+    const [currentPage, setCurrentPage] = useState(0);
+
+    // console.log('현재 페이지 넘버',pageNumber)
+    // console.log('토탈페이지 넘버', totalPages)
+    // console.log('현재 페이지 넘버', currentPage)
     
 
-    
     //observe 콜백 함수
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
+            console.log('-------------------------')
+            // if (currentPage >= totalPages && totalPages)
+            // console.log(totalPages&&totalPages,currentPage,'----------페이지가 토탈보다 크다')
+            // if (pageNumber === 0) {
+                // page = 0
+            // if (page > 3 ? page = 0:page++)
             page++
-            dispatch(__getUserData({
-                username:params.id,
-                'page': page
-            }))
-        //조건이 트루
+                // console.log('&&&&&&&&&&&&',page)
+                dispatch(__getUserData({
+                    username:params.id,
+                    'page': page,
+                }))
+            setCurrentPage(page)
+            //  }
+
+            //조건이 트루
         //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
 
         // 현재 타겟을 observe한다.
@@ -71,14 +88,10 @@ const UserProfile = () => {
     });
   };
     
+//   console.log('useState페이지',currentPage)
 
     
-    const {userPage} = useSelector((state) => state.userpage)
-    const UserPage = userPage && userPage.data
-    // console.log(UserPage && UserPage)
-    
-    const {userData}  = useSelector((state) => state.userdata)
-    // console.log(userData&&userData)
+
 
     useEffect(() => {
         dispatch(__getUserPage({username:params.id}))
@@ -143,10 +156,16 @@ const UserProfile = () => {
     // 닉네임 수정버튼
     let button;
     if (editMyNickname) {
-        button = <EditDone onClick={completeBtn}>완료</EditDone>
+        button = <EditDone onClick={completeBtn}>
+             <div style={{width:'100px',height:'100px',marginLeft:'-10px',backgroundColor: 'white'}}>
+                 <PenContainer style={{backgroundColor: 'black'}}>
+                    <PenImg style={{backgroundColor: 'black'}} src={editPencil} />
+                             </PenContainer>
+             </div>
+        </EditDone>
     } else {
         button = <EditButton onClick={editNickname}>
-            <PenContainer >
+            <PenContainer style={{marginLeft:'-10px'}}>
                 <PenImg src={smallpencil} />
             </PenContainer>
         </EditButton>
@@ -177,7 +196,8 @@ const UserProfile = () => {
         };
     
     return (
-        <UserProfileContainer>
+        <>
+        <UserProfileContainer >
             <ContainerInner >
                 <TopScroll />
                 {/* 프로필 */}
@@ -238,16 +258,18 @@ const UserProfile = () => {
                             )
                         })}
                     </CardContainer>
-                    <div style={{ width: '100px', height: '20px', backgroundColor: 'gray' }} ref={ lastIntersectingData}>.</div>
+                    <div style={{ width: '100px', height: '20px' }} ref={ lastIntersectingData}>.</div>
                 </>
             </ContainerInner>
 
+        
+            </UserProfileContainer>
 
             {/* 프로필이미지 모달창 */}
             {UserPage&&UserPage.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
-                close={allComponentCloseModal} /> : null}  
-        
-        </UserProfileContainer>
+                close={() => myContext.setIsOpenProfileImg(false)} /> : null}  
+            
+            </>
     )
 }
 
