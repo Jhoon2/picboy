@@ -39,6 +39,10 @@ export const Context = (props) => {
     tabNum,
     setTabNum,
 
+    //카테고리넘버
+    categoryNum,
+    setCategoryNum,
+
     //로그온 멤버
     logonOpenProfileImg,
     setLogonProfileImg,

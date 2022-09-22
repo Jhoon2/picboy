@@ -142,6 +142,7 @@ const Header = () => {
             ></LoginUserImg>
           ) : (
             // </ProfileImgBackground>
+            // </ProfileImgBackground>
             <LoginButton
               onClick={() => {
                 navigate('/login');
