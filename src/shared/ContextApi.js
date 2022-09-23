@@ -16,16 +16,16 @@ export const Context = (props) => {
     const [tabNum, setTabNum] = React.useState(0);
     const [categoryNum, setCategoryNum] = React.useState(1);
 
-    const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)  
-    const [logonOpenProfileImg, setLogonProfileImg] = React.useState(false)  
+    const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)
+    const [logonOpenProfileImg, setLogonProfileImg] = React.useState(false)
 
-    const [signUpBtn, setSignUpBtn]= React.useState(false)
+    const [signUpBtn, setSignUpBtn] = React.useState(false)
     const signUpBtnClickOff = () => setSignUpBtn(false)
     const signUpBtnClickOn = () => setSignUpBtn(!signUpBtn)
 
 
     const value = {
-  
+
         timerMessage,
         setTimerMessage,
         btnOpen,

@@ -17,10 +17,12 @@ import Download from '../images/download-btn.png';
 import LikeBefore from '../images/like-before.png';
 import LikeClick from '../images/like-click.png'
 import LikeCount from '../images/like-count.png';
+import Arrow from '../images/complete-detail-arrow-left.png';
+import BgTop from '../images/complete-detail-bg-top.png';
+import BgBottom from '../images/complete-detail-bg-bottom.png';
 
 // components
 import CommentBox from '../components/completeDetail/CommentBox';
-import Footer from '../components/Footer'
 
 const CompleteDetail = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -57,6 +59,7 @@ const CompleteDetail = () => {
   // axios get
 
   const [gif, setGif] = useState("");
+  const [likeCountState, setLikeCountState] = useState();
 
   const gifApi = () => {
     const url = `${baseURL}/post/gif/detail/${params.id}`;
@@ -67,6 +70,7 @@ const CompleteDetail = () => {
     )
       .then(function (response) {
         setGif(response.data.data);
+        setLikeCountState(response.data.data.likeCount);
       })
       .catch(function (error) {
         console.log(error);
@@ -91,7 +95,7 @@ const CompleteDetail = () => {
 
   ////////////////////////////
   // like
-  const [likeState, setLikeState] = useState(false);
+  const [likeState, setLikeState] = useState(gif.liked);
   const [likeApi, setLikeApi] = useState();
   const accessToken = getCookieToken();
   const refreshToken = getRefreshToken();
@@ -101,7 +105,7 @@ const CompleteDetail = () => {
     if (accessToken === undefined) {
       alert('로그인 후 이용 가능합니다.');
     } else {
-      setLikeState(!likeState);
+      // setLikeState(!likeState);
       axios.post(
         `${baseURL}/post/like/${params.id}`, {
         like: 0,
@@ -111,7 +115,7 @@ const CompleteDetail = () => {
         }
       )
         .then(function (response) {
-          setLikeApi(response.data.data);
+          setLikeApi(response.data.data.like);
         })
         .catch(function (error) {
           console.log(error);
@@ -119,9 +123,23 @@ const CompleteDetail = () => {
     }
   }
 
+
+  // console.log(likeApi);
+
+
   useEffect(() => {
-    console.log(gif.liked);
+    if (likeApi === true) {
+      setLikeCountState(likeCountState + 1);
+    } else if (likeApi === false) {
+      setLikeCountState(likeCountState - 1);
+    } else if (likeApi === undefined) {
+      // setLikeApi(true);
+    }
   }, [likeApi])
+
+
+
+
 
   /////////////////
   // toggle
@@ -131,9 +149,22 @@ const CompleteDetail = () => {
     setToggleBoolean(!toggleBoolean);
   }
 
+  //////////////
+  // nav
+  const arrowNav = () => {
+    window.location.replace("/CompList");
+  }
+
+  ///////////////////////
+  // save image
+  const saveImg = () => {
+
+  }
+
   return (
-    <>
+    <div style={{ position: 'relative' }}>
       <TitleBanner>
+        <div onClick={arrowNav}><TitleArrow src={Arrow} alt="" /></div>
         <ContentsTitle>COMPLETE</ContentsTitle>
       </TitleBanner>
       <WidthWrap>
@@ -144,9 +175,9 @@ const CompleteDetail = () => {
           <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
           <ImgListToggleWrap>
             <ImgListToggleText>사용자 정보 한번에 보기</ImgListToggleText>
-            <ToggleWrap>
+            <ToggleWrap style={toggleBoolean ? { backgroundColor: '#000' } : {}}>
               <ToggleInput type="checkbox" onClick={toggleHandler} />
-              <ToggleCheck style={toggleBoolean ? { left: '68%' } : {}} />
+              <ToggleCheck style={toggleBoolean ? { left: '52%' } : {}} />
             </ToggleWrap>
           </ImgListToggleWrap>
           <Slider {...settings}>
@@ -155,7 +186,7 @@ const CompleteDetail = () => {
                 <ImgListWrap key={img.frameNum} >
                   <ImgList src={img.imgUrl} alt="" />
                   <ImgListHoverInfoWrap
-                    style={toggleBoolean ? { backgroundColor: 'rgba(0, 0, 0, 0.5)', border: '3px solid #000' } : { opacity: '0' }}
+                    style={toggleBoolean ? { backgroundColor: 'rgba(0, 0, 0, 0.5)' } : { opacity: '0' }}
                   >
                     <ImgListHoverFrameInfo>{img.frameNum}/{gif.frameTotal}</ImgListHoverFrameInfo>
                     <ImgListHoverUserInfoWrap>
@@ -173,11 +204,25 @@ const CompleteDetail = () => {
           {/* topic info start */}
           <Community>
             <ContentsBtn>
-              <BtnImg src={Download} alt="" />
+              <BtnImg src={Download} onClick={saveImg} alt="" />
+
+
+              {/* 
+              
+              
+              
+              */}
               {
-                gif.liked ?
-                  <BtnImg src={LikeClick} onClick={likeHandler} alt="" /> : <BtnImg src={LikeBefore} onClick={likeHandler} alt="" />
+                likeApi ?
+                  <BtnImg src={LikeClick} onClick={likeHandler} alt="" />
+                  :
+                  <BtnImg src={LikeBefore} onClick={likeHandler} alt="" />
               }
+              {/* 
+              
+              
+              
+              */}
             </ContentsBtn>
             <ContentsLine />
             <SuggestionInfo>
@@ -185,7 +230,7 @@ const CompleteDetail = () => {
                 <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
                 <SuggestionInfoLikeCountWrap>
                   <img src={LikeCount} alt="" />
-                  <SuggestionInfoLikeCount>{gif.likeCount}</SuggestionInfoLikeCount>
+                  <SuggestionInfoLikeCount>{likeCountState}</SuggestionInfoLikeCount>
                 </SuggestionInfoLikeCountWrap>
               </SuggestionInfoTitleWrap>
               <Suggestion>{
@@ -197,7 +242,7 @@ const CompleteDetail = () => {
 
             {/* comment start */}
             <CommentWrap>
-              <CommentTitle>댓글<div>{ }</div></CommentTitle>
+              <CommentTitle>댓글<span style={{ marginLeft: '8px', color: '#a3a3a3' }}>{comments.length}</span></CommentTitle>
               <ContentsLine />
               <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
               <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
@@ -212,13 +257,128 @@ const CompleteDetail = () => {
             {/* comment end */}
           </Community>
         </GifInfo>
+        <BgTopStyle src={BgTop} alt='' />
+        <BgBottomStyle src={BgBottom} alt='' />
       </WidthWrap>
-      <Footer />
-    </>
+    </div>
   )
-
-
 }
+
+const BgTopStyle = styled.img`
+  width: 100%;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  z-index: -100;
+`;
+
+const BgBottomStyle = styled.img`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: -100;
+`;
+
+const TitleBanner = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+
+const WidthWrap = styled.div`
+  width: 944px;
+  margin: 0px auto;
+  padding-bottom: 120px;
+`;
+
+const ContentsTitleWrap = styled.div`
+  display: flex;
+  `;
+
+const ContentsTitle = styled.div`
+  margin-top: 230px;
+  font-family: 'SilkBold';
+  font-size: 65px;
+  letter-spacing: -0.04em;
+`;
+
+const TitleArrow = styled.img`
+  float: left;
+  margin-top: 270px;
+  margin-left: -280px;
+  cursor: pointer;
+`;
+
+const GifInfo = styled.div`
+  margin-top: 64px;
+`;
+
+const CompleteGif = styled.div`
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  margin-bottom: 25px;
+  border: 1px solid #e6e6e6;
+`;
+
+const GifWrap = styled.img`
+  width: 400px;
+  height: 400px;
+  background-color: #fff;
+  z-index: 999;
+`;
+
+const ImgListWrap = styled.div`
+  position: relative;
+`;
+
+const ImgList = styled.img`
+  width: 145px;
+  height: 145px;
+  transition: 0.2s;
+  border: 1px solid #e6e6e6;
+`;
+
+const ImgListHoverInfoWrap = styled.div`
+  position: absolute;
+  top: 0;
+  width: 145px;
+  height: 145px;
+`;
+
+const ImgListHoverFrameInfo = styled.div`
+  padding: 2px 6px 0 6px;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #000;
+`;
+
+const ImgListHoverUserInfoWrap = styled.div`
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+`;
+
+const ImgListHoverUserProfile = styled.img`
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 8px;
+`;
+
+const ImgListHoverUserNickName = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 2px;
+`;
 
 const ImgListToggleWrap = styled.div`
   display: flex;
@@ -227,11 +387,15 @@ const ImgListToggleWrap = styled.div`
 `;
 
 const ImgListToggleText = styled.div`
-  margin-right: 16px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #a3a3a3;
+  margin-right: 8px;
+  margin-top: -24px;
 `;
 
 const ToggleWrap = styled.label`
-    width: 65px;
+    width: 50px;
     height: 26px;
     margin-bottom: 26px;
     display: flex;
@@ -240,6 +404,7 @@ const ToggleWrap = styled.label`
     background-color: #D9D9D9;
     border-radius: 14px;
     cursor: pointer;
+    transition: all 0.3s;
 `;
 
 const ToggleInput = styled.input`
@@ -247,106 +412,17 @@ const ToggleInput = styled.input`
 `;
 
 const ToggleCheck = styled.span`
-    width: 16px;
-    height: 16px;
+    width: 22px;
+    height: 22px;
     position: absolute;
-    top: 20.2%;
-    left: 11%;
+    top: 8%;
+    left: 5%;
     border-radius: 50%;
     background-color: #fff;
     transition: all 0.3s;
     &:after{
         background-color: red;
     }
-`;
-
-const TitleBanner = styled.div`
-  width: 100%;
-  height: 314px;
-  border-bottom: 1px solid #a3a3a3;
-  display: flex;
-  justify-content: center;
-  background-color: #f4f4f4;
-`;
-
-const WidthWrap = styled.div`
-  width: 1200px;
-  margin: 120px auto;
-`;
-
-const ContentsTitle = styled.div`
-  margin-top: 124px;
-  font-size: 80px;
-  font-weight: 400;
-`;
-
-const GifInfo = styled.div`
-  margin-top: 64px;
-`;
-
-const CompleteGif = styled.div`
-  width: 688px;
-  height: 688px;
-  margin: 0 auto;
-  margin-bottom: 126px;
-  background-color: #e9e9e9;
-`;
-
-const GifWrap = styled.img`
-  width: 688px;
-  height: 688px;
-`;
-
-const ImgListWrap = styled.div`
-  position: relative;
-`;
-
-const ImgList = styled.img`
-  width: 175px;
-  height: 175px;
-  transition: 0.2s;
-  &:hover{
-    border: 3px solid #000;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-`;
-
-const ImgListHoverInfoWrap = styled.div`
-  position: absolute;
-  top: 0;
-  width: 175px;
-  height: 175px;
-`;
-
-const ImgListHoverFrameInfo = styled.div`
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  font-size: 14px;
-  font-weight: 400;
-  color: #fff;
-`;
-
-const ImgListHoverUserInfoWrap = styled.div`
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  display: flex;
-  align-items: center;
-  color: #fff;
-`;
-
-const ImgListHoverUserProfile = styled.img`
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  margin-right: 8px;
-`;
-
-const ImgListHoverUserNickName = styled.div`
-  font-size: 14px;
-  font-weight: 400;
-  margin-top: 2px;
 `;
 
 const BtnImg = styled.img`
@@ -365,7 +441,7 @@ const ContentsBtn = styled.div`
 
 const ContentsLine = styled.div`
   margin: 16px 0 24px 0;
-  border-bottom: 1px solid #a3a3a3;
+  border: 1px solid #E6E6E6;
 `;
 
 const SuggestionInfo = styled.div`
@@ -380,8 +456,9 @@ const SuggestionInfoTitleWrap = styled.div`
 `;
 
 const SuggestionInfoTitle = styled.div`
-  font-size: 30px;
+  font-size: 18px;
   font-weight: 700;
+  letter-spacing: -0.04em;
 `;
 
 const SuggestionInfoLikeCountWrap = styled.div`
@@ -397,24 +474,24 @@ const SuggestionInfoLikeCount = styled.span`
 `;
 
 const Suggestion = styled.div`
-  font-size: 30px;
+  font-size: 18px;
   font-weight: 400;
 `;
 
 const CommentWrap = styled.div``;
 
 const CommentTitle = styled.div`
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 700;
 `;
 
 const CommentInput = styled.textarea`
-  width: 1200px;
-  height: 164px;
-  margin-bottom: 32px;
+  width: 944px;
+  height: 123px;
+  margin-bottom: 16px;
   padding: 24px;
   border: 2px solid #e6e6e6;
-  font-size: 20px;
+  font-size: 14px;
 `;
 
 const CommentPostBtn = styled.div`
@@ -428,9 +505,9 @@ const CommentPostBtn = styled.div`
 `;
 
 const CommentList = styled.div`
-  width: 1200px;
+  width: 944;
   margin-top: 120px;
-  border: 1px solid #a3a3a3;
+  border: 1px solid #e6e6e6;
 `;
 
 export default CompleteDetail;

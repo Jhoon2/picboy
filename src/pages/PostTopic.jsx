@@ -350,7 +350,6 @@ const PostTopic = () => {
                                     </tr>
                                 </tbody>
                             </Table>
-                            <ToolShadow />
                         </ToolBox>
                         <LineStyle>
                             <RangeWrap>
@@ -639,16 +638,6 @@ const ToolShadow = styled.div`
   top: 4px;
   left: 4px;
   z-index: 0;
-`;
-
-const LineStyleShadow = styled.div`
-  width: 78px;
-  height: 194px;
-  background-color: #000;
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  z-index: 1;
 `;
 
 const LineWeightCustomWrap = styled.div`
