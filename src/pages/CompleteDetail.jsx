@@ -71,6 +71,7 @@ const CompleteDetail = () => {
       .then(function (response) {
         setGif(response.data.data);
         setLikeCountState(response.data.data.likeCount);
+        setLikeApi(response.data.data.liked);
       })
       .catch(function (error) {
         console.log(error);
@@ -116,30 +117,17 @@ const CompleteDetail = () => {
       )
         .then(function (response) {
           setLikeApi(response.data.data.like);
+          if (likeApi === false) {
+            setLikeCountState(likeCountState + 1);
+          } else if (likeApi === true) {
+            setLikeCountState(likeCountState - 1);
+          }
         })
         .catch(function (error) {
           console.log(error);
         });
     }
   }
-
-
-  // console.log(likeApi);
-
-
-  useEffect(() => {
-    if (likeApi === true) {
-      setLikeCountState(likeCountState + 1);
-    } else if (likeApi === false) {
-      setLikeCountState(likeCountState - 1);
-    } else if (likeApi === undefined) {
-      // setLikeApi(true);
-    }
-  }, [likeApi])
-
-
-
-
 
   /////////////////
   // toggle

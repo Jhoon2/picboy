@@ -18,6 +18,12 @@ import stroke from '../images/stroke.png';
 import waterdrop from '../images/waterdrop.png';
 import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/canvas-bottom-bg.png';
+import CanvasArticle from '../images/canvas-top-article.png';
+import CanvasOptionArticle from '../images/canvas-option-top-article.png';
+import line6 from '../images/line6.png';
+import line8 from '../images/line8.png';
+import line10 from '../images/line10.png';
+import line12 from '../images/line12.png';
 
 const PostTopic = () => {
     const [frame, setFrame] = useState(0);
@@ -45,13 +51,13 @@ const PostTopic = () => {
 
     const [ctx, setCtx] = useState();
     const [isPainting, setIsPainting] = useState(false);
-    const [lineWeight, setLineWeight] = useState(5);
+    const [lineWeight, setLineWeight] = useState(6);
     const [lineOpacity, setLineOpacity] = useState(1);
     const [rectState, setRectState] = useState(false);
     const [pencilState, setPencilState] = useState(false);
-    const [brushState, setBrushState] = useState(false);
     const [paintState, setPaintState] = useState(false);
     const [eraserState, setEraserState] = useState(false);
+    const [colorPreview, setColorPreview] = useState();
     const [undoState, setUndoState] = useState(0);
     const [redoState, setRedoState] = useState(0);
 
@@ -61,6 +67,7 @@ const PostTopic = () => {
         canvas.height = 500;
         setPencilState(true);
         setCtx(canvasRef.current.getContext('2d'));
+        setColorPreview('#000');
     }, []);
 
     const draw = (e) => {
@@ -74,7 +81,7 @@ const PostTopic = () => {
             } else if (eraserState === true) {
                 ctx.strokeStyle = 'white';
             }
-            ctx.lineWidth = lineWeight.value;
+            ctx.lineWidth = lineWeight;
             ctx.lineTo(X, Y);
             ctx.lineCap = 'round';
             ctx.stroke();
@@ -94,9 +101,12 @@ const PostTopic = () => {
     };
 
     // 선 굵기 변경
-    const onLineWidthChange = (e) => {
-        setLineWeight((ctx.lineWidth = e.target.value));
-    };
+    const lineWeightHandler = (e) => {
+        console.log(e.target.id);
+        if (e.target.id) {
+            setLineWeight(ctx.lineWidth = e.target.id);
+        }
+    }
 
     // 선 투명도 변경
     const onLineOpacityChange = (e) => {
@@ -108,9 +118,7 @@ const PostTopic = () => {
         setPaintState(true);
         setPencilState(false);
         setRectState(false);
-        setBrushState(false);
         setEraserState(false);
-
         ctx.fillRect(0, 0, 500, 500);
     };
 
@@ -118,19 +126,8 @@ const PostTopic = () => {
     const pencilHandler = () => {
         setPencilState(true);
         setRectState(false);
-        setBrushState(false);
         setPaintState(false);
         setEraserState(false);
-        ctx.lineCap = 'round';
-    };
-    // brush
-    const brushHandler = (e) => {
-        setBrushState(true);
-        setRectState(false);
-        setPencilState(false);
-        setPaintState(false);
-        setEraserState(false);
-        ctx.lineCap = 'round';
     };
 
     // eraser
@@ -138,7 +135,6 @@ const PostTopic = () => {
         setEraserState(true);
         setRectState(false);
         setPencilState(false);
-        setBrushState(false);
         setPaintState(false);
     };
 
@@ -158,6 +154,7 @@ const PostTopic = () => {
         const colorValue = e.target.id;
         ctx.strokeStyle = colorValue;
         ctx.fillStyle = colorValue;
+        setColorPreview(e.target.id);
     };
 
     ///////////////////////////
@@ -171,6 +168,7 @@ const PostTopic = () => {
     // random topic
     const [topicState, setTopicState] = useState('');
     const [topicInputState, setTopicInputState] = useState('');
+
     const randomTopic = () => {
         const url = `${baseURL}/post/random-topic`;
         axios
@@ -309,6 +307,9 @@ const PostTopic = () => {
                             </Table>
                         </ToolBox>
                         {/* color */}
+                        <SelectedColorWrap>
+                            <SelectedColor color={`${colorPreview}`} />
+                        </SelectedColorWrap>
                         <Table>
                             <tbody>
                                 <tr>
@@ -356,18 +357,25 @@ const PostTopic = () => {
                         <LineStyle>
                             <RangeWrap>
                                 <div>
-                                    <img src={stroke} alt="stroke" style={{ margin: '7px' }} />
+                                    <img src={stroke} alt="stroke" style={{ margin: '10px 0 4px 8px' }} />
                                 </div>
                                 <LineWeightCustomWrap>
-                                    <LineWeightCustom
-                                        id="line-width"
-                                        type="range"
-                                        min="1"
-                                        max="20"
-                                        step="0.5"
-                                        value={lineWeight}
-                                        onChange={onLineWidthChange}
-                                    />
+                                    {/* <LineWeightCustom onClick={lineWeightHandler}>
+                                        <LineWeight size={'6px'} id="6" />
+                                    </LineWeightCustom>
+                                    <LineWeightCustom onClick={lineWeightHandler}>
+                                        <LineWeight size={'8px'} id="8" />
+                                    </LineWeightCustom>
+                                    <LineWeightCustom onClick={lineWeightHandler}>
+                                        <LineWeight size={'10px'} id="10" />
+                                    </LineWeightCustom>
+                                    <LineWeightCustom onClick={lineWeightHandler}>
+                                        <LineWeight size={'12px'} id="12" />
+                                    </LineWeightCustom> */}
+                                    <LineWeight src={line6} id="6" onClick={lineWeightHandler} alt='' />
+                                    <LineWeight src={line8} id="8" onClick={lineWeightHandler} alt='' />
+                                    <LineWeight src={line10} id="10" onClick={lineWeightHandler} alt='' />
+                                    <LineWeight src={line12} id="12" onClick={lineWeightHandler} alt='' />
                                 </LineWeightCustomWrap>
                             </RangeWrap>
                             <RangeWrap>
@@ -375,10 +383,10 @@ const PostTopic = () => {
                                     <img
                                         src={waterdrop}
                                         alt="waterdrop"
-                                        style={{ margin: '7px' }}
+                                        style={{ margin: '10px 2px 4px 0px' }}
                                     />
                                 </div>
-                                <LineWeightCustomWrap>
+                                <LineOpacityCustomWrap>
                                     <LineOpacityCustom
                                         id="line-opacity"
                                         type="range"
@@ -388,23 +396,25 @@ const PostTopic = () => {
                                         value={lineOpacity}
                                         onChange={onLineOpacityChange}
                                     />
-                                </LineWeightCustomWrap>
+                                </LineOpacityCustomWrap>
                             </RangeWrap>
-                            {/* <LineStyleShadow /> */}
                         </LineStyle>
                     </PaintOptionWrap>
-                    <canvas
-                        ref={canvasRef}
-                        style={canvasStyle}
-                        onMouseMove={draw}
-                        onMouseDown={startPainting}
-                        onMouseUp={cancelPainting}
-                        onMouseLeave={cancelPainting}
-                    />
+                    <div>
+                        <CanvasArticleStyle src={CanvasArticle} alt="" />
+                        <canvas
+                            ref={canvasRef}
+                            style={canvasStyle}
+                            onMouseMove={draw}
+                            onMouseDown={startPainting}
+                            onMouseUp={cancelPainting}
+                            onMouseLeave={cancelPainting}
+                        />
+                    </div>
                 </CanvasWrap>
-                {/*  */}
                 <ContetnsWrap>
                     {/* <Canvas setCanvasDone={setCanvasDone} /> */}
+                    <div><CanvasOptionArticleStyle src={CanvasOptionArticle} alt="" /></div>
                     <ModeWrap>
                         <ModeTitleWrap>
                             <img src={modeIc} alt="" />
@@ -420,7 +430,7 @@ const PostTopic = () => {
                                     placeholder="12자 제한입니다"
                                     maxLength={12}
                                 />
-                                <ModeFrameBtn onClick={randomTopic}>랜덤선택</ModeFrameBtn>
+                                <RandomTopicBtn onClick={randomTopic}>랜덤선택</RandomTopicBtn>
                             </ModeFrameBtnWrap>
                             <ModeFrameTitle style={{ marginTop: '32px' }}>
                                 프레임
@@ -470,6 +480,7 @@ const PostContentsWrap = styled.div`
   width: 994px;
   margin: 0 auto;
   display: flex;
+  justify-content: space-between;
 `;
 
 const ContetnsWrap = styled.div`
@@ -477,26 +488,31 @@ const ContetnsWrap = styled.div`
   margin: 0 auto;
   margin-bottom: 160px;
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+`;
+
+const CanvasOptionArticleStyle = styled.img`
+    margin-bottom: -9px;
 `;
 
 const ModeWrap = styled.div`
-  width: 380px;
+  width: 359px;
   height: 500px;
-  margin-left: 21px;
   padding: 32px;
   border: 2px solid #000;
   position: relative;
+  background-color: #fff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 const ModeTitleWrap = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 38px;
 `;
 
 const ModeTitle = styled.div`
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   margin: 4px 0 0 4px;
 `;
@@ -506,22 +522,37 @@ const ModeFrameWrap = styled.div``;
 const ModeFrameTitle = styled.div`
   font-size: 16px;
   font-weight: 700;
-  margin-bottom: 20px;
 `;
 
 const ModeFrameBtnWrap = styled.div`
+  margin-top: 8px;
   display: flex;
+  justify-content: space-between;
+`;
+
+const RandomTopicBtn = styled.div`
+    font-size: 14px;
+  font-weight: 400;
+  padding: 10px 14px;
+  border: 1px solid #000;
+  margin-right: 0px;
+  cursor: pointer;
+  &:active{
+    background-color: #000;
+    color: #fff;
+  }
+
 `;
 
 const RandomTopicInput = styled.input`
-  width: 190px;
+  width: 194px;
   height: 30px;
-  margin-top: 16px;
+  margin-top: 8px;
   border-bottom: 1px solid #000;
-  margin-right: 16px;
+  margin-right: 12px;
   border: none;
   border-bottom: 1px solid #e6e6e6;
-  font-size: 16px;
+  font-size: 14px;
 
   &:focus {
     outline: 0;
@@ -529,54 +560,85 @@ const RandomTopicInput = styled.input`
 `;
 
 const ModeFrameBtn = styled.div`
-  font-size: 16px;
+  width: 64px;
+  text-align: center;
+  font-size: 14px;
   font-weight: 400;
-  padding: 12px 18px;
+  padding: 10px 0;
   border: 1px solid #000;
-  margin-right: 8px;
+  margin-right: 0px;
   cursor: pointer;
 `;
 
 const PostBtn = styled.div`
+    width: 291px;
   position: absolute;
-  right: 32px;
   bottom: 32px;
   display: inline;
   padding: 13px 58px;
   font-size: 16px;
   font-weight: 700;
+  text-align: center;
   border: 2px solid #000;
   cursor: pointer;
+  &:hover{
+      background-color: #000;
+      color: #fff;
+  }
+`;
+
+const CanvasArticleStyle = styled.img`
 `;
 
 const canvasStyle = {
     width: '500px',
     height: '500px',
+    marginTop: '-9px',
     border: '2px solid #000',
     backgroundColor: '#fff',
+    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'
 };
 
 const CanvasWrap = styled.div`
   display: flex;
+  margin-right: 34px;
 `;
 
 const PaintOptionWrap = styled.div`
-  margin-right: 16px;
+    margin-right: 34px;
 `;
 
 const LineWeightCustomWrap = styled.div`
-  width: 30px;
-  height: 80px;
-  margin-left: -47.5px;
-  margin-top: 52px;
+    margin-left: 10px;
 `;
 
-const LineWeightCustom = styled.input`
-  transform: rotate(-90deg);
+const LineWeightCustom = styled.div`
+    width: 20px;
+    height: 20px;
+    margin-bottom: 8px;
+    border-radius: 50%;
+    border: 1px solid ${(props) => props.size};;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: #fff;
+`;
+
+const LineWeight = styled.img`
+    margin-bottom: 2px;
+`;
+
+const LineOpacityCustomWrap = styled.div`
+    width: 10px;
+  height: 63px;
+  margin-left: -45px;
+  margin-top: 52px;
 `;
 
 const LineOpacityCustom = styled.input`
   transform: rotate(-90deg);
+  margin-left: -10px;
 `;
 
 const IcButton = styled.div`
@@ -585,10 +647,11 @@ const IcButton = styled.div`
 `;
 
 const Table = styled.table`
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   border: 2px solid #000;
   border-collapse: collapse;
   z-index: 999;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 const Td = styled.td`
@@ -597,15 +660,29 @@ const Td = styled.td`
   background-color: #fff;
 `;
 
+const SelectedColorWrap = styled.div`
+    width: 70px;
+    height: 40px;
+    border: 2px solid #000;
+    margin-bottom: 2px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const SelectedColor = styled.div`
+    width: 62px;
+    height: 32px;
+    margin: 2px 0 0 2px;
+    background-color: ${(props) => props.color};
+`;
+
 const ColorOption = styled.div`
-  width: 37px;
-  height: 37px;
-  border: 1px solid #fff;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #fff;
   background-color: ${(props) => props.color};
 `;
 
 const ToolBox = styled.div`
-  margin-bottom: 12px;
   position: relative;
 `;
 
@@ -613,6 +690,7 @@ const LineStyle = styled.div`
   display: flex;
   border: 2px solid #000;
   position: relative;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 const RangeWrap = styled.div`
