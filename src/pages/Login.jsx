@@ -1,19 +1,21 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import styled from 'styled-components'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import styled from 'styled-components';
 // import kakaoButton from '../images/kakao_login_medium_wide.png'
-import axios from "axios"
+import axios from 'axios';
 import { setAccessToken, setRefreshToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi'
 import LoginErrorModal from '../components/login/LoginErrorModal'
-
+import { KAKAO_AUTH_URL } from '../shared/Kakao_oauth'
+import kakaoImg from '../images/kakao_login_medium.png'
+// const { Kakao } = window;
 
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
   const myContext = useMyContext();
   const navigate = useNavigate();
-  const [focusedInput, setFocusedInput] = useState('')
+  const [focusedInput, setFocusedInput] = useState('');
 
   const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm();
 
@@ -36,7 +38,6 @@ const Login = () => {
     }
 
   }
-
 
 
   return (
@@ -82,16 +83,16 @@ const Login = () => {
               <LoginButton type='submit' disabled={isSubmitting}>로그인</LoginButton>
             </form>
 
-            <KakaoButton onClick={() => { navigate('/') }}>카카오 소셜 로그인</KakaoButton>
-            {/* <img src={kakaoButton} style={{width:'200px'}}></img> */}
+            <a href={KAKAO_AUTH_URL}>
+              <KakaoButton src={kakaoImg} />
+            </a>
             <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
           </InputBox>
         </FormContainer>
-      </LoginContainer>
-
+      </LoginContainer >
     </>
-  )
-}
+  );
+};
 const ErrorBox = styled.div`
   position: fixed;
   top: 0;
@@ -103,50 +104,48 @@ const ErrorBox = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 2;
-`
+`;
 const LoginContainer = styled.div`
-    display: flex;
-    justify-content: center;
-`
+  display: flex;
+  justify-content: center;
+`;
 const FormContainer = styled.div`
     max-width: 1200px;
     height: 50vh;
-    margin-top: 236px;
+    margin-top: 160px;
 
 `
 const InputBox = styled.div`
-    width: 900px;
-    height: 900px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-`
+  width: 900px;
+  height: 900px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+`;
 
-const InputBoxInner = styled.div`
-
-`
+const InputBoxInner = styled.div``;
 const Title = styled.div`
-    margin-bottom: 82px;
-    text-align: center;
-    font-family: 'SilkBold';
-    font-size: 80px;
-    font-weight: 700;
-`
+  margin-bottom: 82px;
+  text-align: center;
+  font-family: 'SilkBold';
+  font-size: 80px;
+  font-weight: 700;
+`;
 
 const TextAndInput = styled.div`
   width: 585px;
   margin-left: 160px;
   padding: 0.7rem;
   display: flex;
-  border-bottom: 1.5px solid ${(props) => ('userId' === props.focusedInput) ? 'lightgray' : 'black'};
+  border-bottom: 2px solid ${(props) => ('userId' === props.focusedInput) ? 'black' : 'lightgray'};
 `
 const TextAndInput2 = styled.div`
   width: 585px;
   margin-left: 160px;
   padding: 0.7rem;
   display: flex;
-  border-bottom: 2px solid ${(props) => ('password' === props.focusedInput) ? 'lightgray' : 'black'};
+  border-bottom: 2px solid ${(props) => ('password' === props.focusedInput) ? 'black' : 'lightgray'};
   `
 
 const SignupText = styled.div`
@@ -154,14 +153,14 @@ const SignupText = styled.div`
   font-size: 16px;
   font-weight: 900;
   text-align: left;
-`
+`;
 const InputWithButton = styled.input`
   width: 320px;
   font-size: 16px;
-  border : none;
+  border: none;
   outline: none;
   background-color: transparent;
-`
+`;
 
 const SignMove = styled.p`
   font-size: 15px;
@@ -183,22 +182,22 @@ const LoginButton = styled.button`
   font-size: 20px;
   cursor: pointer;
   background-color: black;
-`
+`;
 
-const KakaoButton = styled.button`
+const KakaoButton = styled.img`
   width: 585px;
   height: 90px;
   margin-top: 32px;
   margin-left: 155px;
   border: none;
   border-radius: 5px;
-  color:#000000 85%;
+  color: #000000 85%;
   font-family: 'NotoLight';
   font-weight: 600;
   font-size: 20px;
   cursor: pointer;
-  background-color: #FEE500;
-`
+  background-color: #fee500;
+`;
 
 const Errorsmessage = styled.div`
   width: 300px;
@@ -208,5 +207,4 @@ const Errorsmessage = styled.div`
   text-align: left;
   color: red;
 `;
-export default Login
-
+export default Login;

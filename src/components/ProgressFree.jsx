@@ -1,17 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import Loadings from '../global/Loading';
 import axios from 'axios';
-import user from '../images/user.png';
 
 const BestFree = () => {
   const navigate = useNavigate();
-  const [randomData, setRandomData] = useState([]);
+  const [newData, setNewdata] = useState([]);
+  const [load, setLoad] = useState(false);
   const [page, setPage] = useState(0);
-  const lastIntersectingData = useRef(null);
+  const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
 
-  const getRandomData = async () => {
+  const getProgressData = async () => {
+    setLoad(true);
     try {
       const { data } = await axios.get(
         `${baseURL}/post/gif/images/2?size=6&page=${page}`
@@ -19,62 +21,68 @@ const BestFree = () => {
       if (!data) {
         return;
       }
-      setRandomData(randomData.concat(data.data));
-      // console.log(data.data);
+      setNewdata(newData.concat(data.data));
     } catch (error) {
       console.log(error);
     }
+
+    setLoad(false);
   };
 
-  //observe 콜백 함수
+  useEffect(() => {
+    getProgressData();
+  }, [page]);
+
+  useEffect(() => {
+    window.onbeforeunload = function pushRefresh() {
+      window.scrollTo(0, 0);
+    };
+  }, []);
+
+  const options = {
+    rootMargin: '30px',
+    threshold: 0.5,
+  };
+
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        //조건이 트루
-        //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
         setPage((page) => page + 1);
-        // 현재 타겟을 observe한다.
-        observer.observe(entry.target); // unobserve가 아님
+
+        observer.observe(entry.target);
       }
     });
   };
 
   useEffect(() => {
-    getRandomData();
-  }, [page]);
-
-  useEffect(() => {
-    //observer 인스턴스를 생성한 후 구독
     let observer;
-    if (lastIntersectingData) {
-      observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
-      //observer 생성 시 observe할 target 요소는 불러온 이미지의 마지막아이템(배열의 마지막 아이템)으로 지정
-      observer.observe(lastIntersectingData.current);
+    if (ref) {
+      observer = new IntersectionObserver(onIntersect, options);
+      setTimeout(() => {
+        observer.observe(ref);
+      }, 500);
     }
     return () => observer && observer.disconnect();
-  }, [lastIntersectingData]);
+  }, [ref]);
 
   return (
     <ListBox>
-      <>
-        {randomData.map((item, index) => {
-          return (
-            <BestBox
-              key={item}
-              onClick={() => {
-                navigate(`/progressdetail/${item.id}`);
-              }}
-            >
-              <BestImg productImg={item?.imgUrl} />
-              <BestDesc>
-                <Profile />
-                <Nickname>{item?.nickname}</Nickname>
-              </BestDesc>
-            </BestBox>
-          );
-        })}
-        <div ref={lastIntersectingData}>.</div>
-      </>
+      {load === true ? <Loadings /> : null}
+      {newData.map((item, index) => (
+        <BestBox
+          key={item.id}
+          onClick={() => {
+            navigate(`/progressdetail/${item.id}`);
+          }}
+        >
+          <BestImg productImg={item?.imgUrl} />
+          <BestDesc>
+            <Profile img={item?.profileImg} />
+            <Nickname>{item?.nickname}</Nickname>
+          </BestDesc>
+        </BestBox>
+      ))}
+      <div ref={setRef}>.</div>
     </ListBox>
   );
 };
@@ -118,15 +126,16 @@ const BestDesc = styled(Width)`
 `;
 
 const Button = styled.button`
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
 `;
 
 const Profile = styled(Button)`
   margin-right: 20px;
   border-radius: 50%;
-  background: url(${user});
+  background: url(${(props) => props.img});
   ${({ theme }) => theme.backgroundSet('contain')};
+  background-size: 100% 95%;
 `;
 
 const Span = styled.span`
@@ -135,12 +144,15 @@ const Span = styled.span`
 `;
 
 const Nickname = styled(Span)`
-  font-family: 'NotoLight';
-  font-size: 16px;
   margin-right: 100px;
-  color: #2e3248;
   display: inline-block;
   padding: 15px 0;
   position: relative;
-  text-decoration: none;
+  font-family: 'NotoBold';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  color: #2e3248;
+  line-height: 180%;
+  letter-spacing: -0.02em;
 `;

@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 // import Header from '../components/Header';
-import Footer from '../components/Footer';
-import TopScroll from '../elem/TopScroll';
+// import Footer from '../components/Footer';
+import TopScroll from '../global/TopScroll';
 import MainDesc from '../components/MainDesc';
-import down from '../images/down.png';
+import down from '../images/main/down.png';
 import MP4 from '../sound/bridge.mp4';
 
 //슬라이드 중앙에만 프로필 표시, 스무스 스크롤바
@@ -28,11 +28,9 @@ const Main = () => {
         <TopScroll />
         <Videos src={MP4} autoPlay muted loop></Videos>
         <VideoTitle>
-          WELCOME
+          MAKE.<span>UNPREDIDICTABLE</span>
           <br />
-          PIC
-          <br />
-          WORLD
+          PLEASURE
         </VideoTitle>
 
         <How
@@ -51,7 +49,7 @@ const Main = () => {
         />
       </VideoContainer>
       <MainDesc moveRef={moveRef} move2Ref={move2Ref} />
-      <Footer />
+      {/* <Footer /> */}
     </MainContainer>
   );
 };
@@ -81,13 +79,17 @@ const Videos = styled.video`
 const VideoTitle = styled.span`
   margin: auto;
   display: block;
-  text-align: center;
-  font-family: 'SilkLight';
+  font-family: 'PopLight';
   line-height: 150%;
-  font-size: 100px;
+  font-size: 80px;
   color: white;
   ${Position}
   top: 40%;
+  span {
+    font-family: 'SilkLight';
+    font-size: 90px;
+    color: #0029ff;
+  }
 `;
 
 const How = styled.button`
@@ -100,12 +102,12 @@ const How = styled.button`
   color: white;
   background: none;
   ${Position}
-  top: 63%;
+  top: 46%;
   &:hover {
     background: black;
   }
   @media ${({ theme }) => theme.device.laptop} {
-    top: 75%;
+    top: 49%;
   }
 `;
 
@@ -116,12 +118,12 @@ const DownScroll = styled.button`
   background: url(${down});
   ${({ theme }) => theme.backgroundSet('contain')};
   ${Position}
-  top: 50%;
+  top: 80%;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
   animation-name: bounce;
   animation-timing-function: linear;
-  left: 49.5%;
+  left: 50%;
   @keyframes bounce {
     0% {
       transform: translateY(0);
