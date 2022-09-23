@@ -45,28 +45,28 @@ const Header = () => {
     },
   });
 
-  const stompClient = Stomp.over(socket);
+  // const stompClient = Stomp.over(socket);
 
-  useEffect(() => {
-    stompConnect();
-  });
+  // useEffect(() => {
+  //   stompConnect();
+  // });
 
-  const stompConnect = () => {
-    try {
-      stompClient.connect(
-        () => {
-          stompClient.subscribe(`/sub/${usernames}`, (data) => {
-            const returnMessage = JSON.parse(data.body);
+  // const stompConnect = () => {
+  //   try {
+  //     stompClient.connect(
+  //       () => {
+  //         stompClient.subscribe(`/sub/${usernames}`, (data) => {
+  //           const returnMessage = JSON.parse(data.body);
 
-            setMessageList(returnMessage.message);
-          });
-        },
-        () => {}
-      );
-    } catch (error) {
-      throw error;
-    }
-  };
+  //           setMessageList(returnMessage.message);
+  //         });
+  //       },
+  //       () => {}
+  //     );
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
 
   //////////////////////////////////////////////////////
   const location = useLocation();
@@ -76,7 +76,7 @@ const Header = () => {
   // const  getLogonUser  = useSelector((state) => state && state.logonUser)
   // const loginUser = getLogonUser.logonUser&&getLogonUser.logonUser.profileImg
 
-  useEffect(() => {}, [loginUser]);
+  useEffect(() => { }, [loginUser]);
 
   const navigate = useNavigate();
   const documentRef = useRef(document);
