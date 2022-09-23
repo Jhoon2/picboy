@@ -1,10 +1,15 @@
 import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { __hidePost } from '../../redux/modules/UserPage'
-import { __postReport } from '../../redux/modules/Report'
 import { useMyContext } from '../../shared/ContextApi'
 import styled from 'styled-components'
+
+//불러오기
+import { __postReport } from '../../redux/modules/Report'
+import { __hidePost } from '../../redux/modules/UserPage'
+import AnyModal from '../../elem/AnyModal'
+
+//이미지
 import eyes from '../../images/mypage/eyes.png'
 import grayEyes from '../../images/mypage/grayEyes.png'
 import grayFlag from '../../images/mypage/grayFlag.png'
@@ -19,18 +24,29 @@ const MySpecialButton = ({ shown, close, postId }) => {
   const hide = (e) => {
     setPath(1)
     dispatch(__hidePost(postId))
-    setTimeout(() => {
-      setPath(0)
-    },100)
+    // setTimeout(() => {
+    //   setPath(0)
+    // },100)
   }
+
+  //신고
+  const [toggleDeclar, setToggleDecla] = useState(false)
+
   const declaration = (e) => {
+    myContext.setDecalrBtn(true)
+    setToggleDecla(!toggleDeclar)
     setPath(2)
     dispatch(__postReport(postId))
   }
 
 
   return shown ? (
-    <FullOverLay onClick={()=>{close()}}>
+    <FullOverLay onClick={() => { close() }}>
+      {myContext.declarBtn ? (
+        <ErrorBox onClick={() => myContext.setDecalrBtn(false)}>
+          <AnyModal title="안내" content="신고 되었습니다" />
+          </ErrorBox>
+      ) : null}
       <Overlay >
         <OverlayPosition >
           <OverlayContainer>
@@ -60,6 +76,20 @@ const MySpecialButton = ({ shown, close, postId }) => {
     </FullOverLay>
   ) : null
 }
+
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
+
 const FullOverLay = styled.div`
 
     position: relative;
@@ -69,7 +99,7 @@ const FullOverLay = styled.div`
     bottom: 0;
     left: -100%;
     right: 0;
-    z-index: 9999;
+    z-index: 10;
     display: flex;
     justify-content: center;
     /* background-color:gray ; */

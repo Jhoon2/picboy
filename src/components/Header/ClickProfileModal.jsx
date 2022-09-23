@@ -1,11 +1,15 @@
 import React, { useRef, useState, useEffect } from 'react';
-import styled, { css } from 'styled-components';
-import { removeCookieToken } from '../../shared/Cookie';
 import { useMyContext } from '../../shared/ContextApi';
-// import { useNavigate } from 'react-router-dom';
+
+import { removeCookieToken } from '../../shared/Cookie';
+
+import styled, { css } from 'styled-components';
 import UseGetUser from '../../hooks/UseGetUser';
 import '../../elem/Down'
 import Down from '../../elem/Down';
+
+//로그아웃 알림창
+import AnyModal from '../../elem/AnyModal';
 
 const ClickProfileModal = ({img}) => {
   const myContext = useMyContext();
@@ -21,14 +25,13 @@ const ClickProfileModal = ({img}) => {
 
   const myPage = (e) => {
     setSelectContent(e.target.id);
-    // navigate(`/user-profile/${logonUsername}`)
     window.location.href = `/user-profile/${logonUsername}`;
     myContext.setLogonProfileImg(false);
   };
   const Logout = (e) => {
+    myContext.setLogoutBtn(true)
     setSelectContent(e.target.id);
     removeCookieToken();
-    window.location.href = '/';
   };
   useEffect(() => {
     const clickOutside = (e) => {
@@ -43,9 +46,15 @@ const ClickProfileModal = ({img}) => {
       document.removeEventListener('mousedown', clickOutside);
     };
   }, [select]);
+  let anyData = 1;
+
   return (
-    
     <div ref={node}>
+         {myContext.logoutBtn ? (
+        <ErrorBox onClick={() => window.location.href = '/'}>
+          <AnyModal title="안내" content="로그아웃 되었습니다" anyData={anyData} />
+        </ErrorBox>
+      ) : null}
       <div>
         <div onClick={() => setSelect(!select)}>
           <LoginUserImg src={img}/>
@@ -87,6 +96,18 @@ const ClickProfileModal = ({img}) => {
     </div>
   )
 };
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+`;
 const LoginUserImg = styled.img`
   width: 50px;
   height: 50px;
@@ -107,8 +128,6 @@ const SelectListBox = styled.div`
 const DownUl = styled.ul`
   width: 268px;
   height: 284px;
-  /* position: absolute; */
-  /* z-index: 2; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -116,19 +135,20 @@ const DownUl = styled.ul`
   cursor:default;
   border: 2px solid #000000;
   background-color: white;
-
-  
 `;
 
 const ProfileImg = styled.img`
-  width: 87px;
-  height: 87px;
+  width: 70px;
+  height: 70px;
   margin-top: 22px;
+  margin-left: 5px;
 `
 const ProfileNickname = styled.div`
   font-weight: ${(props) => props.theme.BodyBD};
   font-size: ${(props) => props.theme.Caption1};
-  
+  margin-top: 11px;
+  text-align: center;
+
 `
 const ProfileUsername = styled.div`
    font-weight: ${(props) => props.theme.HeadlineRG};
@@ -150,12 +170,8 @@ const ModalText = styled.div`
   color: ${(props) => props.theme.inactive};
   cursor: pointer;
 
-  /* :first-child {
-    margin-top: 15px;
-  } */
   :hover {
     height: 60px;
-    margin-bottom: -5px;
     background-color:${(props) => props.theme.basic};
   }
 `;

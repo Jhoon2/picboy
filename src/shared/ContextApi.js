@@ -26,7 +26,28 @@ export const Context = (props) => {
     const [allParticipants, setAllParticipants] = React.useState(false)
 
     //페이지넘버
-     const [pageNum, setPageNum] = React.useState(0)
+    const [pageNum, setPageNum] = React.useState(0)
+    
+    //로그아웃
+    const [logoutBtn, setLogoutBtn] = React.useState(false);
+
+    //신고
+    const [declarBtn, setDecalrBtn] = React.useState(false);
+
+    //댓글 삭제
+    const [commetDeleteBtn, setCommetDeleteBtn] = React.useState(false);
+
+    //댓글 로그인 이용 후 가능
+    const [commetApplyBtn, setCommetApplyBtn] = React.useState(false);
+        
+    //프레임 개수
+    const [setttingFrameBtn, setSettingFrameBtn] = React.useState(false);
+    
+    //그리기 완료
+    const [drawingDoneBtn, setDrawingDoneBtn] = React.useState(false);
+
+    //제시어 입력
+    const [topicBtn, setTopicBtn] = React.useState(false);
 
     const value = {
   
@@ -50,9 +71,9 @@ export const Context = (props) => {
         categoryNum,
         setCategoryNum,
 
-        //로그온 멤버
-        // logonOpenProfileImg,
-        // setLogonProfileImg,
+        //로그아웃버튼
+        logoutBtn,
+        setLogoutBtn,
 
         // 모든 참가자 모달창
         allParticipants,
@@ -60,7 +81,31 @@ export const Context = (props) => {
 
         //페이지 넘버
         pageNum,
-        setPageNum
+        setPageNum,
+    
+        //신고
+        declarBtn,
+        setDecalrBtn,
+
+        //댓글삭제
+        commetDeleteBtn,
+        setCommetDeleteBtn,
+
+        //댓글 로그인 이후 가능
+        commetApplyBtn,
+        setCommetApplyBtn,
+
+        //프레임 개수 설정
+        setttingFrameBtn,
+        setSettingFrameBtn,
+
+        //그리기 완료
+        drawingDoneBtn,
+        setDrawingDoneBtn,
+
+        //제시어 입력
+        topicBtn,
+        setTopicBtn,
     };
 
     return (

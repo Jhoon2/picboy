@@ -13,7 +13,7 @@ const CategoryOpen = ({ value,username,data }) => {
   const [categoryContent, setCategoryContent] = useState('all')
   const myContext = useMyContext();
   const dispatch = useDispatch();
-  console.log('카테고리오픈창', data)
+  
   //카테고리 열고 닫기
   const toggleCategoryButton = () => {
     setIsOpenCategory(!isOpenCategory)

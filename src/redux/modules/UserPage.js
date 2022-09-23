@@ -39,7 +39,6 @@ export const __getUserPage = createAsyncThunk(
 export const __getUserData = createAsyncThunk(
   'userData/getUserData',
   async (payload, thunkAPI) => {
-    console.log(payload)
     const tab = payload?.tab ?? 0;
     const category = payload?.category ?? 1;
     const username = payload?.username;
@@ -48,7 +47,6 @@ export const __getUserData = createAsyncThunk(
     try {
       const data = await axios.get
       (`${baseURL}/mypage/post/${tab}/${category}?username=${username}&page=${page}&size=6`)
-      console.log('받은 데이터',data)
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       console.log(error)
@@ -188,7 +186,6 @@ export const userdataSlice = createSlice({
     [__getUserData.fulfilled]: (state, action) => {
       state.isLoading = false;
       // console.log('페이로드 페이지', action.payload.pageable.pageNumber)
-      // console.log('액션페이로드',action.payload)
       if (action.payload.pageable.pageNumber === 0) {
         state.userData = action.payload
       } else {

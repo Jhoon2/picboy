@@ -19,8 +19,7 @@ const Login = () => {
   const [focusedInput, setFocusedInput] = useState('');
 
   const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm();
-  
-  
+
   //일반 로그인버튼
   const onClickLogin = async (data) => {
     const info = {
@@ -33,8 +32,8 @@ const Login = () => {
 
     if (response.data.success) { window.location.href = '/'; }
     else {
-        myContext.btnClickOn();
-      }
+      myContext.btnClickOn();
+    }
 
   }
 
@@ -111,7 +110,7 @@ const ErrorBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2;
+  z-index: 9999;
 `;
 const LoginContainer = styled.div`
   display: flex;

@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 // import Canvas from '../components/Canvas';
 import styled, { css } from 'styled-components';
-import axios from 'axios';
-import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 
 
+//불러오기
+import { useMyContext } from '../shared/ContextApi';
+import AnyModal from '../elem/AnyModal';
+import instance from '../shared/apis';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -24,6 +26,7 @@ import waterdrop from '../images/waterdrop.png';
 const PostFree = () => {
   const [frame, setFrame] = useState(0);
   const [canvasDone, setCanvasDone] = useState();
+  const myContext = useMyContext();
 
   const frameCount = (e) => {
     const target = e.target;
@@ -38,40 +41,29 @@ const PostFree = () => {
     }
   };
 
-  // console.log(frame)
 
   ///////////////////////////
   // ajax
-
-  const accessToken = getCookieToken();
-  const refreshToken = getRefreshToken();
-  const baseURL = process.env.REACT_APP_API_KEY;
 
   const submitImg = () => {
     const canvas = canvasRef.current;
     const imgDataUrl = canvas.toDataURL('image/png');
     const topic = null;
     if (frame === 0) {
-      alert('프레임 개수를 설정해 주세요');
+      myContext.setSettingFrameBtn(true)
       return;
     }
-    axios
+    instance
       .post(
-        `${baseURL}/post`,
+        `/post`,
         {
           topic: null,
           frameTotal: frame,
           file: imgDataUrl,
-        },
-        {
-          headers: {
-            Authorization: accessToken,
-            'Refresh-Token': refreshToken,
-          },
         }
       )
       .then(function (response) {
-        alert('그리기 완료!');
+        myContext.setDrawingDoneBtn(true)
         window.location.replace('/list');
       })
       .catch(function (error) {
@@ -187,10 +179,10 @@ const PostFree = () => {
   };
 
   // undo
-  const undoHandler = (e) => {};
+  const undoHandler = (e) => { };
 
   // redo
-  const redoHandler = (e) => {};
+  const redoHandler = (e) => { };
 
   // draw Rect
   const drawRect = () => {
@@ -206,6 +198,16 @@ const PostFree = () => {
 
   return (
     <div>
+      {myContext.setttingFrameBtn ? (
+        <ErrorBox onClick={() => myContext.setSettingFrameBtn(false)}>
+          <AnyModal  content="프레임 개수를 설정해주세요" />
+          </ErrorBox>
+      ) : null}
+      {myContext.drawingDoneBtn ? (
+        <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
+          <AnyModal  content="올리기가 완료되었습니다" />
+          </ErrorBox>
+      ) : null}
       <PostTitle>FREE</PostTitle>
       {/*  */}
       <PostContentsWrap>
@@ -468,18 +470,10 @@ const PostFree = () => {
             <ModeFrameWrap>
               <ModeFrameTitle>프레임</ModeFrameTitle>
               <ModeFrameBtnWrap>
-                <ModeFrameBtn onClick={frameCount} id="6">
-                  6개
-                </ModeFrameBtn>
-                <ModeFrameBtn onClick={frameCount} id="12">
-                  12개
-                </ModeFrameBtn>
-                <ModeFrameBtn onClick={frameCount} id="18">
-                  18개
-                </ModeFrameBtn>
-                <ModeFrameBtn onClick={frameCount} id="24">
-                  24개
-                </ModeFrameBtn>
+                <ModeFrameBtn onClick={frameCount} id="6" style={frame === 6 ? { backgroundColor: 'black', color: 'white' } : {}}>6개</ModeFrameBtn>
+                <ModeFrameBtn onClick={frameCount} id="12" style={frame === 12 ? { backgroundColor: 'black', color: 'white' } : {}}>12개</ModeFrameBtn>
+                <ModeFrameBtn onClick={frameCount} id="18" style={frame === 18 ? { backgroundColor: 'black', color: 'white' } : {}}>18개</ModeFrameBtn>
+                <ModeFrameBtn onClick={frameCount} id="24" style={frame === 24 ? { backgroundColor: 'black', color: 'white' } : {}}>24개</ModeFrameBtn>
               </ModeFrameBtnWrap>
             </ModeFrameWrap>
             <PostBtn onClick={submitImg}>추가하기</PostBtn>
@@ -489,7 +483,18 @@ const PostFree = () => {
     </div>
   );
 };
-
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 const PostTitle = styled.div`
   font-family: 'SilkLight';
   font-size: 80px;

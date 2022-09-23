@@ -6,7 +6,10 @@ import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 import { useParams } from 'react-router-dom';
 
 // import component
-// import Footer from '../components/Footer'
+import instance from '../shared/apis';
+import { api } from '../shared/apis';
+import { useMyContext } from '../shared/ContextApi';
+import AnyModal from '../elem/AnyModal';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -24,6 +27,7 @@ import stroke from '../images/stroke.png';
 import waterdrop from '../images/waterdrop.png';
 
 const PostRelay = () => {
+  const myContext = useMyContext()
   /////////////////////////////////
   // canvas
   // useRef를 이용해 canvas 엘리먼트에 접근
@@ -190,21 +194,15 @@ const PostRelay = () => {
   const submitImg = () => {
     const canvas = canvasRef.current;
     const imgDataUrl = canvas.toDataURL('image/png');
-    axios
+    instance
       .post(
-        `${baseURL}/post/relay/${params.id}`,
+        `/post/relay/${params.id}`,
         {
           file: imgDataUrl,
-        },
-        {
-          headers: {
-            Authorization: accessToken,
-            'Refresh-Token': refreshToken,
-          },
         }
       )
       .then(function (response) {
-        alert('그리기 완료!');
+        myContext.setDrawingDoneBtn(true);
         window.location.replace('/list');
       })
       .catch(function (error) {
@@ -225,6 +223,11 @@ const PostRelay = () => {
 
   return (
     <div>
+      {myContext.drawingDoneBtn ? (
+        <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
+          <AnyModal  content="올리기가 완료되었습니다" />
+          </ErrorBox>
+      ) : null}
       {countFrame.topic === null ? (
         <PostTitle>FREE</PostTitle>
       ) : (
@@ -526,6 +529,18 @@ const PostRelay = () => {
     </div>
   );
 };
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 
 const ToggleWrap = styled.label`
   width: 65px;

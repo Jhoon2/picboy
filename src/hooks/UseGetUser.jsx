@@ -1,25 +1,21 @@
-import React, {useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 
 import { getCookieToken, getRefreshToken } from "../shared/Cookie";
+import instance from "../shared/apis";
 
 const myToken = getCookieToken();
 
 
 const UseGetUser = () => {
-  const baseURL = process.env.REACT_APP_API_KEY;
   const [user, setUser] = useState('')
+  
   const readUser = async () => {
-    // console.log('문제?')
-    const response = await axios.get(`${baseURL}/main/user-info`,
-      { headers: {
-        Authorization: myToken,
-        'refresh-token': getRefreshToken()
-        }})
-        // console.log(response)
+    const response = await instance.get(`/main/user-info`,
+    )
     setUser(response)
   }
-  
+
   useEffect(() => {
     if (myToken) { readUser() }
 

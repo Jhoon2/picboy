@@ -4,16 +4,18 @@ import { useEffect } from 'react'
 import { useMyContext } from '../shared/ContextApi'
 import { useParams } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
-import axios from "axios"
-// import { getCookieToken, getRefreshToken } from '../shared/Cookie'
 import { __getUserData, __getUserPage } from '../redux/modules/UserPage'
 import { __putEditNickname } from '../redux/modules/UserPage'
 
-import UseGet from '../hooks/UseGetUser'
 import styled from 'styled-components'
+import api from '../shared/apis'
+
+import UseGet from '../hooks/UseGetUser'
 import GifCard from '../components/UserProfile/GifCard'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
+
+//이미지
 import basicImg from '../images/basicImg.jpg'
 import smallpencil from '../images/smallpencil.png'
 import camera from '../images/Camera.png'
@@ -22,7 +24,6 @@ import TopScroll from '../global/TopScroll'
 
 
 const UserProfile = () => {
-    const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
     const params = useParams();
     const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const UserProfile = () => {
     const UserPage = userPage && userPage.data
     // console.log(UserPage && UserPage)
     
-    const {userData}  = useSelector((state) => state.userdata)
+    const { userData } = useSelector((state) => state.userdata)
     const pageNumber = userData.pageable && userData.pageable.pageNumber
     const totalPages = userData.pageable && userData.totalPages
     const [currentPage, setCurrentPage] = useState(0);
@@ -56,7 +57,7 @@ const UserProfile = () => {
     // console.log('토탈페이지 넘버', totalPages)
     // console.log('현재 페이지 넘버', currentPage)
     
-    console.log('&&&&&&&&&&&&',myContext.pageNum)
+    // console.log('&&&&&&&&&&&&',myContext.pageNum)
 
     //observe 콜백 함수
   const onIntersect = (entries, observer) => {
@@ -179,8 +180,8 @@ const UserProfile = () => {
 
     const checkNickname = async () => {
         try {
-        const response = await axios.get(
-            `${baseURL}/user/nickname-double-check/${loadMyNickname}`
+        const response = await api.get(
+            `/user/nickname-double-check/${loadMyNickname}`
             );
         if (!response.data.success) {
             setExistedNick(true);

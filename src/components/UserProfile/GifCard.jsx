@@ -2,14 +2,20 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
 import { useMyContext } from '../../shared/ContextApi'
+
+//axios, apis
 import instance from '../../shared/apis'
 import api from '../../shared/apis'
 import axios from 'axios'
+
 import styled from 'styled-components'
-import download from '../../images/download-btn.png'
-import heart from '../../images/like-before.png'
 import AllParticipants from './AllParticipants'
 import MySpecialButton from './MySpecialButton'
+
+//이미지
+import download from '../../images/download-btn.png'
+import heart from '../../images/like-before.png'
+import colorHeart from '../../images/like-click.png'
 import basicImg from '../../images/basicImg.jpg'
 import favorite from '../../images/favorite@2x.png'
 import moreHoriz from '../../images/More horiz@2x.png'
@@ -19,11 +25,8 @@ import completeIcon from '../../images/mypage/complete.png'
 import progressIcon from '../../images/mypage/progress.png'
 
 const GifCard = ({ data, myImg, myNickname }) => {
-  const myContext = useMyContext();
   const navigate = useNavigate();
   const baseURL = process.env.REACT_APP_API_KEY;
-  console.log('데이터', data.status)
-
   // 참여자들 보여주기
   const [allParticipants, setAllParticipants] = React.useState(false)
 
@@ -54,12 +57,16 @@ const GifCard = ({ data, myImg, myNickname }) => {
   const [openSpecialModal, setOpenSpecialModal] = useState(false);
   const buttonCollection = (e) => {
     e.stopPropagation();
-    // console.log('눌러라')
     setOpenSpecialModal(!openSpecialModal)
   }
-
- 
     
+  //좋아요 버튼
+  const [likePlus, setLikePlus] = useState(false)
+  const clickLikeBtn = (e) => {
+    e.stopPropagation();
+    setLikePlus(!likePlus)
+  }
+
   return (
     <CardContainer>
      
@@ -77,7 +84,7 @@ const GifCard = ({ data, myImg, myNickname }) => {
                 <a href={`${baseURL}/download?postId=${data.postId}&fileName=${data.gifUrl}`} download='free' onClick={(e) => e.stopPropagation()}>
                   <ClickCircle src={download}/>
                 </a>: null}
-                <ClickCircle src={heart} />
+              <ClickCircle src={likePlus ? colorHeart : heart} onClick={clickLikeBtn} />
               </div>
             </HoverContent>
           </OverlayImg>
@@ -99,7 +106,7 @@ const GifCard = ({ data, myImg, myNickname }) => {
             <Icons >
               <IconImg src={textbox} />
             </Icons>
-              <LikeCount >{data.reportCount}</LikeCount>
+              <LikeCount >{data.commentCount}</LikeCount>
             <Icons >
               <IconImg src={favorite} />
             </Icons>
@@ -192,7 +199,7 @@ const Badge = styled.img`
   position: absolute;
   top: 16px;
   left: 16px;
-  z-index: 10;
+  z-index: 5;
 `
 
 const HoverSideButton = styled.button`

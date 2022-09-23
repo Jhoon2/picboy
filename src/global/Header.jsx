@@ -80,7 +80,7 @@ const Header = () => {
   // const  getLogonUser  = useSelector((state) => state && state.logonUser)
   // const loginUser = getLogonUser.logonUser&&getLogonUser.logonUser.profileImg
 
-  useEffect(() => {}, [loginUser]);
+  useEffect(() => { }, [loginUser]);
 
   const navigate = useNavigate();
   const documentRef = useRef(document);

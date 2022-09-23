@@ -19,3 +19,8 @@ const instance = axios.create({
 })
 
 export default instance;
+
+export const anyApis = { 
+  //좋아요기능
+  liked : (data, info) => instance.post(`/post/like/${data}`,info) 
+}
