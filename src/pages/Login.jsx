@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
@@ -8,8 +8,8 @@ import { setAccessToken, setRefreshToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi'
 import LoginErrorModal from '../components/login/LoginErrorModal'
 import { KAKAO_AUTH_URL } from '../shared/Kakao_oauth'
-import kakaoImg from '../images/kakao_login_medium.png'
-// const { Kakao } = window;
+import speechBubble from '../images/frame.png'
+
 
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -83,13 +83,18 @@ const Login = () => {
               <LoginButton type='submit' disabled={isSubmitting}>로그인</LoginButton>
             </form>
 
-            <a href={KAKAO_AUTH_URL}>
-              <KakaoButton src={kakaoImg} />
-            </a>
+            <LoginKaKaoButton>
+              <a href={KAKAO_AUTH_URL}>
+                <KakaoContainer>
+                  <Kakaoimg src={speechBubble} />
+                  <KakaoText>카카오 로그인</KakaoText>
+                </KakaoContainer>
+              </a>
+            </LoginKaKaoButton>
             <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
           </InputBox>
         </FormContainer>
-      </LoginContainer >
+      </LoginContainer>
     </>
   );
 };
@@ -176,28 +181,41 @@ const LoginButton = styled.button`
   width: 585px;
   height: 90px;
   margin-top: 80px;
-  color: white;
+  color : ${(props) => props.theme.SecondaryColor};
   font-family: 'NotoLight';
-  font-weight: 600;
-  font-size: 20px;
+  font-weight: ${(props) => props.theme.Display};
+  font-size: 18px;
   cursor: pointer;
   background-color: black;
 `;
 
-const KakaoButton = styled.img`
-  width: 585px;
+const LoginKaKaoButton = styled.div`
+   width: 585px;
   height: 90px;
-  margin-top: 32px;
-  margin-left: 155px;
-  border: none;
-  border-radius: 5px;
-  color: #000000 85%;
+  margin-top: 16px;
+  margin-left: 158px;
+  color : ${(props) => props.theme.PrimaryColor};
   font-family: 'NotoLight';
-  font-weight: 600;
-  font-size: 20px;
+  font-weight: ${(props) => props.theme.Display};
+  font-size: 18px;
   cursor: pointer;
   background-color: #fee500;
+`
+const KakaoContainer = styled.div`
+  display: flex;
+  margin-left: 210px;
+`
+
+const Kakaoimg = styled.img`
+  width: 28px;
+  height: 25px;
+  margin-top: 33px;
 `;
+
+const KakaoText = styled.div`
+  margin-top: 32px;
+  margin-left: 10px;
+`
 
 const Errorsmessage = styled.div`
   width: 300px;

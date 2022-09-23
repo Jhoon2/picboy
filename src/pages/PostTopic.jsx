@@ -3,22 +3,21 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 // import component
-import Footer from '../global/Footer';
 
 // image import
 import modeIc from '../images/pen.png';
 import paint from '../images/paint.png';
 import pen from '../images/pen.png';
 import eraser from '../images/eraser.png';
-import brush from '../images/brush.png';
 import rectangle from '../images/rectangle.png';
 import line from '../images/line.png';
-import triangle from '../images/triangle.png';
 import circle from '../images/circle.png';
 import undo from '../images/undo.png';
 import redo from '../images/redo.png';
 import stroke from '../images/stroke.png';
 import waterdrop from '../images/waterdrop.png';
+import BgTop from '../images/complete-detail-bg-top.png';
+import BgBottom from '../images/canvas-bottom-bg.png';
 
 const PostTopic = () => {
     const [frame, setFrame] = useState(0);
@@ -58,8 +57,8 @@ const PostTopic = () => {
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        canvas.width = 688;
-        canvas.height = 688;
+        canvas.width = 500;
+        canvas.height = 500;
         setPencilState(true);
         setCtx(canvasRef.current.getContext('2d'));
     }, []);
@@ -70,17 +69,14 @@ const PostTopic = () => {
         if (isPainting === true) {
             if (rectState === true) {
                 // console.log('hi')
-                ctx.strokeRect(
-                    X,
-                    Y,
-                    X - canvasRef.current.offsetLeft,
-                    Y - canvasRef.current.offsetTop
+                ctx.strokeRect(X, Y, X - canvasRef.current.offsetLeft, Y - canvasRef.current.offsetTop
                 );
             } else if (eraserState === true) {
                 ctx.strokeStyle = 'white';
             }
             ctx.lineWidth = lineWeight.value;
             ctx.lineTo(X, Y);
+            ctx.lineCap = 'round';
             ctx.stroke();
         } else {
             ctx.beginPath();
@@ -115,7 +111,7 @@ const PostTopic = () => {
         setBrushState(false);
         setEraserState(false);
 
-        ctx.fillRect(0, 0, 688, 688);
+        ctx.fillRect(0, 0, 500, 500);
     };
 
     // pencil
@@ -125,7 +121,7 @@ const PostTopic = () => {
         setBrushState(false);
         setPaintState(false);
         setEraserState(false);
-        ctx.lineCap = 'butt';
+        ctx.lineCap = 'round';
     };
     // brush
     const brushHandler = (e) => {
@@ -233,9 +229,8 @@ const PostTopic = () => {
     };
 
     return (
-        <div>
+        <div style={{ position: 'relative' }}>
             <PostTitle>TOPIC</PostTitle>
-            {/*  */}
             <PostContentsWrap>
                 <CanvasWrap>
                     <PaintOptionWrap>
@@ -243,13 +238,7 @@ const PostTopic = () => {
                             <Table>
                                 <tbody>
                                     <tr>
-                                        <Td
-                                            style={
-                                                paintState
-                                                    ? { filter: 'invert(0%)', backgroundColor: '#000' }
-                                                    : {}
-                                            }
-                                        >
+                                        <Td style={paintState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
                                             <IcButton onClick={paintHandler}>
                                                 <img
                                                     src={paint}
@@ -258,13 +247,7 @@ const PostTopic = () => {
                                                 />
                                             </IcButton>
                                         </Td>
-                                        <Td
-                                            style={
-                                                pencilState
-                                                    ? { filter: 'invert(0%)', backgroundColor: '#000' }
-                                                    : {}
-                                            }
-                                        >
+                                        <Td style={pencilState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
                                             <IcButton onClick={pencilHandler}>
                                                 <img
                                                     src={pen}
@@ -275,13 +258,21 @@ const PostTopic = () => {
                                         </Td>
                                     </tr>
                                     <tr>
-                                        <Td
-                                            style={
-                                                eraserState
-                                                    ? { filter: 'invert(0%)', backgroundColor: '#000' }
-                                                    : {}
-                                            }
-                                        >
+                                        {/*  */}
+                                        <Td>
+                                            <IcButton onClick={drawRect}>
+                                                <img src={rectangle} alt="rectangle" />
+                                            </IcButton>
+
+                                        </Td>
+                                        <Td>
+                                            <IcButton>
+                                                <img src={circle} alt="circle" />
+                                            </IcButton>
+                                        </Td>
+                                    </tr>
+                                    <tr>
+                                        <Td style={eraserState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
                                             <IcButton onClick={eraseHandler}>
                                                 <img
                                                     src={eraser}
@@ -290,43 +281,9 @@ const PostTopic = () => {
                                                 />
                                             </IcButton>
                                         </Td>
-                                        <Td
-                                            style={
-                                                brushState
-                                                    ? { filter: 'invert(0%)', backgroundColor: '#000' }
-                                                    : {}
-                                            }
-                                        >
-                                            <IcButton onClick={brushHandler}>
-                                                <img
-                                                    src={brush}
-                                                    alt="brush"
-                                                    style={brushState ? { filter: 'invert(100%)' } : {}}
-                                                />
-                                            </IcButton>
-                                        </Td>
-                                    </tr>
-                                    <tr>
-                                        <Td>
-                                            <IcButton onClick={drawRect}>
-                                                <img src={rectangle} alt="rectangle" />
-                                            </IcButton>
-                                        </Td>
                                         <Td>
                                             <IcButton>
                                                 <img src={line} alt="line" />
-                                            </IcButton>
-                                        </Td>
-                                    </tr>
-                                    <tr>
-                                        <Td>
-                                            <IcButton>
-                                                <img src={triangle} alt="triangle" />
-                                            </IcButton>
-                                        </Td>
-                                        <Td>
-                                            <IcButton>
-                                                <img src={circle} alt="circle" />
                                             </IcButton>
                                         </Td>
                                     </tr>
@@ -351,6 +308,51 @@ const PostTopic = () => {
                                 </tbody>
                             </Table>
                         </ToolBox>
+                        {/* color */}
+                        <Table>
+                            <tbody>
+                                <tr>
+                                    <Td>
+                                        <ColorOption color={'#FF2222'} onClick={colorChange} id="#FF2222" />
+                                    </Td>
+                                    <Td>
+                                        <ColorOption color={'#00A3FF'} onClick={colorChange} id="#00A3FF" />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Td>
+                                        <ColorOption color={'#FF5C00'} onClick={colorChange} id="#FF5C00" />
+                                    </Td>
+                                    <Td>
+                                        <ColorOption color={'#3139FF'} onClick={colorChange} id="#3139FF" />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Td>
+                                        <ColorOption color={'#FFEB37'} onClick={colorChange} id="#FFEB37" />
+                                    </Td>
+                                    <Td>
+                                        <ColorOption color={'#BD00FF'} onClick={colorChange} id="#BD00FF" />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Td>
+                                        <ColorOption color={'#00EF43'} onClick={colorChange} id="#00EF43" />
+                                    </Td>
+                                    <Td>
+                                        <ColorOption color={'#713D00'} onClick={colorChange} id="#713D00" />
+                                    </Td>
+                                </tr>
+                                <tr>
+                                    <Td>
+                                        <ColorOption color={'#FFFFFF'} onClick={colorChange} id="#FFFFFF" />
+                                    </Td>
+                                    <Td>
+                                        <ColorOption color={'#000000'} onClick={colorChange} id="#000000" />
+                                    </Td>
+                                </tr>
+                            </tbody>
+                        </Table>
                         <LineStyle>
                             <RangeWrap>
                                 <div>
@@ -390,90 +392,6 @@ const PostTopic = () => {
                             </RangeWrap>
                             {/* <LineStyleShadow /> */}
                         </LineStyle>
-                        <Table style={{ marginTop: '20px' }}>
-                            <tbody>
-                                <tr>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#000'}
-                                            onClick={colorChange}
-                                            id="#000"
-                                        />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#FF2222'}
-                                            onClick={colorChange}
-                                            id="#FF2222"
-                                        />
-                                    </Td>
-                                </tr>
-                                <tr>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#373737'}
-                                            onClick={colorChange}
-                                            id="#373737"
-                                        />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#FFEB37'}
-                                            onClick={colorChange}
-                                            id="#FFEB37"
-                                        />
-                                    </Td>
-                                </tr>
-                                <tr>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#7A7A7A'}
-                                            onClick={colorChange}
-                                            id="#7A7A7A"
-                                        />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#33F96A'}
-                                            onClick={colorChange}
-                                            id="#33F96A"
-                                        />
-                                    </Td>
-                                </tr>
-                                <tr>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#CCCCCC'}
-                                            onClick={colorChange}
-                                            id="#CCCCCC"
-                                        />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#3139FF'}
-                                            onClick={colorChange}
-                                            id="#3139FF"
-                                        />
-                                    </Td>
-                                </tr>
-                                <tr>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#FFFFFF'}
-                                            onClick={colorChange}
-                                            id="#FFFFFF"
-                                        />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption
-                                            color={'#BD00FF'}
-                                            onClick={colorChange}
-                                            id="#BD00FF"
-                                        />
-                                    </Td>
-                                </tr>
-                            </tbody>
-                        </Table>
                     </PaintOptionWrap>
                     <canvas
                         ref={canvasRef}
@@ -518,28 +436,44 @@ const PostTopic = () => {
                     </ModeWrap>
                 </ContetnsWrap>
             </PostContentsWrap>
-            {/* <Footer /> */}
-        </div>
+            <BgTopStyle src={BgTop} alt="" />
+            <BgBottomStyle src={BgBottom} alt="" />
+        </div >
     );
 };
 
+const BgTopStyle = styled.img`
+  width: 100%;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  z-index: -100;
+`;
+
+const BgBottomStyle = styled.img`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: -100;
+`;
 
 const PostTitle = styled.div`
-  font-family: 'SilkLight';
-  font-size: 80px;
-  font-weight: 700;
+  font-family: 'SilkBold';
+  font-size: 65px;
+  letter-spacing: -0.04em;
   text-align: center;
-  margin: 180px 0 40px 0;
+  padding: 230px 0 40px 0;
 `;
 
 const PostContentsWrap = styled.div`
-  width: 1200px;
+  width: 994px;
   margin: 0 auto;
   display: flex;
 `;
 
 const ContetnsWrap = styled.div`
-  width: 1200px;
+  width: 994px;
   margin: 0 auto;
   margin-bottom: 160px;
   display: flex;
@@ -548,7 +482,7 @@ const ContetnsWrap = styled.div`
 
 const ModeWrap = styled.div`
   width: 380px;
-  height: 688px;
+  height: 500px;
   margin-left: 21px;
   padding: 32px;
   border: 2px solid #000;
@@ -616,8 +550,8 @@ const PostBtn = styled.div`
 `;
 
 const canvasStyle = {
-    width: '688px',
-    height: '688px',
+    width: '500px',
+    height: '500px',
     border: '2px solid #000',
     backgroundColor: '#fff',
 };
@@ -628,16 +562,6 @@ const CanvasWrap = styled.div`
 
 const PaintOptionWrap = styled.div`
   margin-right: 16px;
-`;
-
-const ToolShadow = styled.div`
-  width: 78px;
-  height: 194px;
-  background-color: #000;
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  z-index: 0;
 `;
 
 const LineWeightCustomWrap = styled.div`
@@ -664,7 +588,6 @@ const Table = styled.table`
   margin-bottom: 12px;
   border: 2px solid #000;
   border-collapse: collapse;
-  position: absolute;
   z-index: 999;
 `;
 
@@ -682,7 +605,6 @@ const ColorOption = styled.div`
 `;
 
 const ToolBox = styled.div`
-  height: 200px;
   margin-bottom: 12px;
   position: relative;
 `;

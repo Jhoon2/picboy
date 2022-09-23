@@ -1,16 +1,29 @@
 import React from 'react'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { __hidePost } from '../../redux/modules/UserPage'
+import { useMyContext } from '../../shared/ContextApi'
 import styled from 'styled-components'
+import eyes from '../../images/mypage/eyes.png'
+import grayEyes from '../../images/mypage/grayEyes.png'
+import grayFlag from '../../images/mypage/grayFlag.png'
+import grayLineEyes from '../../images/mypage/grayLineEyes.png'
 
-const MySpecialButton = ({ shown, close, setOpenSpecialModal }) => {
+
+const MySpecialButton = ({ shown, close, postId }) => {
+  const [path, setPath] = useState(0)
+  const dispatch = useDispatch();
+  const myContext = useMyContext();
+
   const hide = (e) => {
-    // console.log(e.target.id)
+    setPath(1)
+    dispatch(__hidePost(postId))
   }
   const declaration = (e) => {
-    // console.log(e.target.id)
+    setPath(2)
   }
-  const deletePost = (e) => {
-    // console.log(e.target.id)
-  }
+
+
   return shown ? (
     <FullOverLay onClick={()=>{close()}}>
       <Overlay >
@@ -18,21 +31,22 @@ const MySpecialButton = ({ shown, close, setOpenSpecialModal }) => {
           <OverlayContainer>
             <ModalContainer onClick={e => { e.stopPropagation() }}>
               <ModalText id='hide' name='1' onClick={hide}
-                // categoryContent={myContext.categoryNum}
+               style={path === 1? { color: '#000000', fontWeight:'700'} : {color:'#A3A3A3',fontWeight:'400'}}
               >
-                숨기기
+                <HideIconContainer>
+                {myContext.tabNum === 3 ? 
+                  <><IconImg src={grayEyes} /><div style={{ marginTop: '-5px' }}>보이기</div></> :
+                  <><IconImg src={grayLineEyes} /><div style={{ marginTop: '-5px' }}>숨기기</div></>}
+                  </HideIconContainer>
               </ModalText>
               <TextBr />
               <ModalText id='declaration' name='2' onClick={declaration}
-                // categoryContent={myContext.categoryNum}
+                 style={path ===2 ? { color: '#000000', fontWeight:'700'} : {color:'#A3A3A3',fontWeight:'400'}}
               >
-                신고
-              </ModalText>
-              <TextBr />
-              <ModalText id='delete' name='3' onClick={deletePost}
-                // categoryContent={myContext.categoryNum}
-              >
-                삭제
+                <HideIconContainer>
+                  <IconImg src={grayFlag} style={{marginTop: '0px'}} />
+                  <div>신고</div>
+                </HideIconContainer>
               </ModalText>
             </ModalContainer>
           </OverlayContainer>
@@ -69,8 +83,8 @@ const OverlayPosition = styled.div`
   left: 330px;
 `
 const ModalContainer = styled.div`
-  width: 132px;
-  height: 149px;
+  width: 109px;
+  height: 100px;
   position: absolute;
   z-index: 2;
   border: 2px solid #000000;
@@ -88,24 +102,33 @@ const ModalText = styled.div`
   gap: 10px;
   font-family: 'Noto Sans KR';
   font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  color: ${(props)=> (props.name === String(props.categoryContent)) ? '#000000' : '#A3A3A3'} ;
+  font-size: ${(props) => props.theme.Caption2};
   cursor: pointer;
 
   :first-child {
     margin-top: 15px;
   }
+
 `
 const TextBr = styled.div`
-  width: 84px;
-  height: 0px;
+  width: 105px;
   margin-top: 5px;
-  margin-left: 20px;
+  /* margin-left: 20px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  border: 0.5px solid #A3A3A3;
+  border: 1px solid #A3A3A3;
 `
+const HideIconContainer = styled.div`
+  display: flex;
+`
+const IconImg = styled.img`
+  width: 18px;
+  height: 16px;
+  margin-top: -4px;
+  margin-right: 10px;
+  margin-left: -8px;
+`
+
 export default MySpecialButton

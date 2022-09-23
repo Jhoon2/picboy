@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
+import  instance  from "../../shared/apis";
 
 const baseURL = process.env.REACT_APP_API_KEY;
 
@@ -12,12 +13,7 @@ export const __getLogonUser = createAsyncThunk(
   'logon/getLogonUser',
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.get(`${baseURL}/main/user-info`,
-      { headers: {
-        Authorization: myToken,
-        'refresh-token': getRefreshToken()
-        }
-        })
+      const response = await instance.get('/main/user-info')
       return thunkAPI.fulfillWithValue(response.data.data);
     } catch (error) {
       // return thunkAPI.rejectWithValue(error);
@@ -43,35 +39,43 @@ export const __getUserData = createAsyncThunk(
   'userData/getUserData',
   async (payload, thunkAPI) => {
     // console.log(payload)
+    const tab = payload?.tab ?? 0;
+    const category = payload?.category ?? 1;
+    const username = payload?.username;
+    const page = payload?.page ?? 0;
+    // console.log('받은 정보들', tab,category,username,page)
     try {
       const data = await axios.get
-      (`${baseURL}/mypage/post/0/1?username=${payload.username}&page=0&size=6`,
-  {
-      headers: {
-          Authorization: myToken,
-          'refresh-token': refreshToken
-      }
-
-    })
-      // console.log(data)
+      (`${baseURL}/mypage/post/${tab}/${category}?username=${username}&page=${page}&size=6`)
+      // console.log('받은 데이터',data)
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
+      console.log(error)
       return thunkAPI.rejectWithValue(error);
     }
   }
 )
-
+//숨기기 
+export const __hidePost = createAsyncThunk(
+  'userHidePost/hidePost',
+  async (payload, thunkAPI) => {
+    // console.log(payload)
+    try {
+      const response = await instance.post(
+        `mypage/post-hidden/${payload}`
+      );
+      return thunkAPI.fulfillWithValue(payload);
+    } catch (error) {
+      // return thunkAPI.rejectWithValue(error);
+      console.log(error)
+    }
+  }
+);
 export const __putEditNickname = createAsyncThunk(
   'editNickname /putEditNickname ',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.put(`${baseURL}/mypage/update-nickname`, payload,
-      {
-          headers: {
-            Authorization: myToken,
-            'refresh-token': refreshToken,
-          },
-        }
+      const data = await instance.put('/mypage/update-nickname', payload
       )
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
@@ -84,13 +88,7 @@ export const __putEditProfileImg = createAsyncThunk(
   'editProfileImg /putEditProfileImg ',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.put(`${baseURL}/mypage/update-image`, payload,
-      {
-          headers: {
-            Authorization: myToken,
-            'refresh-token': refreshToken,
-          },
-        }
+      const data = await instance.put(`/mypage/update-image`, payload,
       )
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
@@ -104,23 +102,18 @@ export const __putEditProfileImg = createAsyncThunk(
 export const __selectIconImg = createAsyncThunk(
   'IconImg/selectIconImg',
   async (payload, thunkAPI) => {
-    // console.log(payload)
     try {
-      const response = await axios.put(
-        `${baseURL}/mypage/update-image/`, payload,
-        {
-          headers: {
-            Authorization: myToken,
-            'refresh-token': refreshToken,
-          },
-        }
+      const response = await instance.put(
+        'mypage/update-image', payload
       );
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      // return thunkAPI.rejectWithValue(error);
+      console.log(error)
     }
   }
 );
+
 
 
 //로그온 유저 정보
@@ -181,27 +174,35 @@ export const userPageSlice = createSlice({
 
 export const userdataSlice = createSlice({
   name: 'userData',
-  initialState:{
-      userData: [],
-      isLoading: false,
-      error: null,
+  initialState: {
+    userData: [],
+    isLoading: false,
+    error: null,
   },
   reducers: {},
   extraReducers: {
-      [__getUserData.pending]: (state) => {
-          state.isLoading = true;
-      },
-      [__getUserData.fulfilled]: (state, action) => {
-        state.isLoading = false;
-        // console.log(action.payload)
-          state.userData = action.payload;
-      },
-      [__getUserData.rejected]: (state, action) => {
-          state.isLoading = false;
-          state.error = action.payload;
+    [__getUserData.pending]: (state) => {
+      state.isLoading = true;
     },
-    [__putEditNickname.fulfilled]: (state, action) => {
-      // state.userPage = action.payload.nickname
-    }
+    [__getUserData.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      // console.log('페이로드 페이지', action.payload.pageable.pageNumber)
+      // console.log('액션페이로드',action.payload)
+      if (action.payload.pageable.pageNumber === 0) {
+        state.userData = action.payload
+      } else {
+        state.userData.content = [...state.userData.content].concat(action.payload.content)
+      }
+    },
+    [__getUserData.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [__hidePost.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.userData.content = state.userData.content.filter(
+        (data) => data.postId !== action.payload
+      )
+    },
   }
 })

@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
-
+import { useMyContext } from '../../shared/ContextApi'
+import instance from '../../shared/apis'
 import axios from 'axios'
 import styled from 'styled-components'
 import download from '../../images/download-btn.png'
@@ -9,93 +10,99 @@ import heart from '../../images/like-before.png'
 import AllParticipants from './AllParticipants'
 import MySpecialButton from './MySpecialButton'
 import basicImg from '../../images/basicImg.jpg'
-
-
+import favorite from '../../images/favorite@2x.png'
+import moreHoriz from '../../images/More horiz@2x.png'
+import textbox from '../../images/Textsms.png'
 
 const GifCard = ({ data, myImg, myNickname }) => {
-  //서버주소
-  const baseURL = process.env.REACT_APP_API_KEY;
-  //토큰
-  const myToken = getCookieToken();
-  const refreshToken = getRefreshToken();
-
+  const myContext = useMyContext();
   const navigate = useNavigate();
+  // console.log('데이터', data)
   // 참여자들 보여주기
-  const [allParticipants, setAllParticipants] = useState(false)
+  const [allParticipants, setAllParticipants] = React.useState(false)
+
   const [peopleData, setPeopleData] = useState()
   const showAllParticipants = async(e) => {
     e.stopPropagation();
-    const peopleData = await axios.get(`${baseURL}/post/join-list/${data.postId}`,
-        {
-            headers: {
-                Authorization: myToken,
-                'refresh-token': refreshToken
-            }
-      })
+    const peopleData = await instance.get(`/post/join-list/${data.postId}`,
+       )
     const datas = peopleData && peopleData.data.data
     if (datas.length <= 1) {
-      setAllParticipants(false)
+      setAllParticipants(false);
     } else {
-      setPeopleData(datas)
-      setAllParticipants(!allParticipants)
+      setPeopleData(datas);
+      setAllParticipants(!allParticipants);
     }
-  }
+  };
 
   //완료 페이지, 진행중 페이지 이동
   const movePage = () => {
     if (data.status === 1) {
-      navigate(`/progressdetail/${data.postId}`)
+      navigate(`/progressdetail/${data.postId}`);
     } else {
-      navigate(`/complete-detail/${data.postId}`)
+      navigate(`/complete-detail/${data.postId}`);
     }
-  }
+  };
 
   //... 버튼
-  const [openSpecialModal, setOpenSpecialModal] =useState(false)
+  const [openSpecialModal, setOpenSpecialModal] = useState(false);
   const buttonCollection = (e) => {
     e.stopPropagation();
     // console.log('눌러라')
     setOpenSpecialModal(!openSpecialModal)
   }
-
+  
   return (
     <CardContainer>
-      <div >
+     
         <GifImg src={data.imgUrl} />
+        {/* {console.log(data.imgUrl)} */}
         <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
-          <HoverSideButton onClick={buttonCollection}>···</HoverSideButton>
+          <HoverSideButton onClick={buttonCollection}><HorizBtn src={moreHoriz} /></HoverSideButton>
           <HoverContent>
           <div style={{color:'white'
           }}>{data.topic ? data.topic : null}</div>
             <div style={{display :'flex'}}>
-              <ClickCircle src={download}/>
-              <ClickCircle src={heart} />
+              <a href='#' download='' onClick={(e)=>e.stopPropagation()}>
+                <ClickCircle src={download}/>
+              </a>
+              <ClickCircle src={heart} onClick={(e)=>e.stopPropagation()}/>
             </div>
           </HoverContent>
         </OverlayImg>
         <GifContents>
           <UserProfileContent onClick={showAllParticipants} >
-            <ProfileImage src={!myImg ? basicImg : myImg}/>
-            <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>
-            <div style={{ marginTop: '15px', marginLeft: '15px' }}>{myNickname} 외 {data.memberCount}명</div>
+            <ProfileImage src={!data.profileImg ? basicImg : data.profileImg}/>
+          {data.memberCount ? <Participants><div style={{ marginTop: '5px', marginLeft: '5px', fontSize: '10px' }}>+{data.memberCount}</div></Participants>: null} 
+            <Texts >{data.nickname} 외 {data.memberCount}명</Texts>
           </UserProfileContent>
-          <div style={{display:'flex'}}>
-            <div style={{ marginLeft: '15px', fontSize: '30px' }}>♥</div>
-            <div style={{ marginTop: '7px', marginLeft: '10px', fontSize: '20px' }}>{data.likeCount}</div>
+          <div style={{ display: 'flex' }}>
+            <div style={{ marginLeft: '15px', fontSize: '30px' }}>
+              <img style={{ width: '16px' }} src={textbox} />
+            </div>
+              <LikeCount >{data.reportCount}</LikeCount>
+            <div style={{ marginLeft: '15px', fontSize: '30px' }}>
+              <img style={{width:'16px'}} src={favorite} />
+            </div>
+            <LikeCount >{data.likeCount}</LikeCount>
           </div>
         </GifContents>
-      </div>
+      
 
       {/* ...버튼 */}
-      <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal} /> 
-      {/* 참여자들 */}
-      {allParticipants ?
-        <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData}  myNickname={myNickname} />
-        : null}
+      <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal}
+        postId={data.postId} /> 
+      {/* 참여자들 */}.
+      <CardInner >
+      <AllParticipantsContainer>
+        {allParticipants ?
+            <AllParticipants shown={allParticipants} close={() => { setAllParticipants(false) }} data={peopleData} Firstickname={data.nickname} FirstProfileImg={!data.profileImg ? basicImg : data.profileImg} />
+          : null}
+        </AllParticipantsContainer>
+        </CardInner>
     </CardContainer>
-    
-  )
-}
+  );
+};
 
 const CardContainer = styled.div`
   width: 388px;
@@ -104,23 +111,20 @@ const CardContainer = styled.div`
   margin-right: 10px;
   position: relative;
 `
-const Overlay = styled.div`
-   /* position: absolute;
-    width: 100vw;
-    height: 100vh;
-    bottom: 0; */
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */ 
 
+const CardInner = styled.div`
+  width: 300px;
+  height: 30px;
+  position:relative;
+  top:400px;
+  left: -350px;
 `
-
 
 const GifImg = styled.img`
   width: 100%;
   height: 316px;
-  background-color: #E6E6E6;
-`
+  background-color: #e6e6e6;
+`;
 const OverlayImg = styled.div`
   width: 388px;
   height: 316px;
@@ -129,13 +133,13 @@ const OverlayImg = styled.div`
   left: 0;
   z-index: 1;
   background-color: rgba(0, 0, 0, 0.5);
-  opacity: ${(props) => props.openSpecialModal ? 1 : 0};
+  opacity: ${(props) => (props.openSpecialModal ? 1 : 0)};
   cursor: pointer;
 
   &:hover {
     opacity: 1;
   }
-`
+`;
 const HoverSideButton = styled.button`
   padding: 1rem;
   font-size: 30px;
@@ -143,6 +147,10 @@ const HoverSideButton = styled.button`
   float: right;
   cursor: pointer;
   background-color: transparent;
+`
+const HorizBtn = styled.img`
+  width: 30px;
+  height: 30px;
 `
 
 const HoverContent = styled.div`
@@ -154,18 +162,19 @@ const HoverContent = styled.div`
   display: flex;
   justify-content: space-between;
 `
+
 const ClickCircle = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 46px;
   margin-top: -18px;
-  border-radius: 50px;
+  border-radius: 46px;
   cursor: pointer;
   /* background-color: gray; */
 
   :first-child {
     margin-right: 10px;
   }
-`
+`;
 
 const GifContents = styled.div`
   margin-top: 10px;
@@ -173,18 +182,37 @@ const GifContents = styled.div`
   margin-right: 20px;
   display: flex;
   justify-content: space-between;
-`
+`;
 const UserProfileContent = styled.div`
   display: flex;
   cursor: pointer;
-`
+`;
 
 const ProfileImage = styled.img`
   width: 57px;
   height: 57px;
   border-radius: 50px;
+  border: 2px lightgray solid;
   /* background-color: gray; */
   cursor: pointer;
+`
+const Texts = styled.div`
+  margin-top: 17px;
+  margin-left: 15px;
+  font-size : ${(props) => props.theme.Caption2};
+`
+const LikeCount = styled.div`
+  margin-top: 13px;
+  margin-left: 3px;
+  font-weight : ${(props) => props.theme.HeadlineRG};
+  font-size : ${(props) => props.theme.Caption2};
+  color : ${(props) => props.theme.inactive};
+
+`
+const AllParticipantsContainer = styled.div`
+  width: 300px;
+  height: 300px;
+  position: relative;
 `
 
 const Participants = styled.div`
@@ -193,7 +221,9 @@ const Participants = styled.div`
   position: absolute;
   left: 60px;
   border-radius: 24px;
-  background-color: #D9D9D9;
+  font-size: 9px;
+  color: white;
+  background-color: black;
 `
 
-export default GifCard
+export default GifCard;

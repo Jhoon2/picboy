@@ -19,10 +19,7 @@ import PostRelay from '../pages/PostRelay';
 import Footer from '../global/Footer';
 import KakaoLogin from '../pages/KakaoLogin';
 // import { getCookieToken } from '../shared/Cookie'
-
 const Router = () => {
-  // const myToken = getCookieToken();
-
   return (
     <Context>
       <BrowserRouter>
@@ -46,7 +43,7 @@ const Router = () => {
           <Route path="post-relay/:id" element={<PostRelay />} />
           <Route path="complete-detail/:id" element={<CompleteDetail />} />
         </Routes>
-        <Footer/>
+        <Footer />
       </BrowserRouter>
     </Context>
   );

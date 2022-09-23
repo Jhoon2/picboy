@@ -4,13 +4,20 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { useDispatch, useSelector } from 'react-redux';
-import first from '../images/mainDesc/first.svg';
-import banner from '../images/mainDesc/banner.svg';
 import { __getBest } from '../redux/modules/Best';
+import first from '../images/mainDesc/first.svg';
+import second from '../images/mainDesc/second.svg';
+import third from '../images/mainDesc/third.svg';
+import banner from '../images/mainDesc/banner.svg';
 
 const BestSlider = () => {
   const dispatch = useDispatch();
   const { bests } = useSelector((state) => state.bests);
+
+  const Top1 = bests.top3?.[0];
+  const Top2 = bests.top3?.[1];
+  const Top3 = bests.top3?.[2];
+  const top7 = bests.top410;
 
   useEffect(() => {
     dispatch(__getBest());
@@ -42,11 +49,24 @@ const BestSlider = () => {
     <BestContainer>
       <style>{cssstyle}</style>
       <Slider {...settings}>
-        {bests.map((item, index) => {
-          console.log(item.id);
+        <div className="box">
+          <div className="rank1" />
+          <Rankimg src={Top1?.gifUrl} alt="" />
+        </div>
+
+        <div className="box">
+          <div className="rank2" />
+          <Rankimg src={Top2?.gifUrl} alt="" />
+        </div>
+
+        <div className="box">
+          <div className="rank3" />
+          <Rankimg src={Top3?.gifUrl} alt="" />
+        </div>
+
+        {top7?.map((item, index) => {
           return (
             <div key={item} className="box">
-              <div className="rank" />
               <Rankimg src={item.gifUrl} alt="" />
             </div>
           );
@@ -88,13 +108,37 @@ const cssstyle = css`
     height: 500px;
   }
 
-  .center .slick-center .rank {
+  .center .slick-center .rank1 {
     width: 80px;
     height: 80px;
     position: absolute;
     top: 85%;
     left: 77%;
     background: url(${first});
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+
+  .center .slick-center .rank2 {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 85%;
+    left: 77%;
+    background: url(${second});
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+
+  .center .slick-center .rank3 {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 85%;
+    left: 77%;
+    background: url(${third});
     background-position: center;
     background-size: 100% 100%;
     background-repeat: no-repeat;
