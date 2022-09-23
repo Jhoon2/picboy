@@ -56,25 +56,26 @@ const UserProfile = () => {
     // console.log('토탈페이지 넘버', totalPages)
     // console.log('현재 페이지 넘버', currentPage)
     
+    console.log('&&&&&&&&&&&&',myContext.pageNum)
 
     //observe 콜백 함수
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
             console.log('-------------------------')
-            // if (currentPage >= totalPages && totalPages)
-            // console.log(totalPages&&totalPages,currentPage,'----------페이지가 토탈보다 크다')
-            // if (pageNumber === 0) {
-                // page = 0
-            // if (page > 3 ? page = 0:page++)
+            // if (myContext.pageNum === 0) {
+            //    
+            //     myContext.pageNum++
+ 
             page++
-                // console.log('&&&&&&&&&&&&',page)
+            // myContext.pageNum++
+            // console.log(myContext.pageNum)
+                // myContext.setPageNum(myContext.pageNum++)
                 dispatch(__getUserData({
                     username:params.id,
-                    'page': page,
+                    'page': page
                 }))
-            setCurrentPage(page)
-            //  }
+            // setCurrentPage(page)
 
             //조건이 트루
         //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)

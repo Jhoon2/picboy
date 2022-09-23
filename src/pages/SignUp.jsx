@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import SignupErrorModal from '../components/Signup/SignupErrorModal';
 import UseTimer from '../elem/UseTimer';
 import SignUpDone from '../components/Signup/SignUpDone';
+import Listbanner from '../images/Com/Listbanner.svg';
 
 const SignUp = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -249,7 +250,10 @@ const SignUp = () => {
   };
 
   return (
+    <>
+      <ImgBox src={Listbanner} />
     <LoginContainer>
+
       {myContext.signUpBtn ? <ErrorBox>
         <SignUpDone nickname={myNickname} />
       </ErrorBox> : null}
@@ -416,7 +420,8 @@ const SignUp = () => {
           </InputBox>
         </form>
       </FormContainer>
-    </LoginContainer>
+      </LoginContainer>
+      </>
   );
 };
 
@@ -436,10 +441,15 @@ const LoginContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
+const ImgBox = styled.img`
+  width: 100vw;
+  border: none;
+  /* background-repeat: no-repeat; */
+`;
 const FormContainer = styled.div`
   max-width: 1200px;
   height: 50vh;
-  margin-top: 160px;
+  margin-top: -500px;
 `;
 const InputBox = styled.div`
   width: 700px;

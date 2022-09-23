@@ -50,11 +50,11 @@ const SelectList = styled.div`
   position: absolute;
   right: -75px;
   cursor: pointer;
-  ul {
+  /* ul {
     width: 240px;
     min-height: 100px;
     background: white;
     border: 3px solid black;
     padding: 20px;
-  }
+  } */
 `;

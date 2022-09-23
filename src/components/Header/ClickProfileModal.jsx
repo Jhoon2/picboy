@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { removeCookieToken } from '../../shared/Cookie';
 import { useMyContext } from '../../shared/ContextApi';
 // import { useNavigate } from 'react-router-dom';
 import UseGetUser from '../../hooks/UseGetUser';
+import '../../elem/Down'
+import Down from '../../elem/Down';
 
-const ClickProfileModal = ({ shown, close }) => {
+const ClickProfileModal = ({img}) => {
   const myContext = useMyContext();
+  const node = useRef();
+
   const logonUser = UseGetUser();
-  // console.log(logonUser)
   const logonUsername = logonUser && logonUser.data.data.username;
 
   const [selectContent, setSelectContent] = useState('myPage');
 
-  // const navigate = useNavigate();
-  console.log(logonUsername);
+  //열고 닫는 함수
+  const [select, setSelect] = useState(false);
+
   const myPage = (e) => {
     setSelectContent(e.target.id);
     // navigate(`/user-profile/${logonUsername}`)
@@ -26,102 +30,138 @@ const ClickProfileModal = ({ shown, close }) => {
     removeCookieToken();
     window.location.href = '/';
   };
+  useEffect(() => {
+    const clickOutside = (e) => {
+      if (select && node.current && !node.current.contains(e.target)) {
+        setSelect(false);
+      }
+    };
 
-  return shown ? (
-    <Overlay
-      onClick={() => {
-        close();
-      }}
-    >
-      <OverlayPosition>
-        <OverlayContainer>
-          <ModalContainer
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <ModalText
-              id="myPage"
-              name="myPage"
-              onClick={myPage}
-              selectContent={selectContent}
-            >
-              마이페이지
-            </ModalText>
-            <TextBr />
-            <ModalText
-              id="Logout"
-              name="Logout"
-              onClick={Logout}
-              categoryContent={selectContent}
-            >
-              로그아웃
-            </ModalText>
-          </ModalContainer>
-        </OverlayContainer>
-      </OverlayPosition>
-    </Overlay>
-  ) : null;
+    document.addEventListener('mousedown', clickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', clickOutside);
+    };
+  }, [select]);
+  return (
+    
+    <div ref={node}>
+      <div>
+        <div onClick={() => setSelect(!select)}>
+          <LoginUserImg src={img}/>
+        </div>
+      </div>
+
+          <SelectListBox onClick={(e) => {
+                  e.stopPropagation();
+                }}>
+          <Down select={select}>
+            <DownUl>
+              
+                <div style={{height:'169px'}}>
+                  <ProfileImg src={logonUser && logonUser.data.data.profileImg} />
+                  <ProfileNickname>{logonUser && logonUser.data.data.nickname}</ProfileNickname>
+                  <ProfileUsername>{logonUser && logonUser.data.data.username}</ProfileUsername>
+                </div>
+                <TextBr />
+                <ModalText
+                    id="myPage"
+                    name="myPage"
+                    onClick={myPage}
+                    selectContent={selectContent}
+                  >
+                    마이페이지
+                  </ModalText>
+                  <TextBr />
+                  <ModalText
+                    id="Logout"
+                    name="Logout"
+                    onClick={Logout}
+                    categoryContent={selectContent}
+                  >
+                    로그아웃
+                  </ModalText>
+                 </DownUl>
+                </Down>
+          </SelectListBox>
+    </div>
+  )
 };
-
-const Overlay = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  top: 0px;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-`;
-const OverlayContainer = styled.div`
-  width: 200px;
-  position: absolute;
-`;
-const OverlayPosition = styled.div`
-  height: 30px;
-  position: relative;
-  top: 100px;
-  left: 530px;
-`;
-const ModalContainer = styled.div`
-  width: 132px;
-  height: 100px;
-  position: absolute;
-  z-index: 2;
-  border: 2px solid #000000;
+const LoginUserImg = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
   background-color: white;
+
+  cursor: pointer;
 `;
 
-const ModalText = styled.div`
-  width: 132px;
-  height: 23px;
-  margin-top: 5px;
-  padding: 15px 24px;
+const SelectListBox = styled.div`
+  width: 150px;
+  position: relative;
+  top: 10px;
+  right: 170px;
+  z-index: 1;
+`;
+
+const DownUl = styled.ul`
+  width: 268px;
+  height: 284px;
+  /* position: absolute; */
+  /* z-index: 2; */
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  gap: 10px;
+  align-items: center;
+  cursor:default;
+  border: 2px solid #000000;
+  background-color: white;
+
+  
+`;
+
+const ProfileImg = styled.img`
+  width: 87px;
+  height: 87px;
+  margin-top: 22px;
+`
+const ProfileNickname = styled.div`
+  font-weight: ${(props) => props.theme.BodyBD};
+  font-size: ${(props) => props.theme.Caption1};
+  
+`
+const ProfileUsername = styled.div`
+   font-weight: ${(props) => props.theme.HeadlineRG};
+  font-size: ${(props) => props.theme.Caption3};
+  text-align: center;
+`
+
+const ModalText = styled.div`
+  width: 268px;
+  height: 56px;
+
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
   font-family: 'Noto Sans KR';
   font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  color: ${(props) =>
-    props.name === props.selectContent ? '#000000' : '#A3A3A3'};
+  font-size: ${(props) => props.theme.Caption2};
+  color: ${(props) => props.theme.inactive};
   cursor: pointer;
 
-  :first-child {
+  /* :first-child {
     margin-top: 15px;
+  } */
+  :hover {
+    height: 60px;
+    margin-bottom: -5px;
+    background-color:${(props) => props.theme.basic};
   }
 `;
 const TextBr = styled.div`
-  width: 84px;
+  width: 264px;
   height: 0px;
-  margin-top: 5px;
-  margin-left: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;

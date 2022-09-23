@@ -17,6 +17,7 @@ import {
 import UseGetUser from '../hooks/UseGetUser';
 import ClickProfileModal from '../components/Header/ClickProfileModal';
 import basicImg from '../images/basicImg.jpg';
+import '../elem/Down'
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -35,6 +36,9 @@ const Header = () => {
   const loginUser = useGet && useGet.data.data.profileImg;
   const myToken = getCookieToken();
   ////////////////////////////////////////////////////
+  // //헤더 모달창 열고닫기
+  // const [select, setSelect] = useState(false);
+
   const [messageList, setMessageList] = useState([]);
   const refreshToken = getRefreshToken();
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -45,28 +49,28 @@ const Header = () => {
     },
   });
 
-  const stompClient = Stomp.over(socket);
+  // const stompClient = Stomp.over(socket);
 
   useEffect(() => {
-    stompConnect();
+    // stompConnect();
   });
 
-  const stompConnect = () => {
-    try {
-      stompClient.connect(
-        () => {
-          stompClient.subscribe(`/sub/${usernames}`, (data) => {
-            const returnMessage = JSON.parse(data.body);
+  // const stompConnect = () => {
+  //   try {
+  //     stompClient.connect(
+  //       () => {
+  //         stompClient.subscribe(`/sub/${usernames}`, (data) => {
+  //           const returnMessage = JSON.parse(data.body);
 
-            setMessageList(returnMessage.message);
-          });
-        },
-        () => {}
-      );
-    } catch (error) {
-      throw error;
-    }
-  };
+  //           setMessageList(returnMessage.message);
+  //         });
+  //       },
+  //       () => {}
+  //     );
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // };
 
   //////////////////////////////////////////////////////
   const location = useLocation();
@@ -80,7 +84,6 @@ const Header = () => {
 
   const navigate = useNavigate();
   const documentRef = useRef(document);
-  const myContext = useMyContext();
 
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
@@ -101,9 +104,7 @@ const Header = () => {
       documentRef.current.removeEventListener('scroll', throttleScroll);
   }, [pageY]);
 
-  const clickOpenModal = () => {
-    myContext.setLogonProfileImg(!myContext.logonOpenProfileImg);
-  };
+
 
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
@@ -135,14 +136,9 @@ const Header = () => {
           </CompleteButton>
           <PostCategories />
           {myToken ? (
-            // <ProfileImgBackground>
-            <LoginUserImg
-              src={!loginUser ? basicImg : loginUser}
-              onClick={clickOpenModal}
-            ></LoginUserImg>
+            <ClickProfileModal img={!loginUser ? basicImg : loginUser } />
           ) : (
-            // </ProfileImgBackground>
-            // </ProfileImgBackground>
+
             <LoginButton
               onClick={() => {
                 navigate('/login');
@@ -152,14 +148,7 @@ const Header = () => {
             </LoginButton>
           )}
         </HeaderBox>
-        {myContext.logonOpenProfileImg ? (
-          <ClickProfileModal
-            shown={myContext.logonOpenProfileImg}
-            close={() => {
-              myContext.setLogonProfileImg(false);
-            }}
-          />
-        ) : null}
+
       </HeaderContainer>
     </HeaderArea>
   );
@@ -243,18 +232,6 @@ const LoginButton = styled(Button)`
   }
 `;
 
-const LoginUserImg = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50px;
-  background-color: white;
 
-  cursor: pointer;
-`;
 
-const ProfileImgBackground = styled.div`
-  /* width: 58px;
-  height: 50px;
-  border-radius: 58px;
-   background-color: white; */
-`;
+

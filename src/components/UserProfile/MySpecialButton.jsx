@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { __hidePost } from '../../redux/modules/UserPage'
+import { __postReport } from '../../redux/modules/Report'
 import { useMyContext } from '../../shared/ContextApi'
 import styled from 'styled-components'
 import eyes from '../../images/mypage/eyes.png'
@@ -18,9 +19,13 @@ const MySpecialButton = ({ shown, close, postId }) => {
   const hide = (e) => {
     setPath(1)
     dispatch(__hidePost(postId))
+    setTimeout(() => {
+      setPath(0)
+    },100)
   }
   const declaration = (e) => {
     setPath(2)
+    dispatch(__postReport(postId))
   }
 
 
@@ -56,31 +61,30 @@ const MySpecialButton = ({ shown, close, postId }) => {
   ) : null
 }
 const FullOverLay = styled.div`
-   position: absolute;
+
+    position: relative;
     width: 100vw;
     height: 100vh;
+    top: -1000px;
     bottom: 0;
+    left: -100%;
+    right: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    /* background-color:gray ; */
 
 `
 
 const Overlay = styled.div`
-  position: absolute;
-  /* width: 100vw; */
-  /* height: ; */
-  top: 1270px;
-  bottom: 0;
-  left: 10px;
-  z-index: 9999;
 `
 const OverlayContainer = styled.div`
-  width: 200px;
-  position: absolute;
 `
 const OverlayPosition = styled.div`
   height: 30px;
-  position:relative;
-  top: -330px;
-  left: 330px;
+  position:absolute;
+  top: 660px;
+  left: 590px;
 `
 const ModalContainer = styled.div`
   width: 109px;

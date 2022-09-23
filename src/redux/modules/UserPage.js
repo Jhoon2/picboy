@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
 import  instance  from "../../shared/apis";
+import api from '../../shared/apis'
 
 const baseURL = process.env.REACT_APP_API_KEY;
 
@@ -27,7 +28,7 @@ export const __getUserPage = createAsyncThunk(
   async (payload, thunkAPI) => {
     // console.log(payload)
     try {
-      const data = await axios.get(`${baseURL}/mypage/user-info?username=${payload.username}`
+      const data = await api.get(`/mypage/user-info?username=${payload.username}`
       )
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -38,7 +39,7 @@ export const __getUserPage = createAsyncThunk(
 export const __getUserData = createAsyncThunk(
   'userData/getUserData',
   async (payload, thunkAPI) => {
-    // console.log(payload)
+    console.log(payload)
     const tab = payload?.tab ?? 0;
     const category = payload?.category ?? 1;
     const username = payload?.username;
@@ -47,7 +48,7 @@ export const __getUserData = createAsyncThunk(
     try {
       const data = await axios.get
       (`${baseURL}/mypage/post/${tab}/${category}?username=${username}&page=${page}&size=6`)
-      // console.log('받은 데이터',data)
+      console.log('받은 데이터',data)
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       console.log(error)

@@ -16,7 +16,7 @@ export const Context = (props) => {
     const [categoryNum, setCategoryNum] = React.useState(1);
 
     const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)  
-    const [logonOpenProfileImg, setLogonProfileImg] = React.useState(false)  
+    // const [logonOpenProfileImg, setLogonProfileImg] = React.useState(false)  
 
     const [signUpBtn, setSignUpBtn]= React.useState(false)
     const signUpBtnClickOff = () => setSignUpBtn(false)
@@ -25,6 +25,8 @@ export const Context = (props) => {
     //모든 참가자 보기 모달창 관련
     const [allParticipants, setAllParticipants] = React.useState(false)
 
+    //페이지넘버
+     const [pageNum, setPageNum] = React.useState(0)
 
     const value = {
   
@@ -49,12 +51,16 @@ export const Context = (props) => {
         setCategoryNum,
 
         //로그온 멤버
-        logonOpenProfileImg,
-        setLogonProfileImg,
+        // logonOpenProfileImg,
+        // setLogonProfileImg,
 
         // 모든 참가자 모달창
         allParticipants,
-        setAllParticipants
+        setAllParticipants,
+
+        //페이지 넘버
+        pageNum,
+        setPageNum
     };
 
     return (

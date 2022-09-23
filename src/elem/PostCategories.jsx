@@ -61,12 +61,12 @@ const Categories = () => {
       </SelectBox>
       <SelectListBox>
         <Down select={select}>
-          <ul>
+          <DownUl>
             <Topic onClick={moveTopic}>
               <Title>
                 <TopicBubble />
                 TOPIC
-                <Right left={'110px'} />
+                <Right left={'150px'} />
               </Title>
               <Desc>
                 제시어를 설정해 유저들과 그림을
@@ -79,7 +79,7 @@ const Categories = () => {
               <Title>
                 <TopicBubble />
                 Free
-                <Right left={'122px'} />
+                <Right left={'162px'} />
               </Title>
               <Desc>
                 제시어 없이 유저들과 그림을
@@ -87,7 +87,7 @@ const Categories = () => {
                 그릴 수 있어요!
               </Desc>
             </Free>
-          </ul>
+          </DownUl>
         </Down>
       </SelectListBox>
     </div>
@@ -117,7 +117,7 @@ const Label = css`
 `;
 
 const HR = styled.hr`
-  width: 190px;
+  width: 273px;
   margin-top: 20px;
   border: 0;
   height: 1px;
@@ -173,9 +173,18 @@ const SelectListBox = styled.div`
   z-index: 1;
 `;
 
+const DownUl = styled.ul`
+    width: 280px;
+    min-height: 100px; 
+    background: white;
+    border: 3px solid black;
+    padding: 20px;
+`
+
 const Topic = styled.li`
   ${({ theme }) => theme.flexSet('column', 'flex-start', 'flex-start')}
   font-family: 'NotoBold';
+  margin-left: 20px;
   font-size: 16px;
   color: #a3a3a3;
   &:hover {
