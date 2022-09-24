@@ -57,7 +57,7 @@ const UserProfile = () => {
     // console.log('토탈페이지 넘버', totalPages)
     // console.log('현재 페이지 넘버', currentPage)
     
-    // console.log('&&&&&&&&&&&&',myContext.pageNum)
+    // console.log('&&&&&&&&&&&&',userData)
 
     //observe 콜백 함수
   const onIntersect = (entries, observer) => {
@@ -98,7 +98,7 @@ const UserProfile = () => {
     useEffect(() => {
         dispatch(__getUserPage({username:params.id}))
         dispatch(__getUserData({
-            tab: 0,
+            // tab: 0,
             category:1,
             username: params.id,
             page:0
@@ -204,7 +204,8 @@ const UserProfile = () => {
                 <TopScroll />
                 {/* 프로필 */}
                 <ProfileContainer>
-                    <ProfileInner>
+                        <ProfileInner>
+                            {/* {console.log(UserPage && UserPage)} */}
                         <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onClick={RightMouseClick} />
                         {UserPage&&UserPage.username === userinfo.data.data.username ?<CameraBox>
                             <CameraContainer>
@@ -260,7 +261,7 @@ const UserProfile = () => {
                             )
                         })}
                     </CardContainer>
-                    <div style={{ width: '100px', height: '20px' }} ref={ lastIntersectingData}>.</div>
+                    <div style={{ width: '100px', height: '20px' }} ref={page? null : lastIntersectingData}>.</div>
                 </>
             </ContainerInner>
 

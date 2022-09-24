@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loadings from '../global/Loading';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+import { v4 as uuidv4 } from 'uuid';
 
 const ProgressAll = () => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ const ProgressAll = () => {
     <ListBox>
       {load === true ? <Loadings /> : null}
       {newData?.map((item, index) => (
-        <BestBox key={item.id}>
+        <BestBox key={uuidv4()}>
           <div style={{ position: 'relative' }}>
             <OverlayWrap
               productImg={item?.imgUrl}

@@ -99,10 +99,8 @@ const CompleteDetail = () => {
 
   ////////////////////////////
   // like
-  const [likeState, setLikeState] = useState(gif.liked);
   const [likeApi, setLikeApi] = useState();
   const accessToken = getCookieToken();
-  const refreshToken = getRefreshToken();
 
   const likeHandler = (e) => {
 
@@ -117,7 +115,7 @@ const CompleteDetail = () => {
   
         .then(function (response) {
           setLikeApi(response.data.data.like);
-          console.log(response)
+          // console.log(response)
           if (likeApi === false) {
             setLikeCountState(likeCountState + 1);
           } else if (likeApi === true) {

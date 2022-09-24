@@ -6,12 +6,15 @@ import styled, { css } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+
+//이미지
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import addBef from '../images/detail/addBef.svg';
 import addAft from '../images/detail/addAft.svg';
 import noImage from '../images/detail/noImage.png';
 import Listbanner from '../images/Com/Listbanner.svg';
 import Listfooter from '../images/Com/Listfooter.svg';
+import  api  from '../shared/apis';
 
 const ProgressDetail = () => {
   const navigate = useNavigate();
@@ -28,13 +31,12 @@ const ProgressDetail = () => {
   const mainSlickRef2 = useRef(null);
   const pagingSlickRef2 = useRef(null);
 
-  const baseURL = process.env.REACT_APP_API_KEY;
   const params = useParams();
   const [Data, setData] = useState([]);
 
   const getProgressData = () => {
-    const url = `${baseURL}/post/gif/images/detail/${params.id}`;
-    axios
+    const url = `/post/gif/images/detail/${params.id}`;
+    api
       .get(url)
       .then(function (response) {
         setData(response.data.data);
@@ -123,7 +125,7 @@ const ProgressDetail = () => {
               >
                 {imgList.map((item, index) => {
                   return (
-                    <MainSlickItems key={item}>
+                    <MainSlickItems key={index}>
                       <img src={Data.imgUrl} alt="" />
                     </MainSlickItems>
                   );
@@ -147,9 +149,9 @@ const ProgressDetail = () => {
               >
                 {imgList.map((item, index) => {
                   return (
-                    <div className="bg">
+                    <div className="bg"  key={item}>
                       <Container>
-                        <PagingItems key={item} className="paging_items">
+                        <PagingItems className="paging_items">
                           <div style={{ position: 'relative' }}>
                             <Overlay>
                               <Personnel>
@@ -241,9 +243,9 @@ const ProgressDetail = () => {
                 {imgList &&
                   imgList.map((item, index) => {
                     return (
-                      <div className="bg">
+                      <div className="bg" key={item}>
                         <Container>
-                          <PagingItems key={item} className="paging_items">
+                          <PagingItems  className="paging_items">
                             <div style={{ position: 'relative' }}>
                               <Overlay>
                                 <Personnel>

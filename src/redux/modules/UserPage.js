@@ -45,8 +45,8 @@ export const __getUserData = createAsyncThunk(
     const page = payload?.page ?? 0;
     // console.log('받은 정보들', tab,category,username,page)
     try {
-      const data = await axios.get
-      (`${baseURL}/mypage/post/${tab}/${category}?username=${username}&page=${page}&size=6`)
+      const data = await api.get
+      (`/mypage/post/${tab}/${category}?username=${username}&page=${page}&size=6`)
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       console.log(error)

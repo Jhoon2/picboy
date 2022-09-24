@@ -129,7 +129,6 @@ const FormContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     margin-top: 260px;
-
 `
 const InputBox = styled.div`
   width: 900px;
@@ -236,8 +235,8 @@ const Errorsmessage = styled.div`
 const Footerimg = styled.img`
   width: 100%;
   position: absolute;
-  bottom: 0 ;
   left: 0;
+  bottom:0;
   z-index: -100;
 
  ${({ theme }) => theme.backgroundSet('cover')}

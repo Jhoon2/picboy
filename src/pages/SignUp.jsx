@@ -3,17 +3,22 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+
 import * as yup from 'yup';
 import axios from 'axios';
-import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components';
+
+//불러오기
+import { useMyContext } from '../shared/ContextApi';
 import SignupErrorModal from '../components/Signup/SignupErrorModal';
 import UseTimer from '../elem/UseTimer';
 import SignUpDone from '../components/Signup/SignUpDone';
+import api from '../shared/apis'
+
+//이미지
 import Listbanner from '../images/Com/Listbanner.svg';
 
 const SignUp = () => {
-  const baseURL = process.env.REACT_APP_API_KEY;
   const myContext = useMyContext();
 
   const navigate = useNavigate();
@@ -77,7 +82,7 @@ const SignUp = () => {
     if (id.length < 3 || id.length > 10) return;
 
     try {
-      const response = await axios.get(`${baseURL}/user/id-double-check/${id}`);
+      const response = await api.get(`/user/id-double-check/${id}`);
       if (!response.data.success) {
         setExistedId(true);
       } else {
@@ -112,8 +117,8 @@ const SignUp = () => {
     if (nickname.length < 2 || nickname.length > 10) return;
 
     try {
-      const response = await axios.get(
-        `${baseURL}/user/nickname-double-check/${nickname}`
+      const response = await api.get(
+        `/user/nickname-double-check/${nickname}`
       );
       if (!response.data.success) {
         setExistedNick(true);
@@ -172,7 +177,7 @@ const SignUp = () => {
       phoneNum: inputValue
     }
     try {
-      const response = await axios.post(`${baseURL}/user/phonenumber-send`,info);
+      const response = await api.post(`/user/phonenumber-send`,info);
     } catch (error) {
       console.log(error);
     }
@@ -200,7 +205,7 @@ const SignUp = () => {
     }
     console.log(info)
     try {
-      const response = await axios.post(`${baseURL}/user/code-send`, info);
+      const response = await api.post(`/user/code-send`, info);
       console.log(response)
       if (response.data.success) {
         setPhoneValid(false);
@@ -235,7 +240,7 @@ const SignUp = () => {
     };
     console.log(info)
     try {
-      const response = await axios.post(`${baseURL}/user/signup`, info);
+      const response = await api.post(`/user/signup`, info);
       if (response.status === 200) {
         // reset();
         ////
@@ -440,16 +445,21 @@ const ErrorBox = styled.div`
 const LoginContainer = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
+
 `;
 const ImgBox = styled.img`
-  width: 100vw;
-  border: none;
+  width: 100%;
+  position: absolute;
+  z-index: -100;
   /* background-repeat: no-repeat; */
 `;
 const FormContainer = styled.div`
   max-width: 1200px;
-  height: 50vh;
-  margin-top: -500px;
+  display: flex;
+  justify-content: center;
+  margin-top: 200px;
+
 `;
 const InputBox = styled.div`
   width: 700px;
@@ -472,7 +482,7 @@ const InputBoxInner = styled.div`
 `;
 
 const InputFlex = styled.div`
-  margin-top: 10px;
+  margin-top: 20px;
   margin-bottom: 10px;
   display: flex;
 `;
@@ -481,9 +491,12 @@ const TextAndInput = styled.div`
   padding: 0.8rem;
   display: flex;
   border-bottom: 1px solid lightgray;
+  color: #a3a3a3;
 
   &:focus-within {
-    border-bottom: 2px solid black
+    border-bottom: 2px solid black;
+    color: black;
+
   }
 `
   
@@ -493,9 +506,11 @@ const NoButtonInput = styled.div`
   padding: 0.8rem;
   display: flex;
   border-bottom: 1px solid lightgray;
-  
+  color: #a3a3a3;
+
   &:focus-within {
-    border-bottom: 2px solid black
+    border-bottom: 2px solid black;
+    color: black;
   }
 `;
 const PhoneTextAndInput = styled.div`
@@ -504,6 +519,11 @@ const PhoneTextAndInput = styled.div`
   display: flex;
   justify-content: space-between;
   border-bottom: 2px solid lightgray;
+  color: #a3a3a3;
+
+&:focus-within {
+  color: black; 
+}
 `;
 
 const SignupText = styled.div`
@@ -535,6 +555,7 @@ const CheckButton = styled.button`
   margin-left: 10px;
   font-size: 16px;
   font-family: 'NotoLight';
+  font-weight:  ${(props) => props.theme.HeadlineBD};
   border: 1px solid grey;
   cursor: pointer;
   background-color: white;

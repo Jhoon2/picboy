@@ -13,6 +13,7 @@ const AnyModal = ({title, content, anyData}) => {
     myContext.setSettingFrameBtn(false)
     myContext.setDrawingDoneBtn(false)
     myContext.setTopicBtn(false)
+    myContext.setPostTopicBtn(false)
   }
   return (
     <ErrorContainer onClick={(e) => { e.stopPropagation(); }}>

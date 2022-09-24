@@ -16,44 +16,48 @@ import grayFlag from '../../images/mypage/grayFlag.png'
 import grayLineEyes from '../../images/mypage/grayLineEyes.png'
 
 
-const MySpecialButton = ({ shown, close, postId }) => {
-  const [path, setPath] = useState(0)
+const MySpecialButton = ({ shown, close, postId,data }) => {
+  // const [path, setPath] = useState(0)
   const dispatch = useDispatch();
   const myContext = useMyContext();
 
   const hide = (e) => {
-    setPath(1)
     dispatch(__hidePost(postId))
-    // setTimeout(() => {
-    //   setPath(0)
-    // },100)
+    close()
   }
-
+  
+  //////////////////////////////
   //신고
-  const [toggleDeclar, setToggleDecla] = useState(false)
-
+  const [toggleDeclar, setToggleDecla] = useState(data.reportFlag)
   const declaration = (e) => {
-    myContext.setDecalrBtn(true)
+    if (toggleDeclar) {
+      myContext.setDeclarCancel(true)
+     }
+    else {
+      myContext.setDecalrBtn(true)
+    }
     setToggleDecla(!toggleDeclar)
-    setPath(2)
     dispatch(__postReport(postId))
-  }
+    close()
 
+  }
 
   return shown ? (
+    <>
     <FullOverLay onClick={() => { close() }}>
       {myContext.declarBtn ? (
         <ErrorBox onClick={() => myContext.setDecalrBtn(false)}>
-          <AnyModal title="안내" content="신고 되었습니다" />
+          <AnyModal title="안내" content="신고 완료되었습니다" />
           </ErrorBox>
       ) : null}
-      <Overlay >
+      {myContext.declarCancel ?
+        (<ErrorBox onClick={() => myContext.setDeclarCancel(false)}>
+          <AnyModal title="안내" content=" 신고 취소되었습니다" />
+          </ErrorBox>
+      ) : null}
         <OverlayPosition >
-          <OverlayContainer>
             <ModalContainer onClick={e => { e.stopPropagation() }}>
-              <ModalText id='hide' name='1' onClick={hide}
-               style={path === 1? { color: '#000000', fontWeight:'700'} : {color:'#A3A3A3',fontWeight:'400'}}
-              >
+              <ModalText id='hide' name='1' onClick={hide}>
                 <HideIconContainer>
                 {myContext.tabNum === 3 ? 
                   <><IconImg src={grayEyes} /><div style={{ marginTop: '-5px' }}>보이기</div></> :
@@ -61,19 +65,16 @@ const MySpecialButton = ({ shown, close, postId }) => {
                   </HideIconContainer>
               </ModalText>
               <TextBr />
-              <ModalText id='declaration' name='2' onClick={declaration}
-                 style={path ===2 ? { color: '#000000', fontWeight:'700'} : {color:'#A3A3A3',fontWeight:'400'}}
-              >
+              <ModalText id='declaration' name='2' onClick={declaration}>
                 <HideIconContainer>
                   <IconImg src={grayFlag} style={{marginTop: '0px'}} />
-                  <div>신고</div>
+                  {toggleDeclar ? <div>신고 취소</div> : <div>신고</div>}
                 </HideIconContainer>
               </ModalText>
             </ModalContainer>
-          </OverlayContainer>
         </OverlayPosition>
-      </Overlay>
-    </FullOverLay>
+      </FullOverLay>
+      </>
   ) : null
 }
 
@@ -106,10 +107,6 @@ const FullOverLay = styled.div`
 
 `
 
-const Overlay = styled.div`
-`
-const OverlayContainer = styled.div`
-`
 const OverlayPosition = styled.div`
   height: 30px;
   position:absolute;
@@ -117,7 +114,7 @@ const OverlayPosition = styled.div`
   left: 590px;
 `
 const ModalContainer = styled.div`
-  width: 109px;
+  width: 120px;
   height: 100px;
   position: absolute;
   z-index: 2;
@@ -137,6 +134,7 @@ const ModalText = styled.div`
   font-family: 'Noto Sans KR';
   font-style: normal;
   font-size: ${(props) => props.theme.Caption2};
+  color : ${(props) => props.theme.ShadeRegular} ;
   cursor: pointer;
 
   :first-child {
@@ -145,7 +143,7 @@ const ModalText = styled.div`
 
 `
 const TextBr = styled.div`
-  width: 105px;
+  width: 117px;
   margin-top: 5px;
   /* margin-left: 20px; */
   display: flex;

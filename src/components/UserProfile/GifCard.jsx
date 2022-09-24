@@ -7,7 +7,7 @@ import { useMyContext } from '../../shared/ContextApi'
 import instance from '../../shared/apis'
 import api from '../../shared/apis'
 import axios from 'axios'
-
+import { anyApis } from '../../shared/apis'
 import styled from 'styled-components'
 import AllParticipants from './AllParticipants'
 import MySpecialButton from './MySpecialButton'
@@ -61,10 +61,22 @@ const GifCard = ({ data, myImg, myNickname }) => {
   }
     
   //좋아요 버튼
-  const [likePlus, setLikePlus] = useState(false)
+  const [likePlus, setLikePlus] = useState(data.likesFlag && data.likesFlag)
+  const [smallLikeBtn, setSmallLikeBtn] = useState(data.likeCount && data.likeCount)
+  
   const clickLikeBtn = (e) => {
     e.stopPropagation();
     setLikePlus(!likePlus)
+    anyApis.liked(data.postId, '')
+      .then((response) => {
+        if (!response.data.data.like) {
+          setSmallLikeBtn(smallLikeBtn - 1)
+        }
+        else {
+          setSmallLikeBtn(smallLikeBtn + 1)
+        }
+      })
+
   }
 
   return (
@@ -83,7 +95,8 @@ const GifCard = ({ data, myImg, myNickname }) => {
               {data.status === 2 ?
                 <a href={`${baseURL}/download?postId=${data.postId}&fileName=${data.gifUrl}`} download='free' onClick={(e) => e.stopPropagation()}>
                   <ClickCircle src={download}/>
-                </a>: null}
+                </a> : null}
+              {/* 좋아요기능 */}
               <ClickCircle src={likePlus ? colorHeart : heart} onClick={clickLikeBtn} />
               </div>
             </HoverContent>
@@ -110,14 +123,14 @@ const GifCard = ({ data, myImg, myNickname }) => {
             <Icons >
               <IconImg src={favorite} />
             </Icons>
-            <LikeCount >{data.likeCount}</LikeCount>
+            <LikeCount >{smallLikeBtn}</LikeCount>
           </div>
         </GifContents>
       
 
       {/* ...버튼 */}
       <MySpecialButton shown={openSpecialModal} close={() => { setOpenSpecialModal(false) }} setOpenSpecialModal={setOpenSpecialModal}
-        postId={data.postId} /> 
+        postId={data.postId} data={data} /> 
       {/* 참여자들 */}.
       <CardInner >
       <AllParticipantsContainer>

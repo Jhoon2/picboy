@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 // import Canvas from '../components/Canvas';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
-import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+import { getCookieToken, getRefreshToken, setAccessToken } from '../shared/Cookie';
 import { useParams } from 'react-router-dom';
 
 // import component
 import instance from '../shared/apis';
-import { api } from '../shared/apis';
 import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
+import api from '../shared/apis'
 
 // image import
 import modeIc from '../images/pen.png';
@@ -32,6 +32,7 @@ const PostRelay = () => {
   // canvas
   // useRef를 이용해 canvas 엘리먼트에 접근
   const canvasRef = useRef(null);
+  const accessToken = getCookieToken();
 
   const [ctx, setCtx] = useState();
   const [isPainting, setIsPainting] = useState(false);
@@ -157,18 +158,16 @@ const PostRelay = () => {
   ///////////////////////////
   // ajax
 
-  const accessToken = getCookieToken();
-  const refreshToken = getRefreshToken();
-  const baseURL = process.env.REACT_APP_API_KEY;
+
   const params = useParams();
 
   // get
   const [countFrame, setCountFrame] = useState('');
   const [lastImg, setLastImg] = useState('');
 
-  const imgInfoUrl = `${baseURL}/post/gif/images/detail/${params.id}`;
+  const imgInfoUrl = `post/gif/images/detail/${params.id}`;
   const Callaxios = () => {
-    axios
+    api
       .get(imgInfoUrl)
       .then(function (response) {
         const imgData = response && response.data.data;
@@ -179,7 +178,7 @@ const PostRelay = () => {
         console.log(error);
       });
   };
-  axios
+  api
     .get(imgInfoUrl)
     .then(function (response) {
       const imgData = response.data.data;
@@ -192,6 +191,8 @@ const PostRelay = () => {
 
   // post
   const submitImg = () => {
+    if (!accessToken) return myContext.setPostTopicBtn(true);
+
     const canvas = canvasRef.current;
     const imgDataUrl = canvas.toDataURL('image/png');
     instance
@@ -199,7 +200,8 @@ const PostRelay = () => {
         `/post/relay/${params.id}`,
         {
           file: imgDataUrl,
-        }
+        },
+
       )
       .then(function (response) {
         myContext.setDrawingDoneBtn(true);
@@ -226,6 +228,11 @@ const PostRelay = () => {
       {myContext.drawingDoneBtn ? (
         <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
           <AnyModal  content="올리기가 완료되었습니다" />
+          </ErrorBox>
+      ) : null}
+       {myContext.postTopicBtn ? (
+        <ErrorBox onClick={() => myContext.setPostTopicBtn(false)}>
+          <AnyModal title='안내' content="로그인 후 이용해주세요" />
           </ErrorBox>
       ) : null}
       {countFrame.topic === null ? (

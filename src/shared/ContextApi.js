@@ -34,6 +34,9 @@ export const Context = (props) => {
     //신고
     const [declarBtn, setDecalrBtn] = React.useState(false);
 
+    //신고취소
+    const [declarCancel, setDeclarCancel] = React.useState(false);
+
     //댓글 삭제
     const [commetDeleteBtn, setCommetDeleteBtn] = React.useState(false);
 
@@ -48,6 +51,11 @@ export const Context = (props) => {
 
     //제시어 입력
     const [topicBtn, setTopicBtn] = React.useState(false);
+
+    //포스트 릴레이 추가할때
+    const [ postTopicBtn, setPostTopicBtn] = React.useState(false)
+
+
 
     const value = {
   
@@ -87,6 +95,10 @@ export const Context = (props) => {
         declarBtn,
         setDecalrBtn,
 
+        //신고취소
+        declarCancel,
+        setDeclarCancel,
+
         //댓글삭제
         commetDeleteBtn,
         setCommetDeleteBtn,
@@ -106,6 +118,11 @@ export const Context = (props) => {
         //제시어 입력
         topicBtn,
         setTopicBtn,
+
+        //추가하기 로그인 후 이용
+        postTopicBtn,
+        setPostTopicBtn,
+        
     };
 
     return (

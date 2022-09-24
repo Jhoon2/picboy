@@ -6,6 +6,8 @@ import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 // import component
 import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
+import  api  from '../shared/apis';
+import instance from '../shared/apis';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -164,9 +166,6 @@ const PostTopic = () => {
     ///////////////////////////
     // ajax
 
-    // const accessToken = localStorage.getItem("Authorization");
-    // const refreshToken = localStorage.getItem("Refresh-Token");
-    const baseURL = process.env.REACT_APP_API_KEY;
 
     // get
     // random topic
@@ -174,8 +173,8 @@ const PostTopic = () => {
     const [topicInputState, setTopicInputState] = useState('');
 
     const randomTopic = () => {
-        const url = `${baseURL}/post/random-topic`;
-        axios
+        const url = `/post/random-topic`;
+        api
             .get(url)
             .then(function (response) {
                 const RandomTopicApi = response.data.data.topic;
@@ -207,22 +206,17 @@ const PostTopic = () => {
             myContext.setSettingFrameBtn(true)
             return;
         }
-        axios
+        instance
             .post(
-                `${baseURL}/post`,
+                `/post`,
                 {
                     topic: topic,
                     frameTotal: frame,
                     file: imgDataUrl,
                 },
-                {
-                    headers: {
-                        Authorization: accessToken,
-                        'Refresh-Token': refreshToken,
-                    },
-                }
             )
             .then(function (response) {
+                console.log(response)
                 myContext.setDrawingDoneBtn(true)
                 window.location.replace('/list');
             })
