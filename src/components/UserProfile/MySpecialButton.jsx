@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useMyContext } from '../../shared/ContextApi'
 import styled from 'styled-components'
 
@@ -26,20 +26,18 @@ const MySpecialButton = ({ shown, close, postId,data }) => {
     close()
   }
   
-  //////////////////////////////
   //신고
+  const { reports } = useSelector((state) => state.reports)
   const [toggleDeclar, setToggleDecla] = useState(data.reportFlag)
   const declaration = (e) => {
-    if (toggleDeclar) {
-      myContext.setDeclarCancel(true)
-     }
-    else {
-      myContext.setDecalrBtn(true)
-    }
+  
     setToggleDecla(!toggleDeclar)
     dispatch(__postReport(postId))
-    close()
-
+    if (reports && reports.data === '신고 완료')
+      return myContext.setDeclarCancel(true)
+    if (reports && reports.data === '신고 취소')
+      return myContext.setDecalrBtn(true)
+      
   }
 
   return shown ? (

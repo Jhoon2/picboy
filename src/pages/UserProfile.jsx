@@ -16,7 +16,7 @@ import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
 
 //이미지
-import basicImg from '../images/basicImg.jpg'
+import basicImg from '../images/mypage/basicImg.png'
 import smallpencil from '../images/smallpencil.png'
 import camera from '../images/Camera.png'
 import editPencil from '../images/mypage/mode-edit-sharp.png'
@@ -32,51 +32,36 @@ const UserProfile = () => {
     //로그인 정보
     const userinfo = UseGet();
 
-
-    const [user, setUser] = useState(null)
-
-    let page = 0;
     const lastIntersectingData = useRef(null);
     const [ref, setRef] = useState(null);
-
+    
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
-
-    //store 데이터 호출
+    
+    ////store 데이터 호출
+    //마이페이지 유저
     const { userPage } = useSelector((state) => state.userpage)
     const UserPage = userPage && userPage.data
-    // console.log(UserPage && UserPage)
     
+    
+    //마이페이지 데이터
     const { userData } = useSelector((state) => state.userdata)
-    const pageNumber = userData.pageable && userData.pageable.pageNumber
-    const totalPages = userData.pageable && userData.totalPages
-    const [currentPage, setCurrentPage] = useState(0);
-
-    // console.log('현재 페이지 넘버',pageNumber)
-    // console.log('토탈페이지 넘버', totalPages)
-    // console.log('현재 페이지 넘버', currentPage)
     
-    // console.log('&&&&&&&&&&&&',userData)
-
+    //페이지세팅
+    let page = 0;
     //observe 콜백 함수
   const onIntersect = (entries, observer) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
-            console.log('-------------------------')
-            // if (myContext.pageNum === 0) {
-            //    
-            //     myContext.pageNum++
- 
+
             page++
-            // myContext.pageNum++
-            // console.log(myContext.pageNum)
-                // myContext.setPageNum(myContext.pageNum++)
-                dispatch(__getUserData({
-                    username:params.id,
-                    'page': page
+            dispatch(__getUserData({
+                tab: myContext.tabNum,
+                category: myContext.categoryNum,
+                username:params.id,
+                'page': page
                 }))
-            // setCurrentPage(page)
 
             //조건이 트루
         //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
@@ -85,13 +70,10 @@ const UserProfile = () => {
             observer.observe(entry.target)
         // unobserve가 아님
         } else {
-            console.log('여기서 취소?')
+            // console.log('여기서 취소?')
       }
     });
   };
-    
-//   console.log('useState페이지',currentPage)
-
     
 
 
@@ -103,7 +85,7 @@ const UserProfile = () => {
             username: params.id,
             page:0
         }))
-            
+
     }, [dispatch]);
     
 
@@ -121,11 +103,14 @@ const UserProfile = () => {
           // observer.observe(ref);
             }, 500);
     }
-    return () => observer && observer.disconnect();
-  }, [lastIntersectingData,ref]);
+      return () => observer && observer.disconnect();
+      
+
+  }, [lastIntersectingData,ref,myContext.tabNum,myContext.categoryNum]);
 
 
-    const RightMouseClick = (e) => {
+    
+    const MouseClick = (e) => {
         e.preventDefault();
         myContext.setIsOpenProfileImg(!myContext.isOpenProfileImg)
     }
@@ -206,7 +191,7 @@ const UserProfile = () => {
                 <ProfileContainer>
                         <ProfileInner>
                             {/* {console.log(UserPage && UserPage)} */}
-                        <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onClick={RightMouseClick} />
+                        <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onClick={MouseClick} />
                         {UserPage&&UserPage.username === userinfo.data.data.username ?<CameraBox>
                             <CameraContainer>
                                 <CameraImg src={camera} />

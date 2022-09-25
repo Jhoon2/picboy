@@ -23,13 +23,14 @@ import textbox from '../../images/Mode comment.png'
 import grayEyes from '../../images/mypage/grayEyes.png'
 import completeIcon from '../../images/mypage/complete.png'
 import progressIcon from '../../images/mypage/progress.png'
+import { useEffect } from 'react'
 
 const GifCard = ({ data, myImg, myNickname }) => {
   const navigate = useNavigate();
   const baseURL = process.env.REACT_APP_API_KEY;
+  
   // 참여자들 보여주기
   const [allParticipants, setAllParticipants] = React.useState(false)
-
   const [peopleData, setPeopleData] = useState()
   const showAllParticipants = async(e) => {
     e.stopPropagation();
@@ -61,9 +62,15 @@ const GifCard = ({ data, myImg, myNickname }) => {
   }
     
   //좋아요 버튼
+
   const [likePlus, setLikePlus] = useState(data.likesFlag && data.likesFlag)
   const [smallLikeBtn, setSmallLikeBtn] = useState(data.likeCount && data.likeCount)
   
+  useEffect(() => {
+    setSmallLikeBtn(data.likeCount && data.likeCount);
+  }, [data.likeCount && data.likeCount]);
+ 
+
   const clickLikeBtn = (e) => {
     e.stopPropagation();
     setLikePlus(!likePlus)

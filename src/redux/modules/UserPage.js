@@ -43,7 +43,7 @@ export const __getUserData = createAsyncThunk(
     const category = payload?.category ?? 1;
     const username = payload?.username;
     const page = payload?.page ?? 0;
-    // console.log('받은 정보들', tab,category,username,page)
+    
     try {
       const data = await api.get
       (`/mypage/post/${tab}/${category}?username=${username}&page=${page}&size=6`)
@@ -58,7 +58,6 @@ export const __getUserData = createAsyncThunk(
 export const __hidePost = createAsyncThunk(
   'userHidePost/hidePost',
   async (payload, thunkAPI) => {
-    // console.log(payload)
     try {
       const response = await instance.post(
         `mypage/post-hidden/${payload}`
@@ -185,17 +184,17 @@ export const userdataSlice = createSlice({
     },
     [__getUserData.fulfilled]: (state, action) => {
       state.isLoading = false;
-      // console.log('페이로드 페이지', action.payload.pageable.pageNumber)
       if (action.payload.pageable.pageNumber === 0) {
         state.userData = action.payload
       } else {
-        state.userData.content = [...state.userData.content].concat(action.payload.content)
+          state.userData.content = [...state.userData.content].concat(action.payload.content)
       }
     },
     [__getUserData.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
+    
     [__hidePost.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.userData.content = state.userData.content.filter(

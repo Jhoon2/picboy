@@ -14,6 +14,8 @@ const AnyModal = ({title, content, anyData}) => {
     myContext.setDrawingDoneBtn(false)
     myContext.setTopicBtn(false)
     myContext.setPostTopicBtn(false)
+    myContext.setDecalrBtn(false)
+    myContext.setDeclarCancel(false)
   }
   return (
     <ErrorContainer onClick={(e) => { e.stopPropagation(); }}>

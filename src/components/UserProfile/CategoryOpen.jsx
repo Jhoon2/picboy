@@ -19,6 +19,11 @@ const CategoryOpen = ({ value,username,data }) => {
     setIsOpenCategory(!isOpenCategory)
   }
 
+  //데이터 send, reset
+  const resetData = (tabInfo) => {
+    dispatch(__getUserData(tabInfo))
+  }
+
   //event 함수를 쓸 때는 event에 대한 이름으로 작성 ex) handleClickAll
   const handleClickAll = (e) => {
     setCategoryContent(e.target.id)
@@ -30,7 +35,7 @@ const CategoryOpen = ({ value,username,data }) => {
       category: 1,
       username: username,
     }
-    dispatch(__getUserData(tabInfo))
+    resetData(tabInfo)
   }
   const handleClickStart = (e) => {
     setCategoryContent(e.target.id)
@@ -42,7 +47,7 @@ const CategoryOpen = ({ value,username,data }) => {
       category: 1,
       username: username
     }
-    dispatch(__getUserData(tabInfo))
+    resetData(tabInfo)
   }
   const handleClickParticipate = (e) => {
     setCategoryContent(e.target.id)
@@ -54,7 +59,7 @@ const CategoryOpen = ({ value,username,data }) => {
       category:1,
       username: username
     }
-    dispatch(__getUserData(tabInfo))
+    resetData(tabInfo)
   }
   const handleClickBehind = (e) => {
     setCategoryContent(e.target.id)
@@ -65,7 +70,7 @@ const CategoryOpen = ({ value,username,data }) => {
       category:1,
       username: username
     }
-    dispatch(__getUserData(tabInfo))
+    resetData(tabInfo)
   }
   return (
     <>

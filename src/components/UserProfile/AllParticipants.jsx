@@ -14,7 +14,6 @@ const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) 
 
   useEffect(() => {
     const clickOutside = (e) => {
-      console.log('ㄴㅇㄹㄴㅇ')
       if (!node.current.contains(e.target)) {
         close()
       }
@@ -34,7 +33,8 @@ const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) 
           <OverlayContainer>
             <ModalContainer onClick={e => { e.stopPropagation() }}>
               <FirstAuthor style={{marginTop:'10px'}}>최초 작성자</FirstAuthor>
-              <div style={{display:'flex', padding:'10px', justifyContent:'space-between'}}>
+              <div style={{ display: 'flex', padding: '10px', justifyContent: 'space-between',cursor:'pointer' }}
+              onClick={() => moveOtherPerson(data[0].username)}>
                 <div style={{ display: 'flex' }}>
                   <FirstImg src={FirstProfileImg} />
                   <FirstNickname style={{marginTop:'3px'}}>{Firstickname }</FirstNickname>
