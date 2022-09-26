@@ -2,11 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 // import Canvas from '../components/Canvas';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
-import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+import { getCookieToken, getRefreshToken, setAccessToken } from '../shared/Cookie';
 import { useParams } from 'react-router-dom';
 
 // import component
-// import Footer from '../components/Footer'
+import instance from '../shared/apis';
+import { useMyContext } from '../shared/ContextApi';
+import AnyModal from '../elem/AnyModal';
+import api from '../shared/apis'
+import vacantState from '../elem/vacantStateCanvas';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -30,10 +34,12 @@ import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/canvas-bottom-bg.png';
 
 const PostRelay = () => {
+  const myContext = useMyContext()
   /////////////////////////////////
   // canvas
   // useRef를 이용해 canvas 엘리먼트에 접근
   const canvasRef = useRef(null);
+  const accessToken = getCookieToken();
 
   const [ctx, setCtx] = useState();
   const [isPainting, setIsPainting] = useState(false);
@@ -212,18 +218,16 @@ const PostRelay = () => {
   ///////////////////////////
   // ajax
 
-  const accessToken = getCookieToken();
-  const refreshToken = getRefreshToken();
-  const baseURL = process.env.REACT_APP_API_KEY;
+
   const params = useParams();
 
   // get
   const [countFrame, setCountFrame] = useState('');
   const [lastImg, setLastImg] = useState('');
 
-  const imgInfoUrl = `${baseURL}/post/gif/images/detail/${params.id}`;
+  const imgInfoUrl = `post/gif/images/detail/${params.id}`;
   const Callaxios = () => {
-    axios
+    api
       .get(imgInfoUrl)
       .then(function (response) {
         const imgData = response && response.data.data;
@@ -234,7 +238,7 @@ const PostRelay = () => {
         console.log(error);
       });
   };
-  axios
+  api
     .get(imgInfoUrl)
     .then(function (response) {
       const imgData = response.data.data;
@@ -245,25 +249,34 @@ const PostRelay = () => {
       console.log(error);
     });
 
+   //광클릭 막기
+  const [clickCount, setClickCount] =useState(0)
+  
   // post
   const submitImg = () => {
+    //광클릭막기
+    if(clickCount !== 0) return 
+    setClickCount(prev => prev + 1)
+
     const canvas = canvasRef.current;
+
+    //로그인유저 없을 때 알림창
+    if (!accessToken) return myContext.setPostTopicBtn(true);
+
+    //캔버스 빈화면일 때 알림창
+    if (vacantState(canvas)) return myContext.setVacantCanvas(true)
     const imgDataUrl = canvas.toDataURL('image/png');
-    axios
+    instance
       .post(
-        `${baseURL}/post/relay/${params.id}`,
+        `/post/relay/${params.id}`,
         {
           file: imgDataUrl,
         },
-        {
-          headers: {
-            Authorization: accessToken,
-            'Refresh-Token': refreshToken,
-          },
-        }
+
       )
       .then(function (response) {
-        alert('그리기 완료!');
+        
+        myContext.setDrawingDoneBtn(true);
         window.location.replace('/list');
       })
       .catch(function (error) {
@@ -288,7 +301,22 @@ const PostRelay = () => {
 
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div>
+      {myContext.drawingDoneBtn ? (
+        <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
+          <AnyModal  content="올리기가 완료되었습니다" />
+          </ErrorBox>
+      ) : null}
+       {myContext.postTopicBtn ? (
+        <ErrorBox onClick={() => myContext.setPostTopicBtn(false)}>
+          <AnyModal title='안내' content="로그인 후 이용해주세요" />
+          </ErrorBox>
+      ) : null}
+       {myContext.vacantCanvas ? (
+        <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
+          <AnyModal  content="그림이 비어있습니다" />
+          </ErrorBox>
+      ) : null}
       {countFrame.topic === null ? (
         <PostTitle>FREE</PostTitle>
       ) : (
@@ -529,6 +557,18 @@ const PostRelay = () => {
     </div>
   );
 };
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 
 const BgTopStyle = styled.img`
   width: 100%;

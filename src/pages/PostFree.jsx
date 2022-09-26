@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
-import { getCookieToken, getRefreshToken } from '../shared/Cookie';
-// import component
+// import Canvas from '../components/Canvas';
+import styled, { css } from 'styled-components';
+
+
+//불러오기
+import { useMyContext } from '../shared/ContextApi';
+import AnyModal from '../elem/AnyModal';
+import instance from '../shared/apis';
+import vacantState from '../elem/vacantStateCanvas';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -28,8 +33,7 @@ import line12 from '../images/line12.png';
 const PostFree = () => {
   const [frame, setFrame] = useState(0);
   const [canvasDone, setCanvasDone] = useState();
-  const accessToken = getCookieToken();
-  const refreshToken = getRefreshToken();
+  const myContext = useMyContext();
 
   const frameCount = (e) => {
     const target = e.target;
@@ -42,6 +46,37 @@ const PostFree = () => {
     } else if (target.id === '24') {
       setFrame(24);
     }
+  };
+
+
+  ///////////////////////////
+  // ajax
+
+  const submitImg = () => {
+    const canvas = canvasRef.current;
+    const imgDataUrl = canvas.toDataURL('image/png');
+    const topic = null;
+    if (frame === 0) {
+      myContext.setSettingFrameBtn(true)
+      return;
+    }
+    if(vacantState(canvas)) return myContext.setVacantCanvas(true)
+    instance
+      .post(
+        `/post`,
+        {
+          topic: null,
+          frameTotal: frame,
+          file: imgDataUrl,
+        }
+      )
+      .then(function (response) {
+        myContext.setDrawingDoneBtn(true)
+        window.location.replace('/list');
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   /////////////////////////////////
@@ -223,53 +258,28 @@ const PostFree = () => {
     "#7d5fff",
   ];
 
-  ///////////////////////////
-  // ajax
-
-  // const accessToken = localStorage.getItem("Authorization");
-  // const refreshToken = localStorage.getItem("Refresh-Token");
-  const baseURL = process.env.REACT_APP_API_KEY;
-
-
-
-  // post
-  const submitImg = () => {
-    const canvas = canvasRef.current;
-    const imgDataUrl = canvas.toDataURL('image/png');
-    if (frame === 0) {
-      alert('프레임 개수를 설정해 주세요');
-      return;
-    }
-    axios
-      .post(
-        `${baseURL}/post`,
-        {
-          topic: null,
-          frameTotal: frame,
-          file: imgDataUrl,
-        },
-        {
-          headers: {
-            Authorization: accessToken,
-            'Refresh-Token': refreshToken,
-          },
-        }
-      )
-      .then(function (response) {
-        alert('그리기 완료!');
-        window.location.replace('/list');
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
 
   const cancleNav = () => {
     window.location.replace("/CompList");
   }
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div>
+      {myContext.setttingFrameBtn ? (
+        <ErrorBox onClick={() => myContext.setSettingFrameBtn(false)}>
+          <AnyModal  content="프레임 개수를 설정해주세요" />
+          </ErrorBox>
+      ) : null}
+      {myContext.drawingDoneBtn ? (
+        <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
+          <AnyModal  content="올리기가 완료되었습니다" />
+          </ErrorBox>
+      ) : null}
+      {myContext.vacantCanvas ? (
+        <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
+          <AnyModal  content="그림이 비어있습니다" />
+          </ErrorBox>
+      ) : null}
       <PostTitle>FREE</PostTitle>
       <PostContentsWrap>
         <CanvasWrap>
@@ -488,6 +498,18 @@ const PostFree = () => {
     </div >
   );
 };
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 
 const BgTopStyle = styled.img`
   width: 100%;
@@ -504,7 +526,6 @@ const BgBottomStyle = styled.img`
   left: 0;
   z-index: -100;
 `;
-
 const PostTitle = styled.div`
   font-family: 'SilkBold';
   font-size: 65px;

@@ -1,14 +1,20 @@
 import React from 'react'
-import styled from 'styled-components'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import styled from 'styled-components'
+
+//불러오기
 import { __deleteComment, __editComment } from '../../redux/modules/comments'
 import UseGetUser from '../../hooks/UseGetUser'
+import { useMyContext } from '../../shared/ContextApi'
+import AnyModal from '../../elem/AnyModal'
 
 const CommentBox = ({ commentList }) => {
   //로그인한 사람 정보
   const useGet = UseGetUser();
   const userNickname = useGet && useGet.data.data.nickname;
+
+  const myContext = useMyContext();
 
   const dispatch = useDispatch();
   //수정
@@ -30,11 +36,14 @@ const CommentBox = ({ commentList }) => {
     dispatch(__editComment(newList))
     setEditState(false)
   }
+
   //삭제
   const deleteBtn = () => {
-    // console.log(commentList.commentId)
-    dispatch(__deleteComment(commentList.commentId))
-    alert('삭제완료!')
+    myContext.setCommetDeleteBtn(true)
+    setTimeout(() => {
+      dispatch(__deleteComment(commentList.commentId))
+    },800)
+   
   }
 
   //완료,삭제버튼(로그인유저와 같으면 뜸)
@@ -49,6 +58,12 @@ const CommentBox = ({ commentList }) => {
   }
 
   return (
+  <>
+      {myContext.commetDeleteBtn ? (
+        <ErrorBox onClick={() => myContext.setCommetDeleteBtn(false)}>
+          <AnyModal  content="삭제 되었습니다" />
+        </ErrorBox>
+      ) : null}
     <Comment>
       <CommentContainer>
         <div style={{ display: 'flex' }}>
@@ -67,9 +82,22 @@ const CommentBox = ({ commentList }) => {
           : null
         }
       </CommentContainer>
-    </Comment>
+      </Comment>
+      </>
   )
 }
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 const Comment = styled.div`
     /* display: flex; */
     padding: 24px;

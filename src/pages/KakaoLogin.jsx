@@ -1,6 +1,8 @@
 import React from 'react'
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+//불러오기
 import {REDIRECT_URI} from '../shared/Kakao_oauth';
 import { setAccessToken,setRefreshToken } from '../shared/Cookie';
 import axios from 'axios';

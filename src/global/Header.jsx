@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useMyContext } from '../shared/ContextApi';
+import { useDispatch, useSelector } from 'react-redux';
+
 import styled from 'styled-components';
 import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
@@ -13,9 +15,13 @@ import {
 } from '../shared/Cookie';
 import UseGetUser from '../hooks/UseGetUser';
 import ClickProfileModal from '../components/Header/ClickProfileModal';
-import Notification from '../elem/Notification';
-import basicImg from '../images/basicImg.jpg';
+import basicImg from '../images/mypage/basicImg.png';
+import '../elem/Down'
+import { __getLogonUser } from '../redux/modules/UserPage';
 import { headerPB } from './sound';
+import Notification from '../elem/Notification';
+
+
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -29,25 +35,26 @@ const throttle = function (callback, waitTime) {
 };
 
 const Header = () => {
-  const useGet = UseGetUser();
-  const loginUser = useGet && useGet.data.data.profileImg;
   const myToken = getCookieToken();
-  ////////////////////////////////////////////////////
+
+
   const [messageList, setMessageList] = useState([]);
   const refreshToken = getRefreshToken();
 
   const location = useLocation();
 
-  //usegetuser 훅을 쓸지 RTK로 할지 고민중
-  // const dispatch = useDispatch();
-  // const  getLogonUser  = useSelector((state) => state && state.logonUser)
-  // const loginUser = getLogonUser.logonUser&&getLogonUser.logonUser.profileImg
+  const dispatch = useDispatch();
+  const  getLogonUser  = useSelector((state) =>  state?.logonUser)
+  const loginUser = getLogonUser?.logonUser?.profileImg
 
-  useEffect(() => {}, [loginUser]);
+  // console.log(loginUser)
+
+  useEffect(() => { 
+    dispatch(__getLogonUser())
+  }, []);
 
   const navigate = useNavigate();
   const documentRef = useRef(document);
-  const myContext = useMyContext();
 
   const [hide, setHide] = useState(false);
   const [pageY, setPageY] = useState(0);
@@ -68,9 +75,7 @@ const Header = () => {
       documentRef.current.removeEventListener('scroll', throttleScroll);
   }, [pageY]);
 
-  const clickOpenModal = () => {
-    myContext.setLogonProfileImg(!myContext.logonOpenProfileImg);
-  };
+
 
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
@@ -109,14 +114,13 @@ const Header = () => {
           {myToken ? (
             <>
               <Notification />
-              <LoginUserImg
-                src={!loginUser ? basicImg : loginUser}
-                onClick={() => {
-                  clickOpenModal();
-                  headerPB.play();
-                }}
-              ></LoginUserImg>
-            </>
+              {/* <LoginUserImg> */}
+            <ClickProfileModal img={!loginUser && loginUser ? basicImg : loginUser && loginUser}  
+            onClick={() => {
+              headerPB.play();
+                  }} />
+                {/* </LoginUserImg> */}
+              </>
           ) : (
             <LoginButton
               onClick={() => {
@@ -128,14 +132,7 @@ const Header = () => {
             </LoginButton>
           )}
         </HeaderBox>
-        {myContext.logonOpenProfileImg ? (
-          <ClickProfileModal
-            shown={myContext.logonOpenProfileImg}
-            close={() => {
-              myContext.setLogonProfileImg(false);
-            }}
-          />
-        ) : null}
+
       </HeaderContainer>
     </HeaderArea>
   );
@@ -222,12 +219,3 @@ const LoginButton = styled(Button)`
   }
 `;
 
-const LoginUserImg = styled.img`
-  width: 32px;
-  height: 32px;
-  margin-left: 30px;
-  border-radius: 50px;
-  background-color: white;
-
-  cursor: pointer;
-`;

@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { __getComment, __postComment } from '../redux/modules/comments';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 
-
 // img
 import Download from '../images/download-btn.png';
 import LikeBefore from '../images/like-before.png';
@@ -20,14 +19,22 @@ import LikeCount from '../images/like-count.png';
 import Arrow from '../images/complete-detail-arrow-left.png';
 import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/complete-detail-bg-bottom.png';
-
+import clickDownload from '../images/clickDownload.png'
 // components
 import CommentBox from '../components/completeDetail/CommentBox';
+import { useMyContext } from '../shared/ContextApi';
+import AnyModal from '../elem/AnyModal';
+
+//apis
+import { anyApis } from '../shared/apis';
+import  instance  from '../shared/apis';
+import { api } from '../shared/apis';
 
 const CompleteDetail = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
-  const params = useParams();
 
+  const params = useParams();
+  const myContext = useMyContext();
   //redux
   const [commentInput, setCommentInput] = useState('')
   const { comments } = useSelector((state) => state.comments)
@@ -36,10 +43,12 @@ const CompleteDetail = () => {
   ///////////////////////
   //댓글등록
   const commentChange = (e) => {
+    if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     setCommentInput(e.target.value)
   }
 
   const commentApply = () => {
+    if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     if (commentInput === '') return
 
     const payload = {
@@ -48,6 +57,7 @@ const CompleteDetail = () => {
     }
     dispatch(__postComment(payload))
     setCommentInput('')
+    myContext.setCommetDeleteBtn(false)
   }
 
 
@@ -62,13 +72,9 @@ const CompleteDetail = () => {
   const [likeCountState, setLikeCountState] = useState();
 
   const gifApi = () => {
-    const url = `${baseURL}/post/gif/detail/${params.id}`;
-    axios.get(`${baseURL}/post/gif/detail/${params.id}`,
-      {
-        headers: { "Authorization": accessToken, "Refresh-Token": refreshToken }
-      }
-    )
+    instance.get(`/post/gif/detail/${params.id}`)
       .then(function (response) {
+        console.log(response)
         setGif(response.data.data);
         setLikeCountState(response.data.data.likeCount);
         setLikeApi(response.data.data.liked);
@@ -96,27 +102,23 @@ const CompleteDetail = () => {
 
   ////////////////////////////
   // like
-  const [likeState, setLikeState] = useState(gif.liked);
   const [likeApi, setLikeApi] = useState();
   const accessToken = getCookieToken();
-  const refreshToken = getRefreshToken();
 
   const likeHandler = (e) => {
 
     if (accessToken === undefined) {
-      alert('로그인 후 이용 가능합니다.');
+      myContext.setCommetApplyBtn(true);
     } else {
       // setLikeState(!likeState);
-      axios.post(
-        `${baseURL}/post/like/${params.id}`, {
-        like: 0,
-      },
-        {
-          headers: { "Authorization": accessToken, "Refresh-Token": refreshToken }
-        }
-      )
+      const info = {
+        like: 0
+      }
+      anyApis.liked(params.id, info)
+  
         .then(function (response) {
           setLikeApi(response.data.data.like);
+          // console.log(response)
           if (likeApi === false) {
             setLikeCountState(likeCountState + 1);
           } else if (likeApi === true) {
@@ -146,10 +148,18 @@ const CompleteDetail = () => {
   ///////////////////////
   // save image
   const saveImg = () => {
-
+    if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
+    
   }
+  
 
   return (
+    <>
+        {myContext.commetApplyBtn ? (
+        <ErrorBox onClick={() => myContext.setCommetApplyBtn(false)}>
+          <AnyModal title="회원정보" content="로그인 후 가능합니다" />
+        </ErrorBox>
+      ) : null}
     <div style={{ position: 'relative' }}>
       <TitleBanner>
         <div onClick={arrowNav}><TitleArrow src={Arrow} alt="" /></div>
@@ -188,11 +198,14 @@ const CompleteDetail = () => {
           </Slider>
           {/* git / img info end */}
 
-
           {/* topic info start */}
           <Community>
-            <ContentsBtn>
-              <BtnImg src={Download} onClick={saveImg} alt="" />
+              <ContentsBtn>
+              <a href={`${baseURL}/download?postId=${Number(params.id)}&fileName=${gif.gifUrl}`}  onClick={saveImg}>
+              <DownloadImg  />
+              </a>
+             
+
               {
                 likeApi ?
                   <BtnImg src={LikeClick} onClick={likeHandler} alt="" />
@@ -236,9 +249,22 @@ const CompleteDetail = () => {
         <BgTopStyle src={BgTop} alt='' />
         <BgBottomStyle src={BgBottom} alt='' />
       </WidthWrap>
-    </div>
+      </div>
+      </>
   )
 }
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+`;
 
 const BgTopStyle = styled.img`
   width: 100%;
@@ -400,8 +426,24 @@ const ToggleCheck = styled.span`
         background-color: red;
     }
 `;
+const DownloadImg = styled.img`
+  width: 46px;
+  height: 46px;
+  border-radius: 46px;
+  background: url(${Download});
+  ${({ theme }) => theme.backgroundSet('contain')};
+  cursor: pointer;
+  margin-left: 12px;
+
+  &:hover{
+    background: url(${clickDownload});
+    ${({ theme }) => theme.backgroundSet('contain')};
+  }
+`;
 
 const BtnImg = styled.img`
+  width: 46px;
+  height: 46px;
   cursor: pointer;
   margin-left: 12px;
 `;
