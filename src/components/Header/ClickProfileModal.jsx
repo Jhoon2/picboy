@@ -14,7 +14,6 @@ import AnyModal from '../../elem/AnyModal';
 const ClickProfileModal = ({ img }) => {
   const myContext = useMyContext();
   const node = useRef();
-
   const logonUser = UseGetUser();
   const logonUsername = logonUser && logonUser.data.data.username;
 
@@ -71,11 +70,11 @@ const ClickProfileModal = ({ img }) => {
           <Down select={select}>
             <DownUl>
               
-                <div style={{height:'169px'}}>
-                  <ProfileImg src={img} />
+                <ProfileModalContainer >
+                  <ProfileImg src={img ? img : basicImg} />
                   <ProfileNickname>{logonUser && logonUser.data.data.nickname}</ProfileNickname>
                   <ProfileUsername>{logonUser && logonUser.data.data.username}</ProfileUsername>
-                </div>
+                </ProfileModalContainer>
                 <TextBr />
                 <ModalText
                     id="myPage"
@@ -143,11 +142,16 @@ const DownUl = styled.ul`
   background-color: white;
 `;
 
+const ProfileModalContainer = styled.div`
+  height: 169px;
+  margin: 0 auto;
+`
+
 const ProfileImg = styled.img`
   width: 70px;
   height: 70px;
   margin-top: 22px;
-  margin-left: 5px;
+  /* margin-left: 5px; */
 `
 const ProfileNickname = styled.div`
   font-weight: ${(props) => props.theme.BodyBD};

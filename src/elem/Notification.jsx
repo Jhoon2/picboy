@@ -47,8 +47,9 @@ const Notification = () => {
   };
   const baseURL = process.env.REACT_APP_API_KEY;
 
-  const socket = new SockJS(`${baseURL}/socket/`);
-  const stompClient = Stomp.over(socket);
+  let stompClient = Stomp.over(function () {
+    return new SockJS(`${baseURL}/socket/`);
+    });
 
   const stompConnect = () => {
     try {
