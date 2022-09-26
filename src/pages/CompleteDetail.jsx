@@ -193,24 +193,12 @@ const CompleteDetail = () => {
           <Community>
             <ContentsBtn>
               <BtnImg src={Download} onClick={saveImg} alt="" />
-
-
-              {/* 
-              
-              
-              
-              */}
               {
                 likeApi ?
                   <BtnImg src={LikeClick} onClick={likeHandler} alt="" />
                   :
                   <BtnImg src={LikeBefore} onClick={likeHandler} alt="" />
               }
-              {/* 
-              
-              
-              
-              */}
             </ContentsBtn>
             <ContentsLine />
             <SuggestionInfo>
