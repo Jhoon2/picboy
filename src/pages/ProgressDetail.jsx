@@ -165,7 +165,6 @@ const ProgressDetail = () => {
                         </PagingItems>
                       </Container>
                     </div>
-
                   );
                 })}
 
@@ -203,10 +202,10 @@ const ProgressDetail = () => {
         </>
       ) : (
         <>
-          <ImgBox>
-            <span>PROGRESS</span>
-          </ImgBox>
           <Wrap>
+            <ImgBox>
+              <span>PROGRESS</span>
+            </ImgBox>
             <Inner>
               <Slider
                 ref={mainSlickRef}
@@ -308,6 +307,7 @@ export default ProgressDetail;
 const Wrap = styled.div`
   overflow: hidden;
   margin-top: 60px;
+  position: relative;
 
   & > div + div {
     margin-top: 50px;
@@ -317,13 +317,14 @@ const Wrap = styled.div`
 //배너
 const ImgBox = styled.div`
   width: 100%;
-  height: 300px;
+  height: 636px;
   ${({ theme }) => theme.flexSet('column', 'space-between', 'center')}
   text-align: center;
   background: url(${Listbanner});
-  border: 0.5px solid #a3a3a3;
+  position: absolute;
+  z-index: -1;
   span {
-    margin-top: 140px;
+    margin-top: 200px;
     font-family: 'SilkLight';
     font-size: 80px;
     line-height: 102px;
@@ -342,6 +343,7 @@ const Inner = styled.div`
   width: 1200px;
   margin: auto;
   position: relative;
+  z-index: 1;
   .paging_items {
     filter: grayscale(1);
 
@@ -394,7 +396,8 @@ const defaultItemStyle = styled.div`
 const MainSlickItems = styled(defaultItemStyle)`
   width: 100%;
   height: 400px;
-  background: white;
+  background: none;
+  margin-top: 300px;
 
   img {
     max-width: 100%;
@@ -600,11 +603,18 @@ const defaultButtonStyle = css`
 
 const PrevButton = styled.button`
   ${defaultButtonStyle}
+  left: -10%;
+  @media ${({ theme }) => theme.device.laptop} {
+    left: -0.7%;
+  }
 `;
 
 const NextButton = styled.button`
   ${defaultButtonStyle}
-  right: 0;
+  right: -10%;
+  @media ${({ theme }) => theme.device.laptop} {
+    right: -0.7%;
+  }
 `;
 
 const defaultIconStyle = css`

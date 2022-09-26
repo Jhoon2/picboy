@@ -21,7 +21,7 @@ const Down = (props) => {
 
   const handleClickOutside = ({ target }) => {
     if (props.select && !outsideRef.current.contains(target))
-      props.setSelect(false);
+      props.select(false);
   };
 
   useEffect(() => {
@@ -48,13 +48,4 @@ export default Down;
 
 const SelectList = styled.div`
   position: absolute;
-  right: -75px;
-  cursor: pointer;
-  ul {
-    width: 240px;
-    min-height: 100px;
-    background: white;
-    border: 3px solid black;
-    padding: 20px;
-  }
 `;

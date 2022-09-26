@@ -3,9 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useMyContext } from '../shared/ContextApi';
 import styled from 'styled-components';
-// 소켓
-import { Stomp } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
 import {
@@ -16,7 +13,9 @@ import {
 } from '../shared/Cookie';
 import UseGetUser from '../hooks/UseGetUser';
 import ClickProfileModal from '../components/Header/ClickProfileModal';
+import Notification from '../elem/Notification';
 import basicImg from '../images/basicImg.jpg';
+import { headerPB } from './sound';
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -31,45 +30,9 @@ const throttle = function (callback, waitTime) {
 
 const Header = () => {
   const useGet = UseGetUser();
-  const usernames = useGet.data?.data.username;
   const loginUser = useGet && useGet.data.data.profileImg;
-  const myToken = getCookieToken();
-  ////////////////////////////////////////////////////
-  const [messageList, setMessageList] = useState([]);
-  const refreshToken = getRefreshToken();
-  const baseURL = process.env.REACT_APP_API_KEY;
-  const socket = new SockJS(`${baseURL}/socket/`, '', {
-    headers: {
-      Authorization: myToken,
-      'refresh-token': refreshToken,
-    },
-  });
-
-  const stompClient = Stomp.over(socket);
-
-  useEffect(() => {
-    stompConnect();
-  });
-
-  const stompConnect = () => {
-    try {
-      stompClient.connect(
-        () => {
-          stompClient.subscribe(`/sub/${usernames}`, (data) => {
-            const returnMessage = JSON.parse(data.body);
-
-            setMessageList(returnMessage.message);
-          });
-        },
-        () => {}
-      );
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  //////////////////////////////////////////////////////
   const location = useLocation();
+  const myToken = getCookieToken();
 
   //usegetuser 훅을 쓸지 RTK로 할지 고민중
   // const dispatch = useDispatch();
@@ -117,11 +80,13 @@ const Header = () => {
             alt=""
             onClick={() => {
               navigate('/');
+              headerPB.play();
             }}
           ></Logo>
           <ProceedingButton
             onClick={() => {
               navigate('/list');
+              headerPB.play();
             }}
           >
             PROCEEDING
@@ -129,23 +94,30 @@ const Header = () => {
           <CompleteButton
             onClick={() => {
               navigate('/CompList');
+              headerPB.play();
             }}
           >
             COMPLETE
           </CompleteButton>
+
           <PostCategories />
+
           {myToken ? (
-            // <ProfileImgBackground>
-            <LoginUserImg
-              src={!loginUser ? basicImg : loginUser}
-              onClick={clickOpenModal}
-            ></LoginUserImg>
+            <>
+              <Notification />
+              <LoginUserImg
+                src={!loginUser ? basicImg : loginUser}
+                onClick={() => {
+                  clickOpenModal();
+                  headerPB.play();
+                }}
+              ></LoginUserImg>
+            </>
           ) : (
-            // </ProfileImgBackground>
-            // </ProfileImgBackground>
             <LoginButton
               onClick={() => {
                 navigate('/login');
+                headerPB.play();
               }}
             >
               LOGIN
@@ -179,11 +151,14 @@ const Button = styled.button`
 const HeaderArea = styled.div`
   position: relative;
   width: 100%;
+
   z-index: 9999;
 `;
 
 const HeaderContainer = styled.div`
   width: 100%;
+
+  margin: auto;
   position: fixed;
   top: 0;
   left: 0;
@@ -244,17 +219,11 @@ const LoginButton = styled(Button)`
 `;
 
 const LoginUserImg = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 32px;
+  height: 32px;
+  margin-left: 30px;
   border-radius: 50px;
   background-color: white;
 
   cursor: pointer;
-`;
-
-const ProfileImgBackground = styled.div`
-  /* width: 58px;
-  height: 50px;
-  border-radius: 58px;
-   background-color: white; */
 `;
