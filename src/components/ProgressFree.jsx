@@ -61,7 +61,7 @@ const BestFree = () => {
 
   return (
     <ListBox>
-      {load === true ? <Loadings /> : null}
+      {/* {load === true ? <Loadings /> : null} */}
       {newData.map((item, index) => (
         <BestBox key={item.id}>
           <BestImg

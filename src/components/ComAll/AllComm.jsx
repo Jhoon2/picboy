@@ -70,7 +70,7 @@ const Free = () => {
 
   return (
     <ListBox>
-      {load === true ? <Loadings /> : null}
+      {/* {load === true ? <Loadings /> : null} */}
       {newData.map((item, index) => {
         return (
           <BestBox key={uuidv4()}>
