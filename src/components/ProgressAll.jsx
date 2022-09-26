@@ -63,8 +63,6 @@ const ProgressAll = () => {
     return () => observer && observer.disconnect();
   }, [ref]);
 
-  console.log(newData.length);
-
   return (
     <ListBox>
       {load === true ? <Loadings /> : null}
