@@ -8,6 +8,7 @@ import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
 import  api  from '../shared/apis';
 import instance from '../shared/apis';
+import vacantState from '../elem/vacantStateCanvas';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -33,8 +34,6 @@ import line12 from '../images/line12.png';
 const PostTopic = () => {
     const [frame, setFrame] = useState(0);
     const [canvasDone, setCanvasDone] = useState();
-    const accessToken = getCookieToken();
-    const refreshToken = getRefreshToken();
     const myContext = useMyContext();
 
     const frameCount = (e) => {
@@ -75,6 +74,8 @@ const PostTopic = () => {
         setCtx(canvasRef.current.getContext('2d'));
         setColorPreview('#000');
     }, []);
+
+
 
     const draw = (e) => {
         const X = e.clientX - canvasRef.current.offsetLeft;
@@ -193,19 +194,26 @@ const PostTopic = () => {
         // console.log(topicInputState);
     };
 
+
+    //광클릭 막기
+    let clickCount = 0;
+
     // post
     const submitImg = () => {
         const canvas = canvasRef.current;
+
         const imgDataUrl = canvas.toDataURL('image/png');
         const topic = topicInputState || topicState;
         if (topic === '') {
             myContext.setTopicBtn(true)
-            // alert('제시어를 입력해 주세요');
             return;
         } else if (frame === 0) {
             myContext.setSettingFrameBtn(true)
             return;
         }
+        if (vacantState(canvas)) return myContext.setVacantCanvas(true)
+
+        if(clickCount !== 0) return 
         instance
             .post(
                 `/post`,
@@ -216,8 +224,9 @@ const PostTopic = () => {
                 },
             )
             .then(function (response) {
-                console.log(response)
+                // console.log(response)
                 myContext.setDrawingDoneBtn(true)
+                ++clickCount
                 window.location.replace('/list');
             })
             .catch(function (error) {
@@ -240,6 +249,11 @@ const PostTopic = () => {
       {myContext.drawingDoneBtn ? (
         <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
           <AnyModal  content="올리기가 완료되었습니다" />
+          </ErrorBox>
+            ) : null}
+        {myContext.vacantCanvas ? (
+        <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
+          <AnyModal  content="그림이 비어있습니다" />
           </ErrorBox>
       ) : null}
   

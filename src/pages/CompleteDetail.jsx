@@ -19,7 +19,7 @@ import LikeCount from '../images/like-count.png';
 import Arrow from '../images/complete-detail-arrow-left.png';
 import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/complete-detail-bg-bottom.png';
-
+import clickDownload from '../images/clickDownload.png'
 // components
 import CommentBox from '../components/completeDetail/CommentBox';
 import { useMyContext } from '../shared/ContextApi';
@@ -31,6 +31,8 @@ import  instance  from '../shared/apis';
 import { api } from '../shared/apis';
 
 const CompleteDetail = () => {
+  const baseURL = process.env.REACT_APP_API_KEY;
+
   const params = useParams();
   const myContext = useMyContext();
   //redux
@@ -72,6 +74,7 @@ const CompleteDetail = () => {
   const gifApi = () => {
     instance.get(`/post/gif/detail/${params.id}`)
       .then(function (response) {
+        console.log(response)
         setGif(response.data.data);
         setLikeCountState(response.data.data.likeCount);
         setLikeApi(response.data.data.liked);
@@ -146,7 +149,9 @@ const CompleteDetail = () => {
   // save image
   const saveImg = () => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
+    
   }
+  
 
   return (
     <>
@@ -193,11 +198,13 @@ const CompleteDetail = () => {
           </Slider>
           {/* git / img info end */}
 
-
           {/* topic info start */}
           <Community>
-            <ContentsBtn>
-              <BtnImg src={Download} onClick={saveImg} alt="" />
+              <ContentsBtn>
+              <a href={`${baseURL}/download?postId=${Number(params.id)}&fileName=${gif.gifUrl}`}  onClick={saveImg}>
+              <DownloadImg  />
+              </a>
+             
 
               {
                 likeApi ?
@@ -420,8 +427,24 @@ const ToggleCheck = styled.span`
         background-color: red;
     }
 `;
+const DownloadImg = styled.img`
+  width: 46px;
+  height: 46px;
+  border-radius: 46px;
+  background: url(${Download});
+  ${({ theme }) => theme.backgroundSet('contain')};
+  cursor: pointer;
+  margin-left: 12px;
+
+  &:hover{
+    background: url(${clickDownload});
+    ${({ theme }) => theme.backgroundSet('contain')};
+  }
+`;
 
 const BtnImg = styled.img`
+  width: 46px;
+  height: 46px;
   cursor: pointer;
   margin-left: 12px;
 `;

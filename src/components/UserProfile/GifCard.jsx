@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
+import { useEffect } from 'react'
+
 import { useMyContext } from '../../shared/ContextApi'
 
 //axios, apis
@@ -13,7 +14,7 @@ import AllParticipants from './AllParticipants'
 import MySpecialButton from './MySpecialButton'
 
 //이미지
-import download from '../../images/download-btn.png'
+import download from '../../images/mypage/download.png'
 import heart from '../../images/like-before.png'
 import colorHeart from '../../images/like-click.png'
 import basicImg from '../../images/basicImg.jpg'
@@ -23,7 +24,7 @@ import textbox from '../../images/Mode comment.png'
 import grayEyes from '../../images/mypage/grayEyes.png'
 import completeIcon from '../../images/mypage/complete.png'
 import progressIcon from '../../images/mypage/progress.png'
-import { useEffect } from 'react'
+import clickDownload from '../../images/mypage/clickDownload.png'
 
 const GifCard = ({ data, myImg, myNickname }) => {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ const GifCard = ({ data, myImg, myNickname }) => {
             <div style={{ display: 'flex' }}>
               {data.status === 2 ?
                 <a href={`${baseURL}/download?postId=${data.postId}&fileName=${data.gifUrl}`} download='free' onClick={(e) => e.stopPropagation()}>
-                  <ClickCircle src={download}/>
+                  <ClickCircleDownload />
                 </a> : null}
               {/* 좋아요기능 */}
               <ClickCircle src={likePlus ? colorHeart : heart} onClick={clickLikeBtn} />
@@ -123,10 +124,13 @@ const GifCard = ({ data, myImg, myNickname }) => {
               <IconImg src={grayEyes} />
             </Icons>
               <LikeCount >{data.viewCount}</LikeCount>
-            <Icons >
+          {data.status === 2 ?  
+          <><Icons >
               <IconImg src={textbox} />
             </Icons>
               <LikeCount >{data.commentCount}</LikeCount>
+            </>
+          : null}
             <Icons >
               <IconImg src={favorite} />
             </Icons>
@@ -254,6 +258,26 @@ const ClickCircle = styled.img`
 
   :first-child {
     margin-right: 10px;
+  }
+`;
+
+const ClickCircleDownload = styled.img`
+  width: 46px;
+  height: 46px;
+  margin-top: -18px;
+  border-radius: 46px;
+  background: url(${download});
+  ${({ theme }) => theme.backgroundSet('contain')};
+
+  cursor: pointer;
+
+  :first-child {
+    margin-right: 10px;
+  }
+
+  &:hover{
+    background: url(${clickDownload});
+    ${({ theme }) => theme.backgroundSet('contain')};
   }
 `;
 

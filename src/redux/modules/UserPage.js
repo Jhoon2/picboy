@@ -131,10 +131,14 @@ export const logonUserSlice = createSlice({
       state.isLoading = false;
           state.logonUser = action.payload;
       },
-    // [__getLogonUser.rejected]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // }
+    [__selectIconImg.fulfilled]: (state, action) => {
+        state.isLoading = false;
+        state.logonUser.profileImg = action.payload.img
+    }, 
+    [__putEditProfileImg.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.logonUser.profileImg = action.payload.img
+    }
   }
   })
   
@@ -142,20 +146,24 @@ export const userPageSlice = createSlice({
   name: 'userPage',
   initialState:{
       userPage: [],
-      isLoading: false,
+    isLoading: false,
+      isSuccess: false,
       error: null,
   },
   reducers: {},
   extraReducers: {
       [__getUserPage.pending]: (state) => {
-          state.isLoading = true;
+      state.isLoading = true;
+      state.isSuccess= false;
       },
     [__getUserPage.fulfilled]: (state, action) => {
-          state.isLoading = false;
+      state.isLoading = false;
+      state.isSuccess= true;
           state.userPage = action.payload;
       },
       [__getUserPage.rejected]: (state, action) => {
-          state.isLoading = false;
+        state.isLoading = false;
+        state.isSuccess= false;
           state.error = action.payload;
     },
     [__putEditNickname.fulfilled]: (state, action) => {

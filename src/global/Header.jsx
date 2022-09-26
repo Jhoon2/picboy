@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useMyContext } from '../shared/ContextApi';
+import { useDispatch, useSelector } from 'react-redux';
+
 import styled from 'styled-components';
 // 소켓
 import { Stomp } from '@stomp/stompjs';
@@ -16,8 +18,9 @@ import {
 } from '../shared/Cookie';
 import UseGetUser from '../hooks/UseGetUser';
 import ClickProfileModal from '../components/Header/ClickProfileModal';
-import basicImg from '../images/basicImg.jpg';
+import basicImg from '../images/mypage/basicImg.png';
 import '../elem/Down'
+import { __getLogonUser } from '../redux/modules/UserPage';
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -31,13 +34,9 @@ const throttle = function (callback, waitTime) {
 };
 
 const Header = () => {
-  const useGet = UseGetUser();
-  const usernames = useGet.data?.data.username;
-  const loginUser = useGet && useGet.data.data.profileImg;
+
   const myToken = getCookieToken();
-  ////////////////////////////////////////////////////
-  // //헤더 모달창 열고닫기
-  // const [select, setSelect] = useState(false);
+
 
   const [messageList, setMessageList] = useState([]);
   const refreshToken = getRefreshToken();
@@ -75,12 +74,15 @@ const Header = () => {
   //////////////////////////////////////////////////////
   const location = useLocation();
 
-  //usegetuser 훅을 쓸지 RTK로 할지 고민중
-  // const dispatch = useDispatch();
-  // const  getLogonUser  = useSelector((state) => state && state.logonUser)
-  // const loginUser = getLogonUser.logonUser&&getLogonUser.logonUser.profileImg
+  const dispatch = useDispatch();
+  const  getLogonUser  = useSelector((state) =>  state?.logonUser)
+  const loginUser = getLogonUser?.logonUser?.profileImg
 
-  useEffect(() => { }, [loginUser]);
+  // console.log(loginUser)
+
+  useEffect(() => { 
+    dispatch(__getLogonUser())
+  }, []);
 
   const navigate = useNavigate();
   const documentRef = useRef(document);
@@ -136,7 +138,7 @@ const Header = () => {
           </CompleteButton>
           <PostCategories />
           {myToken ? (
-            <ClickProfileModal img={!loginUser ? basicImg : loginUser } />
+            <ClickProfileModal img={!loginUser&&loginUser ? basicImg : loginUser&&loginUser } />
           ) : (
 
             <LoginButton

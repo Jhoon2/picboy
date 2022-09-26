@@ -55,7 +55,8 @@ export const Context = (props) => {
     //포스트 릴레이 추가할때
     const [ postTopicBtn, setPostTopicBtn] = React.useState(false)
 
-
+    //그림판이 비어있을 떄
+    const [ vacantCanvas , setVacantCanvas] =React.useState(false)
 
     const value = {
   
@@ -123,6 +124,9 @@ export const Context = (props) => {
         postTopicBtn,
         setPostTopicBtn,
         
+        //그림판이 비어있을 떄
+        vacantCanvas,
+        setVacantCanvas
     };
 
     return (

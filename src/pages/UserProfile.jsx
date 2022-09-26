@@ -10,7 +10,7 @@ import { __putEditNickname } from '../redux/modules/UserPage'
 import styled from 'styled-components'
 import api from '../shared/apis'
 
-import UseGet from '../hooks/UseGetUser'
+import UseGetUser from '../hooks/UseGetUser'
 import GifCard from '../components/UserProfile/GifCard'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
@@ -21,6 +21,7 @@ import smallpencil from '../images/smallpencil.png'
 import camera from '../images/Camera.png'
 import editPencil from '../images/mypage/mode-edit-sharp.png'
 import TopScroll from '../global/TopScroll'
+import Loading from '../global/Loading'
 
 
 const UserProfile = () => {
@@ -30,11 +31,10 @@ const UserProfile = () => {
 
 
     //로그인 정보
-    const userinfo = UseGet();
+    const userinfo = UseGetUser();
 
-    const lastIntersectingData = useRef(null);
-    const [ref, setRef] = useState(null);
-    
+
+   //수정
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
@@ -47,12 +47,19 @@ const UserProfile = () => {
     
     //마이페이지 데이터
     const { userData } = useSelector((state) => state.userdata)
-    
+    const  { isLoading }  = useSelector((state) => state.userdata)
+    const [loading, setLoading] = useState(false)
+
+     //무한스크롤관련
+     const lastIntersectingData = useRef(null);
+     const [ref, setRef] = useState(null);
+     
     //페이지세팅
     let page = 0;
     //observe 콜백 함수
   const onIntersect = (entries, observer) => {
-    entries.forEach((entry) => {
+      entries.forEach((entry) => {
+        
         if (entry.isIntersecting) {
 
             page++
@@ -61,7 +68,7 @@ const UserProfile = () => {
                 category: myContext.categoryNum,
                 username:params.id,
                 'page': page
-                }))
+            }))
 
             //조건이 트루
         //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
@@ -78,6 +85,7 @@ const UserProfile = () => {
 
 
     useEffect(() => {
+
         dispatch(__getUserPage({username:params.id}))
         dispatch(__getUserData({
             // tab: 0,
@@ -85,7 +93,6 @@ const UserProfile = () => {
             username: params.id,
             page:0
         }))
-
     }, [dispatch]);
     
 
@@ -182,17 +189,18 @@ const UserProfile = () => {
             setAvailableNick(false);
         };
     
+    if(!userinfo?.data?.data?.username) return
     return (
         <>
+        {isLoading && <Loading />}
         <UserProfileContainer >
             <ContainerInner >
                 <TopScroll />
                 {/* 프로필 */}
                 <ProfileContainer>
                         <ProfileInner>
-                            {/* {console.log(UserPage && UserPage)} */}
                         <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onClick={MouseClick} />
-                        {UserPage&&UserPage.username === userinfo.data.data.username ?<CameraBox>
+                        {UserPage&&UserPage?.username === userinfo?.data?.data?.username ?<CameraBox>
                             <CameraContainer>
                                 <CameraImg src={camera} />
                             </CameraContainer>

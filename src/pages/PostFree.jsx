@@ -7,6 +7,7 @@ import styled, { css } from 'styled-components';
 import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
 import instance from '../shared/apis';
+import vacantState from '../elem/vacantStateCanvas';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -53,6 +54,7 @@ const PostFree = () => {
       myContext.setSettingFrameBtn(true)
       return;
     }
+    if(vacantState(canvas)) return myContext.setVacantCanvas(true)
     instance
       .post(
         `/post`,
@@ -206,6 +208,11 @@ const PostFree = () => {
       {myContext.drawingDoneBtn ? (
         <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
           <AnyModal  content="올리기가 완료되었습니다" />
+          </ErrorBox>
+      ) : null}
+      {myContext.vacantCanvas ? (
+        <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
+          <AnyModal  content="그림이 비어있습니다" />
           </ErrorBox>
       ) : null}
       <PostTitle>FREE</PostTitle>

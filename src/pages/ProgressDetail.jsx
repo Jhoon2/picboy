@@ -4,8 +4,11 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled, { css } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+
+//불러오기
+import UseGetUser from '../hooks/UseGetUser';
+import { useMyContext } from '../shared/ContextApi';
+import AnyModal from '../elem/AnyModal';
 
 //이미지
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
@@ -18,6 +21,8 @@ import  api  from '../shared/apis';
 
 const ProgressDetail = () => {
   const navigate = useNavigate();
+  const logonUser = UseGetUser();
+  const myContext = useMyContext();
 
   //토픽이 있을 때
   const [mainSlick, setMainSlick] = useState(null);
@@ -51,6 +56,7 @@ const ProgressDetail = () => {
   const Topics = Data && Data.topic;
 
   const Move = () => {
+    if(!logonUser) return myContext.btnClickOn()
     navigate(`/post-relay/${params.id}`);
   };
 
@@ -113,6 +119,11 @@ const ProgressDetail = () => {
     <>
       {Topics === null ? (
         <>
+          {myContext.btnOpen ? (
+        <ErrorBox onClick={() => myContext.btnClickOff()}>
+          <AnyModal title="회원정보" content="로그인 후 가능합니다" />
+        </ErrorBox>
+      ) : null}
           <ImgBox>
             <span>PROGRESS</span>
           </ImgBox>
@@ -306,6 +317,19 @@ const ProgressDetail = () => {
 };
 
 export default ProgressDetail;
+
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+`;
 
 const Wrap = styled.div`
   overflow: hidden;

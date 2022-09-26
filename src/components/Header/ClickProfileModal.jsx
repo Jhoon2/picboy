@@ -7,11 +7,11 @@ import styled, { css } from 'styled-components';
 import UseGetUser from '../../hooks/UseGetUser';
 import '../../elem/Down'
 import Down from '../../elem/Down';
-
+import basicImg from '../../images/mypage/basicImg.png'
 //로그아웃 알림창
 import AnyModal from '../../elem/AnyModal';
 
-const ClickProfileModal = ({img}) => {
+const ClickProfileModal = ({ img }) => {
   const myContext = useMyContext();
   const node = useRef();
 
@@ -33,7 +33,9 @@ const ClickProfileModal = ({img}) => {
     setSelectContent(e.target.id);
     removeCookieToken();
   };
+
   useEffect(() => {
+    
     const clickOutside = (e) => {
       if (select && node.current && !node.current.contains(e.target)) {
         setSelect(false);
@@ -46,8 +48,10 @@ const ClickProfileModal = ({img}) => {
       document.removeEventListener('mousedown', clickOutside);
     };
   }, [select]);
-  let anyData = 1;
 
+
+  let anyData = 1;
+  if(!logonUser?.data?.data) return
   return (
     <div ref={node}>
          {myContext.logoutBtn ? (
@@ -68,7 +72,7 @@ const ClickProfileModal = ({img}) => {
             <DownUl>
               
                 <div style={{height:'169px'}}>
-                  <ProfileImg src={logonUser && logonUser.data.data.profileImg} />
+                  <ProfileImg src={img} />
                   <ProfileNickname>{logonUser && logonUser.data.data.nickname}</ProfileNickname>
                   <ProfileUsername>{logonUser && logonUser.data.data.username}</ProfileUsername>
                 </div>
