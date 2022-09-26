@@ -4,17 +4,25 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styled, { css } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+
+//불러오기
+import UseGetUser from '../hooks/UseGetUser';
+import { useMyContext } from '../shared/ContextApi';
+import AnyModal from '../elem/AnyModal';
+
+//이미지
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import addBef from '../images/detail/addBef.svg';
 import addAft from '../images/detail/addAft.svg';
 import noImage from '../images/detail/noImage.png';
 import Listbanner from '../images/Com/Listbanner.svg';
 import Listfooter from '../images/Com/Listfooter.svg';
+import  api  from '../shared/apis';
 
 const ProgressDetail = () => {
   const navigate = useNavigate();
+  const logonUser = UseGetUser();
+  const myContext = useMyContext();
 
   //토픽이 있을 때
   const [mainSlick, setMainSlick] = useState(null);
@@ -28,13 +36,12 @@ const ProgressDetail = () => {
   const mainSlickRef2 = useRef(null);
   const pagingSlickRef2 = useRef(null);
 
-  const baseURL = process.env.REACT_APP_API_KEY;
   const params = useParams();
   const [Data, setData] = useState([]);
 
   const getProgressData = () => {
-    const url = `${baseURL}/post/gif/images/detail/${params.id}`;
-    axios
+    const url = `/post/gif/images/detail/${params.id}`;
+    api
       .get(url)
       .then(function (response) {
         setData(response.data.data);
@@ -49,6 +56,7 @@ const ProgressDetail = () => {
   const Topics = Data && Data.topic;
 
   const Move = () => {
+    if(!logonUser) return myContext.btnClickOn()
     navigate(`/post-relay/${params.id}`);
   };
 
@@ -111,6 +119,11 @@ const ProgressDetail = () => {
     <>
       {Topics === null ? (
         <>
+          {myContext.btnOpen ? (
+        <ErrorBox onClick={() => myContext.btnClickOff()}>
+          <AnyModal title="회원정보" content="로그인 후 가능합니다" />
+        </ErrorBox>
+      ) : null}
           <ImgBox>
             <span>PROGRESS</span>
           </ImgBox>
@@ -123,7 +136,7 @@ const ProgressDetail = () => {
               >
                 {imgList.map((item, index) => {
                   return (
-                    <MainSlickItems key={item}>
+                    <MainSlickItems key={index}>
                       <img src={Data.imgUrl} alt="" />
                     </MainSlickItems>
                   );
@@ -147,9 +160,9 @@ const ProgressDetail = () => {
               >
                 {imgList.map((item, index) => {
                   return (
-                    <div className="bg">
+                    <div className="bg"  key={item}>
                       <Container>
-                        <PagingItems key={item} className="paging_items">
+                        <PagingItems className="paging_items">
                           <div style={{ position: 'relative' }}>
                             <Overlay>
                               <Personnel>
@@ -165,7 +178,6 @@ const ProgressDetail = () => {
                         </PagingItems>
                       </Container>
                     </div>
-
                   );
                 })}
 
@@ -203,10 +215,10 @@ const ProgressDetail = () => {
         </>
       ) : (
         <>
-          <ImgBox>
-            <span>PROGRESS</span>
-          </ImgBox>
           <Wrap>
+            <ImgBox>
+              <span>PROGRESS</span>
+            </ImgBox>
             <Inner>
               <Slider
                 ref={mainSlickRef}
@@ -241,9 +253,9 @@ const ProgressDetail = () => {
                 {imgList &&
                   imgList.map((item, index) => {
                     return (
-                      <div className="bg">
+                      <div className="bg" key={item}>
                         <Container>
-                          <PagingItems key={item} className="paging_items">
+                          <PagingItems  className="paging_items">
                             <div style={{ position: 'relative' }}>
                               <Overlay>
                                 <Personnel>
@@ -305,9 +317,23 @@ const ProgressDetail = () => {
 
 export default ProgressDetail;
 
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+`;
+
 const Wrap = styled.div`
   overflow: hidden;
   margin-top: 60px;
+  position: relative;
 
   & > div + div {
     margin-top: 50px;
@@ -317,13 +343,14 @@ const Wrap = styled.div`
 //배너
 const ImgBox = styled.div`
   width: 100%;
-  height: 300px;
+  height: 636px;
   ${({ theme }) => theme.flexSet('column', 'space-between', 'center')}
   text-align: center;
   background: url(${Listbanner});
-  border: 0.5px solid #a3a3a3;
+  position: absolute;
+  z-index: -1;
   span {
-    margin-top: 140px;
+    margin-top: 200px;
     font-family: 'SilkLight';
     font-size: 80px;
     line-height: 102px;
@@ -342,6 +369,7 @@ const Inner = styled.div`
   width: 1200px;
   margin: auto;
   position: relative;
+  z-index: 1;
   .paging_items {
     filter: grayscale(1);
 
@@ -394,7 +422,8 @@ const defaultItemStyle = styled.div`
 const MainSlickItems = styled(defaultItemStyle)`
   width: 100%;
   height: 400px;
-  background: white;
+  background: none;
+  margin-top: 300px;
 
   img {
     max-width: 100%;
@@ -600,11 +629,18 @@ const defaultButtonStyle = css`
 
 const PrevButton = styled.button`
   ${defaultButtonStyle}
+  left: -10%;
+  @media ${({ theme }) => theme.device.laptop} {
+    left: -0.7%;
+  }
 `;
 
 const NextButton = styled.button`
   ${defaultButtonStyle}
-  right: 0;
+  right: -10%;
+  @media ${({ theme }) => theme.device.laptop} {
+    right: -0.7%;
+  }
 `;
 
 const defaultIconStyle = css`

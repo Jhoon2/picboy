@@ -4,6 +4,14 @@ import styled from 'styled-components'
 import { useMyContext } from '../../shared/ContextApi'
 import { __getUserData } from '../../redux/modules/UserPage'
 import { useDispatch } from 'react-redux'
+import NewBef from '../../images/listCategory/ListNewBef.svg';
+import LikeBef from '../../images/listCategory/ListHeartBef.svg';
+import CommBef from '../../images/listCategory/ListCommBef.svg';
+import NewAft from '../../images/listCategory/ListNewAft.svg';
+import LikeAft from '../../images/listCategory/ListHeartAft.svg';
+import CommAft from '../../images/listCategory/ListCommAft.svg';
+import ViewBef from '../../images/listCategory/ViewBef.svg';
+import ViewAft from '../../images/listCategory/ViewAft.svg';
 
 const CategoryModal = ({children, shown, close,username}) => {
   const [categoryContent, setCategoryContent] = useState('recent')
@@ -37,25 +45,59 @@ const CategoryModal = ({children, shown, close,username}) => {
       category: 3
   }))
   }
+  const views = (e) => {
+    setCategoryContent(e.target.id)
+    myContext.setCategoryNum(4)
+    dispatch(__getUserData({
+      tab: myContext.tabNum,
+      username:username,
+      category: 4
+  }))
+  }
 
   return shown? (
     <Overlay onClick={()=>{close()}}>
       <OverlayPosition >
         <OverlayContainer>
-          <ModalContainer onClick={e => {e.stopPropagation();}}>
-            <ModalText id='recent' name='1' onClick={recent} categoryContent={myContext.categoryNum} >
-              최신순
-              </ModalText>
-            <TextBr />
-            <ModalText id='liked' name='2'onClick={liked} categoryContent={myContext.categoryNum}>
-              좋아요순
-            </ModalText>
-            <TextBr />
-            <ModalText id='comments' name='3' onClick={comments} categoryContent={myContext.categoryNum}>
-              댓글많은순
-            </ModalText>
-            {/* {children} */}
-          </ModalContainer>
+          <div onClick={e => {e.stopPropagation();}}>
+            <SelectList>
+            <ul>
+              <New>
+                <Title
+                  onClick={recent}
+                >
+                  <Newimg img={NewBef}>
+                    <Text>최신순</Text>
+                  </Newimg>
+                </Title>
+              </New>
+              <HR />
+              <Like>
+                <Title  onClick={liked} >
+                  <Likeimg img={LikeBef}>
+                    <Text>좋아요</Text>
+                  </Likeimg>
+                </Title>
+              </Like>
+              <HR />
+              <Comm>
+                <Title  onClick={comments}>
+                  <Commimg img={CommBef}>
+                    <Text>댓글순</Text>
+                  </Commimg>
+                </Title>
+              </Comm>
+              <HR />
+              <View>
+                <Title onClick={views}>
+                  <Viewimg img={ViewBef}>
+                    <Text>조회순</Text>
+                  </Viewimg>
+                </Title>
+              </View>
+            </ul>
+          </SelectList>
+          </div>
         </OverlayContainer>
       </OverlayPosition>
     </Overlay>
@@ -81,48 +123,88 @@ const OverlayContainer = styled.div`
 const OverlayPosition = styled.div`
   height: 30px;
   position:relative;
-  top:880px;
-  left: 450px;
+  top: 780px;
+  left: 430px;
 `
-const ModalContainer = styled.div`
-  width: 132px;
-  height: 149px;
+const HR = styled.hr`
+  width: 110px;
+  border: 0;
+  height: 1px;
+  background: #ccc;
+`;
+const SelectList = styled.div`
   position: absolute;
-  z-index: 2;
-  border: 2px solid #000000;
-  background-color: white;
-`
-
-const ModalText = styled.div`
-  width: 132px;
-  height: 23px;
-  margin-top: 5px;
-  padding: 15px 24px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 10px;
-  font-family: 'Noto Sans KR';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  color: ${(props)=> (props.name === String(props.categoryContent)) ? '#000000' : '#A3A3A3'} ;
   cursor: pointer;
-
-  :first-child {
-    margin-top: 15px;
+  ul {
+    width: 145px;
+    min-height: 154px;
+    background: white;
+    border: 3px solid black;
+    padding: 20px;
   }
-`
-const TextBr = styled.div`
-  width: 84px;
-  height: 0px;
-  margin-top: 5px;
-  margin-left: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  border: 0.5px solid #A3A3A3;
-`
+`;
+
+const New = styled.div`
+  ${({ theme }) => theme.flexSet('column', 'flex-start', 'center')}
+
+  color: #a3a3a3;
+  &:hover {
+    color: black;
+  }
+`;
+const Like = styled(New)``;
+const Comm = styled(New)``;
+const View = styled(New)``;
+
+const Title = styled.div`
+  width: 100px;
+  height: 25px;
+  ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
+`;
+
+const Newimg = styled.div`
+  width: 20px;
+  height: 19px;
+  position: relative;
+  margin-right: 7px;
+  background: url(${(props) => props.img});
+  ${({ theme }) => theme.backgroundSet('contain')}
+  &:hover {
+    background: url(${NewAft});
+  }
+`;
+
+const Likeimg = styled(Newimg)`
+  &:hover {
+    background: url(${LikeAft});
+  }
+`;
+
+const Commimg = styled(Newimg)`
+  &:hover {
+    background: url(${CommAft});
+  }
+`;
+
+const Viewimg = styled(Newimg)`
+  width: 20px;
+  height: 14px;
+
+  &:hover {
+    background: url(${ViewAft});
+  }
+`;
+
+const Text = styled.div`
+  width: 50px;
+  margin-left: 30px;
+  position: absolute;
+  bottom: -4px;
+  font-family: 'NotoBold';
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 180%;
+`;
+
+
 export default CategoryModal

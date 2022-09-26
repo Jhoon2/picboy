@@ -4,77 +4,71 @@ import { useEffect } from 'react'
 import { useMyContext } from '../shared/ContextApi'
 import { useParams } from 'react-router-dom'
 import { useDispatch,useSelector } from 'react-redux'
-import axios from "axios"
-// import { getCookieToken, getRefreshToken } from '../shared/Cookie'
 import { __getUserData, __getUserPage } from '../redux/modules/UserPage'
 import { __putEditNickname } from '../redux/modules/UserPage'
 
-import UseGet from '../hooks/UseGetUser'
 import styled from 'styled-components'
+import api from '../shared/apis'
+
+import UseGetUser from '../hooks/UseGetUser'
 import GifCard from '../components/UserProfile/GifCard'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
-import basicImg from '../images/basicImg.jpg'
+
+//이미지
+import basicImg from '../images/mypage/basicImg.png'
 import smallpencil from '../images/smallpencil.png'
 import camera from '../images/Camera.png'
 import editPencil from '../images/mypage/mode-edit-sharp.png'
 import TopScroll from '../global/TopScroll'
+import Loading from '../global/Loading'
 
 
 const UserProfile = () => {
-    const baseURL = process.env.REACT_APP_API_KEY;
     const myContext = useMyContext();
     const params = useParams();
     const dispatch = useDispatch();
 
 
     //로그인 정보
-    const userinfo = UseGet();
+    const userinfo = UseGetUser();
 
 
-    const [user, setUser] = useState(null)
-
-    let page = 0;
-    const lastIntersectingData = useRef(null);
-    const [ref, setRef] = useState(null);
-
+   //수정
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
     const [editNickValue, setEditNickValue] = useState('')
-
-    //store 데이터 호출
+    
+    ////store 데이터 호출
+    //마이페이지 유저
     const { userPage } = useSelector((state) => state.userpage)
     const UserPage = userPage && userPage.data
-    // console.log(UserPage && UserPage)
     
-    const {userData}  = useSelector((state) => state.userdata)
-    const pageNumber = userData.pageable && userData.pageable.pageNumber
-    const totalPages = userData.pageable && userData.totalPages
-    const [currentPage, setCurrentPage] = useState(0);
-
-    // console.log('현재 페이지 넘버',pageNumber)
-    // console.log('토탈페이지 넘버', totalPages)
-    // console.log('현재 페이지 넘버', currentPage)
     
+    //마이페이지 데이터
+    const { userData } = useSelector((state) => state.userdata)
+    const  { isLoading }  = useSelector((state) => state.userdata)
+    const [loading, setLoading] = useState(false)
 
+     //무한스크롤관련
+     const lastIntersectingData = useRef(null);
+     const [ref, setRef] = useState(null);
+     
+    //페이지세팅
+    let page = 0;
     //observe 콜백 함수
   const onIntersect = (entries, observer) => {
-    entries.forEach((entry) => {
+      entries.forEach((entry) => {
+        
         if (entry.isIntersecting) {
-            console.log('-------------------------')
-            // if (currentPage >= totalPages && totalPages)
-            // console.log(totalPages&&totalPages,currentPage,'----------페이지가 토탈보다 크다')
-            // if (pageNumber === 0) {
-                // page = 0
-            // if (page > 3 ? page = 0:page++)
+
             page++
-                // console.log('&&&&&&&&&&&&',page)
-                dispatch(__getUserData({
-                    username:params.id,
-                    'page': page,
-                }))
-            setCurrentPage(page)
-            //  }
+            dispatch(__getUserData({
+                tab: myContext.tabNum,
+                category: myContext.categoryNum,
+                username:params.id,
+                'page': page
+            }))
 
             //조건이 트루
         //뷰포트에 마지막 이미지가 들어오고, page값에 1을 더하여 새 fetch 요청을 보내게됨 (useEffect의 dependency배열에 page가 있음)
@@ -83,25 +77,22 @@ const UserProfile = () => {
             observer.observe(entry.target)
         // unobserve가 아님
         } else {
-            console.log('여기서 취소?')
+            // console.log('여기서 취소?')
       }
     });
   };
     
-//   console.log('useState페이지',currentPage)
-
-    
 
 
     useEffect(() => {
+
         dispatch(__getUserPage({username:params.id}))
         dispatch(__getUserData({
-            tab: 0,
+            // tab: 0,
             category:1,
             username: params.id,
             page:0
         }))
-            
     }, [dispatch]);
     
 
@@ -119,11 +110,14 @@ const UserProfile = () => {
           // observer.observe(ref);
             }, 500);
     }
-    return () => observer && observer.disconnect();
-  }, [lastIntersectingData,ref]);
+      return () => observer && observer.disconnect();
+      
+
+  }, [lastIntersectingData,ref,myContext.tabNum,myContext.categoryNum]);
 
 
-    const RightMouseClick = (e) => {
+    
+    const MouseClick = (e) => {
         e.preventDefault();
         myContext.setIsOpenProfileImg(!myContext.isOpenProfileImg)
     }
@@ -178,8 +172,8 @@ const UserProfile = () => {
 
     const checkNickname = async () => {
         try {
-        const response = await axios.get(
-            `${baseURL}/user/nickname-double-check/${loadMyNickname}`
+        const response = await api.get(
+            `/user/nickname-double-check/${loadMyNickname}`
             );
         if (!response.data.success) {
             setExistedNick(true);
@@ -195,16 +189,18 @@ const UserProfile = () => {
             setAvailableNick(false);
         };
     
+    if(!userinfo?.data?.data?.username) return
     return (
         <>
+        {isLoading && <Loading />}
         <UserProfileContainer >
             <ContainerInner >
                 <TopScroll />
                 {/* 프로필 */}
                 <ProfileContainer>
-                    <ProfileInner>
-                        <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onClick={RightMouseClick} />
-                        {UserPage&&UserPage.username === userinfo.data.data.username ?<CameraBox>
+                        <ProfileInner>
+                        <ProfileImage src={UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg} onClick={MouseClick} />
+                        {UserPage&&UserPage?.username === userinfo?.data?.data?.username ?<CameraBox>
                             <CameraContainer>
                                 <CameraImg src={camera} />
                             </CameraContainer>
@@ -258,7 +254,7 @@ const UserProfile = () => {
                             )
                         })}
                     </CardContainer>
-                    <div style={{ width: '100px', height: '20px' }} ref={ lastIntersectingData}>.</div>
+                    <div style={{ width: '100px', height: '20px' }} ref={page? null : lastIntersectingData}>.</div>
                 </>
             </ContainerInner>
 

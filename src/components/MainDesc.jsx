@@ -1,6 +1,9 @@
 import React, { useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useMyContext } from '../shared/ContextApi';
+import UseGetUser from '../hooks/UseGetUser';
+
 import Fade from 'react-reveal/Fade';
 import BestSlider from '../elem/BestSlider';
 import Howarrow from '../images/mainDesc/Howarrow.svg';
@@ -18,11 +21,27 @@ import Desc1 from '../images/mainDesc/Desc1.gif';
 import Desc2 from '../images/mainDesc/Desc2.gif';
 import Desc3 from '../images/mainDesc/Desc3.gif';
 import Desc4 from '../images/mainDesc/Desc4.gif';
+import { buttonPB } from '../global/sound';
+import { coinPB } from '../global/sound';
 
 const MainDesc = ({ moveRef, move2Ref }) => {
   const navigate = useNavigate();
   const TopicgRef = useRef();
   const FreeRef = useRef();
+  const myContext = useMyContext();
+  const logonUser = UseGetUser();
+
+  const moveTopic = () => {
+    if (!logonUser) return myContext.btnClickOn();
+    navigate('/post-topic');
+    coinPB.play();
+  };
+
+  const moveFree = () => {
+    if (!logonUser) return myContext.btnClickOn();
+    navigate('/post-free');
+    coinPB.play();
+  };
 
   const handleMove = () => {
     FreeRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -49,6 +68,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
           <TopicButton
             onClick={() => {
               handleMoves();
+              buttonPB.play();
             }}
           >
             ABOUT PICBOY
@@ -60,6 +80,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
           <FreeButton
             onClick={() => {
               handleMove();
+              buttonPB.play();
             }}
           >
             HOW TO
@@ -92,11 +113,14 @@ const MainDesc = ({ moveRef, move2Ref }) => {
         <DescSecond>
           <Fade left>
             <Number2>#2</Number2>
-            <Title2>컨텐츠</Title2>
+            <Title2>간단한 컨텐츠</Title2>
             <Des2>
-              2개의 컨텐츠 중 선택하고 사용자들과
+              주제어를 정하고 그려보세요. 참여된 그림들을 보고 예측해서
+              그려봅시다.
               <br />
-              함께 만들수 있어요.
+              <br />
+              주제어 없이도 그려보세요. 마지막에 그려진 그림만 보고 예측해
+              그려봅시다.
             </Des2>
           </Fade>
         </DescSecond>
@@ -110,7 +134,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
             <Title3>
               자유롭게 저장하고
               <br />
-              공유 및 소통
+              공유 및 소통해 보세요!
             </Title3>
             <Des3>
               유저들과 같이 만드는 움짤을 공유, 소통하고 마음에 드는
@@ -130,9 +154,11 @@ const MainDesc = ({ moveRef, move2Ref }) => {
               텔레파시
             </Title4>
             <Des4>
-              제시어 없이 오직 유저들의 그림을 보고
+              유저들이 대체 어떤 상상을 하고 그렸을까요?
               <br />
-              의미를 찾고 예측할 수 없는 움짤을 만들어 보세요.
+              내 의도랑 같아서 자연스러운 결과물이 나와줄까요?
+              <br />
+              예측할 수 없는 재미를 즐겨보세요!
             </Des4>
           </DescFourth>
           <Descimg4 img={Desc4} />
@@ -217,9 +243,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
                 유저들과 그림을 그릴 수 있어요!
               </StartDescs>
               <StartButton
-                onClick={() => {
-                  navigate('/post-topic');
-                }}
+                onClick={moveTopic}
               >
                 제시어 그리러 가기
                 <Arrow src={Buttonarrow} alt="" />
@@ -233,9 +257,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
                 유저들과 그림을 그릴 수 있어요!
               </StartDescs>
               <StartButton
-                onClick={() => {
-                  navigate('/post-free');
-                }}
+                onClick={moveFree}
               >
                 자유주제 그리러 가기
                 <Arrow src={Buttonarrow} alt="" />
@@ -373,7 +395,8 @@ const Desc = css`
 `;
 
 const DescBox1 = styled(DescBox)`
-  margin-top: 100px;
+  margin-top: 500px;
+  height: 800px;
 `;
 
 const Descimg1 = styled(Descimg)`
@@ -398,7 +421,9 @@ const Des1 = styled.div`
   ${Desc}
 `;
 
-const DescBox2 = styled(DescBox)``;
+const DescBox2 = styled(DescBox)`
+  margin-top: 100px;
+`;
 
 const Descimg2 = styled(Descimg)`
   width: 37.5rem;
@@ -422,7 +447,9 @@ const Des2 = styled.div`
   ${Desc}
 `;
 
-const DescBox3 = styled(DescBox)``;
+const DescBox3 = styled(DescBox)`
+  margin-top: 100px;
+`;
 
 const Descimg3 = styled(Descimg)`
   width: 600px;
@@ -455,12 +482,13 @@ const DescBox4 = styled(DescBox)`
 const Descimg4 = styled(Descimg)`
   width: 600px;
   height: 400px;
-  margin-bottom: 60px;
+  margin-bottom: 150px;
   background: url(${(props) => props.img});
   animation-name: none;
 `;
 
 const DescFourth = styled.div`
+  margin-bottom: 150px;
   ${DescTextBox}
 `;
 
@@ -651,7 +679,7 @@ const BestImg1 = styled.div`
   ${({ theme }) => theme.backgroundSet('contain')};
   background: url(${Heart1});
   top: 15%;
-  left: 33%;
+  left: 35%;
   animation-duration: 1.5s;
   animation-iteration-count: infinite;
   animation-name: bounce1;

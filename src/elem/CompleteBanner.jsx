@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import Listbanner from '../images/Com/Listbanner.svg';
+import back from '../images/Com/back.png';
+import backscroll from '../images/Com/backscroll.png';
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -35,59 +36,70 @@ const CompleteBanner = (props) => {
   }, [pageY]);
 
   return (
-    <ImgBox className={hide && 'hide'}>
-      <span>COMPLETE</span>
-      <SelectBox>
-        <SelectButton
-          onClick={() => {
-            props.setProTap(0);
-          }}
-        >
-          <Underline>전체</Underline>
-        </SelectButton>
-        <SelectButton
-          onClick={() => {
-            props.setProTap(1);
-          }}
-        >
-          <Underline>제시어</Underline>
-        </SelectButton>
-        <SelectButton
-          onClick={() => {
-            props.setProTap(2);
-          }}
-        >
-          <Underline>자유</Underline>
-        </SelectButton>
-      </SelectBox>
-    </ImgBox>
+    <>
+      <Back />
+      <ImgBox className={hide && 'hide'}>
+        <span>COMPLETE</span>
+        <SelectBox>
+          <SelectButton
+            onClick={() => {
+              props.setProTap(0);
+            }}
+          >
+            <Underline color={'black'}>전체</Underline>
+          </SelectButton>
+          <SelectButton
+            onClick={() => {
+              props.setProTap(1);
+            }}
+          >
+            <Underline color={'#a3a3a3'}>제시어</Underline>
+          </SelectButton>
+          <SelectButton
+            onClick={() => {
+              props.setProTap(2);
+            }}
+          >
+            <Underline color={'#a3a3a3'}>자유</Underline>
+          </SelectButton>
+        </SelectBox>
+      </ImgBox>
+    </>
   );
 };
 
 export default CompleteBanner;
 
+const Back = styled.div`
+  width: 100%;
+  height: 636px;
+  background: url(${back});
+  ${({ theme }) => theme.backgroundSet('cover')};
+  position: fixed;
+`;
+
 const ImgBox = styled.div`
   width: 100%;
-  height: 300px;
+  height: 400px;
   ${({ theme }) => theme.flexSet('column', 'space-between', 'center')}
   text-align: center;
-  background: url(${Listbanner});
-  border: 0.5px solid #a3a3a3;
-  span {
-    margin-top: 140px;
-    font-family: 'SilkLight';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 65px;
-  }
+  background: url(${backscroll});
+  /* border: 1px solid black; */
 
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 99;
   transition: 0.4s ease;
   &.hide {
-    transform: translateY(-250px);
+    transform: translateY(-350px);
+  }
+  span {
+    margin-top: 180px;
+    font-family: 'SilkLight';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 65px;
   }
 `;
 
@@ -112,6 +124,7 @@ const SelectButton = styled.button`
 
 const Underline = styled.p`
   color: #a3a3a3;
+  color: ${(props) => props.color};
   display: inline-block;
   position: relative;
   text-decoration: none;

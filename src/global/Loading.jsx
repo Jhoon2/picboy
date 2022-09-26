@@ -19,7 +19,11 @@ const LoadingSpinner = styled.div`
   width: 100%;
   height: 800px;
   margin: 2rem auto;
-  background: white;
+  background: linear-gradient(
+    360deg,
+    #000000 -90.11%,
+    rgba(103, 103, 103, 0) 30.83%
+  );
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -9,7 +9,8 @@ import { useMyContext } from '../shared/ContextApi'
 import LoginErrorModal from '../components/login/LoginErrorModal'
 import {KAKAO_AUTH_URL} from '../shared/Kakao_oauth'
 import speechBubble from '../images/frame.png'
-
+import Listbanner from '../images/Com/Listbanner.svg';
+import Listfooter from '../images/picboy-bg-footer-2 1.png';
 
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
@@ -18,8 +19,7 @@ const Login = () => {
   const [focusedInput, setFocusedInput] = useState('');
 
   const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm();
-  
-  
+
   //일반 로그인버튼
   const onClickLogin = async (data) => {
     const info = {
@@ -32,8 +32,8 @@ const Login = () => {
 
     if (response.data.success) { window.location.href = '/'; }
     else {
-        myContext.btnClickOn();
-      }
+      myContext.btnClickOn();
+    }
 
   }
 
@@ -41,6 +41,7 @@ const Login = () => {
   return (
     <>
       <LoginContainer>
+        <ImgBox src={Listbanner} />
       {myContext.btnOpen ? <ErrorBox onClick={()=>myContext.btnClickOff()}>
         <LoginErrorModal />
       </ErrorBox> : null}
@@ -90,12 +91,15 @@ const Login = () => {
               </a>
             </LoginKaKaoButton>
           <SignMove onClick={() => { navigate('/join') }}>아직 회원이 아니신가요? <span style={{ fontWeight: 900 }}>회원가입</span ></SignMove>
-        </InputBox>
+          </InputBox>
+          <Footerimg src={Listfooter} />
       </FormContainer>
       </LoginContainer>
     </>
   );
 };
+
+
 const ErrorBox = styled.div`
   position: fixed;
   top: 0;
@@ -106,24 +110,29 @@ const ErrorBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2;
+  z-index: 9999;
 `;
 const LoginContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
+//배너
+const ImgBox = styled.img`
+  width: 100%;
+  position: absolute;
+  z-index: -100;
+`;
 const FormContainer = styled.div`
     max-width: 1200px;
-    height: 50vh;
-    margin-top: 160px;
-
+    z-index: 99 ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 260px;
 `
 const InputBox = styled.div`
   width: 900px;
-  height: 900px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /* height: 900px; */
   text-align: center;
 `;
 
@@ -222,5 +231,14 @@ const Errorsmessage = styled.div`
   font-size: 16px;
   text-align: left;
   color: red;
+`;
+const Footerimg = styled.img`
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom:0;
+  z-index: -100;
+
+ ${({ theme }) => theme.backgroundSet('cover')}
 `;
 export default Login;
