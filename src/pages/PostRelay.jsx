@@ -226,6 +226,11 @@ const PostRelay = () => {
   const [lastImg, setLastImg] = useState('');
 
   const imgInfoUrl = `post/gif/images/detail/${params.id}`;
+
+  useEffect(() => {
+    Callaxios();
+  },[])
+
   const Callaxios = () => {
     api
       .get(imgInfoUrl)
@@ -238,16 +243,7 @@ const PostRelay = () => {
         console.log(error);
       });
   };
-  api
-    .get(imgInfoUrl)
-    .then(function (response) {
-      const imgData = response.data.data;
-      setCountFrame(imgData);
-      setLastImg(imgData.imgUrl);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+
 
    //광클릭 막기
   const [clickCount, setClickCount] =useState(0)
