@@ -113,12 +113,14 @@ const ErrorBox = styled.div`
   z-index: 2;
 `;
 const LoginUserImg = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 32px;
+  height: 32px;
+  margin-left: 30px;
   border-radius: 50px;
   background-color: white;
 
   cursor: pointer;
+
 `;
 
 const SelectListBox = styled.div`

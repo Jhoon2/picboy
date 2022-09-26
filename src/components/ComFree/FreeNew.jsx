@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import Loadings from '../../global/Loading';
 import Report from '../../elem/Report';
 import LikeButton from '../../images/Com/like.svg';
@@ -22,12 +23,12 @@ const FreeNew = () => {
     setLoad(true);
     try {
       const { data } = await axios.get(
-        `${baseURL}/post/gif/topic-no/1?size=6&page=${page}`
+        `${baseURL}/post/gif/2/1?page=${page}&size=6`
       );
       if (!data) {
         return;
       }
-      setNewdata(newData.concat(data.data));
+      setNewdata(newData.concat(data.data.content));
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +77,7 @@ const FreeNew = () => {
       {load === true ? <Loadings /> : null}
       {newData.map((item, index) => {
         return (
-          <BestBox key={item.id}>
+          <BestBox key={uuidv4()}>
             <div style={{ position: 'relative' }}>
               <OverlayWrap productImg={item?.gifUrl}>
                 <Report item={item} />
@@ -86,6 +87,9 @@ const FreeNew = () => {
                   }}
                 >
                   <DescBox>
+                    <DescBox>
+                      <Keyword> FREE</Keyword>
+                    </DescBox>
                     <Download />
                     <Like />
                   </DescBox>
@@ -96,20 +100,43 @@ const FreeNew = () => {
             <BestDesc>
               <Profile img={item?.profileImg} />
               <Nickname>
-                {item?.nickname} 등 {item?.participantCount} 명
+                {item?.participantCount <= 0 ? (
+                  <>{item?.nickname} </>
+                ) : (
+                  <>
+                    {item?.nickname} 외 {item?.participantCount} 명
+                  </>
+                )}
               </Nickname>
               <InforBox>
                 <ViewsBox>
                   <ViewsImg />
-                  <DescText>{item?.viewCount}</DescText>
+                  {item?.viewCount > 999 ? (
+                    <DescText>999+</DescText>
+                  ) : (
+                    <DescText> {item?.viewCount}</DescText>
+                  )}
                 </ViewsBox>
                 <CommentBox>
                   <CommentImg />
-                  <DescText>{item?.commentCount}</DescText>
+                  {item?.commentCount > 999 ? (
+                    <DescText>999+</DescText>
+                  ) : (
+                    <DescText>
+                      <DescText> {item?.commentCount}</DescText>
+                    </DescText>
+                  )}
                 </CommentBox>
+
                 <LikeBox>
                   <LikesImg />
-                  <DescText>{item?.likeCount}</DescText>
+                  {item?.likeCount > 999 ? (
+                    <DescText>999+</DescText>
+                  ) : (
+                    <DescText>
+                      <DescText> {item?.likeCount}</DescText>
+                    </DescText>
+                  )}
                 </LikeBox>
               </InforBox>
             </BestDesc>
@@ -117,7 +144,7 @@ const FreeNew = () => {
         );
       })}
       <>
-        <div ref={setRef}>isLoading</div>
+        <div ref={setRef}></div>
       </>
     </ListBox>
   );
@@ -132,6 +159,8 @@ const Width = styled.div`
 const ListBox = styled.div`
   max-width: 1200px;
   margin: auto;
+  position: sticky;
+  z-index: 1;
 `;
 
 const BestBox = styled(Width)`
@@ -139,6 +168,11 @@ const BestBox = styled(Width)`
   margin-top: 50px;
   display: inline-block;
   margin-left: 35px;
+  background: white;
+  transition: 0.2s ease-in;
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const DescBox = styled(Width)`
@@ -162,6 +196,14 @@ const Profile = styled(Button)`
 const Span = styled.span`
   font-size: 30px;
   font-weight: 800;
+`;
+
+const Keyword = styled(Span)`
+  padding-top: 290px;
+  padding-left: 10px;
+  font-family: 'Noto Bold';
+  font-size: 20px;
+  color: white;
 `;
 
 const Download = styled.button`
@@ -189,6 +231,9 @@ const Overlay = styled.div`
   ${OverlaySize}
   margin-top: 100%;
   height: 300px;
+  background: white;
+
+  cursor: pointer;
   background: linear-gradient(
     360deg,
     #000000 -90.11%,
@@ -204,10 +249,7 @@ const OverlayWrap = styled.div`
   background: url(${(props) => props.productImg});
   ${({ theme }) => theme.backgroundSet('contain')};
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
-  transition: 0.2s ease-in;
-  &:hover {
-    transform: scale(1.05);
-  }
+
   &:hover ${Overlay} {
     margin-top: 20%;
   }
@@ -250,8 +292,8 @@ const CommentBox = styled.div`
 `;
 
 const CommentImg = styled.div`
-  width: 17px;
-  height: 15px;
+  width: 13px;
+  height: 13px;
   background: url(${userComm});
   ${({ theme }) => theme.backgroundSet('cover')}
   background-size: 100% 100%;
@@ -260,7 +302,10 @@ const CommentImg = styled.div`
 const LikeBox = styled(CommentBox)``;
 
 const LikesImg = styled(CommentImg)`
+  width: 14px;
+  height: 14px;
   background: url(${userLike});
+  background-size: 100% 100%;
 `;
 
 const ViewsBox = styled(CommentBox)``;
@@ -272,7 +317,7 @@ const ViewsImg = styled(CommentImg)`
 `;
 
 const DescText = styled.span`
-  margin-left: 5px;
+  margin-left: 2px;
   font-family: 'NotoLight';
   font-size: 13px;
   line-height: 20px;

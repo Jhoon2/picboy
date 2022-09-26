@@ -31,7 +31,7 @@ instance.interceptors.response.use( (response) => {
       config,
       response: { status },
     } = error;
-    if (status === 401) return window.location.href = '/login';
+    // if (status === 401) return window.location.href = '/login';
     // 권한없음 === Access 토큰 만료됐을 경우
   }
 );

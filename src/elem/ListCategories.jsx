@@ -164,7 +164,7 @@ const SelectListBox = styled.div`
   position: relative;
   top: 40px;
   right: 60px;
-  z-index: 1;
+  z-index: 2;
 `;
 
 const SelectList = styled.div`

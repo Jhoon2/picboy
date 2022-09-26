@@ -5,9 +5,6 @@ import { useMyContext } from '../shared/ContextApi';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
-// 소켓
-import { Stomp } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 import PostCategories from '../elem/PostCategories';
 import logo from '../images/logo.svg';
 import {
@@ -21,6 +18,10 @@ import ClickProfileModal from '../components/Header/ClickProfileModal';
 import basicImg from '../images/mypage/basicImg.png';
 import '../elem/Down'
 import { __getLogonUser } from '../redux/modules/UserPage';
+import { headerPB } from './sound';
+import Notification from '../elem/Notification';
+
+
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -34,44 +35,12 @@ const throttle = function (callback, waitTime) {
 };
 
 const Header = () => {
-
   const myToken = getCookieToken();
 
 
   const [messageList, setMessageList] = useState([]);
   const refreshToken = getRefreshToken();
-  const baseURL = process.env.REACT_APP_API_KEY;
-  const socket = new SockJS(`${baseURL}/socket/`, '', {
-    headers: {
-      Authorization: myToken,
-      'refresh-token': refreshToken,
-    },
-  });
 
-  // const stompClient = Stomp.over(socket);
-
-  useEffect(() => {
-    // stompConnect();
-  });
-
-  // const stompConnect = () => {
-  //   try {
-  //     stompClient.connect(
-  //       () => {
-  //         stompClient.subscribe(`/sub/${usernames}`, (data) => {
-  //           const returnMessage = JSON.parse(data.body);
-
-  //           setMessageList(returnMessage.message);
-  //         });
-  //       },
-  //       () => {}
-  //     );
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // };
-
-  //////////////////////////////////////////////////////
   const location = useLocation();
 
   const dispatch = useDispatch();
@@ -120,11 +89,13 @@ const Header = () => {
             alt=""
             onClick={() => {
               navigate('/');
+              headerPB.play();
             }}
           ></Logo>
           <ProceedingButton
             onClick={() => {
               navigate('/list');
+              headerPB.play();
             }}
           >
             PROCEEDING
@@ -132,18 +103,29 @@ const Header = () => {
           <CompleteButton
             onClick={() => {
               navigate('/CompList');
+              headerPB.play();
             }}
           >
             COMPLETE
           </CompleteButton>
-          <PostCategories />
-          {myToken ? (
-            <ClickProfileModal img={!loginUser&&loginUser ? basicImg : loginUser&&loginUser } />
-          ) : (
 
+          <PostCategories />
+
+          {myToken ? (
+            <>
+              <Notification />
+              {/* <LoginUserImg> */}
+            <ClickProfileModal img={!loginUser && loginUser ? basicImg : loginUser && loginUser}  
+            onClick={() => {
+              headerPB.play();
+                  }} />
+                {/* </LoginUserImg> */}
+              </>
+          ) : (
             <LoginButton
               onClick={() => {
                 navigate('/login');
+                headerPB.play();
               }}
             >
               LOGIN
@@ -170,11 +152,14 @@ const Button = styled.button`
 const HeaderArea = styled.div`
   position: relative;
   width: 100%;
+
   z-index: 9999;
 `;
 
 const HeaderContainer = styled.div`
   width: 100%;
+
+  margin: auto;
   position: fixed;
   top: 0;
   left: 0;
@@ -233,7 +218,4 @@ const LoginButton = styled(Button)`
     color: white;
   }
 `;
-
-
-
 

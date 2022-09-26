@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import '../elem/Down.css';
 import Down from '../elem/Down';
-import bubble1 from '../images/bubble1.png';
+import TopicBef from '../images/listCategory/TopicBef.svg';
+import TopicAft from '../images/listCategory/TopicAft.svg';
+import FreeBef from '../images/listCategory/Freebef.svg';
+import FreeAft from '../images/listCategory/FreeAft.svg';
 import right from '../images/right.png';
 import UseGetUser from '../hooks/UseGetUser';
 import { useMyContext } from '../shared/ContextApi';
-
 import AnyModal from '../elem/AnyModal';
+import { headerPB, coinPB } from '../global/sound';
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -52,8 +55,14 @@ const Categories = () => {
           <AnyModal title="회원정보" content="로그인 후 가능합니다" />
         </ErrorBox>
       ) : null}
+
       <SelectBox>
-        <DrawingBox onClick={() => setSelect(!select)}>
+        <DrawingBox
+          onClick={() => {
+            headerPB.play();
+            setSelect(!select);
+          }}
+        >
           <Select>
             <div>DRAWING</div>
           </Select>
@@ -62,11 +71,16 @@ const Categories = () => {
       <SelectListBox>
         <Down select={select}>
           <DownUl>
-            <Topic onClick={moveTopic}>
+            <Topic
+              onClick={() => {
+                coinPB.play();
+                moveTopic();
+              }}
+            >
               <Title>
-                <TopicBubble />
-                TOPIC
-                <Right left={'150px'} />
+                <TopicBubble img={TopicAft} />
+                제시어
+                <Right left={'160px'} />
               </Title>
               <Desc>
                 제시어를 설정해 유저들과 그림을
@@ -75,11 +89,16 @@ const Categories = () => {
               </Desc>
             </Topic>
             <HR />
-            <Free onClick={moveFree}>
+            <Free
+              onClick={() => {
+                coinPB.play();
+                moveFree();
+              }}
+            >
               <Title>
-                <TopicBubble />
-                Free
-                <Right left={'162px'} />
+                <FreeBubble img={FreeAft} />
+                자유
+                <Right left={'175px'} />
               </Title>
               <Desc>
                 제시어 없이 유저들과 그림을
@@ -117,7 +136,7 @@ const Label = css`
 `;
 
 const HR = styled.hr`
-  width: 273px;
+  width: 250px;
   margin-top: 20px;
   border: 0;
   height: 1px;
@@ -129,14 +148,21 @@ const Checkbox = css`
   opacity: 0;
 `;
 
-const SelectBox = styled.div`
-  display: flex;
+const SelectBox = styled.div``;
+
+const DownUl = styled.ul`
+  width: 300px;
+  height: 275px;
+  ${({ theme }) => theme.flexSet('column', 'flex-start', 'center')}
+  background: white;
+  padding: 25px 0px 10px 0px;
+  position: absolute;
+  border: 3px solid black;
 `;
 
 const DrawingBox = styled.div`
   width: 140px;
-  height: 40px;
-  margin-left: -120px;
+  height: 42px;
   text-align: center;
   border: 1px #a3a3a3 solid;
   cursor: pointer;
@@ -169,24 +195,26 @@ const SelectListBox = styled.div`
   width: 120px;
   position: relative;
   top: 10px;
-  right: 170px;
+  right: 90px;
   z-index: 1;
 `;
 
-const DownUl = styled.ul`
-    width: 280px;
-    min-height: 100px; 
-    background: white;
-    border: 3px solid black;
-    padding: 20px;
-`
+// const DownUl = styled.ul`
+//     width: 280px;
+//     min-height: 100px; 
+//     background: white;
+//     border: 3px solid black;
+//     padding: 20px;
+// `
 
 const Topic = styled.li`
+  margin-top: 10px;
   ${({ theme }) => theme.flexSet('column', 'flex-start', 'flex-start')}
   font-family: 'NotoBold';
   margin-left: 20px;
   font-size: 16px;
   color: #a3a3a3;
+  cursor: pointer;
   &:hover {
     color: black;
   }
@@ -202,6 +230,7 @@ const Desc = styled.span`
 `;
 
 const Title = styled.div`
+  /* margin-right: 50px; */
   font-family: 'NotoBold';
   font-weight: 700;
   font-size: 16px;
@@ -213,15 +242,16 @@ const TopicBubble = styled.div`
   width: 20px;
   height: 20px;
   margin-top: 7px;
-  margin-right: 5px;
-  background: url(${bubble1});
+  margin-right: 8px;
+  background: url(${(props) => props.img});
   ${({ theme }) => theme.backgroundSet('contain')}
 `;
+const FreeBubble = styled(TopicBubble)``;
 
 const Right = styled.div`
   width: 13px;
   height: 13px;
-  margin-top: 4px;
+  margin-top: 10px;
   margin-left: ${(props) => props.left};
   background: url(${right});
   ${({ theme }) => theme.backgroundSet('contain')}

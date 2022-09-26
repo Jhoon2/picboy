@@ -21,7 +21,7 @@ const Down = (props) => {
 
   const handleClickOutside = ({ target }) => {
     if (props.select && !outsideRef.current.contains(target))
-      props.setSelect(false);
+      props.select(false);
   };
 
   useEffect(() => {
