@@ -31,8 +31,12 @@ const throttle = function (callback, waitTime) {
 const Header = () => {
   const useGet = UseGetUser();
   const loginUser = useGet && useGet.data.data.profileImg;
-  const location = useLocation();
   const myToken = getCookieToken();
+  ////////////////////////////////////////////////////
+  const [messageList, setMessageList] = useState([]);
+  const refreshToken = getRefreshToken();
+
+  const location = useLocation();
 
   //usegetuser 훅을 쓸지 RTK로 할지 고민중
   // const dispatch = useDispatch();
