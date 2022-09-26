@@ -71,7 +71,9 @@ const ClickProfileModal = ({ img }) => {
             <DownUl>
               
                 <ProfileModalContainer >
-                  <ProfileImg src={img ? img : basicImg} />
+                  <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <ProfileImg src={img ? img : basicImg} />
+                  </div>
                   <ProfileNickname>{logonUser && logonUser.data.data.nickname}</ProfileNickname>
                   <ProfileUsername>{logonUser && logonUser.data.data.username}</ProfileUsername>
                 </ProfileModalContainer>
