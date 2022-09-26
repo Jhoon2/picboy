@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import api from '../../shared/apis'
 
 const baseURL = process.env.REACT_APP_API_KEY;
 
@@ -8,7 +9,7 @@ export const __getBest = createAsyncThunk(
   async (payload, thunkAPI) => {
     // console.log(payload)
     try {
-      const data = await axios.get(`${baseURL}/main/best-top10`);
+      const data = await api.get(`/main/best-top10`);
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

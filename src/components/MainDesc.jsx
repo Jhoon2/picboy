@@ -1,6 +1,9 @@
 import React, { useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useMyContext } from '../shared/ContextApi';
+import UseGetUser from '../hooks/UseGetUser';
+
 import Fade from 'react-reveal/Fade';
 import BestSlider from '../elem/BestSlider';
 import Howarrow from '../images/mainDesc/Howarrow.svg';
@@ -25,6 +28,20 @@ const MainDesc = ({ moveRef, move2Ref }) => {
   const navigate = useNavigate();
   const TopicgRef = useRef();
   const FreeRef = useRef();
+  const myContext = useMyContext();
+  const logonUser = UseGetUser();
+
+  const moveTopic = () => {
+    if (!logonUser) return myContext.btnClickOn();
+    navigate('/post-topic');
+    coinPB.play();
+  };
+
+  const moveFree = () => {
+    if (!logonUser) return myContext.btnClickOn();
+    navigate('/post-free');
+    coinPB.play();
+  };
 
   const handleMove = () => {
     FreeRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -226,10 +243,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
                 유저들과 그림을 그릴 수 있어요!
               </StartDescs>
               <StartButton
-                onClick={() => {
-                  navigate('/post-topic');
-                  coinPB.play();
-                }}
+                onClick={moveTopic}
               >
                 제시어 그리러 가기
                 <Arrow src={Buttonarrow} alt="" />
@@ -243,10 +257,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
                 유저들과 그림을 그릴 수 있어요!
               </StartDescs>
               <StartButton
-                onClick={() => {
-                  navigate('/post-free');
-                  coinPB.play();
-                }}
+                onClick={moveFree}
               >
                 자유주제 그리러 가기
                 <Arrow src={Buttonarrow} alt="" />

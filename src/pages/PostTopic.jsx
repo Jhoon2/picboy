@@ -2,7 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
+
 // import component
+import { useMyContext } from '../shared/ContextApi';
+import AnyModal from '../elem/AnyModal';
+import  api  from '../shared/apis';
+import instance from '../shared/apis';
+import vacantState from '../elem/vacantStateCanvas';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -28,8 +34,7 @@ import line12 from '../images/line12.png';
 const PostTopic = () => {
     const [frame, setFrame] = useState(0);
     const [canvasDone, setCanvasDone] = useState();
-    const accessToken = getCookieToken();
-    const refreshToken = getRefreshToken();
+    const myContext = useMyContext();
 
     const frameCount = (e) => {
         const target = e.target;
@@ -73,6 +78,8 @@ const PostTopic = () => {
         setCtx(canvasRef.current.getContext('2d'));
         setColorPreview('#000');
     }, []);
+
+
 
     const draw = (e) => {
         const X = Math.floor(e.clientX - canvasRef.current.offsetLeft);
@@ -226,9 +233,6 @@ const PostTopic = () => {
     ///////////////////////////
     // ajax
 
-    // const accessToken = localStorage.getItem("Authorization");
-    // const refreshToken = localStorage.getItem("Refresh-Token");
-    const baseURL = process.env.REACT_APP_API_KEY;
 
     // get
     // random topic
@@ -236,8 +240,8 @@ const PostTopic = () => {
     const [topicInputState, setTopicInputState] = useState('');
 
     const randomTopic = () => {
-        const url = `${baseURL}/post/random-topic`;
-        axios
+        const url = `/post/random-topic`;
+        api
             .get(url)
             .then(function (response) {
                 const RandomTopicApi = response.data.data.topic;
@@ -256,35 +260,39 @@ const PostTopic = () => {
         // console.log(topicInputState);
     };
 
+
+    //광클릭 막기
+    let clickCount = 0;
+
     // post
     const submitImg = () => {
         const canvas = canvasRef.current;
+
         const imgDataUrl = canvas.toDataURL('image/png');
         const topic = topicInputState || topicState;
         if (topic === '') {
-            alert('제시어를 입력해 주세요');
+            myContext.setTopicBtn(true)
             return;
         } else if (frame === 0) {
-            alert('프레임 개수를 설정해 주세요');
+            myContext.setSettingFrameBtn(true)
             return;
         }
-        axios
+        if (vacantState(canvas)) return myContext.setVacantCanvas(true)
+
+        if(clickCount !== 0) return 
+        instance
             .post(
-                `${baseURL}/post`,
+                `/post`,
                 {
                     topic: topic,
                     frameTotal: frame,
                     file: imgDataUrl,
                 },
-                {
-                    headers: {
-                        Authorization: accessToken,
-                        'Refresh-Token': refreshToken,
-                    },
-                }
             )
             .then(function (response) {
-                alert('그리기 완료!');
+                // console.log(response)
+                myContext.setDrawingDoneBtn(true)
+                ++clickCount
                 window.location.replace('/list');
             })
             .catch(function (error) {
@@ -297,6 +305,28 @@ const PostTopic = () => {
     }
 
     return (
+        <>
+        {myContext.topicBtn ? (
+        <ErrorBox onClick={() => myContext.setTopicBtn(false)}>
+          <AnyModal  content="제시어를 입력해주세요" />
+          </ErrorBox>
+      ) : null}
+        {myContext.setttingFrameBtn ? (
+        <ErrorBox onClick={() => myContext.setSettingFrameBtn(false)}>
+          <AnyModal  content="프레임 개수를 설정해주세요" />
+          </ErrorBox>
+      ) : null}
+      {myContext.drawingDoneBtn ? (
+        <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
+          <AnyModal  content="올리기가 완료되었습니다" />
+          </ErrorBox>
+            ) : null}
+        {myContext.vacantCanvas ? (
+        <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
+          <AnyModal  content="그림이 비어있습니다" />
+          </ErrorBox>
+      ) : null}
+  
         <div style={{ position: 'relative' }}>
             <PostTitle onClick={hi}>TOPIC</PostTitle>
             <PostContentsWrap>
@@ -517,9 +547,22 @@ const PostTopic = () => {
             </PostContentsWrap>
             <BgTopStyle src={BgTop} alt="" />
             <BgBottomStyle src={BgBottom} alt="" />
-        </div>
+            </div >
+            </>
     );
 };
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 
 const BgTopStyle = styled.img`
   width: 100%;

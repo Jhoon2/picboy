@@ -1,127 +1,189 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
-import { removeCookieToken } from '../../shared/Cookie';
+import React, { useRef, useState, useEffect } from 'react';
 import { useMyContext } from '../../shared/ContextApi';
-// import { useNavigate } from 'react-router-dom';
-import UseGetUser from '../../hooks/UseGetUser';
 
-const ClickProfileModal = ({ shown, close }) => {
+import { removeCookieToken } from '../../shared/Cookie';
+
+import styled, { css } from 'styled-components';
+import UseGetUser from '../../hooks/UseGetUser';
+import '../../elem/Down'
+import Down from '../../elem/Down';
+import basicImg from '../../images/mypage/basicImg.png'
+//로그아웃 알림창
+import AnyModal from '../../elem/AnyModal';
+
+const ClickProfileModal = ({ img }) => {
   const myContext = useMyContext();
+  const node = useRef();
+
   const logonUser = UseGetUser();
-  // console.log(logonUser)
   const logonUsername = logonUser && logonUser.data.data.username;
 
   const [selectContent, setSelectContent] = useState('myPage');
 
-  // const navigate = useNavigate();
-  console.log(logonUsername);
+  //열고 닫는 함수
+  const [select, setSelect] = useState(false);
+
   const myPage = (e) => {
     setSelectContent(e.target.id);
-    // navigate(`/user-profile/${logonUsername}`)
     window.location.href = `/user-profile/${logonUsername}`;
     myContext.setLogonProfileImg(false);
   };
   const Logout = (e) => {
+    myContext.setLogoutBtn(true)
     setSelectContent(e.target.id);
     removeCookieToken();
-    window.location.href = '/';
   };
 
-  return shown ? (
-    <Overlay
-      onClick={() => {
-        close();
-      }}
-    >
-      <OverlayPosition>
-        <OverlayContainer>
-          <ModalContainer
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <ModalText
-              id="myPage"
-              name="myPage"
-              onClick={myPage}
-              selectContent={selectContent}
-            >
-              마이페이지
-            </ModalText>
-            <TextBr />
-            <ModalText
-              id="Logout"
-              name="Logout"
-              onClick={Logout}
-              categoryContent={selectContent}
-            >
-              로그아웃
-            </ModalText>
-          </ModalContainer>
-        </OverlayContainer>
-      </OverlayPosition>
-    </Overlay>
-  ) : null;
-};
+  useEffect(() => {
+    
+    const clickOutside = (e) => {
+      if (select && node.current && !node.current.contains(e.target)) {
+        setSelect(false);
+      }
+    };
 
-const Overlay = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  top: 0px;
+    document.addEventListener('mousedown', clickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', clickOutside);
+    };
+  }, [select]);
+
+
+  let anyData = 1;
+  if(!logonUser?.data?.data) return
+  return (
+    <div ref={node}>
+         {myContext.logoutBtn ? (
+        <ErrorBox onClick={() => window.location.href = '/'}>
+          <AnyModal title="안내" content="로그아웃 되었습니다" anyData={anyData} />
+        </ErrorBox>
+      ) : null}
+      <div>
+        <div onClick={() => setSelect(!select)}>
+          <LoginUserImg src={img}/>
+        </div>
+      </div>
+
+          <SelectListBox onClick={(e) => {
+                  e.stopPropagation();
+                }}>
+          <Down select={select}>
+            <DownUl>
+              
+                <div style={{height:'169px'}}>
+                  <ProfileImg src={img} />
+                  <ProfileNickname>{logonUser && logonUser.data.data.nickname}</ProfileNickname>
+                  <ProfileUsername>{logonUser && logonUser.data.data.username}</ProfileUsername>
+                </div>
+                <TextBr />
+                <ModalText
+                    id="myPage"
+                    name="myPage"
+                    onClick={myPage}
+                    selectContent={selectContent}
+                  >
+                    마이페이지
+                  </ModalText>
+                  <TextBr />
+                  <ModalText
+                    id="Logout"
+                    name="Logout"
+                    onClick={Logout}
+                    categoryContent={selectContent}
+                  >
+                    로그아웃
+                  </ModalText>
+                 </DownUl>
+                </Down>
+          </SelectListBox>
+    </div>
+  )
+};
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
-`;
-const OverlayContainer = styled.div`
-  width: 200px;
-  position: absolute;
-`;
-const OverlayPosition = styled.div`
-  height: 30px;
-  position: relative;
-  top: 100px;
-  left: 530px;
-`;
-const ModalContainer = styled.div`
-  width: 132px;
-  height: 100px;
-  position: absolute;
+  align-items: center;
   z-index: 2;
+`;
+const LoginUserImg = styled.img`
+  width: 32px;
+  height: 32px;
+  margin-left: 30px;
+  border-radius: 50px;
+  background-color: white;
+
+  cursor: pointer;
+
+`;
+
+const SelectListBox = styled.div`
+  width: 150px;
+  position: relative;
+  top: 10px;
+  right: 170px;
+  z-index: 1;
+`;
+
+const DownUl = styled.ul`
+  width: 268px;
+  height: 284px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor:default;
   border: 2px solid #000000;
   background-color: white;
 `;
 
+const ProfileImg = styled.img`
+  width: 70px;
+  height: 70px;
+  margin-top: 22px;
+  margin-left: 5px;
+`
+const ProfileNickname = styled.div`
+  font-weight: ${(props) => props.theme.BodyBD};
+  font-size: ${(props) => props.theme.Caption1};
+  margin-top: 11px;
+  text-align: center;
+
+`
+const ProfileUsername = styled.div`
+   font-weight: ${(props) => props.theme.HeadlineRG};
+  font-size: ${(props) => props.theme.Caption3};
+  text-align: center;
+`
+
 const ModalText = styled.div`
-  width: 132px;
-  height: 23px;
-  margin-top: 5px;
-  padding: 15px 24px;
+  width: 268px;
+  height: 56px;
+
   display: flex;
+  text-align: center;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  gap: 10px;
   font-family: 'Noto Sans KR';
   font-style: normal;
-  font-weight: 700;
-  font-size: 16px;
-  color: ${(props) =>
-    props.name === props.selectContent ? '#000000' : '#A3A3A3'};
+  font-size: ${(props) => props.theme.Caption2};
+  color: ${(props) => props.theme.inactive};
   cursor: pointer;
 
-  :first-child {
-    margin-top: 15px;
+  :hover {
+    height: 60px;
+    background-color:${(props) => props.theme.basic};
   }
 `;
 const TextBr = styled.div`
-  width: 84px;
+  width: 264px;
   height: 0px;
-  margin-top: 5px;
-  margin-left: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;

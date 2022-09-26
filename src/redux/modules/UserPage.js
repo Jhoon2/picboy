@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
 import  instance  from "../../shared/apis";
+import api from '../../shared/apis'
 
 const baseURL = process.env.REACT_APP_API_KEY;
 
@@ -27,7 +28,7 @@ export const __getUserPage = createAsyncThunk(
   async (payload, thunkAPI) => {
     // console.log(payload)
     try {
-      const data = await axios.get(`${baseURL}/mypage/user-info?username=${payload.username}`
+      const data = await api.get(`/mypage/user-info?username=${payload.username}`
       )
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
@@ -38,16 +39,14 @@ export const __getUserPage = createAsyncThunk(
 export const __getUserData = createAsyncThunk(
   'userData/getUserData',
   async (payload, thunkAPI) => {
-    // console.log(payload)
     const tab = payload?.tab ?? 0;
     const category = payload?.category ?? 1;
     const username = payload?.username;
     const page = payload?.page ?? 0;
-    // console.log('받은 정보들', tab,category,username,page)
+    
     try {
-      const data = await axios.get
-      (`${baseURL}/mypage/post/${tab}/${category}?username=${username}&page=${page}&size=6`)
-      // console.log('받은 데이터',data)
+      const data = await api.get
+      (`/mypage/post/${tab}/${category}?username=${username}&page=${page}&size=6`)
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       console.log(error)
@@ -59,7 +58,6 @@ export const __getUserData = createAsyncThunk(
 export const __hidePost = createAsyncThunk(
   'userHidePost/hidePost',
   async (payload, thunkAPI) => {
-    // console.log(payload)
     try {
       const response = await instance.post(
         `mypage/post-hidden/${payload}`
@@ -133,10 +131,14 @@ export const logonUserSlice = createSlice({
       state.isLoading = false;
           state.logonUser = action.payload;
       },
-    // [__getLogonUser.rejected]: (state, action) => {
-    //   state.isLoading = false;
-    //   state.error = action.payload;
-    // }
+    [__selectIconImg.fulfilled]: (state, action) => {
+        state.isLoading = false;
+        state.logonUser.profileImg = action.payload.img
+    }, 
+    [__putEditProfileImg.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.logonUser.profileImg = action.payload.img
+    }
   }
   })
   
@@ -144,20 +146,24 @@ export const userPageSlice = createSlice({
   name: 'userPage',
   initialState:{
       userPage: [],
-      isLoading: false,
+    isLoading: false,
+      isSuccess: false,
       error: null,
   },
   reducers: {},
   extraReducers: {
       [__getUserPage.pending]: (state) => {
-          state.isLoading = true;
+      state.isLoading = true;
+      state.isSuccess= false;
       },
     [__getUserPage.fulfilled]: (state, action) => {
-          state.isLoading = false;
+      state.isLoading = false;
+      state.isSuccess= true;
           state.userPage = action.payload;
       },
       [__getUserPage.rejected]: (state, action) => {
-          state.isLoading = false;
+        state.isLoading = false;
+        state.isSuccess= false;
           state.error = action.payload;
     },
     [__putEditNickname.fulfilled]: (state, action) => {
@@ -186,18 +192,17 @@ export const userdataSlice = createSlice({
     },
     [__getUserData.fulfilled]: (state, action) => {
       state.isLoading = false;
-      // console.log('페이로드 페이지', action.payload.pageable.pageNumber)
-      // console.log('액션페이로드',action.payload)
       if (action.payload.pageable.pageNumber === 0) {
         state.userData = action.payload
       } else {
-        state.userData.content = [...state.userData.content].concat(action.payload.content)
+          state.userData.content = [...state.userData.content].concat(action.payload.content)
       }
     },
     [__getUserData.rejected]: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
+    
     [__hidePost.fulfilled]: (state, action) => {
       state.isLoading = false;
       state.userData.content = state.userData.content.filter(

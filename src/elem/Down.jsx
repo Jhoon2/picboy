@@ -48,4 +48,7 @@ export default Down;
 
 const SelectList = styled.div`
   position: absolute;
+  right: -75px;
+  cursor: pointer;
+
 `;

@@ -25,7 +25,6 @@ const ErrorContainer = styled.div`
   flex-direction: column;
   position: fixed;
   border: 2px solid black;
-  z-index: 2;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

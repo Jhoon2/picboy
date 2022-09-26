@@ -1,26 +1,40 @@
-import React from 'react'
+import React,{useRef, useEffect} from 'react'
 import styled from 'styled-components'
 import basicImg from '../../images/basicImg.jpg'
 import grayPerson from '../../images/mypage/Person.png'
 
 const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) => {
-  // const acceptMeData = data && data.filter((person) =>
-  //   person.nickname !== myNickname
-  // )
-  // data = data.substr(1)
-  console.log(data)
+
+  const node = useRef();
+
   //다른 사람 이동
   const moveOtherPerson = (id) => {
     window.location.href = `/user-profile/${id}`
   }
+
+  useEffect(() => {
+    const clickOutside = (e) => {
+      if (!node.current.contains(e.target)) {
+        close()
+      }
+    };
+
+    document.addEventListener('mousedown', clickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', clickOutside);
+    };
+  }, []);
+
   return shown ? (
-    <FullOverLay onClick={()=>{close()}}>
+    <FullOverLay  ref={node}>
       <Overlay >
         <OverlayPosition >
           <OverlayContainer>
             <ModalContainer onClick={e => { e.stopPropagation() }}>
               <FirstAuthor style={{marginTop:'10px'}}>최초 작성자</FirstAuthor>
-              <div style={{display:'flex', padding:'10px', justifyContent:'space-between'}}>
+              <div style={{ display: 'flex', padding: '10px', justifyContent: 'space-between',cursor:'pointer' }}
+              onClick={() => moveOtherPerson(data[0].username)}>
                 <div style={{ display: 'flex' }}>
                   <FirstImg src={FirstProfileImg} />
                   <FirstNickname style={{marginTop:'3px'}}>{Firstickname }</FirstNickname>
@@ -49,23 +63,25 @@ const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) 
   ) : null
 }
 const FullOverLay = styled.div`
-  width: 100vw;
-  height: 70vh;
-  margin-top: -1000px;
-  margin-left: -900px;
-   position: absolute;
-  /* background-color: gray; */
+  width: 1800px;
+  position: relative;
+  top: -1000px;
+
 `
 
 const Overlay = styled.div`
   z-index: 9999;
+  position: absolute;
+  top: 550px;
+  left: 380px;
+
 `
 const OverlayContainer = styled.div`
   /* width: 200px; */
   /* position: absolute; */
   position: absolute;
-    top: 550px;
-    left: 1300px;
+    /* top: 550px;
+    left: 1300px; */
 `
 const OverlayPosition = styled.div`
   height: 30px;
@@ -77,7 +93,7 @@ const ModalContainer = styled.div`
   height: 161px;
   overflow: auto;
   position: absolute;
-  z-index: 2;
+  z-index: 9999;
   border: 2px solid #000000;
   background-color: white;
 `

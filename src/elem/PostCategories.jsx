@@ -199,10 +199,19 @@ const SelectListBox = styled.div`
   z-index: 1;
 `;
 
+// const DownUl = styled.ul`
+//     width: 280px;
+//     min-height: 100px; 
+//     background: white;
+//     border: 3px solid black;
+//     padding: 20px;
+// `
+
 const Topic = styled.li`
   margin-top: 10px;
   ${({ theme }) => theme.flexSet('column', 'flex-start', 'flex-start')}
   font-family: 'NotoBold';
+  margin-left: 20px;
   font-size: 16px;
   color: #a3a3a3;
   cursor: pointer;
