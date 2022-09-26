@@ -6,6 +6,7 @@ import CompTopic from '../components/CompTopic';
 import CompFree from '../components/CompFree';
 import CompleteBanner from '../elem/CompleteBanner';
 import TopScroll from '../global/TopScroll';
+import footer from '../images/Com/footer.svg';
 
 const CompList = () => {
   const [proTap, setProTap] = useState(0);
@@ -21,6 +22,7 @@ const CompList = () => {
       <Grid width="1200px" margin="0 auto">
         <ListComp proTap={proTap} />
       </Grid>
+      <Footers />
     </ListContainer>
   );
 };
@@ -28,3 +30,10 @@ const CompList = () => {
 export default CompList;
 
 const ListContainer = styled.div``;
+
+const Footers = styled.div`
+  width: 100%;
+  height: 320px;
+  background: url(${footer});
+  ${({ theme }) => theme.backgroundSet('cover')}
+`;

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import Loadings from '../global/Loading';
-import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 
 const ProgressAll = () => {
   const navigate = useNavigate();
@@ -11,6 +11,9 @@ const ProgressAll = () => {
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
   const [ref, setRef] = useState(null);
+  const preventRef = useRef(true); //옵저버 중복 실행 방지
+  const endRef = useRef(false); //모든 글 로드 확인
+
   const baseURL = process.env.REACT_APP_API_KEY;
 
   const getProgressData = async () => {
@@ -34,15 +37,9 @@ const ProgressAll = () => {
     getProgressData();
   }, [page]);
 
-  useEffect(() => {
-    window.onbeforeunload = function pushRefresh() {
-      window.scrollTo(0, 0);
-    };
-  }, []);
-
   const options = {
     rootMargin: '30px',
-    threshold: 0.5,
+    threshold: 1.0,
   };
 
   const onIntersect = (entries, observer) => {
@@ -69,8 +66,9 @@ const ProgressAll = () => {
   return (
     <ListBox>
       {load === true ? <Loadings /> : null}
+
       {newData?.map((item, index) => (
-        <BestBox key={item.id}>
+        <BestBox key={uuidv4()}>
           <div style={{ position: 'relative' }}>
             <OverlayWrap
               productImg={item?.imgUrl}
@@ -80,7 +78,11 @@ const ProgressAll = () => {
             >
               <Overlay>
                 <DescBox>
-                  <Keyword> {item?.topic}</Keyword>
+                  {item?.topic === null ? (
+                    <Keyword>FREE</Keyword>
+                  ) : (
+                    <Keyword> {item?.topic}</Keyword>
+                  )}
                 </DescBox>
               </Overlay>
             </OverlayWrap>
@@ -89,13 +91,19 @@ const ProgressAll = () => {
           <BestDesc>
             <Profile img={item?.profileImg} />
             <Nickname>
-              {item?.nickname} 등 {item?.participantCount} 명
+              {item?.participantCount <= 0 ? (
+                <>{item?.nickname} </>
+              ) : (
+                <>
+                  {item?.nickname} 외 {item?.participantCount} 명
+                </>
+              )}
             </Nickname>
           </BestDesc>
         </BestBox>
       ))}
       <>
-        <div ref={setRef}>isLoading</div>
+        <div ref={setRef}></div>
       </>
     </ListBox>
   );
@@ -110,6 +118,8 @@ const Width = styled.div`
 const ListBox = styled.div`
   max-width: 1200px;
   margin: auto;
+  position: sticky;
+  z-index: 1;
 `;
 
 const BestBox = styled(Width)`
@@ -118,6 +128,10 @@ const BestBox = styled(Width)`
   display: inline-block;
   margin-left: 35px;
   background: white;
+  transition: 0.2s ease-in;
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const BestDesc = styled(Width)`
@@ -178,7 +192,7 @@ const OverlaySize = css`
 const Overlay = styled.div`
   ${OverlaySize}
   margin-top: 100%;
-  height: 350px;
+  height: 300px;
   background: white;
 
   cursor: pointer;
@@ -197,11 +211,7 @@ const OverlayWrap = styled.div`
   background: url(${(props) => props.productImg});
   ${({ theme }) => theme.backgroundSet('contain')};
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
-  transition: 0.2s ease-in;
 
-  &:hover {
-    transform: scale(1.05);
-  }
   &:hover ${Overlay} {
     margin-top: 10%;
   }

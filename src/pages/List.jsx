@@ -7,7 +7,7 @@ import ProgressFree from '../components/ProgressFree';
 import ProgressTopic from '../components/ProgressTopic';
 import ProgressBanner from '../elem/ProgressBanner';
 import TopScroll from '../global/TopScroll';
-import { useMyContext } from '../shared/ContextApi';
+import footer from '../images/Com/footer.svg';
 
 const List = () => {
   const [proTap, setProTap] = useState(0);
@@ -26,6 +26,7 @@ const List = () => {
           <ListComp proTap={proTap} />
         </Grid>
       </ListBox>
+      <Footers />
     </ListContainer>
   );
 };
@@ -38,3 +39,10 @@ const ListContainer = styled.div`
 `;
 
 const ListBox = styled.div``;
+
+const Footers = styled.div`
+  width: 100%;
+  height: 320px;
+  background: url(${footer});
+  ${({ theme }) => theme.backgroundSet('cover')}
+`;

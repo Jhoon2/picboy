@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useDispatch, useSelector } from 'react-redux';
 import { __getBest } from '../redux/modules/Best';
 import first from '../images/mainDesc/first.svg';
@@ -11,6 +13,7 @@ import third from '../images/mainDesc/third.svg';
 import banner from '../images/mainDesc/banner.svg';
 
 const BestSlider = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { bests } = useSelector((state) => state.bests);
 
@@ -31,7 +34,9 @@ const BestSlider = () => {
     slidesToShow: 3,
     centerPadding: '200px',
     pauseOnHover: true,
-    touchThreshold: 100,
+    touchThreshold: 1,
+    autoplay: true,
+    draggable: true,
     responsive: [
       // 반응형 웹 구현 옵션
       {
@@ -66,7 +71,7 @@ const BestSlider = () => {
 
         {top7?.map((item, index) => {
           return (
-            <div key={item} className="box">
+            <div key={uuidv4()} className="box">
               <Rankimg src={item.gifUrl} alt="" />
             </div>
           );
@@ -97,11 +102,12 @@ const Rankimg = styled.img`
 
 const cssstyle = css`
   .center .slick-center .box {
-    position: relative;
     height: 410px;
+    position: relative;
     background: url(${banner});
     background-position: center;
     background-size: 100% 100%;
+    cursor: pointer;
   }
 
   .box {

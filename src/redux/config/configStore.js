@@ -5,6 +5,8 @@ import { userPageSlice } from '../modules/UserPage';
 import { userdataSlice } from '../modules/UserPage';
 import { logonUserSlice } from '../modules/UserPage';
 import { reportSlice } from '../modules/Report';
+import { getNotiSlice } from '../modules/Noti';
+import { notiSlice } from '../modules/Noti';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +16,9 @@ const store = configureStore({
     reports: reportSlice.reducer,
     userpage: userPageSlice.reducer,
     userdata: userdataSlice.reducer,
+
+    getNotis: getNotiSlice.reducer,
+    notis: notiSlice.reducer,
   },
 });
 

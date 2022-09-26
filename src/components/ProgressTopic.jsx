@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loadings from '../global/Loading';
+import { v4 as uuidv4 } from 'uuid';
 
 const ProgressTopic = () => {
   const navigate = useNavigate();
@@ -25,19 +26,14 @@ const ProgressTopic = () => {
     } catch (error) {
       console.log(error);
     }
-
     setLoad(false);
   };
+
+  console.log(newData.length);
 
   useEffect(() => {
     getProgressData();
   }, [page]);
-
-  useEffect(() => {
-    window.onbeforeunload = function pushRefresh() {
-      window.scrollTo(0, 0);
-    };
-  }, []);
 
   const options = {
     rootMargin: '30px',
@@ -69,7 +65,7 @@ const ProgressTopic = () => {
     <ListBox>
       {load === true ? <Loadings /> : null}
       {newData?.map((item, index) => (
-        <BestBox key={item.id}>
+        <BestBox key={uuidv4()}>
           <div style={{ position: 'relative' }}>
             <OverlayWrap
               productImg={item?.imgUrl}
@@ -88,13 +84,19 @@ const ProgressTopic = () => {
           <BestDesc>
             <Profile img={item?.profileImg} />
             <Nickname>
-              {item?.nickname} 외 {item?.participantCount} 명
+              {item?.participantCount <= 0 ? (
+                <>{item?.nickname} </>
+              ) : (
+                <>
+                  {item?.nickname} 외 {item?.participantCount} 명
+                </>
+              )}
             </Nickname>
           </BestDesc>
         </BestBox>
       ))}
       <>
-        <div ref={setRef}>isLoading</div>
+        <div ref={setRef}></div>
       </>
     </ListBox>
   );
@@ -109,6 +111,8 @@ const Width = styled.div`
 const ListBox = styled.div`
   max-width: 1200px;
   margin: auto;
+  position: sticky;
+  z-index: 1;
 `;
 
 const BestBox = styled(Width)`
@@ -116,6 +120,11 @@ const BestBox = styled(Width)`
   margin-top: 50px;
   display: inline-block;
   margin-left: 35px;
+  background: white;
+  transition: 0.2s ease-in;
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const BestDesc = styled(Width)`
@@ -176,8 +185,10 @@ const OverlaySize = css`
 const Overlay = styled.div`
   ${OverlaySize}
   margin-top: 100%;
-  height: 350px;
-  background: rgb(212, 212, 212);
+  height: 300px;
+  background: white;
+
+  cursor: pointer;
   background: linear-gradient(
     360deg,
     #000000 -90.11%,
@@ -193,11 +204,7 @@ const OverlayWrap = styled.div`
   background: url(${(props) => props.productImg});
   ${({ theme }) => theme.backgroundSet('contain')};
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
-  transition: 0.2s ease-in;
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.05);
-  }
+
   &:hover ${Overlay} {
     margin-top: 10%;
   }
