@@ -59,12 +59,16 @@ const PostTopic = () => {
     const [lineWeight, setLineWeight] = useState(6);
     const [lineOpacity, setLineOpacity] = useState(1);
     const [rectState, setRectState] = useState(false);
+    const [circleState, setCircleState] = useState(false);
     const [pencilState, setPencilState] = useState(false);
     const [paintState, setPaintState] = useState(false);
     const [eraserState, setEraserState] = useState(false);
+    const [lineState, setLineState] = useState(false);
     const [colorPreview, setColorPreview] = useState();
+    const [LineWeightCount, setLineWeightCount] = useState('3');
     const [undoState, setUndoState] = useState(0);
     const [redoState, setRedoState] = useState(0);
+    const [pos, setPos] = useState([]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -78,46 +82,58 @@ const PostTopic = () => {
 
 
     const draw = (e) => {
-        const X = e.clientX - canvasRef.current.offsetLeft;
-        const Y = e.clientY - canvasRef.current.offsetTop + window.scrollY;
+        const X = Math.floor(e.clientX - canvasRef.current.offsetLeft);
+        const Y = Math.floor(e.clientY - canvasRef.current.offsetTop + window.scrollY);
         if (isPainting === true) {
             if (rectState === true) {
-                // console.log('hi')
-                ctx.strokeRect(X, Y, X - canvasRef.current.offsetLeft, Y - canvasRef.current.offsetTop
-                );
-            } else if (eraserState === true) {
-                ctx.strokeStyle = 'white';
+                ctx.fillRect(pos[0], pos[1], X - pos[0], Y - pos[1]);
+            } else if (circleState === true) {
+                ctx.lineWidth = lineWeight;
+                // x축, y축, 반지름, 시작각도, 마지막각도
+                ctx.arc(pos[0], pos[1], 50, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (lineState === true) {
+                ctx.lineWidth = LineWeightCount;
+                ctx.moveTo(pos[0], pos[1]);
+                ctx.lineTo(X, Y);
+                ctx.stroke()
+                console.log('hi');
+            } else {
+                ctx.lineWidth = LineWeightCount;
+                ctx.lineTo(X, Y);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+                if (eraserState === true) {
+                    ctx.strokeStyle = '#fff';
+                }
             }
-            ctx.lineWidth = lineWeight;
-            ctx.lineTo(X, Y);
-            ctx.lineCap = 'round';
-            ctx.stroke();
         } else {
             ctx.beginPath();
             ctx.moveTo(X, Y);
         }
     };
     // 사용자 마우스 움직임 감지
-    const startPainting = () => {
+    const startPainting = (e) => {
         setIsPainting(true);
+        setPos([e.clientX - canvasRef.current.offsetLeft, e.clientY - canvasRef.current.offsetTop + window.scrollY]);
     };
 
     const cancelPainting = () => {
         setIsPainting(false);
-        setRectState(false);
     };
 
     // 선 굵기 변경
     const lineWeightHandler = (e) => {
-        console.log(e.target.id);
         if (e.target.id) {
             setLineWeight(ctx.lineWidth = e.target.id);
+            setLineWeightCount(e.target.id);
         }
     }
 
     // 선 투명도 변경
     const onLineOpacityChange = (e) => {
-        setLineOpacity((ctx.globalAlpha = e.target.value));
+        setLineOpacity(ctx.globalAlpha = e.target.value);
     };
 
     // paint
@@ -126,6 +142,8 @@ const PostTopic = () => {
         setPencilState(false);
         setRectState(false);
         setEraserState(false);
+        setCircleState(false);
+        setLineState(false);
         ctx.fillRect(0, 0, 500, 500);
     };
 
@@ -135,6 +153,10 @@ const PostTopic = () => {
         setRectState(false);
         setPaintState(false);
         setEraserState(false);
+        setCircleState(false);
+        setLineState(false);
+        ctx.strokeStyle = colorPreview;
+        ctx.fillStyle = colorPreview;
     };
 
     // eraser
@@ -143,6 +165,8 @@ const PostTopic = () => {
         setRectState(false);
         setPencilState(false);
         setPaintState(false);
+        setCircleState(false);
+        setLineState(false);
     };
 
     // undo
@@ -154,7 +178,32 @@ const PostTopic = () => {
     // draw Rect
     const drawRect = () => {
         setRectState(true);
+        setEraserState(false);
+        setPencilState(false);
+        setPaintState(false);
+        setCircleState(false);
+        setLineState(false);
     };
+
+    // draw circle
+    const drawCircle = () => {
+        setCircleState(true);
+        setRectState(false);
+        setEraserState(false);
+        setPencilState(false);
+        setPaintState(false);
+        setLineState(false);
+    };
+
+    // draw line
+    const drawLine = () => {
+        setLineState(true);
+        setCircleState(false);
+        setRectState(false);
+        setEraserState(false);
+        setPencilState(false);
+        setPaintState(false);
+    }
 
     // color change
     const colorChange = (e) => {
@@ -163,6 +212,23 @@ const PostTopic = () => {
         ctx.fillStyle = colorValue;
         setColorPreview(e.target.id);
     };
+
+    const hi = (e) => {
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        ctx.strokeStyle = color;
+    }
+
+    const colors = [
+        "#FF9D9D",
+        "#FFC69D",
+        "#FFE49D",
+        "#EBFF9D",
+        "#B1FF9D",
+        "#9DFFB9",
+        "#9DE8FF",
+        "#9DADFF",
+        "#BD9DFF",
+    ];
 
     ///////////////////////////
     // ajax
@@ -234,6 +300,10 @@ const PostTopic = () => {
             });
     };
 
+    const cancleNav = () => {
+        window.location.replace("/CompList");
+    }
+
     return (
         <>
         {myContext.topicBtn ? (
@@ -258,7 +328,7 @@ const PostTopic = () => {
       ) : null}
   
         <div style={{ position: 'relative' }}>
-            <PostTitle>TOPIC</PostTitle>
+            <PostTitle onClick={hi}>TOPIC</PostTitle>
             <PostContentsWrap>
                 <CanvasWrap>
                     <PaintOptionWrap>
@@ -287,15 +357,23 @@ const PostTopic = () => {
                                     </tr>
                                     <tr>
                                         {/*  */}
-                                        <Td>
+                                        <Td style={rectState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
                                             <IcButton onClick={drawRect}>
-                                                <img src={rectangle} alt="rectangle" />
+                                                <img
+                                                    src={rectangle}
+                                                    alt="rectangle"
+                                                    style={rectState ? { filter: 'invert(100%)' } : {}}
+                                                />
                                             </IcButton>
 
                                         </Td>
-                                        <Td>
-                                            <IcButton>
-                                                <img src={circle} alt="circle" />
+                                        <Td style={circleState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                            <IcButton onClick={drawCircle}>
+                                                <img
+                                                    src={circle}
+                                                    alt="circle"
+                                                    style={circleState ? { filter: 'invert(100%)' } : {}}
+                                                />
                                             </IcButton>
                                         </Td>
                                     </tr>
@@ -309,9 +387,13 @@ const PostTopic = () => {
                                                 />
                                             </IcButton>
                                         </Td>
-                                        <Td>
-                                            <IcButton>
-                                                <img src={line} alt="line" />
+                                        <Td style={lineState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                            <IcButton onClick={drawLine}>
+                                                <img
+                                                    src={line}
+                                                    alt="line"
+                                                    style={lineState ? { filter: 'invert(100%)' } : {}}
+                                                />
                                             </IcButton>
                                         </Td>
                                     </tr>
@@ -386,36 +468,20 @@ const PostTopic = () => {
                         </Table>
                         <LineStyle>
                             <RangeWrap>
-                                <div>
-                                    <img src={stroke} alt="stroke" style={{ margin: '10px 0 4px 8px' }} />
-                                </div>
+                                <img src={stroke} alt="stroke" style={{ width: '24px', margin: '10px 0 10px 8px' }} />
                                 <LineWeightCustomWrap>
-                                    {/* <LineWeightCustom onClick={lineWeightHandler}>
-                                        <LineWeight size={'6px'} id="6" />
-                                    </LineWeightCustom>
-                                    <LineWeightCustom onClick={lineWeightHandler}>
-                                        <LineWeight size={'8px'} id="8" />
-                                    </LineWeightCustom>
-                                    <LineWeightCustom onClick={lineWeightHandler}>
-                                        <LineWeight size={'10px'} id="10" />
-                                    </LineWeightCustom>
-                                    <LineWeightCustom onClick={lineWeightHandler}>
-                                        <LineWeight size={'12px'} id="12" />
-                                    </LineWeightCustom> */}
-                                    <LineWeight src={line6} id="6" onClick={lineWeightHandler} alt='' />
-                                    <LineWeight src={line8} id="8" onClick={lineWeightHandler} alt='' />
-                                    <LineWeight src={line10} id="10" onClick={lineWeightHandler} alt='' />
-                                    <LineWeight src={line12} id="12" onClick={lineWeightHandler} alt='' />
+                                    <LineWeight src={line6} id="3" onClick={lineWeightHandler} style={LineWeightCount === '3' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                    <LineWeight src={line8} id="8" onClick={lineWeightHandler} style={LineWeightCount === '8' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                    <LineWeight src={line10} id="14" onClick={lineWeightHandler} style={LineWeightCount === '14' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                    <LineWeight src={line12} id="20" onClick={lineWeightHandler} style={LineWeightCount === '20' ? { filter: 'brightness(0%)' } : {}} alt='' />
                                 </LineWeightCustomWrap>
                             </RangeWrap>
                             <RangeWrap>
-                                <div>
-                                    <img
-                                        src={waterdrop}
-                                        alt="waterdrop"
-                                        style={{ margin: '10px 2px 4px 0px' }}
-                                    />
-                                </div>
+                                <img
+                                    src={waterdrop}
+                                    alt="waterdrop"
+                                    style={{ width: '24px', margin: '10px 2px -1px 2px' }}
+                                />
                                 <LineOpacityCustomWrap>
                                     <LineOpacityCustom
                                         id="line-opacity"
@@ -472,7 +538,10 @@ const PostTopic = () => {
                                 <ModeFrameBtn onClick={frameCount} id="24" style={frame === 24 ? { backgroundColor: 'black', color: 'white' } : {}}>24개</ModeFrameBtn>
                             </ModeFrameBtnWrap>
                         </ModeFrameWrap>
-                        <PostBtn onClick={submitImg}>추가하기</PostBtn>
+                        <PostBtnWrap>
+                            <PostBtn onClick={cancleNav}>취소하기</PostBtn>
+                            <PostBtn onClick={submitImg}>추가하기</PostBtn>
+                        </PostBtnWrap>
                     </ModeWrap>
                 </ContetnsWrap>
             </PostContentsWrap>
@@ -613,12 +682,18 @@ const ModeFrameBtn = styled.div`
   cursor: pointer;
 `;
 
-const PostBtn = styled.div`
+const PostBtnWrap = styled.div`
     width: 291px;
-  position: absolute;
-  bottom: 32px;
+    position: absolute;
+    bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const PostBtn = styled.div`
+width: 136px;
   display: inline;
-  padding: 13px 58px;
+  padding: 13px 0;
   font-size: 16px;
   font-weight: 700;
   text-align: center;
@@ -655,25 +730,12 @@ const LineWeightCustomWrap = styled.div`
     margin-left: 10px;
 `;
 
-const LineWeightCustom = styled.div`
-    width: 20px;
-    height: 20px;
-    margin-bottom: 8px;
-    border-radius: 50%;
-    border: 1px solid ${(props) => props.size};;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background-color: #fff;
-`;
-
 const LineWeight = styled.img`
     margin-bottom: 2px;
 `;
 
 const LineOpacityCustomWrap = styled.div`
-    width: 10px;
+  width: 10px;
   height: 63px;
   margin-left: -45px;
   margin-top: 52px;
@@ -681,7 +743,13 @@ const LineOpacityCustomWrap = styled.div`
 
 const LineOpacityCustom = styled.input`
   transform: rotate(-90deg);
-  margin-left: -10px;
+  margin-left: 8px;
+  width: 102px;
+  height: 8px;
+  -webkit-appearance: none;
+    background: #fff;
+    border: 2px solid #000;
+    accent-color: #000;
 `;
 
 const IcButton = styled.div`
@@ -730,6 +798,7 @@ const ToolBox = styled.div`
 `;
 
 const LineStyle = styled.div`
+    height: 164px;
   display: flex;
   border: 2px solid #000;
   position: relative;
@@ -739,6 +808,8 @@ const LineStyle = styled.div`
 const RangeWrap = styled.div`
   display: flex;
   flex-direction: column;
+  background-color: #fff;
+  width: 50%;
 `;
 
 export default PostTopic;

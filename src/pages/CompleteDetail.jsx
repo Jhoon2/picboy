@@ -212,7 +212,6 @@ const CompleteDetail = () => {
                   :
                   <BtnImg src={LikeBefore} onClick={likeHandler} alt="" />
               }
-
             </ContentsBtn>
             <ContentsLine />
             <SuggestionInfo>
