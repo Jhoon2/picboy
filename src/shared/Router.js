@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 // pages import
@@ -20,6 +20,11 @@ import Footer from '../global/Footer';
 import KakaoLogin from '../pages/KakaoLogin';
 // import { getCookieToken } from '../shared/Cookie'
 const Router = () => {
+  useEffect(() => {
+    window.onbeforeunload = function pushRefresh() {
+      window.scrollTo(0, 0);
+    };
+  }, []);
   return (
     <Context>
       <BrowserRouter>

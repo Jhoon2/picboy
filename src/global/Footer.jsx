@@ -19,11 +19,11 @@ const Footer = () => {
           <span>BE</span> Lee Dong-Keon | Shin Sun-Ho | Jang Chang-Kyoon | Jeong
           Yong-Wook
         </Desc>
-        <Sub>DESIGN</Sub>
+        <Sub1>DESIGN</Sub1>
         <Desc>KIM NAYOUNG</Desc>
         <End>@ 2022 PICBOY ALL RIGHT RESERVERD</End>
       </LogoBox>
-      <LogoBox>ㅎㅇ</LogoBox>
+      <LogoBox></LogoBox>
     </FooterContainer>
   );
 };
@@ -46,12 +46,13 @@ const LogoBox = styled.div`
 const Title = styled.div`
   width: 200px;
   height: 100px;
+
   background: url(${footerimg});
-  ${({ theme }) => theme.backgroundSet('')};
+  ${({ theme }) => theme.backgroundSet('contain')};
 `;
 
 const Sub = styled.div`
-  margin-top: 30px;
+  margin-top: 20px;
   font-family: 'PopLight';
   font-weight: 700;
   font-size: 14px;
@@ -60,8 +61,13 @@ const Sub = styled.div`
   color: #ffffff;
 `;
 
+const Sub1 = styled(Sub)`
+  margin-top: 50px;
+`;
+
 const Desc = styled.div`
-  margin-top: 20px;
+  margin-top: 10px;
+  /* margin-left: 10px; */
   font-family: 'PopLight';
   font-weight: 500;
   font-size: 12px;

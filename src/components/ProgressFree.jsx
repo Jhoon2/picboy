@@ -33,12 +33,6 @@ const BestFree = () => {
     getProgressData();
   }, [page]);
 
-  useEffect(() => {
-    window.onbeforeunload = function pushRefresh() {
-      window.scrollTo(0, 0);
-    };
-  }, []);
-
   const options = {
     rootMargin: '30px',
     threshold: 0.5,
@@ -65,8 +59,6 @@ const BestFree = () => {
     return () => observer && observer.disconnect();
   }, [ref]);
 
-  console.log(newData);
-
   return (
     <ListBox>
       {load === true ? <Loadings /> : null}
@@ -80,11 +72,19 @@ const BestFree = () => {
           />
           <BestDesc>
             <Profile img={item?.profileImg} />
-            <Nickname>{item?.nickname}</Nickname>
+            <Nickname>
+              {item?.participantCount <= 0 ? (
+                <>{item?.nickname} </>
+              ) : (
+                <>
+                  {item?.nickname} 외 {item?.participantCount} 명
+                </>
+              )}
+            </Nickname>
           </BestDesc>
         </BestBox>
       ))}
-      <div ref={setRef}>.</div>
+      <div ref={setRef}></div>
     </ListBox>
   );
 };
@@ -98,6 +98,8 @@ const Width = styled.div`
 const ListBox = styled.div`
   max-width: 1200px;
   margin: auto;
+  position: sticky;
+  z-index: 1;
 `;
 
 const BestBox = styled(Width)`
@@ -105,6 +107,11 @@ const BestBox = styled(Width)`
   margin-top: 50px;
   display: inline-block;
   margin-left: 35px;
+  background: white;
+  transition: 0.2s ease-in;
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const BestImg = styled.div`
@@ -115,11 +122,7 @@ const BestImg = styled.div`
   ${({ theme }) => theme.backgroundSet('contain')};
 
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);
-  transition: 0.2s ease-in;
   cursor: pointer;
-  &:hover {
-    transform: scale(1.05);
-  }
 `;
 
 const BestDesc = styled(Width)`

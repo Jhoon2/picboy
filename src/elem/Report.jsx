@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -9,6 +9,7 @@ import reportAft from '../images/Com/reportAft.svg';
 const Report = ({ item }) => {
   const dispatch = useDispatch();
   const [select, setSelect] = useState(false);
+  const [text, setText] = useState(false);
 
   const id = item.id;
 
@@ -16,8 +17,23 @@ const Report = ({ item }) => {
     dispatch(__postReport(id));
   }
 
+  const node = useRef();
+  useEffect(() => {
+    const clickOutside = (e) => {
+      if (select && node.current && !node.current.contains(e.target)) {
+        setSelect(false);
+      }
+    };
+
+    document.addEventListener('mousedown', clickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', clickOutside);
+    };
+  }, [select]);
+
   return (
-    <>
+    <div ref={node}>
       <SelectBox>
         <Select>
           <div onClick={() => setSelect(!select)}>...</div>
@@ -30,11 +46,12 @@ const Report = ({ item }) => {
               <New>
                 <ReportButton
                   onClick={() => {
+                    setText(!text);
                     onReport();
                   }}
                 >
                   <Newimg img={reportBef}>
-                    <Text>신고</Text>
+                    <Text> {text ? '신고취소' : '신고하기'}</Text>
                   </Newimg>
                 </ReportButton>
               </New>
@@ -42,7 +59,7 @@ const Report = ({ item }) => {
           </SelectList>
         )}
       </SelectListBox>
-    </>
+    </div>
   );
 };
 
@@ -115,13 +132,13 @@ const Newimg = styled.div`
 `;
 
 const Text = styled.div`
-  width: 30px;
-  margin-left: 25px;
-  margin-top: -3px;
+  width: 60px;
+  margin-left: 18px;
+  margin-top: -5px;
   font-family: 'Noto Sans KR';
   font-style: normal;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 15px;
   line-height: 180%;
   letter-spacing: -0.02em;
   color: #a3a3a3;

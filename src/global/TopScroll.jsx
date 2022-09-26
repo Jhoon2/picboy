@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import topbutton from '../images/topbutton.svg';
+import { upPB } from './sound';
 
 //버튼 색상
 
@@ -43,7 +44,12 @@ const TopScroll = () => {
   return (
     <>
       {BtnStatus ? (
-        <TopScrolls onClick={handleTop}></TopScrolls>
+        <TopScrolls
+          onClick={() => {
+            handleTop();
+            upPB.play();
+          }}
+        ></TopScrolls>
       ) : (
         <ScrollActive />
       )}
