@@ -32,14 +32,16 @@ import line10 from '../images/line10.png';
 import line12 from '../images/line12.png';
 import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/canvas-bottom-bg.png';
+import Frame from '../images/canvas-frame.png';
 
 const PostRelay = () => {
-  const myContext = useMyContext()
+  const myContext = useMyContext();
+  const accessToken = getCookieToken();
+
   /////////////////////////////////
   // canvas
   // useRef를 이용해 canvas 엘리먼트에 접근
   const canvasRef = useRef(null);
-  const accessToken = getCookieToken();
 
   const [ctx, setCtx] = useState();
   const [isPainting, setIsPainting] = useState(false);
@@ -53,9 +55,13 @@ const PostRelay = () => {
   const [lineState, setLineState] = useState(false);
   const [colorPreview, setColorPreview] = useState();
   const [LineWeightCount, setLineWeightCount] = useState('3');
-  const [undoState, setUndoState] = useState(0);
-  const [redoState, setRedoState] = useState(0);
+  const [undoBoolean, setUndoBoolean] = useState(false);
+  const [redoBoolean, setRedoBoolean] = useState(false);
   const [pos, setPos] = useState([]);
+  const [imgArr, setImgArr] = useState([]);
+  const [step, setStep] = useState(-1);
+
+  const canvas = canvasRef.current;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -65,6 +71,17 @@ const PostRelay = () => {
     setCtx(canvasRef.current.getContext('2d'));
     setColorPreview('#000');
   }, []);
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = Frame;
+    image.onload = function () {
+      ctx.drawImage(image, 0, 0);
+    }
+  }, [ctx]);
+
+  // const imgURL = canvas.toDataURL();
+  // console.log(imgURL);
 
   const draw = (e) => {
     const X = Math.floor(e.clientX - canvasRef.current.offsetLeft);
@@ -82,7 +99,8 @@ const PostRelay = () => {
         ctx.moveTo(pos[0], pos[1]);
         ctx.lineTo(X, Y);
         ctx.stroke()
-        console.log('hi');
+      } else if (paintState === true) {
+        ctx.fillRect(0, 0, 500, 500);
       } else {
         ctx.lineWidth = LineWeightCount;
         ctx.lineTo(X, Y);
@@ -104,7 +122,25 @@ const PostRelay = () => {
     setPos([e.clientX - canvasRef.current.offsetLeft, e.clientY - canvasRef.current.offsetTop + window.scrollY]);
   };
 
+  //////////////////////////
+  //////////////////////////
+  // mouse up
   const cancelPainting = () => {
+    setIsPainting(false);
+    setStep(step + 1);
+    console.log(step);
+    if (step < imgArr.length) {
+      imgArr.length = step + 2
+    }
+    // else if (step > imgArr.length) {
+    //     imgArr.length = step + 2
+    // }
+    const imgURL = canvas.toDataURL();
+    setImgArr([...imgArr, imgURL]);
+    console.log(imgArr);
+  };
+
+  const cancelPaintingLeave = () => {
     setIsPainting(false);
   };
 
@@ -129,7 +165,6 @@ const PostRelay = () => {
     setEraserState(false);
     setCircleState(false);
     setLineState(false);
-    ctx.fillRect(0, 0, 500, 500);
   };
 
   // pencil
@@ -154,11 +189,39 @@ const PostRelay = () => {
     setLineState(false);
   };
 
+  //////////////////////////
+  //////////////////////////
   // undo
-  const undoHandler = (e) => { };
+  const undoHandler = (e) => {
+    if (step > 0) {
+      setUndoBoolean(true);
+      console.log('hi');
+      setStep(step - 1);
+      console.log(step)
+      const undoImage = new Image();
+      undoImage.src = imgArr[step];
+
+      undoImage.onload = function () {
+        ctx.drawImage(undoImage, 0, 0, 500, 500);
+        setUndoBoolean(false);
+      }
+    }
+  };
 
   // redo
-  const redoHandler = (e) => { };
+  const redoHandler = (e) => {
+    if (step < imgArr.length) {
+      setRedoBoolean(true);
+      setStep(step + 1);
+      console.log(step)
+      const redoImage = new Image();
+      redoImage.src = imgArr[step];
+      redoImage.onload = function () {
+        ctx.drawImage(redoImage, 0, 0, 500, 500);
+      }
+      setRedoBoolean(false);
+    }
+  };
 
   // draw Rect
   const drawRect = () => {
@@ -198,22 +261,6 @@ const PostRelay = () => {
     setColorPreview(e.target.id);
   };
 
-  const hi = (e) => {
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    ctx.strokeStyle = color;
-  }
-
-  const colors = [
-    "#FF9D9D",
-    "#FFC69D",
-    "#FFE49D",
-    "#EBFF9D",
-    "#B1FF9D",
-    "#9DFFB9",
-    "#9DE8FF",
-    "#9DADFF",
-    "#BD9DFF",
-  ];
 
   ///////////////////////////
   // ajax
@@ -390,20 +437,22 @@ const PostRelay = () => {
                     </Td>
                   </tr>
                   <tr>
-                    <Td>
-                      <IcButton
-                        onClick={undoHandler}
-                        disabled={undoState === 0}
-                      >
-                        <img src={undo} alt="undo" />
+                    <Td style={undoBoolean ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                      <IcButton onClick={undoHandler}>
+                        <img
+                          src={undo}
+                          alt="undo"
+                          style={undoBoolean ? { filter: 'invert(100%)' } : {}}
+                        />
                       </IcButton>
                     </Td>
-                    <Td>
-                      <IcButton
-                        onClick={redoHandler}
-                        disabled={redoState === 0}
-                      >
-                        <img src={redo} alt="redo" />
+                    <Td style={redoBoolean ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                      <IcButton onClick={redoHandler} >
+                        <img
+                          src={redo}
+                          alt="redo"
+                          style={redoBoolean ? { filter: 'invert(100%)' } : {}}
+                        />
                       </IcButton>
                     </Td>
                   </tr>
@@ -531,7 +580,7 @@ const PostRelay = () => {
             <ModeFrameWrap>
               <ModeFrameTitle>프레임</ModeFrameTitle>
               <ModeFrameArticle>
-                {countFrame.frameTotal}번째 중 {countFrame.frameNum}번째
+                {countFrame.frameTotal}번째 중 {countFrame.frameNum + 1}번째
               </ModeFrameArticle>
             </ModeFrameWrap>
             <ToggleWrap style={toggleBoolean ? { backgroundColor: '#000' } : {}}>

@@ -27,7 +27,7 @@ import AnyModal from '../elem/AnyModal';
 
 //apis
 import { anyApis } from '../shared/apis';
-import  instance  from '../shared/apis';
+import instance from '../shared/apis';
 import { api } from '../shared/apis';
 
 const CompleteDetail = () => {
@@ -115,7 +115,7 @@ const CompleteDetail = () => {
         like: 0
       }
       anyApis.liked(params.id, info)
-  
+
         .then(function (response) {
           setLikeApi(response.data.data.like);
           // console.log(response)
@@ -149,108 +149,106 @@ const CompleteDetail = () => {
   // save image
   const saveImg = () => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
-    
+
   }
-  
+
 
   return (
     <>
-        {myContext.commetApplyBtn ? (
+      {myContext.commetApplyBtn ? (
         <ErrorBox onClick={() => myContext.setCommetApplyBtn(false)}>
           <AnyModal title="회원정보" content="로그인 후 가능합니다" />
         </ErrorBox>
       ) : null}
-    <div style={{ position: 'relative' }}>
-      <TitleBanner>
-        <div onClick={arrowNav}><TitleArrow src={Arrow} alt="" /></div>
-        <ContentsTitle>COMPLETE</ContentsTitle>
-      </TitleBanner>
-      <WidthWrap>
+      <div style={{ position: 'relative' }}>
+        <TitleBanner>
+          <div onClick={arrowNav}><TitleArrow src={Arrow} alt="" /></div>
+          <ContentsTitle>COMPLETE</ContentsTitle>
+        </TitleBanner>
+        <WidthWrap>
 
 
-        {/* git / img info start */}
-        <GifInfo>
-          <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
-          <ImgListToggleWrap>
-            <ImgListToggleText>사용자 정보 한번에 보기</ImgListToggleText>
-            <ToggleWrap style={toggleBoolean ? { backgroundColor: '#000' } : {}}>
-              <ToggleInput type="checkbox" onClick={toggleHandler} />
-              <ToggleCheck style={toggleBoolean ? { left: '52%' } : {}} />
-            </ToggleWrap>
-          </ImgListToggleWrap>
-          <Slider {...settings}>
-            {
-              imgList && imgList.map((img) => (
-                <ImgListWrap key={img.frameNum} >
-                  <ImgList src={img.imgUrl} alt="" />
-                  <ImgListHoverInfoWrap
-                    style={toggleBoolean ? { backgroundColor: 'rgba(0, 0, 0, 0.5)' } : { opacity: '0' }}
-                  >
-                    <ImgListHoverFrameInfo>{img.frameNum}/{gif.frameTotal}</ImgListHoverFrameInfo>
-                    <ImgListHoverUserInfoWrap>
-                      <ImgListHoverUserProfile src={img.profileimg} alt="" />
-                      <ImgListHoverUserNickName>{img.nickname}</ImgListHoverUserNickName>
-                    </ImgListHoverUserInfoWrap>
-                  </ImgListHoverInfoWrap>
-                </ImgListWrap>
-              ))
-            }
-          </Slider>
-          {/* git / img info end */}
-
-          {/* topic info start */}
-          <Community>
-              <ContentsBtn>
-              <a href={`${baseURL}/download?postId=${Number(params.id)}&fileName=${gif.gifUrl}`}  onClick={saveImg}>
-              <DownloadImg  />
-              </a>
-             
-
+          {/* git / img info start */}
+          <GifInfo>
+            <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
+            <ImgListToggleWrap>
+              <ImgListToggleText>사용자 정보 한번에 보기</ImgListToggleText>
+              <ToggleWrap style={toggleBoolean ? { backgroundColor: '#000' } : {}}>
+                <ToggleInput type="checkbox" onClick={toggleHandler} />
+                <ToggleCheck style={toggleBoolean ? { left: '52%' } : {}} />
+              </ToggleWrap>
+            </ImgListToggleWrap>
+            <Slider {...settings}>
               {
-                likeApi ?
-                  <BtnImg src={LikeClick} onClick={likeHandler} alt="" />
-                  :
-                  <BtnImg src={LikeBefore} onClick={likeHandler} alt="" />
+                imgList && imgList.map((img) => (
+                  <ImgListWrap key={img.frameNum} >
+                    <ImgList src={img.imgUrl} alt="" />
+                    <ImgListHoverInfoWrap
+                      style={toggleBoolean ? { backgroundColor: 'rgba(0, 0, 0, 0.5)' } : { opacity: '0' }}
+                    >
+                      <ImgListHoverFrameInfo>{img.frameNum}/{gif.frameTotal}</ImgListHoverFrameInfo>
+                      <ImgListHoverUserInfoWrap>
+                        <ImgListHoverUserProfile src={img.profileimg} alt="" />
+                        <ImgListHoverUserNickName>{img.nickname}</ImgListHoverUserNickName>
+                      </ImgListHoverUserInfoWrap>
+                    </ImgListHoverInfoWrap>
+                  </ImgListWrap>
+                ))
               }
-            </ContentsBtn>
-            <ContentsLine />
-            <SuggestionInfo>
-              <SuggestionInfoTitleWrap>
-                <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
-                <SuggestionInfoLikeCountWrap>
-                  <img src={LikeCount} alt="" />
-                  <SuggestionInfoLikeCount>{likeCountState}</SuggestionInfoLikeCount>
-                </SuggestionInfoLikeCountWrap>
-              </SuggestionInfoTitleWrap>
-              <Suggestion>{
-                gif.topic === null ? <div>제시어가 없습니다.</div> : `${gif.topic}`
-              }</Suggestion>
-            </SuggestionInfo>
-            {/* topic info end */}
+            </Slider>
+            {/* git / img info end */}
 
-
-            {/* comment start */}
-            <CommentWrap>
-              <CommentTitle>댓글<span style={{ marginLeft: '8px', color: '#a3a3a3' }}>{comments.length}</span></CommentTitle>
-              <ContentsLine />
-              <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
-              <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
-              <CommentList style={comments.length === 0 ? { border: 'none' } : {}}>
+            {/* topic info start */}
+            <Community>
+              <ContentsBtn>
+                <a href={`${baseURL}/download?postId=${Number(params.id)}&fileName=${gif.gifUrl}`} onClick={saveImg}>
+                  <DownloadImg />
+                </a>
                 {
-                  comments && comments.map((commentList, idx) =>
-                    <CommentBox commentList={commentList} key={idx} />
-                  )
+                  likeApi ?
+                    <BtnImg src={LikeClick} onClick={likeHandler} alt="" />
+                    :
+                    <BtnImg src={LikeBefore} onClick={likeHandler} alt="" />
                 }
-              </CommentList>
-            </CommentWrap>
-            {/* comment end */}
-          </Community>
-        </GifInfo>
-        <BgTopStyle src={BgTop} alt='' />
-        <BgBottomStyle src={BgBottom} alt='' />
-      </WidthWrap>
+              </ContentsBtn>
+              <ContentsLine />
+              <SuggestionInfo>
+                <SuggestionInfoTitleWrap>
+                  <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
+                  <SuggestionInfoLikeCountWrap>
+                    <img src={LikeCount} alt="" />
+                    <SuggestionInfoLikeCount>{likeCountState}</SuggestionInfoLikeCount>
+                  </SuggestionInfoLikeCountWrap>
+                </SuggestionInfoTitleWrap>
+                <Suggestion>{
+                  gif.topic === null ? <div>제시어가 없습니다.</div> : `${gif.topic}`
+                }</Suggestion>
+              </SuggestionInfo>
+              {/* topic info end */}
+
+
+              {/* comment start */}
+              <CommentWrap>
+                <CommentTitle>댓글<span style={{ marginLeft: '8px', color: '#a3a3a3' }}>{comments.length}</span></CommentTitle>
+                <ContentsLine />
+                <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
+                <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
+                <CommentList style={comments.length === 0 ? { border: 'none' } : {}}>
+                  {
+                    comments && comments.map((commentList, idx) =>
+                      <CommentBox commentList={commentList} key={idx} />
+                    )
+                  }
+                </CommentList>
+              </CommentWrap>
+              {/* comment end */}
+            </Community>
+          </GifInfo>
+          <BgTopStyle src={BgTop} alt='' />
+          <BgBottomStyle src={BgBottom} alt='' />
+        </WidthWrap>
       </div>
-      </>
+    </>
   )
 }
 const ErrorBox = styled.div`

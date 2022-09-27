@@ -30,6 +30,8 @@ import line6 from '../images/line6.png';
 import line8 from '../images/line8.png';
 import line10 from '../images/line10.png';
 import line12 from '../images/line12.png';
+import Frame from '../images/canvas-frame.png';
+import RangeBg from '../images/range-bg.png';
 import { castDraft } from 'immer';
 
 const PostTopic = () => {
@@ -67,9 +69,13 @@ const PostTopic = () => {
     const [lineState, setLineState] = useState(false);
     const [colorPreview, setColorPreview] = useState();
     const [LineWeightCount, setLineWeightCount] = useState('3');
-    const [undoState, setUndoState] = useState(0);
-    const [redoState, setRedoState] = useState(0);
+    const [undoBoolean, setUndoBoolean] = useState(false);
+    const [redoBoolean, setRedoBoolean] = useState(false);
     const [pos, setPos] = useState([]);
+    const [imgArr, setImgArr] = useState([]);
+    const [step, setStep] = useState(-1);
+
+    const canvas = canvasRef.current;
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -78,11 +84,18 @@ const PostTopic = () => {
         setPencilState(true);
         setCtx(canvasRef.current.getContext('2d'));
         setColorPreview('#000');
-        ctx.fillStyle = "black";
-        ctx.fillRect(0, 0, 500, 500);
     }, []);
 
+    useEffect(() => {
+        const image = new Image();
+        image.src = Frame;
+        image.onload = function () {
+            ctx.drawImage(image, 0, 0);
+        }
+    }, [ctx]);
 
+    // const imgURL = canvas.toDataURL();
+    // console.log(imgURL);
 
     const draw = (e) => {
         const X = Math.floor(e.clientX - canvasRef.current.offsetLeft);
@@ -100,7 +113,8 @@ const PostTopic = () => {
                 ctx.moveTo(pos[0], pos[1]);
                 ctx.lineTo(X, Y);
                 ctx.stroke()
-                console.log('hi');
+            } else if (paintState === true) {
+                ctx.fillRect(0, 0, 500, 500);
             } else {
                 ctx.lineWidth = LineWeightCount;
                 ctx.lineTo(X, Y);
@@ -122,7 +136,25 @@ const PostTopic = () => {
         setPos([e.clientX - canvasRef.current.offsetLeft, e.clientY - canvasRef.current.offsetTop + window.scrollY]);
     };
 
+    //////////////////////////
+    //////////////////////////
+    // mouse up
     const cancelPainting = () => {
+        setIsPainting(false);
+        setStep(step + 1);
+        console.log(step);
+        if (step < imgArr.length) {
+            imgArr.length = step + 2
+        }
+        // else if (step > imgArr.length) {
+        //     imgArr.length = step + 2
+        // }
+        const imgURL = canvas.toDataURL();
+        setImgArr([...imgArr, imgURL]);
+        console.log(imgArr);
+    };
+
+    const cancelPaintingLeave = () => {
         setIsPainting(false);
     };
 
@@ -147,7 +179,6 @@ const PostTopic = () => {
         setEraserState(false);
         setCircleState(false);
         setLineState(false);
-        ctx.fillRect(0, 0, 500, 500);
     };
 
     // pencil
@@ -172,11 +203,39 @@ const PostTopic = () => {
         setLineState(false);
     };
 
+    //////////////////////////
+    //////////////////////////
     // undo
-    const undoHandler = (e) => { };
+    const undoHandler = (e) => {
+        if (step > 0) {
+            setUndoBoolean(true);
+            console.log('hi');
+            setStep(step - 1);
+            console.log(step)
+            const undoImage = new Image();
+            undoImage.src = imgArr[step];
+
+            undoImage.onload = function () {
+                ctx.drawImage(undoImage, 0, 0, 500, 500);
+                setUndoBoolean(false);
+            }
+        }
+    };
 
     // redo
-    const redoHandler = (e) => { };
+    const redoHandler = (e) => {
+        if (step < imgArr.length) {
+            setRedoBoolean(true);
+            setStep(step + 1);
+            console.log(step)
+            const redoImage = new Image();
+            redoImage.src = imgArr[step];
+            redoImage.onload = function () {
+                ctx.drawImage(redoImage, 0, 0, 500, 500);
+            }
+            setRedoBoolean(false);
+        }
+    };
 
     // draw Rect
     const drawRect = () => {
@@ -216,23 +275,6 @@ const PostTopic = () => {
         setColorPreview(e.target.id);
     };
 
-    const hi = (e) => {
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        ctx.strokeStyle = color;
-    }
-
-    const colors = [
-        "#FF9D9D",
-        "#FFC69D",
-        "#FFE49D",
-        "#EBFF9D",
-        "#B1FF9D",
-        "#9DFFB9",
-        "#9DE8FF",
-        "#9DADFF",
-        "#BD9DFF",
-    ];
-
     ///////////////////////////
     // ajax
 
@@ -248,7 +290,6 @@ const PostTopic = () => {
             .get(url)
             .then(function (response) {
                 const RandomTopicApi = response.data.data.topic;
-                // console.log(RandomTopicApi);
                 setTopicState(RandomTopicApi);
             })
             .catch(function (error) {
@@ -260,7 +301,6 @@ const PostTopic = () => {
 
     const topicInput = (e) => {
         setTopicInputState(e.target.value);
-        // console.log(topicInputState);
     };
 
 
@@ -331,7 +371,7 @@ const PostTopic = () => {
             ) : null}
 
             <div style={{ position: 'relative' }}>
-                <PostTitle onClick={hi}>TOPIC</PostTitle>
+                <PostTitle>TOPIC</PostTitle>
                 <PostContentsWrap>
                     <CanvasWrap>
                         <PaintOptionWrap>
@@ -401,20 +441,22 @@ const PostTopic = () => {
                                             </Td>
                                         </tr>
                                         <tr>
-                                            <Td>
-                                                <IcButton
-                                                    onClick={undoHandler}
-                                                    disabled={undoState === 0}
-                                                >
-                                                    <img src={undo} alt="undo" />
+                                            <Td style={undoBoolean ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                                <IcButton onClick={undoHandler}>
+                                                    <img
+                                                        src={undo}
+                                                        alt="undo"
+                                                        style={undoBoolean ? { filter: 'invert(100%)' } : {}}
+                                                    />
                                                 </IcButton>
                                             </Td>
-                                            <Td>
-                                                <IcButton
-                                                    onClick={redoHandler}
-                                                    disabled={redoState === 0}
-                                                >
-                                                    <img src={redo} alt="redo" />
+                                            <Td style={redoBoolean ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                                <IcButton onClick={redoHandler} >
+                                                    <img
+                                                        src={redo}
+                                                        alt="redo"
+                                                        style={redoBoolean ? { filter: 'invert(100%)' } : {}}
+                                                    />
                                                 </IcButton>
                                             </Td>
                                         </tr>
@@ -507,7 +549,7 @@ const PostTopic = () => {
                                 onMouseMove={draw}
                                 onMouseDown={startPainting}
                                 onMouseUp={cancelPainting}
-                                onMouseLeave={cancelPainting}
+                                onMouseLeave={cancelPaintingLeave}
                             />
                         </div>
                     </CanvasWrap>
@@ -668,7 +710,6 @@ const RandomTopicInput = styled.input`
   border: none;
   border-bottom: 1px solid #e6e6e6;
   font-size: 14px;
-
   &:focus {
     outline: 0;
   }
@@ -716,8 +757,7 @@ const canvasStyle = {
     height: '500px',
     marginTop: '-9px',
     border: '2px solid #000',
-    backgroundColor: '#fff',
-    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'
+    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
 };
 
 const CanvasWrap = styled.div`
@@ -745,14 +785,15 @@ const LineOpacityCustomWrap = styled.div`
 `;
 
 const LineOpacityCustom = styled.input`
+  -webkit-appearance: none;
   transform: rotate(-90deg);
   margin-left: 8px;
   width: 102px;
   height: 8px;
-  -webkit-appearance: none;
-    background: #fff;
+    /* background: red; */
     border: 2px solid #000;
     accent-color: #000;
+    background-image: url(${RangeBg});
 `;
 
 const IcButton = styled.div`
