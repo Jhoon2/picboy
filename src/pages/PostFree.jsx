@@ -29,6 +29,7 @@ import line6 from '../images/line6.png';
 import line8 from '../images/line8.png';
 import line10 from '../images/line10.png';
 import line12 from '../images/line12.png';
+import Frame from '../images/canvas-frame.png';
 
 // 소리
 import { error1PB } from '../global/sound';
@@ -108,9 +109,13 @@ const PostFree = () => {
   const [lineState, setLineState] = useState(false);
   const [colorPreview, setColorPreview] = useState();
   const [LineWeightCount, setLineWeightCount] = useState('3');
-  const [undoState, setUndoState] = useState(0);
-  const [redoState, setRedoState] = useState(0);
+  const [undoBoolean, setUndoBoolean] = useState(false);
+  const [redoBoolean, setRedoBoolean] = useState(false);
   const [pos, setPos] = useState([]);
+  const [imgArr, setImgArr] = useState([]);
+  const [step, setStep] = useState(-1);
+
+  const canvas = canvasRef.current;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -120,6 +125,17 @@ const PostFree = () => {
     setCtx(canvasRef.current.getContext('2d'));
     setColorPreview('#000');
   }, []);
+
+  useEffect(() => {
+    const image = new Image();
+    image.src = Frame;
+    image.onload = function () {
+      ctx.drawImage(image, 0, 0);
+    }
+  }, [ctx]);
+
+  // const imgURL = canvas.toDataURL();
+  // console.log(imgURL);
 
   const draw = (e) => {
     const X = Math.floor(e.clientX - canvasRef.current.offsetLeft);
@@ -137,6 +153,8 @@ const PostFree = () => {
         ctx.moveTo(pos[0], pos[1]);
         ctx.lineTo(X, Y);
         ctx.stroke()
+      } else if (paintState === true) {
+        ctx.fillRect(0, 0, 500, 500);
       } else {
         ctx.lineWidth = LineWeightCount;
         ctx.lineTo(X, Y);
@@ -158,7 +176,25 @@ const PostFree = () => {
     setPos([e.clientX - canvasRef.current.offsetLeft, e.clientY - canvasRef.current.offsetTop + window.scrollY]);
   };
 
+  //////////////////////////
+  //////////////////////////
+  // mouse up
   const cancelPainting = () => {
+    setIsPainting(false);
+    setStep(step + 1);
+    console.log(step);
+    if (step < imgArr.length) {
+      imgArr.length = step + 2
+    }
+    // else if (step > imgArr.length) {
+    //     imgArr.length = step + 2
+    // }
+    const imgURL = canvas.toDataURL();
+    setImgArr([...imgArr, imgURL]);
+    console.log(imgArr);
+  };
+
+  const cancelPaintingLeave = () => {
     setIsPainting(false);
   };
 
@@ -183,7 +219,6 @@ const PostFree = () => {
     setEraserState(false);
     setCircleState(false);
     setLineState(false);
-    ctx.fillRect(0, 0, 500, 500);
   };
 
   // pencil
@@ -208,11 +243,39 @@ const PostFree = () => {
     setLineState(false);
   };
 
+  //////////////////////////
+  //////////////////////////
   // undo
-  const undoHandler = (e) => { };
+  const undoHandler = (e) => {
+    if (step > 0) {
+      setUndoBoolean(true);
+      console.log('hi');
+      setStep(step - 1);
+      console.log(step)
+      const undoImage = new Image();
+      undoImage.src = imgArr[step];
+
+      undoImage.onload = function () {
+        ctx.drawImage(undoImage, 0, 0, 500, 500);
+        setUndoBoolean(false);
+      }
+    }
+  };
 
   // redo
-  const redoHandler = (e) => { };
+  const redoHandler = (e) => {
+    if (step < imgArr.length) {
+      setRedoBoolean(true);
+      setStep(step + 1);
+      console.log(step)
+      const redoImage = new Image();
+      redoImage.src = imgArr[step];
+      redoImage.onload = function () {
+        ctx.drawImage(redoImage, 0, 0, 500, 500);
+      }
+      setRedoBoolean(false);
+    }
+  };
 
   // draw Rect
   const drawRect = () => {
@@ -252,23 +315,6 @@ const PostFree = () => {
     setColorPreview(e.target.id);
   };
 
-  const hi = (e) => {
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    ctx.strokeStyle = color;
-  }
-
-  const colors = [
-    "#ff3838",
-    "#ffb8b8",
-    "#c56cf0",
-    "#ff9f1a",
-    "#fff200",
-    "#32ff7e",
-    "#7efff5",
-    "#18dcff",
-    "#7d5fff",
-  ];
-
 
   const cancleNav = () => {
     window.location.replace("/CompList");
@@ -279,18 +325,18 @@ const PostFree = () => {
     <div>
       {myContext.setttingFrameBtn ? (
         <ErrorBox onClick={() => myContext.setSettingFrameBtn(false)}>
-          <AnyModal  content="프레임 개수를 설정해주세요" />
-          </ErrorBox>
+          <AnyModal content="프레임 개수를 설정해주세요" />
+        </ErrorBox>
       ) : null}
       {myContext.drawingDoneBtn ? (
         <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
-          <AnyModal  content="올리기가 완료되었습니다" />
-          </ErrorBox>
+          <AnyModal content="올리기가 완료되었습니다" />
+        </ErrorBox>
       ) : null}
       {myContext.vacantCanvas ? (
         <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
-          <AnyModal  content="그림이 비어있습니다" />
-          </ErrorBox>
+          <AnyModal content="그림이 비어있습니다" />
+        </ErrorBox>
       ) : null}
       <PostTitle>FREE</PostTitle>
       <PostContentsWrap>
@@ -362,20 +408,22 @@ const PostFree = () => {
                     </Td>
                   </tr>
                   <tr>
-                    <Td>
-                      <IcButton
-                        onClick={undoHandler}
-                        disabled={undoState === 0}
-                      >
-                        <img src={undo} alt="undo" />
+                    <Td style={undoBoolean ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                      <IcButton onClick={undoHandler}>
+                        <img
+                          src={undo}
+                          alt="undo"
+                          style={undoBoolean ? { filter: 'invert(100%)' } : {}}
+                        />
                       </IcButton>
                     </Td>
-                    <Td>
-                      <IcButton
-                        onClick={redoHandler}
-                        disabled={redoState === 0}
-                      >
-                        <img src={redo} alt="redo" />
+                    <Td style={redoBoolean ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                      <IcButton onClick={redoHandler} >
+                        <img
+                          src={redo}
+                          alt="redo"
+                          style={redoBoolean ? { filter: 'invert(100%)' } : {}}
+                        />
                       </IcButton>
                     </Td>
                   </tr>
