@@ -20,7 +20,6 @@ export const setRefreshToken = (refreshtoken) => {
 
   // const expireDate = today.setDate(today.getDate() + 7);
   // const expireDate = new Date(new Date().getTime() + 60 * 1000);
-  // console.log(expireDate)
   return cookies.set("fresh_token", refreshtoken, {
     sameSite: "strict",
     path: "/",

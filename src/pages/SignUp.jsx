@@ -18,6 +18,9 @@ import api from '../shared/apis'
 //이미지
 import Listbanner from '../images/Com/Listbanner.svg';
 
+//소리
+import { error1PB, pop1PB } from '../global/sound';
+
 const SignUp = () => {
   const myContext = useMyContext();
 
@@ -98,7 +101,6 @@ const SignUp = () => {
   //ID input창 빈값
   const [any, setAny] = useState(0)
   const IDinputVacant = (e) => {
-    // console.log(e)
 
     setFocusedInput(e.target.name)
     setExistedId(false);
@@ -197,16 +199,13 @@ const SignUp = () => {
   const validatePhone = async () => {
     //핸드폰 인증번호 감지
     const phone_valid_number = watch().phone_valid_number;
-    // console.log(phone_valid_number)
 
     const info = {
       phoneNum: inputValue,
       numStr: phone_valid_number
     }
-    console.log(info)
     try {
       const response = await api.post(`/user/code-send`, info);
-      console.log(response)
       if (response.data.success) {
         setPhoneValid(false);
         setCodeTrue(true)
@@ -227,10 +226,24 @@ const SignUp = () => {
   const [openSignupDone, setOpenSignupDone] = useState(false)
   const [myNickname, setMyNickname] = useState()
 
+
+  //에러
+  const codeFalseError = () => {
+    error1PB.play();
+    myContext.btnClickOn()
+  }
+  const availableIdError = () => {
+    error1PB.play();
+    myContext.btnClickOn()
+  }
+  const availableNickError = () => {
+    error1PB.play();
+    myContext.btnClickOn()
+  }
   const onClickSignUp = async (data) => {
-    if (!codeTrue) return myContext.btnClickOn();
-    if (!availableId) return myContext.btnClickOn();
-    if (!availableNick) return myContext.btnClickOn();
+    if (!codeTrue) return codeFalseError();
+    if (!availableId) return availableIdError();
+    if (!availableNick) return availableNickError();
     setMyNickname(data.nickname)
     const info = {
       username: data.id,
@@ -238,13 +251,13 @@ const SignUp = () => {
       password: data.pw,
       phoneNumber: inputValue,
     };
-    console.log(info)
     try {
       const response = await api.post(`/user/signup`, info);
       if (response.status === 200) {
         // reset();
         ////
         //회원가입 완료 창 만들기
+        pop1PB.play();
         myContext.signUpBtnClickOn();
         // setOpenSignupDone(true)
         // navigate('/login');

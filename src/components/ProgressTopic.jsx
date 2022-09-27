@@ -29,7 +29,6 @@ const ProgressTopic = () => {
     setLoad(false);
   };
 
-  console.log(newData.length);
 
   useEffect(() => {
     getProgressData();
@@ -63,7 +62,7 @@ const ProgressTopic = () => {
 
   return (
     <ListBox>
-      {load === true ? <Loadings /> : null}
+      {/* {load === true ? <Loadings /> : null} */}
       {newData?.map((item, index) => (
         <BestBox key={uuidv4()}>
           <div style={{ position: 'relative' }}>

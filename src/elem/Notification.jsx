@@ -47,8 +47,9 @@ const Notification = () => {
   };
   const baseURL = process.env.REACT_APP_API_KEY;
 
-  const socket = new SockJS(`${baseURL}/socket/`);
-  const stompClient = Stomp.over(socket);
+  let stompClient = Stomp.over(function () {
+    return new SockJS(`${baseURL}/socket/`);
+    });
 
   const stompConnect = () => {
     try {
@@ -133,12 +134,13 @@ const Notification = () => {
                 </Nonoti>
               </>
             ) : (
-              getList?.map((item, index) => (
-                <div key={uuidv4()}>
-                  <HR />
+                getList?.map((item, index) => (
+                  <div key={uuidv4()}>
+                    <HR />
                   <DescBox
-                    onClick={() => {
-                      navigate(`/complete-detail/${item.id}`);
+                      onClick={() => {
+                        console.log(item.postId)
+                      window.location.href = (`/complete-detail/${item.postId}`);
                       pop1PB.play();
                     }}
                   >
@@ -200,7 +202,7 @@ const NotiBox = styled.div`
   width: 50px;
   position: relative;
   top: 10px;
-  right: 100px;
+  right: 10px;
 `;
 
 const NotiUl = styled.ul`

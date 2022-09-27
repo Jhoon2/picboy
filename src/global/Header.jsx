@@ -47,7 +47,6 @@ const Header = () => {
   const  getLogonUser  = useSelector((state) =>  state?.logonUser)
   const loginUser = getLogonUser?.logonUser?.profileImg
 
-  // console.log(loginUser)
 
   useEffect(() => { 
     dispatch(__getLogonUser())
@@ -74,7 +73,6 @@ const Header = () => {
     return () =>
       documentRef.current.removeEventListener('scroll', throttleScroll);
   }, [pageY]);
-
 
 
   if (location.pathname === '/login') return null;
@@ -115,7 +113,7 @@ const Header = () => {
             <>
               <Notification />
               {/* <LoginUserImg> */}
-            <ClickProfileModal img={!loginUser && loginUser ? basicImg : loginUser && loginUser}  
+            <ClickProfileModal img={!loginUser? basicImg : loginUser}  
             onClick={() => {
               headerPB.play();
                   }} />

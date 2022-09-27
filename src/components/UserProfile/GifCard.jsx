@@ -15,9 +15,9 @@ import MySpecialButton from './MySpecialButton'
 
 //이미지
 import download from '../../images/mypage/download.png'
-import heart from '../../images/like-before.png'
-import colorHeart from '../../images/like-click.png'
-import basicImg from '../../images/basicImg.jpg'
+import heart from '../../images/mypage/like-before.png'
+import colorHeart from '../../images/mypage/like-after.png'
+import basicImg from '../../images/mypage/basicImg.png'
 import favorite from '../../images/favorite@2x.png'
 import moreHoriz from '../../images/More horiz@2x.png'
 import textbox from '../../images/Mode comment.png'
@@ -31,7 +31,7 @@ const GifCard = ({ data, myImg, myNickname }) => {
   const baseURL = process.env.REACT_APP_API_KEY;
   
   // 참여자들 보여주기
-  const [allParticipants, setAllParticipants] = React.useState(false)
+  const [allParticipants, setAllParticipants] = useState(false)
   const [peopleData, setPeopleData] = useState()
   const showAllParticipants = async(e) => {
     e.stopPropagation();
@@ -91,7 +91,7 @@ const GifCard = ({ data, myImg, myNickname }) => {
     <CardContainer>
      
         <OverlayWrap>
-          <GifImg src={data.imgUrl} />
+          <GifImg src={data.gifUrl ??data.imgUrl } />
           <Badge src={data.status === 1 ? progressIcon : completeIcon} />          
           <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
           <HoverSideButton onClick={buttonCollection}><HorizBtn src={moreHoriz} /></HoverSideButton>

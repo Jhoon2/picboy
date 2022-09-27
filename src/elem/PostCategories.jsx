@@ -18,7 +18,6 @@ const Categories = () => {
   const myContext = useMyContext();
 
   const logonUser = UseGetUser();
-  // console.log(logonUser && logonUser)
   const [select, setSelect] = useState(false);
 
   const moveTopic = () => {
@@ -195,7 +194,7 @@ const SelectListBox = styled.div`
   width: 120px;
   position: relative;
   top: 10px;
-  right: 90px;
+  right: 55px;
   z-index: 1;
 `;
 

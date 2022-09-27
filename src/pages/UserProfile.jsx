@@ -14,6 +14,7 @@ import UseGetUser from '../hooks/UseGetUser'
 import GifCard from '../components/UserProfile/GifCard'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
+import Grid from '../styles/Grid'
 
 //이미지
 import basicImg from '../images/mypage/basicImg.png'
@@ -21,7 +22,6 @@ import smallpencil from '../images/smallpencil.png'
 import camera from '../images/Camera.png'
 import editPencil from '../images/mypage/mode-edit-sharp.png'
 import TopScroll from '../global/TopScroll'
-import Loading from '../global/Loading'
 
 
 const UserProfile = () => {
@@ -32,8 +32,7 @@ const UserProfile = () => {
 
     //로그인 정보
     const userinfo = UseGetUser();
-
-
+    const logonUserStatus = userinfo?.data?.data?.status
    //수정
     const [loadMyNickname, setLoadMyNickName] = useState('')
     const [editMyNickname, setEditMyNickName] = useState(false)
@@ -47,7 +46,7 @@ const UserProfile = () => {
     
     //마이페이지 데이터
     const { userData } = useSelector((state) => state.userdata)
-    const  { isLoading }  = useSelector((state) => state.userdata)
+    // const { isLoading } = useSelector((state) => state.userdata)
     const [loading, setLoading] = useState(false)
 
      //무한스크롤관련
@@ -93,6 +92,8 @@ const UserProfile = () => {
             username: params.id,
             page:0
         }))
+        setLoading(true)
+
     }, [dispatch]);
     
 
@@ -142,7 +143,6 @@ const UserProfile = () => {
         const info = {
             nickname:loadMyNickname
         }
-        // console.log(info)
         dispatch(__putEditNickname(info))
         setEditMyNickName(false)
     }
@@ -192,7 +192,8 @@ const UserProfile = () => {
     if(!userinfo?.data?.data?.username) return
     return (
         <>
-        {isLoading && <Loading />}
+            {loading ? 
+         
         <UserProfileContainer >
             <ContainerInner >
                 <TopScroll />
@@ -209,13 +210,13 @@ const UserProfile = () => {
                             <TextContentContainer>
                                 <TextContent>아이디</TextContent>
                                 
-                                <Texts>{UserPage&&UserPage.username}</Texts>
+                                <Texts>{logonUserStatus === 1 ? UserPage&&UserPage.username : 'Kakao user'}</Texts>
                             </TextContentContainer>
                             <TextContentContainer>
                                 <TextContent>닉네임</TextContent>
                                 <Texts >{editMyNickname ? 
                                     <EditInput placeholder={UserPage&&UserPage.nickname} onChange={editNickChange} onFocus={NickinputVacant} />
-                                    : UserPage&&UserPage.nickname}
+                                    : UserPage&&UserPage.nickname.slice(0,8)}
                                 </Texts>
                                 {editMyNickname ? 
                                 <ValidationNickname>
@@ -255,27 +256,37 @@ const UserProfile = () => {
                         })}
                     </CardContainer>
                     <div style={{ width: '100px', height: '20px' }} ref={page? null : lastIntersectingData}>.</div>
-                </>
+                        </>
+                        
             </ContainerInner>
 
         
             </UserProfileContainer>
 
+                : <LoadingContainer>
+                <div >
+                        {/* <Loading /> */}
+                        로딩중
+                </div>
+                </LoadingContainer>} 
+            
             {/* 프로필이미지 모달창 */}
             {UserPage&&UserPage.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
-                close={() => myContext.setIsOpenProfileImg(false)} /> : null}  
+            close={() => myContext.setIsOpenProfileImg(false)} /> : null}  
             
-            </>
+        </>
     )
 }
-
+const LoadingContainer = styled.div`
+    margin-top: 80px;
+`
 const UserProfileContainer = styled.div`
     display: flex;
     justify-content: center;
+    margin-bottom: 190px;
 `
 const ContainerInner = styled.div`
-    width: 1200px;
-    height: 100%;
+    max-width: 1200px;
 `
 const ProfileContainer = styled.div`
     width: 100%;
@@ -354,12 +365,12 @@ const Texts = styled.div`
     font-weight: 400;
 `
 const EditInput = styled.input`
-  width: 230px;
-  height: 30px;
-  border: none;
-  border-bottom: 1px solid black;
-  outline: none;
-  font-size: 28px;
+    width: 230px;
+    height: 30px;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    font-size: 28px;
 `
 
 
@@ -370,8 +381,6 @@ const EditDone = styled.button`
     margin-right: 50px;
     border-radius: 50px;
     border: none;
-    /* background-color: black; */
-    /* color: white; */
 `
 
 
@@ -445,6 +454,7 @@ const NoErrorsmessage = styled.div`
   font-family: 'NotoLight';
   color: green;
 `;
+
 
 
 export default UserProfile

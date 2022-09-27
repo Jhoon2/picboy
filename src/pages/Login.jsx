@@ -12,6 +12,9 @@ import speechBubble from '../images/frame.png'
 import Listbanner from '../images/Com/Listbanner.svg';
 import Listfooter from '../images/picboy-bg-footer-2 1.png';
 
+//소리
+import { error1PB } from '../global/sound';
+
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
   const myContext = useMyContext();
@@ -32,6 +35,7 @@ const Login = () => {
 
     if (response.data.success) { window.location.href = '/'; }
     else {
+      error1PB.play();
       myContext.btnClickOn();
     }
 
