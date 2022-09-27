@@ -225,6 +225,10 @@ const PostRelay = () => {
   const [countFrame, setCountFrame] = useState('');
   const [lastImg, setLastImg] = useState('');
 
+  useEffect(() => {
+    Callaxios();
+  }, []);
+
   const imgInfoUrl = `post/gif/images/detail/${params.id}`;
   const Callaxios = () => {
     api
@@ -238,24 +242,14 @@ const PostRelay = () => {
         console.log(error);
       });
   };
-  api
-    .get(imgInfoUrl)
-    .then(function (response) {
-      const imgData = response.data.data;
-      setCountFrame(imgData);
-      setLastImg(imgData.imgUrl);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
 
-   //광클릭 막기
-  const [clickCount, setClickCount] =useState(0)
-  
+  //광클릭 막기
+  const [clickCount, setClickCount] = useState(0)
+
   // post
   const submitImg = () => {
     //광클릭막기
-    if(clickCount !== 0) return 
+    if (clickCount !== 0) return
     setClickCount(prev => prev + 1)
 
     const canvas = canvasRef.current;
@@ -275,7 +269,6 @@ const PostRelay = () => {
 
       )
       .then(function (response) {
-        
         myContext.setDrawingDoneBtn(true);
         window.location.replace('/list');
       })
@@ -304,18 +297,18 @@ const PostRelay = () => {
     <div>
       {myContext.drawingDoneBtn ? (
         <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
-          <AnyModal  content="올리기가 완료되었습니다" />
-          </ErrorBox>
+          <AnyModal content="올리기가 완료되었습니다" />
+        </ErrorBox>
       ) : null}
-       {myContext.postTopicBtn ? (
+      {myContext.postTopicBtn ? (
         <ErrorBox onClick={() => myContext.setPostTopicBtn(false)}>
           <AnyModal title='안내' content="로그인 후 이용해주세요" />
-          </ErrorBox>
+        </ErrorBox>
       ) : null}
-       {myContext.vacantCanvas ? (
+      {myContext.vacantCanvas ? (
         <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
-          <AnyModal  content="그림이 비어있습니다" />
-          </ErrorBox>
+          <AnyModal content="그림이 비어있습니다" />
+        </ErrorBox>
       ) : null}
       {countFrame.topic === null ? (
         <PostTitle>FREE</PostTitle>

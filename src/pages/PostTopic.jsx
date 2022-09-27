@@ -6,7 +6,7 @@ import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 // import component
 import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
-import  api  from '../shared/apis';
+import api from '../shared/apis';
 import instance from '../shared/apis';
 import vacantState from '../elem/vacantStateCanvas';
 
@@ -30,6 +30,7 @@ import line6 from '../images/line6.png';
 import line8 from '../images/line8.png';
 import line10 from '../images/line10.png';
 import line12 from '../images/line12.png';
+import { castDraft } from 'immer';
 
 const PostTopic = () => {
     const [frame, setFrame] = useState(0);
@@ -77,6 +78,8 @@ const PostTopic = () => {
         setPencilState(true);
         setCtx(canvasRef.current.getContext('2d'));
         setColorPreview('#000');
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, 500, 500);
     }, []);
 
 
@@ -279,7 +282,7 @@ const PostTopic = () => {
         }
         if (vacantState(canvas)) return myContext.setVacantCanvas(true)
 
-        if(clickCount !== 0) return 
+        if (clickCount !== 0) return
         instance
             .post(
                 `/post`,
@@ -306,249 +309,249 @@ const PostTopic = () => {
 
     return (
         <>
-        {myContext.topicBtn ? (
-        <ErrorBox onClick={() => myContext.setTopicBtn(false)}>
-          <AnyModal  content="제시어를 입력해주세요" />
-          </ErrorBox>
-      ) : null}
-        {myContext.setttingFrameBtn ? (
-        <ErrorBox onClick={() => myContext.setSettingFrameBtn(false)}>
-          <AnyModal  content="프레임 개수를 설정해주세요" />
-          </ErrorBox>
-      ) : null}
-      {myContext.drawingDoneBtn ? (
-        <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
-          <AnyModal  content="올리기가 완료되었습니다" />
-          </ErrorBox>
+            {myContext.topicBtn ? (
+                <ErrorBox onClick={() => myContext.setTopicBtn(false)}>
+                    <AnyModal content="제시어를 입력해주세요" />
+                </ErrorBox>
             ) : null}
-        {myContext.vacantCanvas ? (
-        <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
-          <AnyModal  content="그림이 비어있습니다" />
-          </ErrorBox>
-      ) : null}
-  
-        <div style={{ position: 'relative' }}>
-            <PostTitle onClick={hi}>TOPIC</PostTitle>
-            <PostContentsWrap>
-                <CanvasWrap>
-                    <PaintOptionWrap>
-                        <ToolBox>
+            {myContext.setttingFrameBtn ? (
+                <ErrorBox onClick={() => myContext.setSettingFrameBtn(false)}>
+                    <AnyModal content="프레임 개수를 설정해주세요" />
+                </ErrorBox>
+            ) : null}
+            {myContext.drawingDoneBtn ? (
+                <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
+                    <AnyModal content="올리기가 완료되었습니다" />
+                </ErrorBox>
+            ) : null}
+            {myContext.vacantCanvas ? (
+                <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
+                    <AnyModal content="그림이 비어있습니다" />
+                </ErrorBox>
+            ) : null}
+
+            <div style={{ position: 'relative' }}>
+                <PostTitle onClick={hi}>TOPIC</PostTitle>
+                <PostContentsWrap>
+                    <CanvasWrap>
+                        <PaintOptionWrap>
+                            <ToolBox>
+                                <Table>
+                                    <tbody>
+                                        <tr>
+                                            <Td style={paintState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                                <IcButton onClick={paintHandler}>
+                                                    <img
+                                                        src={paint}
+                                                        alt="paint"
+                                                        style={paintState ? { filter: 'invert(100%)' } : {}}
+                                                    />
+                                                </IcButton>
+                                            </Td>
+                                            <Td style={pencilState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                                <IcButton onClick={pencilHandler}>
+                                                    <img
+                                                        src={pen}
+                                                        alt="pen"
+                                                        style={pencilState ? { filter: 'invert(100%)' } : {}}
+                                                    />
+                                                </IcButton>
+                                            </Td>
+                                        </tr>
+                                        <tr>
+                                            {/*  */}
+                                            <Td style={rectState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                                <IcButton onClick={drawRect}>
+                                                    <img
+                                                        src={rectangle}
+                                                        alt="rectangle"
+                                                        style={rectState ? { filter: 'invert(100%)' } : {}}
+                                                    />
+                                                </IcButton>
+
+                                            </Td>
+                                            <Td style={circleState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                                <IcButton onClick={drawCircle}>
+                                                    <img
+                                                        src={circle}
+                                                        alt="circle"
+                                                        style={circleState ? { filter: 'invert(100%)' } : {}}
+                                                    />
+                                                </IcButton>
+                                            </Td>
+                                        </tr>
+                                        <tr>
+                                            <Td style={eraserState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                                <IcButton onClick={eraseHandler}>
+                                                    <img
+                                                        src={eraser}
+                                                        alt="eraser"
+                                                        style={eraserState ? { filter: 'invert(100%)' } : {}}
+                                                    />
+                                                </IcButton>
+                                            </Td>
+                                            <Td style={lineState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                                <IcButton onClick={drawLine}>
+                                                    <img
+                                                        src={line}
+                                                        alt="line"
+                                                        style={lineState ? { filter: 'invert(100%)' } : {}}
+                                                    />
+                                                </IcButton>
+                                            </Td>
+                                        </tr>
+                                        <tr>
+                                            <Td>
+                                                <IcButton
+                                                    onClick={undoHandler}
+                                                    disabled={undoState === 0}
+                                                >
+                                                    <img src={undo} alt="undo" />
+                                                </IcButton>
+                                            </Td>
+                                            <Td>
+                                                <IcButton
+                                                    onClick={redoHandler}
+                                                    disabled={redoState === 0}
+                                                >
+                                                    <img src={redo} alt="redo" />
+                                                </IcButton>
+                                            </Td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
+                            </ToolBox>
+                            {/* color */}
+                            <SelectedColorWrap>
+                                <SelectedColor color={`${colorPreview}`} />
+                            </SelectedColorWrap>
                             <Table>
                                 <tbody>
                                     <tr>
-                                        <Td style={paintState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
-                                            <IcButton onClick={paintHandler}>
-                                                <img
-                                                    src={paint}
-                                                    alt="paint"
-                                                    style={paintState ? { filter: 'invert(100%)' } : {}}
-                                                />
-                                            </IcButton>
+                                        <Td>
+                                            <ColorOption color={'#FF2222'} onClick={colorChange} id="#FF2222" />
                                         </Td>
-                                        <Td style={pencilState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
-                                            <IcButton onClick={pencilHandler}>
-                                                <img
-                                                    src={pen}
-                                                    alt="pen"
-                                                    style={pencilState ? { filter: 'invert(100%)' } : {}}
-                                                />
-                                            </IcButton>
-                                        </Td>
-                                    </tr>
-                                    <tr>
-                                        {/*  */}
-                                        <Td style={rectState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
-                                            <IcButton onClick={drawRect}>
-                                                <img
-                                                    src={rectangle}
-                                                    alt="rectangle"
-                                                    style={rectState ? { filter: 'invert(100%)' } : {}}
-                                                />
-                                            </IcButton>
-
-                                        </Td>
-                                        <Td style={circleState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
-                                            <IcButton onClick={drawCircle}>
-                                                <img
-                                                    src={circle}
-                                                    alt="circle"
-                                                    style={circleState ? { filter: 'invert(100%)' } : {}}
-                                                />
-                                            </IcButton>
-                                        </Td>
-                                    </tr>
-                                    <tr>
-                                        <Td style={eraserState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
-                                            <IcButton onClick={eraseHandler}>
-                                                <img
-                                                    src={eraser}
-                                                    alt="eraser"
-                                                    style={eraserState ? { filter: 'invert(100%)' } : {}}
-                                                />
-                                            </IcButton>
-                                        </Td>
-                                        <Td style={lineState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
-                                            <IcButton onClick={drawLine}>
-                                                <img
-                                                    src={line}
-                                                    alt="line"
-                                                    style={lineState ? { filter: 'invert(100%)' } : {}}
-                                                />
-                                            </IcButton>
+                                        <Td>
+                                            <ColorOption color={'#00A3FF'} onClick={colorChange} id="#00A3FF" />
                                         </Td>
                                     </tr>
                                     <tr>
                                         <Td>
-                                            <IcButton
-                                                onClick={undoHandler}
-                                                disabled={undoState === 0}
-                                            >
-                                                <img src={undo} alt="undo" />
-                                            </IcButton>
+                                            <ColorOption color={'#FF5C00'} onClick={colorChange} id="#FF5C00" />
                                         </Td>
                                         <Td>
-                                            <IcButton
-                                                onClick={redoHandler}
-                                                disabled={redoState === 0}
-                                            >
-                                                <img src={redo} alt="redo" />
-                                            </IcButton>
+                                            <ColorOption color={'#3139FF'} onClick={colorChange} id="#3139FF" />
+                                        </Td>
+                                    </tr>
+                                    <tr>
+                                        <Td>
+                                            <ColorOption color={'#FFEB37'} onClick={colorChange} id="#FFEB37" />
+                                        </Td>
+                                        <Td>
+                                            <ColorOption color={'#BD00FF'} onClick={colorChange} id="#BD00FF" />
+                                        </Td>
+                                    </tr>
+                                    <tr>
+                                        <Td>
+                                            <ColorOption color={'#00EF43'} onClick={colorChange} id="#00EF43" />
+                                        </Td>
+                                        <Td>
+                                            <ColorOption color={'#713D00'} onClick={colorChange} id="#713D00" />
+                                        </Td>
+                                    </tr>
+                                    <tr>
+                                        <Td>
+                                            <ColorOption color={'#FFFFFF'} onClick={colorChange} id="#FFFFFF" />
+                                        </Td>
+                                        <Td>
+                                            <ColorOption color={'#000000'} onClick={colorChange} id="#000000" />
                                         </Td>
                                     </tr>
                                 </tbody>
                             </Table>
-                        </ToolBox>
-                        {/* color */}
-                        <SelectedColorWrap>
-                            <SelectedColor color={`${colorPreview}`} />
-                        </SelectedColorWrap>
-                        <Table>
-                            <tbody>
-                                <tr>
-                                    <Td>
-                                        <ColorOption color={'#FF2222'} onClick={colorChange} id="#FF2222" />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption color={'#00A3FF'} onClick={colorChange} id="#00A3FF" />
-                                    </Td>
-                                </tr>
-                                <tr>
-                                    <Td>
-                                        <ColorOption color={'#FF5C00'} onClick={colorChange} id="#FF5C00" />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption color={'#3139FF'} onClick={colorChange} id="#3139FF" />
-                                    </Td>
-                                </tr>
-                                <tr>
-                                    <Td>
-                                        <ColorOption color={'#FFEB37'} onClick={colorChange} id="#FFEB37" />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption color={'#BD00FF'} onClick={colorChange} id="#BD00FF" />
-                                    </Td>
-                                </tr>
-                                <tr>
-                                    <Td>
-                                        <ColorOption color={'#00EF43'} onClick={colorChange} id="#00EF43" />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption color={'#713D00'} onClick={colorChange} id="#713D00" />
-                                    </Td>
-                                </tr>
-                                <tr>
-                                    <Td>
-                                        <ColorOption color={'#FFFFFF'} onClick={colorChange} id="#FFFFFF" />
-                                    </Td>
-                                    <Td>
-                                        <ColorOption color={'#000000'} onClick={colorChange} id="#000000" />
-                                    </Td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                        <LineStyle>
-                            <RangeWrap>
-                                <img src={stroke} alt="stroke" style={{ width: '24px', margin: '10px 0 10px 8px' }} />
-                                <LineWeightCustomWrap>
-                                    <LineWeight src={line6} id="3" onClick={lineWeightHandler} style={LineWeightCount === '3' ? { filter: 'brightness(0%)' } : {}} alt='' />
-                                    <LineWeight src={line8} id="8" onClick={lineWeightHandler} style={LineWeightCount === '8' ? { filter: 'brightness(0%)' } : {}} alt='' />
-                                    <LineWeight src={line10} id="14" onClick={lineWeightHandler} style={LineWeightCount === '14' ? { filter: 'brightness(0%)' } : {}} alt='' />
-                                    <LineWeight src={line12} id="20" onClick={lineWeightHandler} style={LineWeightCount === '20' ? { filter: 'brightness(0%)' } : {}} alt='' />
-                                </LineWeightCustomWrap>
-                            </RangeWrap>
-                            <RangeWrap>
-                                <img
-                                    src={waterdrop}
-                                    alt="waterdrop"
-                                    style={{ width: '24px', margin: '10px 2px -1px 2px' }}
-                                />
-                                <LineOpacityCustomWrap>
-                                    <LineOpacityCustom
-                                        id="line-opacity"
-                                        type="range"
-                                        min="0.2"
-                                        max="1"
-                                        step="0.2"
-                                        value={lineOpacity}
-                                        onChange={onLineOpacityChange}
+                            <LineStyle>
+                                <RangeWrap>
+                                    <img src={stroke} alt="stroke" style={{ width: '24px', margin: '10px 0 10px 8px' }} />
+                                    <LineWeightCustomWrap>
+                                        <LineWeight src={line6} id="3" onClick={lineWeightHandler} style={LineWeightCount === '3' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                        <LineWeight src={line8} id="8" onClick={lineWeightHandler} style={LineWeightCount === '8' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                        <LineWeight src={line10} id="14" onClick={lineWeightHandler} style={LineWeightCount === '14' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                        <LineWeight src={line12} id="20" onClick={lineWeightHandler} style={LineWeightCount === '20' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                    </LineWeightCustomWrap>
+                                </RangeWrap>
+                                <RangeWrap>
+                                    <img
+                                        src={waterdrop}
+                                        alt="waterdrop"
+                                        style={{ width: '24px', margin: '10px 2px -1px 2px' }}
                                     />
-                                </LineOpacityCustomWrap>
-                            </RangeWrap>
-                        </LineStyle>
-                    </PaintOptionWrap>
-                    <div>
-                        <CanvasArticleStyle src={CanvasArticle} alt="" />
-                        <canvas
-                            ref={canvasRef}
-                            style={canvasStyle}
-                            onMouseMove={draw}
-                            onMouseDown={startPainting}
-                            onMouseUp={cancelPainting}
-                            onMouseLeave={cancelPainting}
-                        />
-                    </div>
-                </CanvasWrap>
-                <ContetnsWrap>
-                    {/* <Canvas setCanvasDone={setCanvasDone} /> */}
-                    <div><CanvasOptionArticleStyle src={CanvasOptionArticle} alt="" /></div>
-                    <ModeWrap>
-                        <ModeTitleWrap>
-                            <img src={modeIc} alt="" />
-                            <ModeTitle>새 글 쓰기</ModeTitle>
-                        </ModeTitleWrap>
-                        <ModeFrameWrap>
-                            <ModeFrameTitle>제시어</ModeFrameTitle>
-                            <ModeFrameBtnWrap>
-                                <RandomTopicInput
-                                    onChange={topicInput}
-                                    value={topicInputState || topicState}
-                                    type="text"
-                                    placeholder="12자 제한입니다"
-                                    maxLength={12}
-                                />
-                                <RandomTopicBtn onClick={randomTopic}>랜덤선택</RandomTopicBtn>
-                            </ModeFrameBtnWrap>
-                            <ModeFrameTitle style={{ marginTop: '32px' }}>
-                                프레임
-                            </ModeFrameTitle>
-                            <ModeFrameBtnWrap>
-                                <ModeFrameBtn onClick={frameCount} id="6" style={frame === 6 ? { backgroundColor: 'black', color: 'white' } : {}}>6개</ModeFrameBtn>
-                                <ModeFrameBtn onClick={frameCount} id="12" style={frame === 12 ? { backgroundColor: 'black', color: 'white' } : {}}>12개</ModeFrameBtn>
-                                <ModeFrameBtn onClick={frameCount} id="18" style={frame === 18 ? { backgroundColor: 'black', color: 'white' } : {}}>18개</ModeFrameBtn>
-                                <ModeFrameBtn onClick={frameCount} id="24" style={frame === 24 ? { backgroundColor: 'black', color: 'white' } : {}}>24개</ModeFrameBtn>
-                            </ModeFrameBtnWrap>
-                        </ModeFrameWrap>
-                        <PostBtnWrap>
-                            <PostBtn onClick={cancleNav}>취소하기</PostBtn>
-                            <PostBtn onClick={submitImg}>추가하기</PostBtn>
-                        </PostBtnWrap>
-                    </ModeWrap>
-                </ContetnsWrap>
-            </PostContentsWrap>
-            <BgTopStyle src={BgTop} alt="" />
-            <BgBottomStyle src={BgBottom} alt="" />
+                                    <LineOpacityCustomWrap>
+                                        <LineOpacityCustom
+                                            id="line-opacity"
+                                            type="range"
+                                            min="0.2"
+                                            max="1"
+                                            step="0.2"
+                                            value={lineOpacity}
+                                            onChange={onLineOpacityChange}
+                                        />
+                                    </LineOpacityCustomWrap>
+                                </RangeWrap>
+                            </LineStyle>
+                        </PaintOptionWrap>
+                        <div>
+                            <CanvasArticleStyle src={CanvasArticle} alt="" />
+                            <canvas
+                                ref={canvasRef}
+                                style={canvasStyle}
+                                onMouseMove={draw}
+                                onMouseDown={startPainting}
+                                onMouseUp={cancelPainting}
+                                onMouseLeave={cancelPainting}
+                            />
+                        </div>
+                    </CanvasWrap>
+                    <ContetnsWrap>
+                        {/* <Canvas setCanvasDone={setCanvasDone} /> */}
+                        <div><CanvasOptionArticleStyle src={CanvasOptionArticle} alt="" /></div>
+                        <ModeWrap>
+                            <ModeTitleWrap>
+                                <img src={modeIc} alt="" />
+                                <ModeTitle>새 글 쓰기</ModeTitle>
+                            </ModeTitleWrap>
+                            <ModeFrameWrap>
+                                <ModeFrameTitle>제시어</ModeFrameTitle>
+                                <ModeFrameBtnWrap>
+                                    <RandomTopicInput
+                                        onChange={topicInput}
+                                        value={topicInputState || topicState}
+                                        type="text"
+                                        placeholder="12자 제한입니다"
+                                        maxLength={12}
+                                    />
+                                    <RandomTopicBtn onClick={randomTopic}>랜덤선택</RandomTopicBtn>
+                                </ModeFrameBtnWrap>
+                                <ModeFrameTitle style={{ marginTop: '32px' }}>
+                                    프레임
+                                </ModeFrameTitle>
+                                <ModeFrameBtnWrap>
+                                    <ModeFrameBtn onClick={frameCount} id="6" style={frame === 6 ? { backgroundColor: 'black', color: 'white' } : {}}>6개</ModeFrameBtn>
+                                    <ModeFrameBtn onClick={frameCount} id="12" style={frame === 12 ? { backgroundColor: 'black', color: 'white' } : {}}>12개</ModeFrameBtn>
+                                    <ModeFrameBtn onClick={frameCount} id="18" style={frame === 18 ? { backgroundColor: 'black', color: 'white' } : {}}>18개</ModeFrameBtn>
+                                    <ModeFrameBtn onClick={frameCount} id="24" style={frame === 24 ? { backgroundColor: 'black', color: 'white' } : {}}>24개</ModeFrameBtn>
+                                </ModeFrameBtnWrap>
+                            </ModeFrameWrap>
+                            <PostBtnWrap>
+                                <PostBtn onClick={cancleNav}>취소하기</PostBtn>
+                                <PostBtn onClick={submitImg}>추가하기</PostBtn>
+                            </PostBtnWrap>
+                        </ModeWrap>
+                    </ContetnsWrap>
+                </PostContentsWrap>
+                <BgTopStyle src={BgTop} alt="" />
+                <BgBottomStyle src={BgBottom} alt="" />
             </div >
-            </>
+        </>
     );
 };
 const ErrorBox = styled.div`
