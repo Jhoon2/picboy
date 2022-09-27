@@ -128,29 +128,11 @@ const Select = styled.button`
   font-weight: 400;
   font-size: 16px;
   line-height: 180%;
-  div {
-    ::after {
-      background: none repeat scroll 0 0 transparent;
-      background: #2e3248;
-      bottom: 0;
-      content: '';
-      display: block;
-      height: 3px;
-      left: 50%;
-      position: absolute;
-      transition: width 0.3s ease 0s, left 0.3s ease 0s;
-      width: 0;
-    }
-    :hover::after {
-      left: 2px;
-      width: 100%;
-    }
-  }
 `;
 
 const SelectImg = styled.img`
   position: absolute;
-  top: 50%;
+  top: 51%;
   left: 80px;
   width: 12px;
   height: 12px;

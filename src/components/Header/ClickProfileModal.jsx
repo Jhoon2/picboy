@@ -5,9 +5,9 @@ import { removeCookieToken } from '../../shared/Cookie';
 
 import styled, { css } from 'styled-components';
 import UseGetUser from '../../hooks/UseGetUser';
-import '../../elem/Down'
+import '../../elem/Down';
 import Down from '../../elem/Down';
-import basicImg from '../../images/mypage/basicImg.png'
+import basicImg from '../../images/mypage/basicImg.png';
 //로그아웃 알림창
 import AnyModal from '../../elem/AnyModal';
 
@@ -28,13 +28,12 @@ const ClickProfileModal = ({ img }) => {
     myContext.setLogonProfileImg(false);
   };
   const Logout = (e) => {
-    myContext.setLogoutBtn(true)
+    myContext.setLogoutBtn(true);
     setSelectContent(e.target.id);
     removeCookieToken();
   };
 
   useEffect(() => {
-    
     const clickOutside = (e) => {
       if (select && node.current && !node.current.contains(e.target)) {
         setSelect(false);
@@ -48,58 +47,66 @@ const ClickProfileModal = ({ img }) => {
     };
   }, [select]);
 
-
   let anyData = 1;
-  if(!logonUser?.data?.data) return
+  if (!logonUser?.data?.data) return;
   return (
     <div ref={node}>
-         {myContext.logoutBtn ? (
-        <ErrorBox onClick={() => window.location.href = '/'}>
-          <AnyModal title="안내" content="로그아웃 되었습니다" anyData={anyData} />
+      {myContext.logoutBtn ? (
+        <ErrorBox onClick={() => (window.location.href = '/')}>
+          <AnyModal
+            title="안내"
+            content="로그아웃 되었습니다"
+            anyData={anyData}
+          />
         </ErrorBox>
       ) : null}
       <div>
         <div onClick={() => setSelect(!select)}>
-          <LoginUserImg src={img}/>
+          <LoginUserImg src={img} />
         </div>
       </div>
 
-          <SelectListBox onClick={(e) => {
-                  e.stopPropagation();
-                }}>
-          <Down select={select}>
-            <DownUl>
-              
-                <ProfileModalContainer >
-                  <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <ProfileImg src={img ? img : basicImg} />
-                  </div>
-                  <ProfileNickname>{logonUser && logonUser.data.data.nickname}</ProfileNickname>
-                  <ProfileUsername>{logonUser && logonUser.data.data.username}</ProfileUsername>
-                </ProfileModalContainer>
-                <TextBr />
-                <ModalText
-                    id="myPage"
-                    name="myPage"
-                    onClick={myPage}
-                    selectContent={selectContent}
-                  >
-                    마이페이지
-                  </ModalText>
-                  <TextBr />
-                  <ModalText
-                    id="Logout"
-                    name="Logout"
-                    onClick={Logout}
-                    categoryContent={selectContent}
-                  >
-                    로그아웃
-                  </ModalText>
-                 </DownUl>
-                </Down>
-          </SelectListBox>
+      <SelectListBox
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <Down select={select}>
+          <DownUl>
+            <ProfileModalContainer>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <ProfileImg src={img ? img : basicImg} />
+              </div>
+              <ProfileNickname>
+                {logonUser && logonUser.data.data.nickname}
+              </ProfileNickname>
+              <ProfileUsername>
+                {logonUser && logonUser.data.data.username}
+              </ProfileUsername>
+            </ProfileModalContainer>
+            <TextBr />
+            <ModalText
+              id="myPage"
+              name="myPage"
+              onClick={myPage}
+              selectContent={selectContent}
+            >
+              마이페이지
+            </ModalText>
+            <TextBr />
+            <ModalText
+              id="Logout"
+              name="Logout"
+              onClick={Logout}
+              categoryContent={selectContent}
+            >
+              로그아웃
+            </ModalText>
+          </DownUl>
+        </Down>
+      </SelectListBox>
     </div>
-  )
+  );
 };
 const ErrorBox = styled.div`
   position: fixed;
@@ -121,7 +128,11 @@ const LoginUserImg = styled.img`
   background-color: white;
 
   cursor: pointer;
-
+  @media ${({ theme }) => theme.device.laptop} {
+    position: absolute;
+    bottom: 30%;
+    right: 3%;
+  }
 `;
 
 const SelectListBox = styled.div`
@@ -139,7 +150,7 @@ const DownUl = styled.ul`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor:default;
+  cursor: default;
   border: 2px solid #000000;
   background-color: white;
 `;
@@ -147,26 +158,25 @@ const DownUl = styled.ul`
 const ProfileModalContainer = styled.div`
   height: 169px;
   margin: 0 auto;
-`
+`;
 
 const ProfileImg = styled.img`
   width: 70px;
   height: 70px;
   margin-top: 22px;
   /* margin-left: 5px; */
-`
+`;
 const ProfileNickname = styled.div`
   font-weight: ${(props) => props.theme.BodyBD};
   font-size: ${(props) => props.theme.Caption1};
   margin-top: 11px;
   text-align: center;
-
-`
+`;
 const ProfileUsername = styled.div`
-   font-weight: ${(props) => props.theme.HeadlineRG};
+  font-weight: ${(props) => props.theme.HeadlineRG};
   font-size: ${(props) => props.theme.Caption3};
   text-align: center;
-`
+`;
 
 const ModalText = styled.div`
   width: 268px;
@@ -184,7 +194,7 @@ const ModalText = styled.div`
 
   :hover {
     height: 60px;
-    background-color:${(props) => props.theme.basic};
+    background-color: ${(props) => props.theme.basic};
   }
 `;
 const TextBr = styled.div`
