@@ -35,12 +35,22 @@ const BestSlider = () => {
     centerPadding: '200px',
     pauseOnHover: true,
     touchThreshold: 1,
+    focusOnChange: true,
     autoplay: true,
     draggable: true,
     responsive: [
       // 반응형 웹 구현 옵션
       {
-        breakpoint: 1200, //화면 사이즈 960px
+        breakpoint: 1200,
+        settings: {
+          //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
+          slidesToShow: 1,
+          centerPadding: '270px',
+        },
+      },
+
+      {
+        breakpoint: 1520,
         settings: {
           //위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
           slidesToShow: 1,

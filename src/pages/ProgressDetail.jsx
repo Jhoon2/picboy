@@ -19,6 +19,9 @@ import Listbanner from '../images/Com/Listbanner.svg';
 import Listfooter from '../images/Com/Listfooter.svg';
 import  api  from '../shared/apis';
 
+//소리
+import { error1PB } from '../global/sound';
+
 const ProgressDetail = () => {
   const navigate = useNavigate();
   const logonUser = UseGetUser();
@@ -45,7 +48,6 @@ const ProgressDetail = () => {
       .get(url)
       .then(function (response) {
         setData(response.data.data);
-        // console.log(response.data.data);
       })
       .catch(function (error) {
         console.log('error');
@@ -54,9 +56,15 @@ const ProgressDetail = () => {
 
   const imgList = Data.frameImgList;
   const Topics = Data && Data.topic;
-
+  
+  //에러창
+  const clickError = () => {
+    error1PB.play();
+    myContext.btnClickOn()
+  }
   const Move = () => {
-    if(!logonUser) return myContext.btnClickOn()
+    if (!logonUser)
+      return clickError();
     navigate(`/post-relay/${params.id}`);
   };
 

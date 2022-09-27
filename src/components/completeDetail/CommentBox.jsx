@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 //불러오기
@@ -8,6 +9,7 @@ import { __deleteComment, __editComment } from '../../redux/modules/comments'
 import UseGetUser from '../../hooks/UseGetUser'
 import { useMyContext } from '../../shared/ContextApi'
 import AnyModal from '../../elem/AnyModal'
+import basicImg from '../../images/mypage/basicImg.png'
 
 const CommentBox = ({ commentList }) => {
   //로그인한 사람 정보
@@ -15,7 +17,7 @@ const CommentBox = ({ commentList }) => {
   const userNickname = useGet && useGet.data.data.nickname;
 
   const myContext = useMyContext();
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   //수정
   const [editState, setEditState] = useState(false)
@@ -29,6 +31,7 @@ const CommentBox = ({ commentList }) => {
   }
   const completeBtn = () => {
     if (edit === '') return setEditState(false)
+  
     const newList = {
       commentId: commentList.commentId,
       content: edit
@@ -36,7 +39,8 @@ const CommentBox = ({ commentList }) => {
     dispatch(__editComment(newList))
     setEditState(false)
   }
-
+    // const commentText = commentList.comment.replace(/(?:\r\n|\r|\n)/g, '<br/>');
+  
   //삭제
   const deleteBtn = () => {
     myContext.setCommetDeleteBtn(true)
@@ -56,7 +60,7 @@ const CommentBox = ({ commentList }) => {
     button = <span style={{ mr: 3, cursor: 'pointer', fontSize: '12px', color: '#a3a3a3', fontWeight: '400', marginLeft: '16px' }} onClick={editBtn}>수정</span>
     button_1 = <span style={{ mr: 3, cursor: 'pointer', fontSize: '12px', color: '#a3a3a3', fontWeight: '400', marginLeft: '16px' }} onClick={deleteBtn}>삭제</span>
   }
-
+  
   return (
   <>
       {myContext.commetDeleteBtn ? (
@@ -67,7 +71,9 @@ const CommentBox = ({ commentList }) => {
     <Comment>
       <CommentContainer>
         <div style={{ display: 'flex' }}>
-          <CommentUserProfileImg src={commentList.profileImg} alt="" />
+            <CommentUserProfileImg src={commentList?.profileImage ? commentList?.profileImage : basicImg} alt=""
+              onClick={() => { window.location.href = (`/user-profile/${commentList?.username}`) }}
+            />
           <CommentIdContents>
             <CommentUserNickName>{commentList.nickname}</CommentUserNickName>
             {editState ? <EditCommentInput placeholder={commentList.comment}
@@ -115,9 +121,10 @@ const CommentContainer = styled.div`
 const CommentUserProfileImg = styled.img`
     width: 50px;
     height: 50px;
+    margin-right: 24px;
     border-radius: 50%;
     border: 1px solid #ccc;
-    margin-right: 24px;
+    cursor: pointer;
 `;
 
 const CommentIdContents = styled.div`

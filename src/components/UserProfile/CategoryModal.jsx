@@ -17,7 +17,6 @@ const CategoryModal = ({children, shown, close,username}) => {
   const [categoryContent, setCategoryContent] = useState('recent')
   const myContext = useMyContext();
   const dispatch = useDispatch();
-  // console.log(myContext.categoryNum)
   const recent = (e) => {
     setCategoryContent(e.target.id)
     myContext.setCategoryNum(1)

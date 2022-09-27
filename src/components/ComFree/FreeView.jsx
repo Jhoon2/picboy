@@ -5,8 +5,10 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import Loadings from '../../global/Loading';
 import Report from '../../elem/Report';
-import LikeButton from '../../images/Com/like.svg';
-import DownButton from '../../images/Com/download.svg';
+import Listprofile from '../../elem/Listprofile';
+import Like from '../../elem/Like';
+import downBef from '../../images/Com/downBef.svg';
+import downAft from '../../images/Com/downAft.svg';
 import userView from '../../images/Com/userView.svg';
 import userLike from '../../images/Com/userLike.svg';
 import userComm from '../../images/Com/userComm.svg';
@@ -83,15 +85,21 @@ const FreeView = () => {
                     <DescBox>
                       <Keyword> FREE</Keyword>
                     </DescBox>
-                    <Download />
-                    <Like />
+                    <a
+                      href={`${baseURL}/download?postId=${item.id}&fileName=${item.gifUrl}`}
+                      download="free"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <Download />
+                    </a>
+                    <Like item={item} />
                   </DescBox>
                 </Overlay>
               </OverlayWrap>
               <BestImg />
             </div>
             <BestDesc>
-              <Profile img={item?.profileImg} />
+              <Listprofile item={item} />
               <Nickname>
                 {item?.participantCount <= 0 ? (
                   <>{item?.nickname} </>
@@ -200,19 +208,18 @@ const Keyword = styled(Span)`
 `;
 
 const Download = styled.button`
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 46px;
   border-radius: 50px;
   position: absolute;
   top: 165px;
   right: 70px;
-  background: url(${DownButton});
+  background: url(${downBef});
   ${({ theme }) => theme.backgroundSet('contain')};
-`;
 
-const Like = styled(Download)`
-  right: 10px;
-  background: url(${LikeButton});
+  &:hover {
+    background: url(${downAft});
+  }
 `;
 
 const OverlaySize = css`
@@ -311,8 +318,9 @@ const ViewsImg = styled(CommentImg)`
 
 const DescText = styled.span`
   margin-left: 2px;
-  font-family: 'NotoLight';
-  font-size: 13px;
+  font-family: 'NotoBold';
+  font-weight: 500;
+  font-size: 12px;
   line-height: 20px;
   color: #a3a3a3;
 `;

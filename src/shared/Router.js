@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 // pages import
 import CompleteDetail from '../pages/CompleteDetail';
@@ -18,12 +18,14 @@ import Header from '../global/Header';
 import PostRelay from '../pages/PostRelay';
 import Footer from '../global/Footer';
 import KakaoLogin from '../pages/KakaoLogin';
-// import { getCookieToken } from '../shared/Cookie'
+
+
 const Router = () => {
   useEffect(() => {
     window.onbeforeunload = function pushRefresh() {
       window.scrollTo(0, 0);
     };
+
   }, []);
   return (
     <Context>

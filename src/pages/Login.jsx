@@ -12,6 +12,9 @@ import speechBubble from '../images/frame.png'
 import Listbanner from '../images/Com/Listbanner.svg';
 import Listfooter from '../images/picboy-bg-footer-2 1.png';
 
+//소리
+import { error1PB } from '../global/sound';
+
 const Login = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
   const myContext = useMyContext();
@@ -32,6 +35,7 @@ const Login = () => {
 
     if (response.data.success) { window.location.href = '/'; }
     else {
+      error1PB.play();
       myContext.btnClickOn();
     }
 
@@ -113,8 +117,10 @@ const ErrorBox = styled.div`
   z-index: 9999;
 `;
 const LoginContainer = styled.div`
+  height: 70vh;
   display: flex;
   justify-content: center;
+
 `;
 //배너
 const ImgBox = styled.img`
@@ -185,8 +191,8 @@ const SignMove = styled.p`
 `;
 
 const LoginButton = styled.button`
-  width: 585px;
-  height: 90px;
+  width: 400px;
+  height: 50px;
   margin-top: 80px;
   color : ${(props) => props.theme.SecondaryColor};
   font-family: 'NotoLight';
@@ -197,10 +203,10 @@ const LoginButton = styled.button`
 `;
 
 const LoginKaKaoButton = styled.div`
-   width: 585px;
-  height: 90px;
+   width: 400px;
+  height: 50px;
   margin-top: 16px;
-  margin-left: 158px;
+  margin-left: 252px;
   color : ${(props) => props.theme.PrimaryColor};
   font-family: 'NotoLight';
   font-weight: ${(props) => props.theme.Display};
@@ -210,17 +216,17 @@ const LoginKaKaoButton = styled.div`
 `
 const KakaoContainer = styled.div`
   display: flex;
-  margin-left: 210px;
+  margin-left: 120px;
 `
 
 const Kakaoimg = styled.img`
   width: 28px;
   height: 25px;
-  margin-top: 33px;
+  margin-top: 15px;
 `;
 
 const KakaoText = styled.div`
-  margin-top: 32px;
+  margin-top: 15px;
   margin-left: 10px;
 `
 

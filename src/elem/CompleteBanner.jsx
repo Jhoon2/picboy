@@ -46,7 +46,7 @@ const CompleteBanner = (props) => {
               props.setProTap(0);
             }}
           >
-            <Underline color={'black'}>전체</Underline>
+            <Underline color={'#a3a3a3'}>전체</Underline>
           </SelectButton>
           <SelectButton
             onClick={() => {
