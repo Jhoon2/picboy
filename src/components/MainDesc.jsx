@@ -120,12 +120,11 @@ const MainDesc = ({ moveRef, move2Ref }) => {
             <Number2>#2</Number2>
             <Title2>간단한 컨텐츠</Title2>
             <Des2>
-              주제어를 정하고 그려보세요. 참여된 그림들을 보고 예측해서
-              그려봅시다.
+              주제어를 정하고 그려보세요.참여된 그림들을 보고
+              예측해서그려봅시다.
               <br />
-              <br />
-              주제어 없이도 그려보세요. 마지막에 그려진 그림만 보고 예측해
-              그려봅시다.
+              주제어 없이도 그려보세요.마지막에 그려진 그림만 보고
+              예측해그려봅시다.
             </Des2>
           </Fade>
         </DescSecond>
@@ -247,9 +246,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
                 제시어를 설정하여 <br />
                 유저들과 그림을 그릴 수 있어요!
               </StartDescs>
-              <StartButton
-                onClick={moveTopic}
-              >
+              <StartButton onClick={moveTopic}>
                 제시어 그리러 가기
                 <Arrow src={Buttonarrow} alt="" />
               </StartButton>
@@ -261,9 +258,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
                 제시어 없이 <br />
                 유저들과 그림을 그릴 수 있어요!
               </StartDescs>
-              <StartButton
-                onClick={moveFree}
-              >
+              <StartButton onClick={moveFree}>
                 자유주제 그리러 가기
                 <Arrow src={Buttonarrow} alt="" />
               </StartButton>
@@ -675,6 +670,9 @@ const BestImg = styled.div`
       transform: translateY(0);
     }
   }
+  @media ${({ theme }) => theme.device.laptop} {
+    left: 31%;
+  }
 `;
 
 const BestImg1 = styled.div`
@@ -700,6 +698,9 @@ const BestImg1 = styled.div`
       transform: translateY(0);
     }
   }
+  @media ${({ theme }) => theme.device.laptop} {
+    left: 28%;
+  }
 `;
 
 const BestImg2 = styled.div`
@@ -724,6 +725,9 @@ const BestImg2 = styled.div`
     100% {
       transform: translateY(0);
     }
+  }
+  @media ${({ theme }) => theme.device.laptop} {
+    left: 65%;
   }
 `;
 
@@ -765,7 +769,7 @@ const FreeBox = styled(TopicBox)``;
 
 const StartTitles = styled.span`
   padding-top: 30px;
-  padding-bottom: 30px;
+  padding-bottom: 12px;
   font-family: 'NotoBold';
   font-weight: 700;
   font-size: 24px;
@@ -781,17 +785,18 @@ const StartDescs = styled.span`
   padding-bottom: 50px;
   font-family: 'NotoLight';
   font-weight: 400;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 180%;
   letter-spacing: -0.02em;
+  color: #a3a3a3;
 `;
 
 const StartButton = styled.button`
   width: 280px;
   height: 60px;
-  font-family: 'NotoLight';
-  font-size: 12px;
-  font-weight: 400;
+  font-family: 'NotoBold';
+  font-size: 14px;
+  font-weight: 600;
   line-height: 180%;
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
     #000000;

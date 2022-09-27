@@ -13,27 +13,27 @@ const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) 
 
   //다른 사람 이동
   const moveOtherPerson = (id) => {
-    window.location.href = `/user-profile/${id}`
-  }
+    window.location.href = `/user-profile/${id}`;
+  };
 
-  useEffect(() => {
-    const clickOutside = (e) => {
-      if (!node.current.contains(e.target)) {
-        close()
-      }
-    };
+  // useEffect(() => {
+  //   const clickOutside = (e) => {
+  //     if (!node.current.contains(e.target)) {
+  //       close();
+  //     }
+  //   };
 
-    document.addEventListener('mousedown', clickOutside);
+  //   document.addEventListener('mousedown', clickOutside);
 
-    return () => {
-      document.removeEventListener('mousedown', clickOutside);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener('mousedown', clickOutside);
+  //   };
+  // }, []);
 
   return shown ? (
-    <FullOverLay  ref={node}>
-      <Overlay >
-        <OverlayPosition >
+    <FullOverLay ref={node}>
+      <Overlay>
+        <OverlayPosition>
           <OverlayContainer>
             <ModalContainer onClick={e => { e.stopPropagation() }}>
               <FirstAuthor style={{marginTop:'10px'}}>최초 작성자</FirstAuthor>
@@ -43,7 +43,9 @@ const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) 
                 }}>
                 <div style={{ display: 'flex' }}>
                   <FirstImg src={FirstProfileImg} />
-                  <FirstNickname style={{marginTop:'3px'}}>{Firstickname }</FirstNickname>
+                  <FirstNickname style={{ marginTop: '3px' }}>
+                    {Firstickname}
+                  </FirstNickname>
                 </div>
                 <PersonImg1 src={grayPerson} />
               </div>
@@ -69,34 +71,31 @@ const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) 
         </OverlayPosition>
       </Overlay>
     </FullOverLay>
-  ) : null
-}
+  ) : null;
+};
 const FullOverLay = styled.div`
   width: 1800px;
   position: relative;
   top: -1000px;
-
-`
+`;
 
 const Overlay = styled.div`
   z-index: 9999;
   position: absolute;
   top: 550px;
   left: 380px;
-
-`
+`;
 const OverlayContainer = styled.div`
   /* width: 200px; */
   /* position: absolute; */
   position: absolute;
-    /* top: 550px;
+  /* top: 550px;
     left: 1300px; */
-`
+`;
 const OverlayPosition = styled.div`
   height: 30px;
-  position:absolute;
-
-`
+  position: absolute;
+`;
 const ModalContainer = styled.div`
   width: 234px;
   height: 161px;
@@ -120,29 +119,29 @@ const DataPersonContainer = styled.div`
   padding: 0.6rem;
   display: flex;
   cursor: pointer;
-`
+`;
 const FirstAuthor = styled.div`
   padding: 10px;
   color: ${(props) => props.theme.inactive};
-`
+`;
 
 const FirstImg = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 32px;
-`
+`;
 const FirstNickname = styled.div`
   margin-top: 3px;
   margin-left: 10px;
   color: ${(props) => props.theme.basic};
   font-size: ${(props) => props.theme.Caption2};
-`
+`;
 
 const PersonImg = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 32px;
-`
+`;
 const PersonImg1 = styled.img`
   width: 14px;
   height: 14px;
@@ -156,5 +155,5 @@ const PersonText = styled.div`
   margin-left: 10px;
   color: ${(props) => props.theme.basic};
   font-size: ${(props) => props.theme.Caption2};
-`
-export default AllParticipants
+`;
+export default AllParticipants;

@@ -456,6 +456,7 @@ const ErrorBox = styled.div`
   z-index: 2;
 `;
 const LoginContainer = styled.div`
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -595,13 +596,16 @@ const NoErrorsmessage = styled.div`
 `;
 
 const SignupButton = styled.button`
-  width: 586px;
-  height: 90px;
+  width: 400px;
+  height: 50px;
   font-family: 'NotoLight';
   font-size: 20px;
   font-weight: 400;
 
   margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: 100px;
+
   padding: 0.5rem;
   cursor: pointer;
   color: white;

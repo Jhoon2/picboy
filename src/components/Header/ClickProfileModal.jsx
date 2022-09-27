@@ -6,7 +6,7 @@ import { removeCookieToken } from '../../shared/Cookie';
 
 import styled, { css } from 'styled-components';
 import UseGetUser from '../../hooks/UseGetUser';
-import '../../elem/Down'
+import '../../elem/Down';
 import Down from '../../elem/Down';
 import basicImg from '../../images/mypage/basicImg.png'
 import { headerPB } from '../../global/sound';
@@ -41,7 +41,6 @@ const ClickProfileModal = ({ img }) => {
   };
 
   useEffect(() => {
-    
     const clickOutside = (e) => {
       if (select && node.current && !node.current.contains(e.target)) {
         setSelect(false);
@@ -55,14 +54,17 @@ const ClickProfileModal = ({ img }) => {
     };
   }, [select]);
 
-
   let anyData = 1;
-  if(!logonUser?.data?.data) return
+  if (!logonUser?.data?.data) return;
   return (
     <div ref={node}>
-         {myContext.logoutBtn ? (
-        <ErrorBox onClick={() => window.location.href = '/'}>
-          <AnyModal title="안내" content="로그아웃 되었습니다" anyData={anyData} />
+      {myContext.logoutBtn ? (
+        <ErrorBox onClick={() => (window.location.href = '/')}>
+          <AnyModal
+            title="안내"
+            content="로그아웃 되었습니다"
+            anyData={anyData}
+          />
         </ErrorBox>
       ) : null}
       <div>
@@ -111,7 +113,7 @@ const ClickProfileModal = ({ img }) => {
                 </Down>
           </SelectListBox>
     </div>
-  )
+  );
 };
 const ErrorBox = styled.div`
   position: fixed;
@@ -134,7 +136,11 @@ const LoginUserImg = styled.img`
   background-color: white;
 
   cursor: pointer;
-
+  @media ${({ theme }) => theme.device.laptop} {
+    position: absolute;
+    bottom: 30%;
+    right: 3%;
+  }
 `;
 
 const SelectListBox = styled.div`
@@ -152,7 +158,7 @@ const DownUl = styled.ul`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor:default;
+  cursor: default;
   border: 2px solid #000000;
   background-color: white;
 `;
@@ -160,7 +166,7 @@ const DownUl = styled.ul`
 const ProfileModalContainer = styled.div`
   height: 169px;
   margin: 0 auto;
-`
+`;
 
 const ProfileImg = styled.img`
   width: 70px;
@@ -173,13 +179,12 @@ const ProfileNickname = styled.div`
   font-size: ${(props) => props.theme.Caption1};
   margin-top: 11px;
   text-align: center;
-
-`
+`;
 const ProfileUsername = styled.div`
-   font-weight: ${(props) => props.theme.HeadlineRG};
+  font-weight: ${(props) => props.theme.HeadlineRG};
   font-size: ${(props) => props.theme.Caption3};
   text-align: center;
-`
+`;
 
 const ModalText = styled.div`
   width: 268px;

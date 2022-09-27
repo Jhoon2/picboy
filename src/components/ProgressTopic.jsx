@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Loadings from '../global/Loading';
 import { v4 as uuidv4 } from 'uuid';
+import Listprofile from '../elem/Listprofile';
+import Loadings from '../global/Loading';
 
 const ProgressTopic = () => {
   const navigate = useNavigate();
@@ -28,7 +29,6 @@ const ProgressTopic = () => {
     }
     setLoad(false);
   };
-
 
   useEffect(() => {
     getProgressData();
@@ -81,7 +81,7 @@ const ProgressTopic = () => {
             <BestImg />
           </div>
           <BestDesc>
-            <Profile img={item?.profileImg} />
+            <Listprofile item={item} />
             <Nickname>
               {item?.participantCount <= 0 ? (
                 <>{item?.nickname} </>

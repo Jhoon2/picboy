@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { __postReport } from '../redux/modules/Report';
 import reportBef from '../images/Com/reportBef.svg';
@@ -69,8 +68,8 @@ const SelectBox = styled.div`
   position: relative;
 `;
 const Select = styled.button`
-  top: -20px;
-  right: 10px;
+  top: -15px;
+  right: 15px;
   position: absolute;
   background: none;
   font-family: 'NotoBold';

@@ -25,7 +25,6 @@ const Notification = () => {
   const [select, setSelect] = useState(false);
   const useGet = UseGetUser();
   const usernames = useGet && useGet.data?.data.username;
-
   const read = notis.data;
   const getList = getNotis.data;
 
@@ -49,7 +48,7 @@ const Notification = () => {
 
   let stompClient = Stomp.over(function () {
     return new SockJS(`${baseURL}/socket/`);
-    });
+  });
 
   const stompConnect = () => {
     try {
@@ -105,6 +104,10 @@ const Notification = () => {
       ':' +
       date.getMinutes();
     return returnDate;
+  };
+
+  const moveOtherCom = (id) => {
+    window.location.href = `/user-profile/${id}`;
   };
 
   return (

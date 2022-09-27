@@ -16,12 +16,10 @@ import {
 import UseGetUser from '../hooks/UseGetUser';
 import ClickProfileModal from '../components/Header/ClickProfileModal';
 import basicImg from '../images/mypage/basicImg.png';
-import '../elem/Down'
+import '../elem/Down';
 import { __getLogonUser } from '../redux/modules/UserPage';
 import { headerPB } from './sound';
 import Notification from '../elem/Notification';
-
-
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -37,19 +35,17 @@ const throttle = function (callback, waitTime) {
 const Header = () => {
   const myToken = getCookieToken();
 
-
   const [messageList, setMessageList] = useState([]);
   const refreshToken = getRefreshToken();
 
   const location = useLocation();
 
   const dispatch = useDispatch();
-  const  getLogonUser  = useSelector((state) =>  state?.logonUser)
-  const loginUser = getLogonUser?.logonUser?.profileImg
+  const getLogonUser = useSelector((state) => state?.logonUser);
+  const loginUser = getLogonUser?.logonUser?.profileImg;
 
-
-  useEffect(() => { 
-    dispatch(__getLogonUser())
+  useEffect(() => {
+    dispatch(__getLogonUser());
   }, []);
 
   const navigate = useNavigate();
@@ -73,7 +69,6 @@ const Header = () => {
     return () =>
       documentRef.current.removeEventListener('scroll', throttleScroll);
   }, [pageY]);
-
 
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
@@ -113,12 +108,14 @@ const Header = () => {
             <>
               <Notification />
               {/* <LoginUserImg> */}
-            <ClickProfileModal img={!loginUser? basicImg : loginUser}  
-            onClick={() => {
-              headerPB.play();
-                  }} />
-                {/* </LoginUserImg> */}
-              </>
+              <ClickProfileModal
+                img={!loginUser ? basicImg : loginUser}
+                onClick={() => {
+                  headerPB.play();
+                }}
+              />
+              {/* </LoginUserImg> */}
+            </>
           ) : (
             <LoginButton
               onClick={() => {
@@ -130,7 +127,6 @@ const Header = () => {
             </LoginButton>
           )}
         </HeaderBox>
-
       </HeaderContainer>
     </HeaderArea>
   );
@@ -142,7 +138,7 @@ const Button = styled.button`
   width: 200px;
   height: 50px;
   background: none;
-  font-family: 'PopLight';
+  font-family: 'PopBold';
   font-size: 13px;
   color: white;
 `;
@@ -216,4 +212,3 @@ const LoginButton = styled(Button)`
     color: white;
   }
 `;
-

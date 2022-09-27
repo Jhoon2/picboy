@@ -14,7 +14,6 @@ import UseGetUser from '../hooks/UseGetUser'
 import GifCard from '../components/UserProfile/GifCard'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
-import Grid from '../styles/Grid'
 
 //이미지
 import basicImg from '../images/mypage/basicImg.png'
@@ -192,8 +191,6 @@ const UserProfile = () => {
     if(!userinfo?.data?.data?.username) return
     return (
         <>
-            {loading ? 
-         
         <UserProfileContainer >
             <ContainerInner >
                 <TopScroll />
@@ -260,16 +257,9 @@ const UserProfile = () => {
                         
             </ContainerInner>
 
-        
             </UserProfileContainer>
 
-                : <LoadingContainer>
-                <div >
-                        {/* <Loading /> */}
-                        로딩중
-                </div>
-                </LoadingContainer>} 
-            
+                
             {/* 프로필이미지 모달창 */}
             {UserPage&&UserPage.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
             close={() => myContext.setIsOpenProfileImg(false)} /> : null}  
