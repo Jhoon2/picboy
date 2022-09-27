@@ -145,7 +145,6 @@ const PostTopic = () => {
     const cancelPainting = () => {
         setIsPainting(false);
         setStep(step + 1);
-        console.log(step);
         if (step < imgArr.length) {
             imgArr.length = step + 2
         }
@@ -154,7 +153,6 @@ const PostTopic = () => {
         // }
         const imgURL = canvas.toDataURL();
         setImgArr([...imgArr, imgURL]);
-        console.log(imgArr);
     };
 
     const cancelPaintingLeave = () => {
@@ -212,9 +210,8 @@ const PostTopic = () => {
     const undoHandler = (e) => {
         if (step > 0) {
             setUndoBoolean(true);
-            console.log('hi');
             setStep(step - 1);
-            console.log(step)
+
             const undoImage = new Image();
             undoImage.src = imgArr[step];
 
@@ -230,7 +227,6 @@ const PostTopic = () => {
         if (step < imgArr.length) {
             setRedoBoolean(true);
             setStep(step + 1);
-            console.log(step)
             const redoImage = new Image();
             redoImage.src = imgArr[step];
             redoImage.onload = function () {
