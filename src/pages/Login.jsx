@@ -7,7 +7,10 @@ import axios from 'axios';
 import { setAccessToken, setRefreshToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi'
 import LoginErrorModal from '../components/login/LoginErrorModal'
-import {KAKAO_AUTH_URL} from '../shared/Kakao_oauth'
+import { KAKAO_AUTH_URL } from '../shared/Kakao_oauth'
+
+//이미지
+import logo from '../images/logo.svg'
 import speechBubble from '../images/frame.png'
 import Listbanner from '../images/Com/Listbanner.svg';
 import Listfooter from '../images/picboy-bg-footer-2 1.png';
@@ -45,6 +48,9 @@ const Login = () => {
   return (
     <>
       <LoginContainer>
+        <LogoContainer onClick={()=>navigate('/')}>
+          <LogoImg src={logo} />
+        </LogoContainer>
         <ImgBox src={Listbanner} />
       {myContext.btnOpen ? <ErrorBox onClick={()=>myContext.btnClickOff()}>
         <LoginErrorModal />
@@ -122,6 +128,17 @@ const LoginContainer = styled.div`
   justify-content: center;
 
 `;
+//로고
+const LogoContainer = styled.div`
+  position: absolute;
+  margin-top: 46px;
+  cursor: pointer;
+`
+
+const LogoImg = styled.img`
+  width: 119px;
+  height: 34px;
+`
 //배너
 const ImgBox = styled.img`
   width: 100%;

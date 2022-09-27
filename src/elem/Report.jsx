@@ -11,13 +11,13 @@ const Report = ({ item }) => {
   const dispatch = useDispatch();
   const [select, setSelect] = useState(false);
   const [text, setText] = useState(false);
+  const [toggleDeclar, setToggleDecla] = useState(item.reported)
 
   const { reports } = useSelector((state) => state.reports)
-  console.log(reports)
   const id = item.id;
-  // console.log(id, reports)
+  
   function onReport() {
-    console.log(id)
+    setToggleDecla(!toggleDeclar)
     dispatch(__postReport(id));
   }
 
@@ -55,7 +55,7 @@ const Report = ({ item }) => {
                   }}
                 >
                   <Newimg img={reportBef}>
-                    <Text> {text ? '신고취소' : '신고하기'}</Text>
+                    <Text> {toggleDeclar ? '신고취소' : '신고하기'}</Text>
                   </Newimg>
                 </ReportButton>
               </New>

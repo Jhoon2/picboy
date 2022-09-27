@@ -1,22 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
 import axios from 'axios';
+import instance from '../../shared/apis';
 
-const myToken = getCookieToken();
-const refreshToken = getRefreshToken();
-const baseURL = process.env.REACT_APP_API_KEY;
 
 export const __postReport = createAsyncThunk(
   'postReport',
   async (postId, thunkAPI) => {
-    console.log(postId)
     try {
-      const data = await axios.post(`${baseURL}/post/report/${postId}`, '', {
-        headers: {
-          Authorization: myToken,
-          'refresh-token': refreshToken,
-        },
-      });
+      const data = await instance.post(`/post/report/${postId}`, ''
+      );
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -38,7 +31,6 @@ export const reportSlice = createSlice({
     },
     [__postReport.fulfilled]: (state, action) => {
       state.isLoading = false;
-      console.log(action.payload)
       state.reports = action.payload;
     },
     [__postReport.rejected]: (state, action) => {
