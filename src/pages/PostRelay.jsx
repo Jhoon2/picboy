@@ -230,6 +230,11 @@ const PostRelay = () => {
   }, []);
 
   const imgInfoUrl = `post/gif/images/detail/${params.id}`;
+
+  useEffect(() => {
+    Callaxios();
+  }, [])
+
   const Callaxios = () => {
     api
       .get(imgInfoUrl)

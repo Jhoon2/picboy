@@ -192,7 +192,7 @@ const UserProfile = () => {
     if(!userinfo?.data?.data?.username) return
     return (
         <>
-        {isLoading && <Loading />}
+        {/* {isLoading && <Loading />} */}
         <UserProfileContainer >
             <ContainerInner >
                 <TopScroll />
