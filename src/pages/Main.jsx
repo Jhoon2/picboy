@@ -42,7 +42,7 @@ const Main = () => {
           <Icon4 />
           <Icon5 />
           <p>DELIGHT</p>
-          AND
+          <div>AND</div>
           <span>HAPPINESS</span>
         </Line2>
         <Line3>
@@ -99,6 +99,9 @@ const Title = styled.div`
   ${Position}
   top: 50%;
   color: #a3a3a3;
+  @media ${({ theme }) => theme.device.laptop} {
+    width: 1200px;
+  }
 `;
 
 const Line1 = styled.div`
@@ -107,6 +110,13 @@ const Line1 = styled.div`
     position: absolute;
     top: 13%;
     left: 26%;
+  }
+  @media ${({ theme }) => theme.device.laptop} {
+    span {
+      position: absolute;
+      top: 13%;
+      left: 15%;
+    }
   }
 `;
 
@@ -117,6 +127,9 @@ const Icon1 = styled.div`
   ${({ theme }) => theme.backgroundSet('contain')};
   position: absolute;
   left: 23.3%;
+  @media ${({ theme }) => theme.device.laptop} {
+    left: 11%;
+  }
 `;
 
 const Icon2 = styled(Icon1)`
@@ -125,12 +138,18 @@ const Icon2 = styled(Icon1)`
   background: url(${icon2});
   top: 16%;
   left: 71.5%;
+  @media ${({ theme }) => theme.device.laptop} {
+    left: 86%;
+  }
 `;
 const Icon3 = styled(Icon1)`
   height: 66px;
   background: url(${icon3});
   top: 48%;
   left: 39.3%;
+  @media ${({ theme }) => theme.device.laptop} {
+    left: 31%;
+  }
 `;
 
 const Icon4 = styled(Icon1)`
@@ -138,6 +157,9 @@ const Icon4 = styled(Icon1)`
   background: url(${icon4});
   top: 48%;
   left: 42.3%;
+  @media ${({ theme }) => theme.device.laptop} {
+    left: 35%;
+  }
 `;
 
 const Icon5 = styled(Icon1)`
@@ -145,6 +167,9 @@ const Icon5 = styled(Icon1)`
   background: url(${icon5});
   top: 48%;
   left: 55.3%;
+  @media ${({ theme }) => theme.device.laptop} {
+    left: 53%;
+  }
 `;
 
 const Icon6 = styled(Icon1)`
@@ -153,6 +178,9 @@ const Icon6 = styled(Icon1)`
   background: url(${icon6});
   top: 16%;
   left: 29%;
+  @media ${({ theme }) => theme.device.laptop} {
+    left: 18%;
+  }
 `;
 
 const Icon7 = styled(Icon1)`
@@ -175,6 +203,10 @@ const Icon7 = styled(Icon1)`
     100% {
       transform: translateY(0);
     }
+  }
+  @media ${({ theme }) => theme.device.laptop} {
+    top: 25%;
+    left: 77%;
   }
 `;
 
@@ -206,8 +238,24 @@ const Line2 = styled.div`
   }
   span {
     position: absolute;
+    bottom: 32.5%;
     left: 56%;
     margin: 0 40px;
+  }
+  @media ${({ theme }) => theme.device.laptop} {
+    p {
+      left: 0%;
+    }
+    span {
+      position: absolute;
+      bottom: 32.8%;
+      left: 53%;
+      margin: 0 40px;
+    }
+
+    div {
+      margin-right: 90px;
+    }
   }
 `;
 
