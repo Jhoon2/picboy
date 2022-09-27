@@ -31,6 +31,9 @@ import line8 from '../images/line8.png';
 import line10 from '../images/line10.png';
 import line12 from '../images/line12.png';
 
+//소리
+import { error1PB } from '../global/sound';
+
 const PostTopic = () => {
     const [frame, setFrame] = useState(0);
     const [canvasDone, setCanvasDone] = useState();
@@ -97,7 +100,6 @@ const PostTopic = () => {
                 ctx.moveTo(pos[0], pos[1]);
                 ctx.lineTo(X, Y);
                 ctx.stroke()
-                console.log('hi');
             } else {
                 ctx.lineWidth = LineWeightCount;
                 ctx.lineTo(X, Y);
@@ -245,7 +247,6 @@ const PostTopic = () => {
             .get(url)
             .then(function (response) {
                 const RandomTopicApi = response.data.data.topic;
-                // console.log(RandomTopicApi);
                 setTopicState(RandomTopicApi);
             })
             .catch(function (error) {
@@ -257,7 +258,6 @@ const PostTopic = () => {
 
     const topicInput = (e) => {
         setTopicInputState(e.target.value);
-        // console.log(topicInputState);
     };
 
 
@@ -271,14 +271,19 @@ const PostTopic = () => {
         const imgDataUrl = canvas.toDataURL('image/png');
         const topic = topicInputState || topicState;
         if (topic === '') {
+            error1PB.play();
             myContext.setTopicBtn(true)
             return;
         } else if (frame === 0) {
+            error1PB.play();
             myContext.setSettingFrameBtn(true)
             return;
         }
-        if (vacantState(canvas)) return myContext.setVacantCanvas(true)
-
+        if (vacantState(canvas)) {
+            error1PB.play();
+            myContext.setVacantCanvas(true)
+            return;
+        }
         if(clickCount !== 0) return 
         instance
             .post(
@@ -290,7 +295,6 @@ const PostTopic = () => {
                 },
             )
             .then(function (response) {
-                // console.log(response)
                 myContext.setDrawingDoneBtn(true)
                 ++clickCount
                 window.location.replace('/list');

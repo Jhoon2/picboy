@@ -6,7 +6,6 @@ import { __selectIconImg } from '../../redux/modules/UserPage'
 const IconImages = ({ robot, clickRobot, idx, num, setNum,iconNames }) => {
   const dispatch = useDispatch();
 
-  // console.log(num)
   const handleIconClick = (e) => {
     setNum(e.target.id)
     const info = {

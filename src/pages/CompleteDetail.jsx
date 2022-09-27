@@ -45,12 +45,12 @@ const CompleteDetail = () => {
   const commentChange = (e) => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     setCommentInput(e.target.value)
+    
   }
-
+  
   const commentApply = () => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     if (commentInput === '') return
-
     const payload = {
       id: params.id,
       content: commentInput
@@ -74,7 +74,6 @@ const CompleteDetail = () => {
   const gifApi = () => {
     instance.get(`/post/gif/detail/${params.id}`)
       .then(function (response) {
-        console.log(response)
         setGif(response.data.data);
         setLikeCountState(response.data.data.likeCount);
         setLikeApi(response.data.data.liked);
@@ -118,7 +117,6 @@ const CompleteDetail = () => {
   
         .then(function (response) {
           setLikeApi(response.data.data.like);
-          // console.log(response)
           if (likeApi === false) {
             setLikeCountState(likeCountState + 1);
           } else if (likeApi === true) {
@@ -145,12 +143,6 @@ const CompleteDetail = () => {
     window.location.replace("/CompList");
   }
 
-  ///////////////////////
-  // save image
-  const saveImg = () => {
-    if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
-    
-  }
   
 
   return (
@@ -201,7 +193,7 @@ const CompleteDetail = () => {
           {/* topic info start */}
           <Community>
               <ContentsBtn>
-              <a href={`${baseURL}/download?postId=${Number(params.id)}&fileName=${gif.gifUrl}`}  onClick={saveImg}>
+              <a href={`${baseURL}/download?postId=${Number(params.id)}&fileName=${gif.gifUrl}`} >
               <DownloadImg  />
               </a>
              
@@ -233,7 +225,7 @@ const CompleteDetail = () => {
             <CommentWrap>
               <CommentTitle>댓글<span style={{ marginLeft: '8px', color: '#a3a3a3' }}>{comments.length}</span></CommentTitle>
               <ContentsLine />
-              <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
+              <CommentInput onChange={commentChange} wrap='hard' value={commentInput} placeholder="댓글을 남겨주세요." />
               <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
               <CommentList style={comments.length === 0 ? { border: 'none' } : {}}>
                 {

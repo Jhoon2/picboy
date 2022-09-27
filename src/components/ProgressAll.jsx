@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import Listprofile from '../elem/Listprofile';
 import Loadings from '../global/Loading';
 
 const ProgressAll = () => {
@@ -11,9 +12,7 @@ const ProgressAll = () => {
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
   const [ref, setRef] = useState(null);
-  const preventRef = useRef(true); //옵저버 중복 실행 방지
-  const endRef = useRef(false); //모든 글 로드 확인
-
+  const [list, setList] = useState(false);
   const baseURL = process.env.REACT_APP_API_KEY;
 
   const getProgressData = async () => {
@@ -89,7 +88,7 @@ const ProgressAll = () => {
             <BestImg />
           </div>
           <BestDesc>
-            <Profile img={item?.profileImg} />
+            <Listprofile item={item} />
             <Nickname>
               {item?.participantCount <= 0 ? (
                 <>{item?.nickname} </>
@@ -145,18 +144,6 @@ const DescBox = styled(Width)`
   ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
 `;
 
-const Button = styled.button`
-  width: 40px;
-  height: 40px;
-`;
-
-const Profile = styled(Button)`
-  margin-right: 20px;
-  border-radius: 50%;
-  background: url(${(props) => props.img});
-  ${({ theme }) => theme.backgroundSet('cover')};
-`;
-
 const Span = styled.span`
   font-size: 30px;
   font-weight: 800;
@@ -194,7 +181,6 @@ const Overlay = styled.div`
   margin-top: 100%;
   height: 300px;
   background: white;
-
   cursor: pointer;
   background: linear-gradient(
     360deg,
@@ -208,6 +194,7 @@ const OverlayWrap = styled.div`
   ${OverlaySize}
   overflow: hidden;
   position: absolute;
+
   background: url(${(props) => props.productImg});
   ${({ theme }) => theme.backgroundSet('contain')};
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.09);

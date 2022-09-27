@@ -1,40 +1,46 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useMyContext } from '../../shared/ContextApi';
+import { useNavigate } from 'react-router-dom';
 
 import { removeCookieToken } from '../../shared/Cookie';
 
 import styled, { css } from 'styled-components';
 import UseGetUser from '../../hooks/UseGetUser';
-import '../../elem/Down'
+import '../../elem/Down';
 import Down from '../../elem/Down';
 import basicImg from '../../images/mypage/basicImg.png'
+import { headerPB } from '../../global/sound';
+import { pop1PB } from '../../global/sound';
+
 //로그아웃 알림창
 import AnyModal from '../../elem/AnyModal';
+
+
 
 const ClickProfileModal = ({ img }) => {
   const myContext = useMyContext();
   const node = useRef();
+  const navigate = useNavigate();
   const logonUser = UseGetUser();
   const logonUsername = logonUser && logonUser.data.data.username;
-
+  
   const [selectContent, setSelectContent] = useState('myPage');
-
+  const openClick = () => {
+    setSelect(!select)
+    headerPB.play()
+  }
   //열고 닫는 함수
   const [select, setSelect] = useState(false);
 
-  const myPage = (e) => {
-    setSelectContent(e.target.id);
-    window.location.href = `/user-profile/${logonUsername}`;
-    myContext.setLogonProfileImg(false);
-  };
+  //로그아웃
   const Logout = (e) => {
+    pop1PB.play();
     myContext.setLogoutBtn(true)
     setSelectContent(e.target.id);
     removeCookieToken();
   };
 
   useEffect(() => {
-    
     const clickOutside = (e) => {
       if (select && node.current && !node.current.contains(e.target)) {
         setSelect(false);
@@ -48,18 +54,21 @@ const ClickProfileModal = ({ img }) => {
     };
   }, [select]);
 
-
   let anyData = 1;
-  if(!logonUser?.data?.data) return
+  if (!logonUser?.data?.data) return;
   return (
     <div ref={node}>
-         {myContext.logoutBtn ? (
-        <ErrorBox onClick={() => window.location.href = '/'}>
-          <AnyModal title="안내" content="로그아웃 되었습니다" anyData={anyData} />
+      {myContext.logoutBtn ? (
+        <ErrorBox onClick={() => (window.location.href = '/')}>
+          <AnyModal
+            title="안내"
+            content="로그아웃 되었습니다"
+            anyData={anyData}
+          />
         </ErrorBox>
       ) : null}
       <div>
-        <div onClick={() => setSelect(!select)}>
+        <div onClick={openClick}>
           <LoginUserImg src={img}/>
         </div>
       </div>
@@ -74,19 +83,24 @@ const ClickProfileModal = ({ img }) => {
                   <div style={{display: 'flex', justifyContent: 'center'}}>
                     <ProfileImg src={img ? img : basicImg} />
                   </div>
-                  <ProfileNickname>{logonUser && logonUser.data.data.nickname}</ProfileNickname>
-                  <ProfileUsername>{logonUser && logonUser.data.data.username}</ProfileUsername>
+                  <ProfileNickname>{logonUser?.data?.data?.status === 1 ? logonUser?.data?.data?.nickname : logonUser?.data?.data?.nickname.slice(0,8)}</ProfileNickname>
+                  <ProfileUsername>{logonUser?.data?.data?.status === 1 ?  logonUser?.data?.data?.username : 'Kakao user'}</ProfileUsername>
                 </ProfileModalContainer>
-                <TextBr />
+                <HR />
                 <ModalText
                     id="myPage"
                     name="myPage"
-                    onClick={myPage}
+                 onClick={(e) => {
+                      pop1PB.play();
+                      setSelectContent(e.target.id);
+                      navigate(`/user-profile/${logonUsername}`)
+                      // myContext.setLogonProfileImg(false);
+                    }}
                     selectContent={selectContent}
                   >
                     마이페이지
                   </ModalText>
-                  <TextBr />
+                  <HR />
                   <ModalText
                     id="Logout"
                     name="Logout"
@@ -99,7 +113,7 @@ const ClickProfileModal = ({ img }) => {
                 </Down>
           </SelectListBox>
     </div>
-  )
+  );
 };
 const ErrorBox = styled.div`
   position: fixed;
@@ -116,12 +130,17 @@ const ErrorBox = styled.div`
 const LoginUserImg = styled.img`
   width: 32px;
   height: 32px;
+  margin-top: 5px;
   margin-left: 30px;
   border-radius: 50px;
   background-color: white;
 
   cursor: pointer;
-
+  @media ${({ theme }) => theme.device.laptop} {
+    position: absolute;
+    bottom: 30%;
+    right: 3%;
+  }
 `;
 
 const SelectListBox = styled.div`
@@ -139,7 +158,7 @@ const DownUl = styled.ul`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  cursor:default;
+  cursor: default;
   border: 2px solid #000000;
   background-color: white;
 `;
@@ -147,54 +166,52 @@ const DownUl = styled.ul`
 const ProfileModalContainer = styled.div`
   height: 169px;
   margin: 0 auto;
-`
+`;
 
 const ProfileImg = styled.img`
   width: 70px;
   height: 70px;
   margin-top: 22px;
-  /* margin-left: 5px; */
+  margin-left: 5px;
 `
 const ProfileNickname = styled.div`
   font-weight: ${(props) => props.theme.BodyBD};
   font-size: ${(props) => props.theme.Caption1};
   margin-top: 11px;
   text-align: center;
-
-`
+`;
 const ProfileUsername = styled.div`
-   font-weight: ${(props) => props.theme.HeadlineRG};
+  font-weight: ${(props) => props.theme.HeadlineRG};
   font-size: ${(props) => props.theme.Caption3};
   text-align: center;
-`
+`;
 
 const ModalText = styled.div`
   width: 268px;
-  height: 56px;
+  height: 58px;
 
   display: flex;
   text-align: center;
   flex-direction: column;
   justify-content: center;
-  font-family: 'Noto Sans KR';
+  font-family: 'NotoBold';
   font-style: normal;
+  font-weight: 700;
   font-size: ${(props) => props.theme.Caption2};
   color: ${(props) => props.theme.inactive};
   cursor: pointer;
 
   :hover {
-    height: 60px;
+    height: 65px;
     background-color:${(props) => props.theme.basic};
   }
 `;
-const TextBr = styled.div`
+const HR = styled.hr`
   width: 264px;
-  height: 0px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  border: 0.5px solid #a3a3a3;
+  height: 1px;
+  border: none;
+  margin: 0;
+  background: #ccc;
 `;
 
 export default ClickProfileModal;

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Loadings from '../global/Loading';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+import Listprofile from '../elem/Listprofile';
+import Loadings from '../global/Loading';
 
 const BestFree = () => {
   const navigate = useNavigate();
@@ -63,7 +65,7 @@ const BestFree = () => {
     <ListBox>
       {/* {load === true ? <Loadings /> : null} */}
       {newData.map((item, index) => (
-        <BestBox key={item.id}>
+        <BestBox key={uuidv4()}>
           <BestImg
             productImg={item?.imgUrl}
             onClick={() => {
@@ -71,7 +73,7 @@ const BestFree = () => {
             }}
           />
           <BestDesc>
-            <Profile img={item?.profileImg} />
+            <Listprofile item={item} />
             <Nickname>
               {item?.participantCount <= 0 ? (
                 <>{item?.nickname} </>

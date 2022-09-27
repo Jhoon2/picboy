@@ -26,7 +26,6 @@ export const __getLogonUser = createAsyncThunk(
 export const __getUserPage = createAsyncThunk(
   'userPage/getUserPage',
   async (payload, thunkAPI) => {
-    // console.log(payload)
     try {
       const data = await api.get(`/mypage/user-info?username=${payload.username}`
       )

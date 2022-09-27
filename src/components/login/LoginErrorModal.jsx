@@ -4,7 +4,7 @@ import { useMyContext } from '../../shared/ContextApi'
 
 const LoginErrorModal = () => {
   const myContext = useMyContext();
-
+  
   return (
     <ErrorContainer onClick={(e) => { e.stopPropagation(); }}>
       <div style={{textAlign:'center'}}>

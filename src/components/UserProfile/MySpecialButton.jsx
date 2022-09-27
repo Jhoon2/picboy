@@ -90,7 +90,6 @@ const ErrorBox = styled.div`
 `;
 
 const FullOverLay = styled.div`
-
     position: relative;
     width: 100vw;
     height: 100vh;
@@ -116,7 +115,7 @@ const ModalContainer = styled.div`
   height: 100px;
   position: absolute;
   z-index: 2;
-  border: 2px solid #000000;
+  border: 3px solid #000000;
   background-color: white;
 `
 const ModalText = styled.div`
