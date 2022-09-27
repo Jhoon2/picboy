@@ -18,7 +18,6 @@ const Categories = () => {
   const myContext = useMyContext();
 
   const logonUser = UseGetUser();
-  // console.log(logonUser && logonUser)
   const [select, setSelect] = useState(false);
 
   const moveTopic = () => {

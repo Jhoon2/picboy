@@ -137,12 +137,13 @@ const Notification = () => {
                 </Nonoti>
               </>
             ) : (
-              getList?.map((item, index) => (
-                <div key={uuidv4()}>
-                  <HR />
+                getList?.map((item, index) => (
+                  <div key={uuidv4()}>
+                    <HR />
                   <DescBox
-                    onClick={() => {
-                      navigate(`/complete-detail/${item?.postId}`);
+                      onClick={() => {
+                        console.log(item.postId)
+                      window.location.href = (`/complete-detail/${item.postId}`);
                       pop1PB.play();
                     }}
                   >

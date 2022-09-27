@@ -38,7 +38,6 @@ const Free = () => {
     setLoad(false);
   };
 
-  console.log(page);
 
   useEffect(() => {
     getCompleteData();

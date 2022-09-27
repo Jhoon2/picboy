@@ -31,7 +31,6 @@ const AllView = () => {
         return;
       }
       setNewdata(newData.concat(data.data.content));
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -39,7 +38,6 @@ const AllView = () => {
     setLoad(false);
   };
 
-  console.log(page);
   useEffect(() => {
     getCompleteData();
   }, [page]);

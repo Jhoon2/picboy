@@ -57,6 +57,11 @@ const All = () => {
     });
   };
 
+  // setTimeout(() => {
+  //   observer.observe(ref);
+  // }, 500);
+
+
   useEffect(() => {
     let observer;
     if (ref) {

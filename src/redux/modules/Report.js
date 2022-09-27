@@ -16,7 +16,6 @@ export const __postReport = createAsyncThunk(
           'refresh-token': refreshToken,
         },
       });
-      console.log(data.data);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

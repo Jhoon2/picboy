@@ -23,6 +23,7 @@ import Desc3 from '../images/mainDesc/Desc3.gif';
 import Desc4 from '../images/mainDesc/Desc4.gif';
 import { buttonPB } from '../global/sound';
 import { coinPB } from '../global/sound';
+import { error1PB } from '../global/sound';
 
 const MainDesc = ({ moveRef, move2Ref }) => {
   const navigate = useNavigate();
@@ -31,14 +32,18 @@ const MainDesc = ({ moveRef, move2Ref }) => {
   const myContext = useMyContext();
   const logonUser = UseGetUser();
 
+  const btnClick = () => {
+    myContext.btnClickOn();
+    error1PB.play()
+  }
   const moveTopic = () => {
-    if (!logonUser) return myContext.btnClickOn();
+    if (!logonUser) return btnClick() 
     navigate('/post-topic');
     coinPB.play();
   };
 
   const moveFree = () => {
-    if (!logonUser) return myContext.btnClickOn();
+    if (!logonUser) return btnClick()  ;
     navigate('/post-free');
     coinPB.play();
   };
