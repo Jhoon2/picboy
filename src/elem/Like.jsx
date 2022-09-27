@@ -19,7 +19,6 @@ const Like = ({ item }) => {
     if (accessToken === undefined) {
       myContext.setCommetApplyBtn(true);
     } else {
-      // setLikeState(!likeState);
       const info = {
         like: 0,
       };
