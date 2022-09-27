@@ -18,7 +18,6 @@ const Categories = () => {
   const myContext = useMyContext();
 
   const logonUser = UseGetUser();
-  // console.log(logonUser && logonUser)
   const [select, setSelect] = useState(false);
 
   const moveTopic = () => {
@@ -155,7 +154,7 @@ const DownUl = styled.ul`
   height: 275px;
   ${({ theme }) => theme.flexSet('column', 'flex-start', 'center')}
   background: white;
-  padding: 25px 0px 10px 0px;
+  padding: 25px 19px 10px 0px;
   position: absolute;
   border: 3px solid black;
 `;
@@ -195,17 +194,9 @@ const SelectListBox = styled.div`
   width: 120px;
   position: relative;
   top: 10px;
-  right: 90px;
+  right: 55px;
   z-index: 1;
 `;
-
-// const DownUl = styled.ul`
-//     width: 280px;
-//     min-height: 100px; 
-//     background: white;
-//     border: 3px solid black;
-//     padding: 20px;
-// `
 
 const Topic = styled.li`
   margin-top: 10px;
@@ -227,6 +218,7 @@ const Desc = styled.span`
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
+  letter-spacing: 0.01em;
 `;
 
 const Title = styled.div`

@@ -37,6 +37,11 @@ export const Context = (props) => {
     //신고취소
     const [declarCancel, setDeclarCancel] = React.useState(false);
 
+    //List 중 신고
+    const [listDeclarBtn, setListDecalrBtn] = React.useState(false);
+
+    //List 중 신고취소
+    const [listDeclarCancel, setListDeclarCancel] = React.useState(false);
     //댓글 삭제
     const [commetDeleteBtn, setCommetDeleteBtn] = React.useState(false);
 
@@ -100,6 +105,14 @@ export const Context = (props) => {
         declarCancel,
         setDeclarCancel,
 
+        //list 중 신고
+        listDeclarBtn,
+        setListDecalrBtn,
+
+        //List 중 신고취소
+        listDeclarCancel,
+        setListDeclarCancel,
+        
         //댓글삭제
         commetDeleteBtn,
         setCommetDeleteBtn,

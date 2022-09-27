@@ -5,9 +5,14 @@ import footerimg from '../images/footerimg.svg';
 
 const Footer = () => {
   const location = useLocation();
+  
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
+  // if (location.pathname.slice(0, 13) === '/user-profile') return;
+
   return (
+    <>
+
     <FooterContainer>
       <LogoBox>
         <Title />
@@ -19,16 +24,21 @@ const Footer = () => {
           <span>BE</span> Lee Dong-Keon | Shin Sun-Ho | Jang Chang-Kyoon | Jeong
           Yong-Wook
         </Desc>
-        <Sub1>DESIGN</Sub1>
+        <Sub>DESIGN</Sub>
         <Desc>KIM NAYOUNG</Desc>
         <End>@ 2022 PICBOY ALL RIGHT RESERVERD</End>
       </LogoBox>
-      <LogoBox></LogoBox>
-    </FooterContainer>
+      <LogoBox>ㅎㅇ</LogoBox>
+      </FooterContainer>
+      </>
   );
 };
 
 export default Footer;
+
+const LoadingPage = styled.div`
+  height: 1000px;
+`
 
 const FooterContainer = styled.div`
   height: 520px;
@@ -46,13 +56,12 @@ const LogoBox = styled.div`
 const Title = styled.div`
   width: 200px;
   height: 100px;
-
   background: url(${footerimg});
-  ${({ theme }) => theme.backgroundSet('contain')};
+  ${({ theme }) => theme.backgroundSet('')};
 `;
 
 const Sub = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
   font-family: 'PopLight';
   font-weight: 700;
   font-size: 14px;
@@ -61,13 +70,8 @@ const Sub = styled.div`
   color: #ffffff;
 `;
 
-const Sub1 = styled(Sub)`
-  margin-top: 50px;
-`;
-
 const Desc = styled.div`
-  margin-top: 10px;
-  /* margin-left: 10px; */
+  margin-top: 20px;
   font-family: 'PopLight';
   font-weight: 500;
   font-size: 12px;

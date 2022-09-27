@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import axios from 'axios';
 import { getCookieToken, getRefreshToken, setAccessToken } from '../shared/Cookie';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // import component
 import instance from '../shared/apis';
@@ -34,9 +34,14 @@ import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/canvas-bottom-bg.png';
 import Frame from '../images/canvas-frame.png';
 
+//소리
+import { error1PB, pop1PB } from '../global/sound';
+
 const PostRelay = () => {
+  const navigate = useNavigate();
   const myContext = useMyContext();
   const accessToken = getCookieToken();
+
 
   /////////////////////////////////
   // canvas
@@ -306,11 +311,27 @@ const PostRelay = () => {
 
     const canvas = canvasRef.current;
 
+    //에러창
+    const clickErrorUser = () => {
+      error1PB.play();
+      myContext.setPostTopicBtn(true)
+    }
+    const clickErrorVacant = () => {
+      error1PB.play();
+      myContext.setVacantCanvas(true)
+    }
+    const passSubmit = () => {
+      pop1PB.play();
+      myContext.setDrawingDoneBtn(true);
+      window.location.href = '/list'
+    }
     //로그인유저 없을 때 알림창
-    if (!accessToken) return myContext.setPostTopicBtn(true);
+    if (!accessToken)
+      return clickErrorUser();
+
 
     //캔버스 빈화면일 때 알림창
-    if (vacantState(canvas)) return myContext.setVacantCanvas(true)
+    if (vacantState(canvas)) return clickErrorVacant();
     const imgDataUrl = canvas.toDataURL('image/png');
     instance
       .post(
@@ -321,8 +342,8 @@ const PostRelay = () => {
 
       )
       .then(function (response) {
-        myContext.setDrawingDoneBtn(true);
-        window.location.replace('/list');
+        passSubmit();
+
       })
       .catch(function (error) {
         console.log(error);

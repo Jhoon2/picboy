@@ -34,6 +34,9 @@ import Frame from '../images/canvas-frame.png';
 import RangeBg from '../images/range-bg.png';
 import { castDraft } from 'immer';
 
+//소리
+import { error1PB } from '../global/sound';
+
 const PostTopic = () => {
     const [frame, setFrame] = useState(0);
     const [canvasDone, setCanvasDone] = useState();
@@ -314,14 +317,19 @@ const PostTopic = () => {
         const imgDataUrl = canvas.toDataURL('image/png');
         const topic = topicInputState || topicState;
         if (topic === '') {
+            error1PB.play();
             myContext.setTopicBtn(true)
             return;
         } else if (frame === 0) {
+            error1PB.play();
             myContext.setSettingFrameBtn(true)
             return;
         }
-        if (vacantState(canvas)) return myContext.setVacantCanvas(true)
-
+        if (vacantState(canvas)) {
+            error1PB.play();
+            myContext.setVacantCanvas(true)
+            return;
+        }
         if (clickCount !== 0) return
         instance
             .post(
@@ -333,7 +341,6 @@ const PostTopic = () => {
                 },
             )
             .then(function (response) {
-                // console.log(response)
                 myContext.setDrawingDoneBtn(true)
                 ++clickCount
                 window.location.replace('/list');

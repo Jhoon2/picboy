@@ -31,6 +31,9 @@ import line10 from '../images/line10.png';
 import line12 from '../images/line12.png';
 import Frame from '../images/canvas-frame.png';
 
+// 소리
+import { error1PB } from '../global/sound';
+
 const PostFree = () => {
   const [frame, setFrame] = useState(0);
   const [canvasDone, setCanvasDone] = useState();
@@ -51,17 +54,26 @@ const PostFree = () => {
 
 
   ///////////////////////////
-  // ajax
+
+  //에러버튼
+  const clickErrorFrame = () => {
+    error1PB.play();
+    myContext.setSettingFrameBtn(true)
+  }
+  const clickErrorVacant = () => {
+    error1PB.play();
+    myContext.setVacantCanvas(true)
+  }
 
   const submitImg = () => {
     const canvas = canvasRef.current;
     const imgDataUrl = canvas.toDataURL('image/png');
     const topic = null;
     if (frame === 0) {
-      myContext.setSettingFrameBtn(true)
+      clickErrorFrame();
       return;
     }
-    if (vacantState(canvas)) return myContext.setVacantCanvas(true)
+    if (vacantState(canvas)) return clickErrorVacant();
     instance
       .post(
         `/post`,
@@ -72,8 +84,8 @@ const PostFree = () => {
         }
       )
       .then(function (response) {
-        myContext.setDrawingDoneBtn(true)
-        window.location.replace('/list');
+        myContext.setDrawingDoneBtn(true);
+        window.location.href = '/list';
       })
       .catch(function (error) {
         console.log(error);
@@ -307,6 +319,7 @@ const PostFree = () => {
   const cancleNav = () => {
     window.location.replace("/CompList");
   }
+
 
   return (
     <div>

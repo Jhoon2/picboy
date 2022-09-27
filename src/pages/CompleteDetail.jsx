@@ -45,12 +45,12 @@ const CompleteDetail = () => {
   const commentChange = (e) => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     setCommentInput(e.target.value)
+
   }
 
   const commentApply = () => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     if (commentInput === '') return
-
     const payload = {
       id: params.id,
       content: commentInput
@@ -74,7 +74,6 @@ const CompleteDetail = () => {
   const gifApi = () => {
     instance.get(`/post/gif/detail/${params.id}`)
       .then(function (response) {
-        console.log(response)
         setGif(response.data.data);
         setLikeCountState(response.data.data.likeCount);
         setLikeApi(response.data.data.liked);
@@ -118,7 +117,6 @@ const CompleteDetail = () => {
 
         .then(function (response) {
           setLikeApi(response.data.data.like);
-          // console.log(response)
           if (likeApi === false) {
             setLikeCountState(likeCountState + 1);
           } else if (likeApi === true) {

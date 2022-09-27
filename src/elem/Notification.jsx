@@ -25,7 +25,6 @@ const Notification = () => {
   const [select, setSelect] = useState(false);
   const useGet = UseGetUser();
   const usernames = useGet && useGet.data?.data.username;
-
   const read = notis.data;
   const getList = getNotis.data;
 
@@ -49,7 +48,7 @@ const Notification = () => {
 
   let stompClient = Stomp.over(function () {
     return new SockJS(`${baseURL}/socket/`);
-    });
+  });
 
   const stompConnect = () => {
     try {
@@ -107,6 +106,10 @@ const Notification = () => {
     return returnDate;
   };
 
+  const moveOtherCom = (id) => {
+    window.location.href = `/user-profile/${id}`;
+  };
+
   return (
     <div ref={node}>
       <NotifiImg
@@ -134,12 +137,13 @@ const Notification = () => {
                 </Nonoti>
               </>
             ) : (
-              getList?.map((item, index) => (
-                <div key={uuidv4()}>
-                  <HR />
+                getList?.map((item, index) => (
+                  <div key={uuidv4()}>
+                    <HR />
                   <DescBox
-                    onClick={() => {
-                      navigate(`/complete-detail/${item.id}`);
+                      onClick={() => {
+                        console.log(item.postId)
+                      window.location.href = (`/complete-detail/${item.postId}`);
                       pop1PB.play();
                     }}
                   >
@@ -201,7 +205,7 @@ const NotiBox = styled.div`
   width: 50px;
   position: relative;
   top: 10px;
-  right: 100px;
+  right: 10px;
 `;
 
 const NotiUl = styled.ul`

@@ -44,7 +44,6 @@ const Canvas = () => {
     // const submit = () => {
     //     const canvas = canvasRef.current;
     //     const imgDataUrl = canvas.toDataURL('image/png');
-    //     console.log(imgDataUrl)
     // }
 
     const draw = (e) => {
@@ -52,7 +51,6 @@ const Canvas = () => {
         const Y = e.clientY - canvasRef.current.offsetTop + window.scrollY;
         if (isPainting === true) {
             if (rectState === true) {
-                // console.log('hi')
                 ctx.strokeRect(X, Y, X - canvasRef.current.offsetLeft, Y - canvasRef.current.offsetTop);
             } else if (eraserState === true) {
                 ctx.strokeStyle = "white";
