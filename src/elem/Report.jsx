@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
 import { __postReport } from '../redux/modules/Report';
 import reportBef from '../images/Com/reportBef.svg';
 import reportAft from '../images/Com/reportAft.svg';
@@ -10,9 +12,12 @@ const Report = ({ item }) => {
   const [select, setSelect] = useState(false);
   const [text, setText] = useState(false);
 
+  const { reports } = useSelector((state) => state.reports)
+  console.log(reports)
   const id = item.id;
-
+  // console.log(id, reports)
   function onReport() {
+    console.log(id)
     dispatch(__postReport(id));
   }
 

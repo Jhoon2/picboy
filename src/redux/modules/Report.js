@@ -9,6 +9,7 @@ const baseURL = process.env.REACT_APP_API_KEY;
 export const __postReport = createAsyncThunk(
   'postReport',
   async (postId, thunkAPI) => {
+    console.log(postId)
     try {
       const data = await axios.post(`${baseURL}/post/report/${postId}`, '', {
         headers: {
@@ -16,7 +17,8 @@ export const __postReport = createAsyncThunk(
           'refresh-token': refreshToken,
         },
       });
-      return thunkAPI.fulfillWithValue(data.data);
+      // console.log(data)
+      return thunkAPI.fulfillWithValue(postId);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
@@ -37,6 +39,7 @@ export const reportSlice = createSlice({
     },
     [__postReport.fulfilled]: (state, action) => {
       state.isLoading = false;
+      console.log(action.payload)
       state.reports = action.payload;
     },
     [__postReport.rejected]: (state, action) => {
