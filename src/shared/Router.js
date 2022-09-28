@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 // pages import
@@ -28,31 +28,29 @@ const Router = () => {
   }, []);
   return (
     <Context>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          {/* 종훈님 */}
-          <Route path="/" element={<Main />} />
-          <Route path="/progressdetail/:id" element={<ProgressDetail />} />
-          <Route path="progress-post" element={<ProgressPost />} />
-          <Route path="list" element={<List />} />
-          <Route path="event" element={<Event />} />
+      <Header />
+      <Routes>
+        {/* 종훈님 */}
+        <Route path="/" element={<Main />} />
+        <Route path="/progressdetail/:id" element={<ProgressDetail />} />
+        <Route path="progress-post" element={<ProgressPost />} />
+        <Route path="list" element={<List />} />
+        <Route path="event" element={<Event />} />
 
-          {/* 민희님 */}
-          <Route path="login" element={<Login />} />
-          <Route path="join" element={<SignUp />} />
-          <Route path="user-profile/:id" element={<UserProfile />} />
-          <Route path="user/kakao" element={<KakaoLogin />} />
+        {/* 민희님 */}
+        <Route path="login" element={<Login />} />
+        <Route path="join" element={<SignUp />} />
+        <Route path="user-profile/:id" element={<UserProfile />} />
+        <Route path="user/kakao" element={<KakaoLogin />} />
 
-          {/* 다솜님 */}
-          <Route path="complist" element={<CompList />} />
-          <Route path="post-free" element={<PostFree />} />
-          <Route path="post-topic" element={<PostTopic />} />
-          <Route path="post-relay/:id" element={<PostRelay />} />
-          <Route path="complete-detail/:id" element={<CompleteDetail />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+        {/* 다솜님 */}
+        <Route path="complist" element={<CompList />} />
+        <Route path="post-free" element={<PostFree />} />
+        <Route path="post-topic" element={<PostTopic />} />
+        <Route path="post-relay/:id" element={<PostRelay />} />
+        <Route path="complete-detail/:id" element={<CompleteDetail />} />
+      </Routes>
+      <Footer />
     </Context>
   );
 };

@@ -33,17 +33,17 @@ const MySpecialButton = ({ shown, close, postId,data,samePerson }) => {
   
     setToggleDecla(!toggleDeclar)
     dispatch(__postReport(postId))
-    if (reports && reports.data === '신고 완료')
-      return myContext.setDeclarCancel(true)
-    if (reports && reports.data === '신고 취소')
-      return myContext.setDecalrBtn(true)
+    // if (reports && reports.data === '신고 완료')
+    //   return myContext.setDeclarCancel(true)
+    // if (reports && reports.data === '신고 취소')
+    //   return myContext.setDecalrBtn(true)
       
   }
 
   return shown ? (
     <> {samePerson ?
       <FullOverLay onClick={() => { close() }}>
-        {myContext.declarBtn ? (
+        {/* {myContext.declarBtn ? (
           <ErrorBox onClick={() => myContext.setDecalrBtn(false)}>
             <AnyModal title="안내" content="신고 완료되었습니다" />
           </ErrorBox>
@@ -52,7 +52,7 @@ const MySpecialButton = ({ shown, close, postId,data,samePerson }) => {
           (<ErrorBox onClick={() => myContext.setDeclarCancel(false)}>
             <AnyModal title="안내" content=" 신고 취소되었습니다" />
           </ErrorBox>
-          ) : null}
+          ) : null} */}
         <OverlayPosition >
           <ModalContainer onClick={e => { e.stopPropagation() }}>
             <ModalText id='hide' name='1' onClick={hide}>

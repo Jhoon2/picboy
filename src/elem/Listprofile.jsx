@@ -61,7 +61,7 @@ const Listprofile = ({ item }) => {
                 ) : (
                   <Userimage img={item.profileImg} />
                 )}
-                <Username>{item.nickname}</Username>
+                <Username>{item.nickname.slice(0,8)}</Username>
                 <UserGo />
               </UserBox>
               <HR />
@@ -79,7 +79,7 @@ const Listprofile = ({ item }) => {
                     ) : (
                       <Userimage img={item.profileImg} />
                     )}
-                    <Username>{item.nickname}</Username>
+                    <Username>{item.nickname.slice(0,8)}</Username>
                     <UserGo />
                   </UserBox>
                 ))}
@@ -96,6 +96,10 @@ export default Listprofile;
 
 const HR = styled.hr`
   border: none;
+`;
+
+const ProfileBox = styled.div`
+  ${({ theme }) => theme.flexSet('row', 'center', 'center')};
 `;
 
 const Profile = styled.button`

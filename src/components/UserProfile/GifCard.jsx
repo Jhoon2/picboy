@@ -14,26 +14,26 @@ import AllParticipants from './AllParticipants';
 import MySpecialButton from './MySpecialButton';
 
 //이미지
-import download from '../../images/mypage/download.png'
-import heart from '../../images/mypage/like-before.png'
-import colorHeart from '../../images/mypage/like-after.png'
-import basicImg from '../../images/mypage/basicImg.png'
-import favorite from '../../images/favorite@2x.png'
-import moreHoriz from '../../images/More horiz@2x.png'
-import textbox from '../../images/Mode comment.png'
-import grayEyes from '../../images/mypage/grayEyes.png'
-import completeIcon from '../../images/mypage/complete.png'
-import progressIcon from '../../images/mypage/progress.png'
-import clickDownload from '../../images/mypage/clickDownload.png'
+import download from '../../images/mypage/download.png';
+import heart from '../../images/mypage/like-before.png';
+import colorHeart from '../../images/mypage/like-after.png';
+import basicImg from '../../images/mypage/basicImg.png';
+import favorite from '../../images/favorite@2x.png';
+import moreHoriz from '../../images/More horiz@2x.png';
+import textbox from '../../images/Mode comment.png';
+import grayEyes from '../../images/mypage/grayEyes.png';
+import completeIcon from '../../images/mypage/complete.png';
+import progressIcon from '../../images/mypage/progress.png';
+import clickDownload from '../../images/mypage/clickDownload.png';
 
-const GifCard = ({ data, myImg, myNickname,samePerson }) => {
+const GifCard = ({ data, myImg, myNickname, samePerson }) => {
   const navigate = useNavigate();
   const baseURL = process.env.REACT_APP_API_KEY;
 
   // 참여자들 보여주기
-  const [allParticipants, setAllParticipants] = useState(false)
-  const [peopleData, setPeopleData] = useState()
-  const showAllParticipants = async(e) => {
+  const [allParticipants, setAllParticipants] = useState(false);
+  const [peopleData, setPeopleData] = useState();
+  const showAllParticipants = async (e) => {
     e.stopPropagation();
     const peopleData = await instance.get(`/post/join-list/${data.postId}`);
     const datas = peopleData && peopleData.data.data;
@@ -86,12 +86,13 @@ const GifCard = ({ data, myImg, myNickname,samePerson }) => {
 
   return (
     <CardContainer>
-     
-        <OverlayWrap>
-          <GifImg src={data.gifUrl ??data.imgUrl } />
-          <Badge src={data.status === 1 ? progressIcon : completeIcon} />          
-          <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
-          <HoverSideButton onClick={buttonCollection}><HorizBtn src={moreHoriz} /></HoverSideButton>
+      <OverlayWrap>
+        <GifImg src={data.gifUrl ?? data.imgUrl} />
+        <Badge src={data.status === 1 ? progressIcon : completeIcon} />
+        <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
+          <HoverSideButton onClick={buttonCollection}>
+            <HorizBtn src={moreHoriz} />
+          </HoverSideButton>
           <HoverContent>
             <div style={{ color: 'white' }}>
               {data.topic ? data.topic : null}
@@ -132,7 +133,7 @@ const GifCard = ({ data, myImg, myNickname,samePerson }) => {
             </Participants>
           ) : null}
           <Texts>
-            {data.nickname}
+            {data.nickname.slice(0, 8)}
             {data.memberCount ? <>외 {data.memberCount}명</> : null}
           </Texts>
         </UserProfileContent>
@@ -166,7 +167,7 @@ const GifCard = ({ data, myImg, myNickname,samePerson }) => {
         data={data}
         samePerson={samePerson}
       />
-      {/* 참여자들 */}.
+      {/* 참여자들 */}
       <CardInner>
         <AllParticipantsContainer>
           {allParticipants ? (

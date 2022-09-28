@@ -76,10 +76,10 @@ const BestFree = () => {
             <Listprofile item={item} />
             <Nickname>
               {item?.participantCount <= 0 ? (
-                <>{item?.nickname} </>
+                <>{item?.nickname.slice(0, 8)} </>
               ) : (
                 <>
-                  {item?.nickname} 외 {item?.participantCount} 명
+                  {item?.nickname.slice(0, 8)} 외 {item?.participantCount} 명
                 </>
               )}
             </Nickname>
@@ -130,7 +130,7 @@ const BestImg = styled.div`
 const BestDesc = styled(Width)`
   height: 50px;
   margin-top: 20px;
-  ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
+  ${({ theme }) => theme.flexSet('row', 'flex-start', 'flex-start')}
 `;
 
 const Button = styled.button`
@@ -152,14 +152,12 @@ const Span = styled.span`
 
 const Nickname = styled(Span)`
   margin-right: 100px;
+  margin-top: 10px;
   display: inline-block;
-  padding: 15px 0;
-  position: relative;
   font-family: 'NotoBold';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   color: #2e3248;
-  line-height: 180%;
   letter-spacing: -0.02em;
 `;

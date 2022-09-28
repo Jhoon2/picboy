@@ -16,19 +16,19 @@ const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) 
     window.location.href = `/user-profile/${id}`;
   };
 
-  // useEffect(() => {
-  //   const clickOutside = (e) => {
-  //     if (!node.current.contains(e.target)) {
-  //       close();
-  //     }
-  //   };
+  useEffect(() => {
+    const clickOutside = (e) => {
+      if (!node.current.contains(e.target)) {
+        close();
+      }
+    };
 
-  //   document.addEventListener('mousedown', clickOutside);
+    document.addEventListener('mousedown', clickOutside);
 
-  //   return () => {
-  //     document.removeEventListener('mousedown', clickOutside);
-  //   };
-  // }, []);
+    return () => {
+      document.removeEventListener('mousedown', clickOutside);
+    };
+  }, []);
 
   return shown ? (
     <FullOverLay ref={node}>
@@ -44,7 +44,7 @@ const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) 
                 <div style={{ display: 'flex' }}>
                   <FirstImg src={FirstProfileImg} />
                   <FirstNickname style={{ marginTop: '3px' }}>
-                    {Firstickname}
+                    {Firstickname.slice(0,8)}
                   </FirstNickname>
                 </div>
                 <PersonImg1 src={grayPerson} />
@@ -59,7 +59,7 @@ const AllParticipants = ({ shown, close, data, Firstickname, FirstProfileImg }) 
                     <div >
                       <DataPersonContainer  >
                         <PersonImg src={!person.img?basicImg : person.img} ></PersonImg>
-                        <PersonText>{person.nickname}</PersonText>
+                        <PersonText>{person.nickname.slice(0,8)}</PersonText>
                         </DataPersonContainer>
                     </div>
                     <PersonImg1 src={grayPerson} style={{marginTop:'22px'}}/>
