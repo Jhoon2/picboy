@@ -5,6 +5,7 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import Listprofile from '../elem/Listprofile';
 import Loadings from '../global/Loading';
+import { pop3PB } from '../global/sound';
 
 const ProgressTopic = () => {
   const navigate = useNavigate();
@@ -70,6 +71,7 @@ const ProgressTopic = () => {
               productImg={item?.imgUrl}
               onClick={() => {
                 navigate(`/progressdetail/${item.id}`);
+                pop3PB.play();
               }}
             >
               <Overlay>
