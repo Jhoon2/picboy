@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
 import { __postReport } from '../redux/modules/Report';
 import reportBef from '../images/Com/reportBef.svg';
 import reportAft from '../images/Com/reportAft.svg';
@@ -9,10 +11,13 @@ const Report = ({ item }) => {
   const dispatch = useDispatch();
   const [select, setSelect] = useState(false);
   const [text, setText] = useState(false);
+  const [toggleDeclar, setToggleDecla] = useState(item.reported)
 
+  const { reports } = useSelector((state) => state.reports)
   const id = item.id;
-
+  
   function onReport() {
+    setToggleDecla(!toggleDeclar)
     dispatch(__postReport(id));
   }
 
@@ -50,7 +55,7 @@ const Report = ({ item }) => {
                   }}
                 >
                   <Newimg img={reportBef}>
-                    <Text> {text ? '신고취소' : '신고하기'}</Text>
+                    <Text> {toggleDeclar ? '신고취소' : '신고하기'}</Text>
                   </Newimg>
                 </ReportButton>
               </New>

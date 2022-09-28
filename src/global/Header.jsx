@@ -34,9 +34,9 @@ const throttle = function (callback, waitTime) {
 
 const Header = () => {
   const myToken = getCookieToken();
+  const refreshToken = getRefreshToken();
 
   const [messageList, setMessageList] = useState([]);
-  const refreshToken = getRefreshToken();
 
   const location = useLocation();
 

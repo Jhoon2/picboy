@@ -45,9 +45,9 @@ const CompleteDetail = () => {
   const commentChange = (e) => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     setCommentInput(e.target.value)
-
+    
   }
-
+  
   const commentApply = () => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     if (commentInput === '') return
@@ -234,7 +234,7 @@ const CompleteDetail = () => {
                 <CommentList style={comments.length === 0 ? { border: 'none' } : {}}>
                   {
                     comments && comments.map((commentList, idx) =>
-                      <CommentBox commentList={commentList} key={idx} />
+                      <CommentBox commentList={commentList} key={idx} accessToken={accessToken} />
                     )
                   }
                 </CommentList>

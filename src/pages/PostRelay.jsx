@@ -305,13 +305,13 @@ const PostRelay = () => {
 
   // post
   const submitImg = () => {
-    //광클릭막기
-    if (clickCount !== 0) return
-    setClickCount(prev => prev + 1)
+  //광클릭막기
+  if(clickCount !== 0) return 
+  setClickCount(prev => prev + 1)
 
-    const canvas = canvasRef.current;
+  const canvas = canvasRef.current;
 
-    //에러창
+  //에러창
     const clickErrorUser = () => {
       error1PB.play();
       myContext.setPostTopicBtn(true)
@@ -323,12 +323,12 @@ const PostRelay = () => {
     const passSubmit = () => {
       pop1PB.play();
       myContext.setDrawingDoneBtn(true);
-      window.location.href = '/list'
+      window.location.href ='/list'
     }
     //로그인유저 없을 때 알림창
     if (!accessToken)
       return clickErrorUser();
-
+    
 
     //캔버스 빈화면일 때 알림창
     if (vacantState(canvas)) return clickErrorVacant();
@@ -343,7 +343,7 @@ const PostRelay = () => {
       )
       .then(function (response) {
         passSubmit();
-
+       
       })
       .catch(function (error) {
         console.log(error);
