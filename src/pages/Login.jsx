@@ -159,25 +159,26 @@ const InputBox = styled.div`
   text-align: center;
 `;
 
-const InputBoxInner = styled.div``;
+const InputBoxInner = styled.div`
+`;
 const Title = styled.div`
   margin-bottom: 82px;
   text-align: center;
   font-family: 'SilkBold';
-  font-size: 80px;
+  font-size: 65px;
   font-weight: 700;
 `;
 
 const TextAndInput = styled.div`
-  width: 585px;
-  margin-left: 160px;
+  width: 379px;
+  margin-left: 255px;
   padding: 0.7rem;
   display: flex;
   border-bottom: 2px solid ${(props) => ('userId' === props.focusedInput) ? 'black' : 'lightgray'};
 `
 const TextAndInput2 = styled.div`
-  width: 585px;
-  margin-left: 160px;
+  width: 379px;
+  margin-left: 255px;
   padding: 0.7rem;
   display: flex;
   border-bottom: 2px solid ${(props) => ('password' === props.focusedInput) ? 'black' : 'lightgray'};
@@ -198,19 +199,20 @@ const InputWithButton = styled.input`
 `;
 
 const SignMove = styled.p`
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   margin-top: 30px;
+  color : ${(props) => props.theme.ShadeRegular};
   cursor: pointer;
   :hover {
-    color: blue;
+    color: black;
   }
 `;
 
 const LoginButton = styled.button`
-  width: 400px;
-  height: 50px;
-  margin-top: 80px;
+  width: 380px;
+  height: 74px;
+  margin-top: 70px;
   color : ${(props) => props.theme.SecondaryColor};
   font-family: 'NotoLight';
   font-weight: ${(props) => props.theme.Display};
@@ -220,10 +222,10 @@ const LoginButton = styled.button`
 `;
 
 const LoginKaKaoButton = styled.div`
-   width: 400px;
-  height: 50px;
+   width: 380px;
+  height: 74px;
   margin-top: 16px;
-  margin-left: 252px;
+  margin-left: 260px;
   color : ${(props) => props.theme.PrimaryColor};
   font-family: 'NotoLight';
   font-weight: ${(props) => props.theme.Display};
@@ -239,18 +241,18 @@ const KakaoContainer = styled.div`
 const Kakaoimg = styled.img`
   width: 28px;
   height: 25px;
-  margin-top: 15px;
+  margin-top: 25px;
 `;
 
 const KakaoText = styled.div`
-  margin-top: 15px;
+  margin-top: 25px;
   margin-left: 10px;
 `
 
 const Errorsmessage = styled.div`
   width: 300px;
   margin-top: 10px;
-  margin-left: 290px;
+  margin-left: 360px;
   font-size: 16px;
   text-align: left;
   color: red;

@@ -17,6 +17,7 @@ import api from '../shared/apis'
 
 //이미지
 import Listbanner from '../images/Com/Listbanner.svg';
+import logo from '../images/logo.svg'
 
 //소리
 import { error1PB, pop1PB } from '../global/sound';
@@ -268,10 +269,12 @@ const SignUp = () => {
   };
 
   return (
-    <>
+    <SignupContainer>
       <ImgBox src={Listbanner} />
-    <LoginContainer>
-
+      <LogoContainer onClick={()=>navigate('/')}>
+          <LogoImg src={logo} />
+        </LogoContainer>
+      <LoginContainer>
       {myContext.signUpBtn ? <ErrorBox>
         <SignUpDone nickname={myNickname} />
       </ErrorBox> : null}
@@ -439,7 +442,7 @@ const SignUp = () => {
         </form>
       </FormContainer>
       </LoginContainer>
-      </>
+      </SignupContainer>
   );
 };
 
@@ -455,6 +458,12 @@ const ErrorBox = styled.div`
   align-items: center;
   z-index: 2;
 `;
+const SignupContainer = styled.div`
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+
+`;
 const LoginContainer = styled.div`
   height: 100vh;
   display: flex;
@@ -462,6 +471,16 @@ const LoginContainer = styled.div`
   align-items: center;
 
 `;
+const LogoContainer = styled.div`
+  position: absolute;
+  margin-top: 46px;
+  cursor: pointer;
+`
+const LogoImg = styled.img`
+  width: 119px;
+  height: 34px;
+`
+
 const ImgBox = styled.img`
   width: 100%;
   position: absolute;
@@ -485,7 +504,7 @@ const InputBox = styled.div`
 const Title = styled.div`
   text-align: center;
   font-family: 'SilkBold';
-  font-size: 80px;
+  font-size: 65px;
   font-weight: 700;
 `;
 
@@ -596,11 +615,11 @@ const NoErrorsmessage = styled.div`
 `;
 
 const SignupButton = styled.button`
-  width: 400px;
-  height: 50px;
+  width: 380px;
+  height: 74px;
   font-family: 'NotoLight';
-  font-size: 20px;
-  font-weight: 400;
+  font-size: 18px;
+  font-weight: 700;
 
   margin-top: 50px;
   margin-bottom: 50px;
