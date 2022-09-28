@@ -39,6 +39,12 @@ const Listprofile = ({ item }) => {
         </>
       )}
 
+      {item?.participantCount === 0 ? null : (
+        <>
+          <ProfileCount>+{item?.participantCount}</ProfileCount>
+        </>
+      )}
+
       <SelectListBox>
         {select && (
           <SelectList>
@@ -99,6 +105,25 @@ const Profile = styled.button`
   border-radius: 50%;
   background: url(${(props) => props.img});
   ${({ theme }) => theme.backgroundSet('cover')};
+`;
+
+const ProfileCount = styled.div`
+  width: 20px;
+  height: 20px;
+
+  ${({ theme }) => theme.flexSet('row', 'center', 'center')};
+  padding-bottom: 1px;
+  text-align: center;
+  border-radius: 50%;
+
+  position: relative;
+  background: black;
+  left: 25px;
+  bottom: 45px;
+  font-family: 'NotoBold';
+  font-weight: 700;
+  font-size: 9px;
+  color: white;
 `;
 
 const SelectList = styled.div`

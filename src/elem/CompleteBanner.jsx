@@ -46,21 +46,21 @@ const CompleteBanner = (props) => {
               props.setProTap(0);
             }}
           >
-            <Underline color={'#a3a3a3'}>전체</Underline>
+            <Underline color={'#868686'}>전체</Underline>
           </SelectButton>
           <SelectButton
             onClick={() => {
               props.setProTap(1);
             }}
           >
-            <Underline color={'#a3a3a3'}>제시어</Underline>
+            <Underline color={'#868686'}>제시어</Underline>
           </SelectButton>
           <SelectButton
             onClick={() => {
               props.setProTap(2);
             }}
           >
-            <Underline color={'#a3a3a3'}>자유</Underline>
+            <Underline color={'#868686'}>자유</Underline>
           </SelectButton>
         </SelectBox>
       </ImgBox>
