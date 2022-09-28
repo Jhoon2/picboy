@@ -199,7 +199,7 @@ const UserProfile = () => {
     return (
         <>
         <UserProfileContainer >
-                <ImgBox src={Listbanner} />
+                <ImgBox />
                 <ContainerInner >
                 <TopScroll />
                 {/* 프로필 */}
@@ -288,10 +288,15 @@ const ContainerInner = styled.div`
     max-width: 1200px;
 `
 //배너
-const ImgBox = styled.img`
+const ImgBox = styled.div`
   width: 100%;
+  height: 620px;
+  margin-top: 70px;
   position: absolute;
   z-index: -100;
+  border: none;
+  background: url(${Listbanner});
+ ${({ theme }) => theme.backgroundSet('cover')}
 `;
 
 const ProfileContainer = styled.div`
@@ -465,6 +470,7 @@ const Footerimg = styled.div`
   width: 100%;
   height: 320px;
   border: none;
+  margin-top: 380px;
   background: url(${Listfooter});
  ${({ theme }) => theme.backgroundSet('cover')}
 `;

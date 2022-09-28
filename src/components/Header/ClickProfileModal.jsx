@@ -83,8 +83,12 @@ const ClickProfileModal = ({ img }) => {
                   <div style={{display: 'flex', justifyContent: 'center'}}>
                     <ProfileImg src={img ? img : basicImg} />
                   </div>
-                  <ProfileNickname>{logonUser?.data?.data?.status === 1 ? logonUser?.data?.data?.nickname : logonUser?.data?.data?.nickname.slice(0,8)}</ProfileNickname>
-                  <ProfileUsername>{logonUser?.data?.data?.status === 1 ?  logonUser?.data?.data?.username : 'Kakao user'}</ProfileUsername>
+              <ProfileNickname>
+                {logonUser?.data?.data?.status === 1 ? logonUser?.data?.data?.nickname : logonUser?.data?.data?.nickname.slice(0, 8)}
+              </ProfileNickname>
+              <ProfileUsername>
+                {logonUser?.data?.data?.status === 1 ? logonUser?.data?.data?.username : 'Kakao user'}
+              </ProfileUsername>
                 </ProfileModalContainer>
                 <HR />
                 <ModalText
