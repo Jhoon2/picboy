@@ -229,7 +229,7 @@ const CompleteDetail = () => {
               <CommentWrap>
                 <CommentTitle>댓글<span style={{ marginLeft: '8px', color: '#a3a3a3' }}>{comments.length}</span></CommentTitle>
                 <ContentsLine />
-                <CommentInput onChange={commentChange} value={commentInput} placeholder="댓글을 남겨주세요." />
+                <CommentInput onChange={commentChange} maxLength='80' value={commentInput} placeholder="댓글을 남겨주세요." />
                 <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
                 <CommentList style={comments.length === 0 ? { border: 'none' } : {}}>
                   {

@@ -19,9 +19,10 @@ const CommentBox = ({ commentList,accessToken }) => {
   const myContext = useMyContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   //수정
   const [editState, setEditState] = useState(false)
-  const [edit, setEdit] = useState('')
+  const [edit, setEdit] = useState(commentList?.comment)
 
   const editBtn = () => {
     setEditState(true)
@@ -87,7 +88,10 @@ const CommentBox = ({ commentList,accessToken }) => {
             />
           <CommentIdContents>
             <CommentUserNickName>{commentList.nickname}</CommentUserNickName>
-            {editState ? <EditCommentInput placeholder={commentList.comment}
+              {editState ? <EditCommentInput
+                type="text"
+                value={edit}
+                maxLength='80'
               onChange={editOnChange}></EditCommentInput> : <UserComment>{commentList.comment}</UserComment>}
           </CommentIdContents>
         </div>
