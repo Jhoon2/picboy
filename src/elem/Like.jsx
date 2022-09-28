@@ -21,7 +21,6 @@ const Like = ({ item }) => {
     e.stopPropagation();
     setLikePlus(!likePlus);
     anyApis.liked(item.id, '').then((response) => {
-      console.log(response.data.data.like);
       if (!response.data.data.like) {
         setSmallLikeBtn(smallLikeBtn - 1);
       } else {
