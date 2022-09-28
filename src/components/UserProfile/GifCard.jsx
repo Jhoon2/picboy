@@ -166,7 +166,7 @@ const GifCard = ({ data, myImg, myNickname,samePerson }) => {
         data={data}
         samePerson={samePerson}
       />
-      {/* 참여자들 */}.
+      {/* 참여자들 */}
       <CardInner>
         <AllParticipantsContainer>
           {allParticipants ? (

@@ -261,7 +261,7 @@ const UserProfile = () => {
                             )
                         })}
                     </CardContainer>
-                    <div style={{ width: '100px', height: '20px' }} ref={page? null : lastIntersectingData}>.</div>
+                    <div style={{ width: '100px', height: '20px' }} ref={page? null : lastIntersectingData}></div>
                         </>
                         
             </ContainerInner>
