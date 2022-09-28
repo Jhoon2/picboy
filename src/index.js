@@ -1,6 +1,8 @@
 import React from 'react';
 import GlobalStyle from './styles/GlobalStyles';
 import GlobalFonts from './styles/GlobalFonts';
+import { BrowserRouter } from 'react-router-dom';
+import Scrolltop from './global/Scrolltop';
 import {
   color,
   fontSizes,
@@ -39,7 +41,10 @@ root.render(
     >
       <GlobalStyle />
       <GlobalFonts />
-      <App />
+      <BrowserRouter>
+        <Scrolltop />
+        <App />
+      </BrowserRouter>
     </ThemeProvider>
   </Provider>
   // </React.StrictMode>
