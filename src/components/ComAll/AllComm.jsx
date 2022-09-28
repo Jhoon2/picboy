@@ -38,7 +38,6 @@ const Free = () => {
     setLoad(false);
   };
 
-
   useEffect(() => {
     getCompleteData();
   }, [page]);
@@ -108,10 +107,10 @@ const Free = () => {
               <Listprofile item={item} />
               <Nickname>
                 {item?.participantCount <= 0 ? (
-                  <>{item?.nickname} </>
+                  <>{item?.nickname.slice(0, 8)} </>
                 ) : (
                   <>
-                    {item?.nickname} 외 {item?.participantCount} 명
+                    {item?.nickname.slice(0, 8)} 외 {item?.participantCount} 명
                   </>
                 )}
               </Nickname>
@@ -188,18 +187,6 @@ const DescBox = styled(Width)`
   position: relative;
 `;
 
-const Button = styled.button`
-  width: 40px;
-  height: 40px;
-`;
-
-const Profile = styled(Button)`
-  margin-right: 15px;
-  border-radius: 50%;
-  background: url(${(props) => props.img});
-  ${({ theme }) => theme.backgroundSet('cover')};
-`;
-
 const Span = styled.span`
   font-size: 30px;
   font-weight: 800;
@@ -238,7 +225,6 @@ const Overlay = styled.div`
   margin-top: 100%;
   height: 300px;
   background: white;
-
   cursor: pointer;
   background: linear-gradient(
     360deg,
@@ -265,18 +251,19 @@ const BestDesc = styled(Width)`
   height: 50px;
   margin-top: 15px;
   position: relative;
-  ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
+  ${({ theme }) => theme.flexSet('row', 'flex-start', 'flex-start')}
 `;
 
 //여기
 const Nickname = styled(Span)`
-  width: 150px;
+  margin-right: 100px;
+  margin-top: 10px;
+  display: inline-block;
   font-family: 'NotoBold';
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   color: #2e3248;
-  line-height: 180%;
   letter-spacing: -0.02em;
 `;
 
@@ -288,6 +275,7 @@ const BestImg = styled.div`
 
 const InforBox = styled.div`
   position: absolute;
+  margin-top: 10px;
   right: 0;
   ${({ theme }) => theme.flexSet('row', 'flex-end', 'center')};
 `;
