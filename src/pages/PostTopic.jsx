@@ -37,6 +37,7 @@ import { castDraft } from 'immer';
 //소리
 import { error1PB } from '../global/sound';
 
+
 const PostTopic = () => {
     const [frame, setFrame] = useState(0);
     const [canvasDone, setCanvasDone] = useState();
@@ -326,7 +327,7 @@ const PostTopic = () => {
             myContext.setVacantCanvas(true)
             return;
         }
-        if (clickCount !== 0) return
+        if(clickCount !== 0) return 
         instance
             .post(
                 `/post`,

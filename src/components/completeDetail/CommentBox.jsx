@@ -11,7 +11,7 @@ import { useMyContext } from '../../shared/ContextApi'
 import AnyModal from '../../elem/AnyModal'
 import basicImg from '../../images/mypage/basicImg.png'
 
-const CommentBox = ({ commentList }) => {
+const CommentBox = ({ commentList,accessToken }) => {
   //로그인한 사람 정보
   const useGet = UseGetUser();
   const userNickname = useGet && useGet.data.data.nickname;
@@ -39,6 +39,7 @@ const CommentBox = ({ commentList }) => {
     dispatch(__editComment(newList))
     setEditState(false)
   }
+  
     // const commentText = commentList.comment.replace(/(?:\r\n|\r|\n)/g, '<br/>');
   
   //삭제
@@ -61,6 +62,11 @@ const CommentBox = ({ commentList }) => {
     button_1 = <span style={{ mr: 3, cursor: 'pointer', fontSize: '12px', color: '#a3a3a3', fontWeight: '400', marginLeft: '16px' }} onClick={deleteBtn}>삭제</span>
   }
   
+  //유저페이지 이동
+  const moveToUser = () => {
+    if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
+    navigate (`/user-profile/${commentList?.username}`)
+  }
   return (
   <>
       {myContext.commetDeleteBtn ? (
@@ -68,11 +74,16 @@ const CommentBox = ({ commentList }) => {
           <AnyModal  content="삭제 되었습니다" />
         </ErrorBox>
       ) : null}
+       {myContext.commetApplyBtn ? (
+        <ErrorBox onClick={() => myContext.setCommetApplyBtn(false)}>
+          <AnyModal title="회원정보" content="로그인 후 가능합니다" />
+        </ErrorBox>
+      ) : null}
     <Comment>
       <CommentContainer>
         <div style={{ display: 'flex' }}>
             <CommentUserProfileImg src={commentList?.profileImage ? commentList?.profileImage : basicImg} alt=""
-              onClick={() => { window.location.href = (`/user-profile/${commentList?.username}`) }}
+              onClick={moveToUser}
             />
           <CommentIdContents>
             <CommentUserNickName>{commentList.nickname}</CommentUserNickName>
