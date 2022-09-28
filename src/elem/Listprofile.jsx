@@ -98,6 +98,10 @@ const HR = styled.hr`
   border: none;
 `;
 
+const ProfileBox = styled.div`
+  ${({ theme }) => theme.flexSet('row', 'center', 'center')};
+`;
+
 const Profile = styled.button`
   width: 40px;
   height: 40px;
