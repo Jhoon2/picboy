@@ -18,14 +18,13 @@ import Header from '../global/Header';
 import PostRelay from '../pages/PostRelay';
 import Footer from '../global/Footer';
 import KakaoLogin from '../pages/KakaoLogin';
-
+import Event from '../pages/Event';
 
 const Router = () => {
   useEffect(() => {
     window.onbeforeunload = function pushRefresh() {
       window.scrollTo(0, 0);
     };
-
   }, []);
   return (
     <Context>
@@ -37,6 +36,8 @@ const Router = () => {
           <Route path="/progressdetail/:id" element={<ProgressDetail />} />
           <Route path="progress-post" element={<ProgressPost />} />
           <Route path="list" element={<List />} />
+          <Route path="event" element={<Event />} />
+
           {/* 민희님 */}
           <Route path="login" element={<Login />} />
           <Route path="join" element={<SignUp />} />

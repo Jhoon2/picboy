@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { getCookieToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi';
@@ -7,61 +7,31 @@ import likeBef from '../images/Com/likeBef.svg';
 import likeAft from '../images/Com/likeAft.svg';
 
 const Like = ({ item }) => {
-  const [likeApi, setLikeApi] = useState();
-  const [likeCountState, setLikeCountState] = useState();
-  const [likes, setLikes] = useState(false);
+  const [likePlus, setLikePlus] = useState(item.liked && item.liked);
+  const [smallLikeBtn, setSmallLikeBtn] = useState(
+    item.likeCount && item.likeCount
+  );
   const accessToken = getCookieToken();
 
-  const myContext = useMyContext();
-  const id = item.id;
+  useEffect(() => {
+    setSmallLikeBtn(item.likeCount && item.likeCount);
+  }, [item.likeCount && item.likeCount]);
 
-  const likeHandler = (e) => {
-    if (accessToken === undefined) {
-      myContext.setCommetApplyBtn(true);
-    } else {
-      const info = {
-        like: 0,
-      };
-      anyApis
-        .liked(id, info)
-
-        .then(function (data) {
-          setLikeApi(data && data?.data.data);
-          if (likeApi && likeApi === false) {
-            setLikeCountState(likeCountState + 1);
-          } else if (likeApi && likeApi === true) {
-            setLikeCountState(likeCountState - 1);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+  const clickLikeBtn = (e) => {
+    e.stopPropagation();
+    setLikePlus(!likePlus);
+    anyApis.liked(item.id, '').then((response) => {
+      if (!response.data.data.like) {
+        setSmallLikeBtn(smallLikeBtn - 1);
+      } else {
+        setSmallLikeBtn(smallLikeBtn + 1);
+      }
+    });
   };
 
   return (
     <>
-      {likes ? (
-        <Likebutton
-          src={likeAft}
-          onClick={(e) => {
-            setLikes(!likes);
-            e.stopPropagation();
-            likeHandler();
-          }}
-          alt=""
-        />
-      ) : (
-        <Likebutton
-          src={likeBef}
-          onClick={(e) => {
-            setLikes(!likes);
-            e.stopPropagation();
-            likeHandler();
-          }}
-          alt=""
-        />
-      )}
+      <Likebutton src={likePlus ? likeAft : likeBef} onClick={clickLikeBtn} />
     </>
   );
 };

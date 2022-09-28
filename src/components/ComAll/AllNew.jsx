@@ -6,7 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 import Loadings from '../../global/Loading';
 import Report from '../../elem/Report';
 import Listprofile from '../../elem/Listprofile';
+import instance from '../../shared/apis';
 import Like from '../../elem/Like';
+import { useMyContext } from '../../shared/ContextApi';
 import downBef from '../../images/Com/downBef.svg';
 import downAft from '../../images/Com/downAft.svg';
 import userView from '../../images/Com/userView.svg';
@@ -20,11 +22,13 @@ const All = () => {
   const [newData, setNewdata] = useState([]);
   const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
+  const myContext = useMyContext();
+  const [smallLikeBtn, setSmallLikeBtn] = useState();
 
   const getCompleteData = async () => {
     setLoad(true);
     try {
-      const { data } = await axios.get(
+      const { data } = await instance.get(
         `${baseURL}/post/gif/0/1?page=${page}&size=6`
       );
       if (!data) {
@@ -56,11 +60,6 @@ const All = () => {
       }
     });
   };
-
-  // setTimeout(() => {
-  //   observer.observe(ref);
-  // }, 500);
-
 
   useEffect(() => {
     let observer;
@@ -102,7 +101,7 @@ const All = () => {
                     >
                       <Download />
                     </a>
-                    <Like item={item} />
+                    <Like item={item} smallLikeBtn={smallLikeBtn} />
                   </DescBox>
                 </Overlay>
               </OverlayWrap>
@@ -145,7 +144,7 @@ const All = () => {
                     <DescText>999+</DescText>
                   ) : (
                     <DescText>
-                      <DescText> {item?.likeCount}</DescText>
+                      <DescText> {item.likeCount}</DescText>
                     </DescText>
                   )}
                 </LikeBox>
