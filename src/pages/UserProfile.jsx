@@ -22,7 +22,8 @@ import smallpencil from '../images/smallpencil.png'
 import camera from '../images/Camera.png'
 import editPencil from '../images/mypage/mode-edit-sharp.png'
 import Listbanner from '../images/Com/Listbanner.svg';
-import Listfooter from '../images/mypage/myPageFooter.svg'
+import Listfooter from '../images/mypage/myPageFooter.svg';
+
 
 
 

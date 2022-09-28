@@ -94,7 +94,7 @@ const PostTopic = () => {
         const image = new Image();
         image.src = Frame;
         image.onload = function () {
-            ctx.drawImage(image, 0, 0);
+            ctx?.drawImage(image, 0, 0);
         }
     }, [ctx]);
 
@@ -692,7 +692,7 @@ const ModeFrameBtnWrap = styled.div`
 `;
 
 const RandomTopicBtn = styled.div`
-    font-size: 14px;
+    font-size: 13px;
   font-weight: 400;
   padding: 10px 14px;
   border: 1px solid #000;
