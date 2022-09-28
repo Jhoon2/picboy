@@ -8,7 +8,7 @@ const Footer = () => {
   
   if (location.pathname === '/login') return null;
   if (location.pathname === '/join') return null;
-  // if (location.pathname.slice(0, 13) === '/user-profile') return;
+  if (location.pathname.slice(0, 13) === '/user-profile') return;
 
   return (
     <>

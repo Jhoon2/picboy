@@ -6,6 +6,7 @@ const isCanvasBlank = (canvas) => {
         );
       
         return !pixelBuffer.some(color => color !== 0);
+
 }
   
 export  default isCanvasBlank

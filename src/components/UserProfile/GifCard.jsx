@@ -132,7 +132,7 @@ const GifCard = ({ data, myImg, myNickname,samePerson }) => {
             </Participants>
           ) : null}
           <Texts>
-            {data.nickname}
+            {data.nickname.slice(0,8)}
             {data.memberCount ? <>외 {data.memberCount}명</> : null}
           </Texts>
         </UserProfileContent>
