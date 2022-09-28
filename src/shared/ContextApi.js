@@ -63,8 +63,6 @@ export const Context = (props) => {
     //그림판이 비어있을 떄
     const [ vacantCanvas , setVacantCanvas] =React.useState(false)
 
-    //로그인 유저와 마이페이지 유저 같을 때
-    const [sameUser, setSameUser] = React.useState(false)
 
     const value = {
   
@@ -144,9 +142,6 @@ export const Context = (props) => {
         vacantCanvas,
         setVacantCanvas,
 
-        //로그인 유저와 마이페이지 유저 같을 때
-        sameUser,
-        setSameUser
     };
 
     return (

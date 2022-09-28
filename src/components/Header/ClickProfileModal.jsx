@@ -92,8 +92,9 @@ const ClickProfileModal = ({ img }) => {
                     name="myPage"
                  onClick={(e) => {
                       pop1PB.play();
-                      setSelectContent(e.target.id);
-                      navigate(`/user-profile/${logonUsername}`)
+                   setSelectContent(e.target.id);
+                   setSelect(false)
+                      window.location.href = (`/user-profile/${logonUsername}`)
                       // myContext.setLogonProfileImg(false);
                     }}
                     selectContent={selectContent}

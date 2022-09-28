@@ -195,7 +195,7 @@ const UserProfile = () => {
     
     //로그인유저 마이페이지 유저 같을 떄
     const samePerson = UserPage && UserPage?.username === userinfo?.data?.data?.username;
-    myContext.setSameUser(samePerson)
+
     return (
         <>
         <UserProfileContainer >
@@ -256,7 +256,8 @@ const UserProfile = () => {
                     <CardContainer>
                         {userData.content && userData.content.map((data, i) => {
                             return (
-                                <GifCard key={i} data={data} myImg={UserPage&&UserPage.profilImg} myNickname={UserPage&&UserPage.nickname} />
+                                <GifCard key={i} data={data} myImg={UserPage && UserPage.profilImg} myNickname={UserPage && UserPage.nickname}
+                                    samePerson={samePerson} />
                             )
                         })}
                     </CardContainer>

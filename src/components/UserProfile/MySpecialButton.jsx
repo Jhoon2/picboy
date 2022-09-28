@@ -16,7 +16,7 @@ import grayFlag from '../../images/mypage/grayFlag.png'
 import grayLineEyes from '../../images/mypage/grayLineEyes.png'
 
 
-const MySpecialButton = ({ shown, close, postId,data }) => {
+const MySpecialButton = ({ shown, close, postId,data,samePerson }) => {
   // const [path, setPath] = useState(0)
   const dispatch = useDispatch();
   const myContext = useMyContext();
@@ -41,37 +41,53 @@ const MySpecialButton = ({ shown, close, postId,data }) => {
   }
 
   return shown ? (
-    <>
-    <FullOverLay onClick={() => { close() }}>
-      {myContext.declarBtn ? (
-        <ErrorBox onClick={() => myContext.setDecalrBtn(false)}>
-          <AnyModal title="안내" content="신고 완료되었습니다" />
+    <> {samePerson ?
+      <FullOverLay onClick={() => { close() }}>
+        {myContext.declarBtn ? (
+          <ErrorBox onClick={() => myContext.setDecalrBtn(false)}>
+            <AnyModal title="안내" content="신고 완료되었습니다" />
           </ErrorBox>
-      ) : null}
-      {myContext.declarCancel ?
-        (<ErrorBox onClick={() => myContext.setDeclarCancel(false)}>
-          <AnyModal title="안내" content=" 신고 취소되었습니다" />
+        ) : null}
+        {myContext.declarCancel ?
+          (<ErrorBox onClick={() => myContext.setDeclarCancel(false)}>
+            <AnyModal title="안내" content=" 신고 취소되었습니다" />
           </ErrorBox>
-      ) : null}
+          ) : null}
         <OverlayPosition >
-            <ModalContainer onClick={e => { e.stopPropagation() }}>
-              <ModalText id='hide' name='1' onClick={hide}>
-                <HideIconContainer>
-                {myContext.tabNum === 3 ? 
-                  <><IconImg src={grayEyes} /><div style={{ marginTop: '-5px' }}>보이기</div></> :
-                  <><IconImg src={grayLineEyes} /><div style={{ marginTop: '-5px' }}>숨기기</div></>}
-                  </HideIconContainer>
-              </ModalText>
-              <TextBr />
-              <ModalText id='declaration' name='2' onClick={declaration}>
-                <HideIconContainer>
-                  <IconImg src={grayFlag} style={{marginTop: '0px'}} />
-                  {toggleDeclar ? <div>신고 취소</div> : <div>신고</div>}
-                </HideIconContainer>
-              </ModalText>
-            </ModalContainer>
+          <ModalContainer onClick={e => { e.stopPropagation() }}>
+            <ModalText id='hide' name='1' onClick={hide}>
+              <HideIconContainer>
+                {
+                  myContext.tabNum === 3 ?
+                    <><IconImg src={grayEyes} /><div style={{ marginTop: '-5px' }}>보이기</div></> :
+                    <><IconImg src={grayLineEyes} /><div style={{ marginTop: '-5px' }}>숨기기</div></>
+                }
+              </HideIconContainer>
+            </ModalText>
+            <TextBr />
+            <ModalText id='declaration' name='2' onClick={declaration}>
+              <HideIconContainer>
+                <IconImg src={grayFlag} style={{ marginTop: '0px' }} />
+                {toggleDeclar ? <div>신고 취소</div> : <div>신고</div>}
+              </HideIconContainer>
+            </ModalText>
+          </ModalContainer>
+        </OverlayPosition>
+      </FullOverLay> :
+       <FullOverLay onClick={() => { close() }}>
+      <OverlayPosition>
+          <ModalContainer1 onClick={e => { e.stopPropagation() }}>      
+
+            <ModalText1 id='declaration' name='2' onClick={declaration}>
+              <HideIconContainer>
+                <IconImg src={grayFlag} style={{ marginTop: '0px' }} />
+                {toggleDeclar ? <div>신고 취소</div> : <div>신고</div>}
+              </HideIconContainer>
+            </ModalText1>
+          </ModalContainer1>
         </OverlayPosition>
       </FullOverLay>
+    }
       </>
   ) : null
 }
@@ -110,6 +126,15 @@ const OverlayPosition = styled.div`
   top: 660px;
   left: 590px;
 `
+const ModalContainer1 = styled.div`
+  width: 120px;
+  height: 50px;
+  position: absolute;
+  z-index: 2;
+  border: 3px solid #000000;
+  background-color: white;
+`
+
 const ModalContainer = styled.div`
   width: 120px;
   height: 100px;
@@ -139,15 +164,37 @@ const ModalText = styled.div`
   }
 
 `
-const TextBr = styled.div`
-  width: 117px;
-  margin-top: 5px;
-  /* margin-left: 20px; */
+
+const ModalText1 = styled.div`
+  width: 132px;
+  height: 23px;
+  /* margin-top: -5px; */
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  border: 1px solid #A3A3A3;
+  /* gap: 10px; */
+  font-family: 'Noto Sans KR';
+  font-style: normal;
+  font-size: ${(props) => props.theme.Caption2};
+  color : ${(props) => props.theme.ShadeRegular} ;
+  cursor: pointer;
+
+  :first-child {
+    margin-top: 12px;
+  }
+
+`
+const TextBr = styled.div`
+  width: 115px;
+  height: 1px;
+  margin-top: 5px;
+  background-color: #A3A3A3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
 `
 const HideIconContainer = styled.div`
   display: flex;
