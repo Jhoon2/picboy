@@ -13,21 +13,21 @@ import { useMyContext } from '../shared/ContextApi';
 import SignupErrorModal from '../components/Signup/SignupErrorModal';
 import UseTimer from '../elem/UseTimer';
 import SignUpDone from '../components/Signup/SignUpDone';
-import api from '../shared/apis'
+import api from '../shared/apis';
 
 //이미지
 import Listbanner from '../images/Com/Listbanner.svg';
-import logo from '../images/logo.svg'
+import logo from '../images/logo.svg';
 
 //소리
-import { error1PB, pop1PB } from '../global/sound';
+import { error1PB, succ2PB } from '../global/sound';
 
 const SignUp = () => {
   const myContext = useMyContext();
 
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
-  const [focusedInput, setFocusedInput] = useState('')
+  const [focusedInput, setFocusedInput] = useState('');
 
   //유효성검사
   const schema = yup.object().shape({
@@ -97,32 +97,28 @@ const SignUp = () => {
     }
   };
 
-
   ////////////////////////
   //ID input창 빈값
-  const [any, setAny] = useState(0)
+  const [any, setAny] = useState(0);
   const IDinputVacant = (e) => {
-
-    setFocusedInput(e.target.name)
+    setFocusedInput(e.target.name);
     setExistedId(false);
     // setAvailableId(false);
-    setPhoneValid(false)
-    setCodeError(false)
+    setPhoneValid(false);
+    setCodeError(false);
     // setCodeTrue(false)
   };
 
   // NickName 중복확인
   const [existedNick, setExistedNick] = useState(false);
   const [availableNick, setAvailableNick] = useState(false);
-  
+
   const checkSameNick = async () => {
     const nickname = watch().nickname;
     if (nickname.length < 2 || nickname.length > 10) return;
 
     try {
-      const response = await api.get(
-        `/user/nickname-double-check/${nickname}`
-      );
+      const response = await api.get(`/user/nickname-double-check/${nickname}`);
       if (!response.data.success) {
         setExistedNick(true);
       } else {
@@ -164,23 +160,23 @@ const SignUp = () => {
   const [phoneValid, setPhoneValid] = useState(false);
   const [noSendPhone, setNoSendPhone] = useState(false);
   //핸드폰 인증버튼
-  const [codeTrue, setCodeTrue] = useState(false)
-  const [codeError, setCodeError] = useState(false)
+  const [codeTrue, setCodeTrue] = useState(false);
+  const [codeError, setCodeError] = useState(false);
 
   //핸드폰 유효시간
   const [minutes, setMinutes] = useState(2);
   const [seconds, setSeconds] = useState(59);
 
   const phoneCheck = async () => {
-    if(inputValue.length <= 9) return
-    setCodeTrue(false)
+    if (inputValue.length <= 9) return;
+    setCodeTrue(false);
 
-    setNoSendPhone(true)
+    setNoSendPhone(true);
     const info = {
-      phoneNum: inputValue
-    }
+      phoneNum: inputValue,
+    };
     try {
-      const response = await api.post(`/user/phonenumber-send`,info);
+      const response = await api.post(`/user/phonenumber-send`, info);
     } catch (error) {
       console.log(error);
     }
@@ -189,13 +185,12 @@ const SignUp = () => {
 
     setTimeout(() => {
       myContext.setTimerMessage(false);
-      if (!codeTrue) { setPhoneValid(true) }
-      setNoSendPhone(false)
+      if (!codeTrue) {
+        setPhoneValid(true);
+      }
+      setNoSendPhone(false);
     }, 180000);
-    
   };
-
-
 
   const validatePhone = async () => {
     //핸드폰 인증번호 감지
@@ -203,49 +198,47 @@ const SignUp = () => {
 
     const info = {
       phoneNum: inputValue,
-      numStr: phone_valid_number
-    }
+      numStr: phone_valid_number,
+    };
     try {
       const response = await api.post(`/user/code-send`, info);
       if (response.data.success) {
         setPhoneValid(false);
-        setCodeTrue(true)
+        setCodeTrue(true);
         myContext.setTimerMessage(false);
         // setMinutes(0);
         // setSeconds(0);
-        setNoSendPhone(false)
-
+        setNoSendPhone(false);
       } else {
-        setCodeError(true)
+        setCodeError(true);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   //회원가입 버튼
-  const [openSignupDone, setOpenSignupDone] = useState(false)
-  const [myNickname, setMyNickname] = useState()
-
+  const [openSignupDone, setOpenSignupDone] = useState(false);
+  const [myNickname, setMyNickname] = useState();
 
   //에러
   const codeFalseError = () => {
     error1PB.play();
-    myContext.btnClickOn()
-  }
+    myContext.btnClickOn();
+  };
   const availableIdError = () => {
     error1PB.play();
-    myContext.btnClickOn()
-  }
+    myContext.btnClickOn();
+  };
   const availableNickError = () => {
     error1PB.play();
-    myContext.btnClickOn()
-  }
+    myContext.btnClickOn();
+  };
   const onClickSignUp = async (data) => {
     if (!codeTrue) return codeFalseError();
     if (!availableId) return availableIdError();
     if (!availableNick) return availableNickError();
-    setMyNickname(data.nickname)
+    setMyNickname(data.nickname);
     const info = {
       username: data.id,
       nickname: data.nickname,
@@ -258,7 +251,7 @@ const SignUp = () => {
         // reset();
         ////
         //회원가입 완료 창 만들기
-        pop1PB.play();
+        succ2PB.play();
         myContext.signUpBtnClickOn();
         // setOpenSignupDone(true)
         // navigate('/login');
@@ -271,178 +264,211 @@ const SignUp = () => {
   return (
     <SignupContainer>
       <ImgBox src={Listbanner} />
-      <LogoContainer onClick={()=>navigate('/')}>
-          <LogoImg src={logo} />
-        </LogoContainer>
+      <LogoContainer onClick={() => navigate('/')}>
+        <LogoImg src={logo} />
+      </LogoContainer>
       <LoginContainer>
-      {myContext.signUpBtn ? <ErrorBox>
-        <SignUpDone nickname={myNickname} />
-      </ErrorBox> : null}
-      {myContext.btnOpen ? (
-        <ErrorBox onClick={() => myContext.btnClickOff()}>
-          <SignupErrorModal codeTrue={codeTrue} />
-        </ErrorBox>
-      ) : null}
-      <FormContainer>
-        <form onSubmit={handleSubmit(onClickSignUp)}>
-          <InputBox>
-            <Title>JOIN</Title>
-            <InputBoxInner>
-              <InputFlex>
-                <TextAndInput onFocus={IDinputVacant} focusedInput ={focusedInput}>
-                  <SignupText>아이디</SignupText>
-                  <InputWithButton
-                    id="userId"
-                    name="id"
-                    placeholder="ID를 입력해주세요"
-                    {...register('id')}
-                  />
-                </TextAndInput>
-                <CheckButton
-                  type="button"
-                  id="checkId"
-                  name="checkId"
-                  onClick={checkSameId}
-                >
-                  중복확인
-                </CheckButton>
-              </InputFlex>
-              <Errorsmessage>{errors.id?.message} </Errorsmessage>
-              <Errorsmessage>{existedId && '중복 아이디입니다'} </Errorsmessage>
-              <NoErrorsmessage>
-                {availableId && '사용 가능한 아이디입니다'}{' '}
-              </NoErrorsmessage>
-
-              <InputFlex>
-                <NoButtonInput onFocus={IDinputVacant} focusedInput ={focusedInput}>
-                  <SignupText>비밀번호</SignupText>
-                  <OnlyInput
-                    id="password"
-                    name="pw"
-                    type="password"
-                    placeholder="비밀번호를 입력해주세요"
-                    autoComplete="off"
-                    {...register('pw', {
-                      required: true,
-                    })}
-                  />
-                </NoButtonInput>
-              </InputFlex>
-              <Errorsmessage>{errors.pw?.message}</Errorsmessage>
-
-              <InputFlex>
-                <NoButtonInput onFocus={IDinputVacant} focusedInput ={focusedInput}>
-                  <SignupText>비밀번호 확인</SignupText>
-                  <OnlyInput
-                    id="checkPsasword"
-                    name="checkPw"
-                    autoComplete="off"
-                    type="password"
-                    placeholder="비밀번호를 확인해주세요"
-                    {...register('checkPw', {
-                      required: true,
-                    })}
-                  />
-                </NoButtonInput>
-              </InputFlex>
-              <Errorsmessage>{errors.checkPw?.message}</Errorsmessage>
-
-              <InputFlex>
-                <TextAndInput>
-                  <SignupText>휴대폰</SignupText>
-                  <InputWithButton
-                    id="phone_number"
-                    name="phone_number"
-                    placeholder="핸드폰번호를 입력해주세요"
-                    type="text"
-                    value={inputValue}
-                    onChange={numberAddHyphen}
+        {myContext.signUpBtn ? (
+          <ErrorBox>
+            <SignUpDone nickname={myNickname} />
+          </ErrorBox>
+        ) : null}
+        {myContext.btnOpen ? (
+          <ErrorBox onClick={() => myContext.btnClickOff()}>
+            <SignupErrorModal codeTrue={codeTrue} />
+          </ErrorBox>
+        ) : null}
+        <FormContainer>
+          <form onSubmit={handleSubmit(onClickSignUp)}>
+            <InputBox>
+              <Title>JOIN</Title>
+              <InputBoxInner>
+                <InputFlex>
+                  <TextAndInput
                     onFocus={IDinputVacant}
-                  />
-                </TextAndInput>
-                <CheckButton type="button" disabled={noSendPhone? true:false} onClick={phoneCheck}>
-                  코드전송
-                </CheckButton>
-              </InputFlex>
-
-              <InputFlex>
-                <PhoneTextAndInput>
-                  <div style={{ display: 'flex' }}>
-                    <SignupText>휴대폰 인증</SignupText>
+                    focusedInput={focusedInput}
+                  >
+                    <SignupText>아이디</SignupText>
                     <InputWithButton
-                      id="phone_valid_number"
-                      name="phone_valid_number"
-                      placeholder="인증번호를 입력해주세요"
-                      // onChange={checkValidatePhone}
-                      onFocus={IDinputVacant}
-                      {...register('phone_valid_number', {
+                      id="userId"
+                      name="id"
+                      placeholder="ID를 입력해주세요"
+                      {...register('id')}
+                    />
+                  </TextAndInput>
+                  <CheckButton
+                    type="button"
+                    id="checkId"
+                    name="checkId"
+                    onClick={checkSameId}
+                  >
+                    중복확인
+                  </CheckButton>
+                </InputFlex>
+                <Errorsmessage>{errors.id?.message} </Errorsmessage>
+                <Errorsmessage>
+                  {existedId && '중복 아이디입니다'}{' '}
+                </Errorsmessage>
+                <NoErrorsmessage>
+                  {availableId && '사용 가능한 아이디입니다'}{' '}
+                </NoErrorsmessage>
+
+                <InputFlex>
+                  <NoButtonInput
+                    onFocus={IDinputVacant}
+                    focusedInput={focusedInput}
+                  >
+                    <SignupText>비밀번호</SignupText>
+                    <OnlyInput
+                      id="password"
+                      name="pw"
+                      type="password"
+                      placeholder="비밀번호를 입력해주세요"
+                      autoComplete="off"
+                      {...register('pw', {
                         required: true,
                       })}
                     />
-                  </div>
-                  <div style={{ color: 'red' }}>
-                    {myContext.timerMessage ? (
-                      <UseTimer
-                        minutes={minutes}
-                        setMinutes={setMinutes}
-                        seconds={seconds}
-                        setSeconds={setSeconds}
+                  </NoButtonInput>
+                </InputFlex>
+                <Errorsmessage>{errors.pw?.message}</Errorsmessage>
+
+                <InputFlex>
+                  <NoButtonInput
+                    onFocus={IDinputVacant}
+                    focusedInput={focusedInput}
+                  >
+                    <SignupText>비밀번호 확인</SignupText>
+                    <OnlyInput
+                      id="checkPsasword"
+                      name="checkPw"
+                      autoComplete="off"
+                      type="password"
+                      placeholder="비밀번호를 확인해주세요"
+                      {...register('checkPw', {
+                        required: true,
+                      })}
+                    />
+                  </NoButtonInput>
+                </InputFlex>
+                <Errorsmessage>{errors.checkPw?.message}</Errorsmessage>
+
+                <InputFlex>
+                  <TextAndInput>
+                    <SignupText>휴대폰</SignupText>
+                    <InputWithButton
+                      id="phone_number"
+                      name="phone_number"
+                      placeholder="핸드폰번호를 입력해주세요"
+                      type="text"
+                      value={inputValue}
+                      onChange={numberAddHyphen}
+                      onFocus={IDinputVacant}
+                    />
+                  </TextAndInput>
+                  <CheckButton
+                    type="button"
+                    disabled={noSendPhone ? true : false}
+                    onClick={phoneCheck}
+                  >
+                    코드전송
+                  </CheckButton>
+                </InputFlex>
+
+                <InputFlex>
+                  <PhoneTextAndInput>
+                    <div style={{ display: 'flex' }}>
+                      <SignupText>휴대폰 인증</SignupText>
+                      <InputWithButton
+                        id="phone_valid_number"
+                        name="phone_valid_number"
+                        placeholder="인증번호를 입력해주세요"
+                        // onChange={checkValidatePhone}
+                        onFocus={IDinputVacant}
+                        {...register('phone_valid_number', {
+                          required: true,
+                        })}
                       />
-                    ) : null}
-                  </div>
-                </PhoneTextAndInput>
-                <CheckButton type='button'
-                  disabled={!noSendPhone ? true : false}
-                  onClick={validatePhone}>인증확인</CheckButton>
-              </InputFlex>
-              <Errorsmessage>{errors.phone_valid_number?.message}</Errorsmessage>
+                    </div>
+                    <div style={{ color: 'red' }}>
+                      {myContext.timerMessage ? (
+                        <UseTimer
+                          minutes={minutes}
+                          setMinutes={setMinutes}
+                          seconds={seconds}
+                          setSeconds={setSeconds}
+                        />
+                      ) : null}
+                    </div>
+                  </PhoneTextAndInput>
+                  <CheckButton
+                    type="button"
+                    disabled={!noSendPhone ? true : false}
+                    onClick={validatePhone}
+                  >
+                    인증확인
+                  </CheckButton>
+                </InputFlex>
+                <Errorsmessage>
+                  {errors.phone_valid_number?.message}
+                </Errorsmessage>
 
-              <div
-                style={{ color: 'red', marginLeft: '130px', fontSize: '13px' }}
-              >
-                {phoneValid ? '유효시간이 만료되었습니다' : false}
-                {codeError? '인증번호를 다시 입력해주세요' : false}
-              </div>
-              <div style={{ color: 'green', marginLeft: '130px', fontSize: '13px' }}>
-                {codeTrue? '인증되었습니다' :null}
-              </div>
-              <InputFlex>
-                <TextAndInput>
-                  <SignupText>닉네임</SignupText>
-                  <InputWithButton
-                    id="nickname"
-                    name="nickname"
-                    placeholder="닉네임은 최대 8글자입니다"
-                    {...register('nickname')}
-                    onFocus={NickInputVacant}
-                  />
-                </TextAndInput>
-                <CheckButton
-                  type="button"
-                  id="checkNickname"
-                  name="checkNickname"
-                  onClick={checkSameNick}
+                <div
+                  style={{
+                    color: 'red',
+                    marginLeft: '130px',
+                    fontSize: '13px',
+                  }}
                 >
-                  중복확인
-                </CheckButton>
-              </InputFlex>
-              {/* {errors.checkNickname?.message} */}
-              <Errorsmessage>{errors.nickname?.message}</Errorsmessage>
-              <Errorsmessage>
-                {existedNick && '중복 아이디입니다'}{' '}
-              </Errorsmessage>
-              <NoErrorsmessage>
-                {availableNick && '사용 가능한 아이디입니다'}{' '}
-              </NoErrorsmessage>
+                  {phoneValid ? '유효시간이 만료되었습니다' : false}
+                  {codeError ? '인증번호를 다시 입력해주세요' : false}
+                </div>
+                <div
+                  style={{
+                    color: 'green',
+                    marginLeft: '130px',
+                    fontSize: '13px',
+                  }}
+                >
+                  {codeTrue ? '인증되었습니다' : null}
+                </div>
+                <InputFlex>
+                  <TextAndInput>
+                    <SignupText>닉네임</SignupText>
+                    <InputWithButton
+                      id="nickname"
+                      name="nickname"
+                      placeholder="닉네임은 최대 8글자입니다"
+                      {...register('nickname')}
+                      onFocus={NickInputVacant}
+                    />
+                  </TextAndInput>
+                  <CheckButton
+                    type="button"
+                    id="checkNickname"
+                    name="checkNickname"
+                    onClick={checkSameNick}
+                  >
+                    중복확인
+                  </CheckButton>
+                </InputFlex>
+                {/* {errors.checkNickname?.message} */}
+                <Errorsmessage>{errors.nickname?.message}</Errorsmessage>
+                <Errorsmessage>
+                  {existedNick && '중복 아이디입니다'}{' '}
+                </Errorsmessage>
+                <NoErrorsmessage>
+                  {availableNick && '사용 가능한 아이디입니다'}{' '}
+                </NoErrorsmessage>
 
-              {/* 회원가입 버튼창 */}
-              <SignupButton type="submit">회원가입</SignupButton>
-            </InputBoxInner>
-          </InputBox>
-        </form>
-      </FormContainer>
+                {/* 회원가입 버튼창 */}
+                <SignupButton type="submit">회원가입</SignupButton>
+              </InputBoxInner>
+            </InputBox>
+          </form>
+        </FormContainer>
       </LoginContainer>
-      </SignupContainer>
+    </SignupContainer>
   );
 };
 
@@ -462,24 +488,22 @@ const SignupContainer = styled.div`
   height: 70vh;
   display: flex;
   justify-content: center;
-
 `;
 const LoginContainer = styled.div`
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-
 `;
 const LogoContainer = styled.div`
   position: absolute;
   margin-top: 46px;
   cursor: pointer;
-`
+`;
 const LogoImg = styled.img`
   width: 119px;
   height: 34px;
-`
+`;
 
 const ImgBox = styled.img`
   width: 100%;
@@ -492,7 +516,6 @@ const FormContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 200px;
-
 `;
 const InputBox = styled.div`
   width: 700px;
@@ -529,10 +552,8 @@ const TextAndInput = styled.div`
   &:focus-within {
     border-bottom: 2px solid black;
     color: black;
-
   }
-`
-  
+`;
 
 const NoButtonInput = styled.div`
   width: 575px;
@@ -554,9 +575,9 @@ const PhoneTextAndInput = styled.div`
   border-bottom: 2px solid lightgray;
   color: #a3a3a3;
 
-&:focus-within {
-  color: black; 
-}
+  &:focus-within {
+    color: black;
+  }
 `;
 
 const SignupText = styled.div`
@@ -588,7 +609,7 @@ const CheckButton = styled.button`
   margin-left: 10px;
   font-size: 16px;
   font-family: 'NotoLight';
-  font-weight:  ${(props) => props.theme.HeadlineBD};
+  font-weight: ${(props) => props.theme.HeadlineBD};
   border: 1px solid grey;
   cursor: pointer;
   background-color: white;

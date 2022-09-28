@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import back from '../images/Com/back.png';
 import backscroll from '../images/Com/backscroll.png';
+import { pop2PB } from '../global/sound';
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -44,6 +45,7 @@ const ProgressBanner = (props) => {
           <SelectButton
             onClick={() => {
               props.setProTap(0);
+              pop2PB.play();
             }}
           >
             <Underline color={'#868686'}>전체</Underline>
@@ -51,6 +53,7 @@ const ProgressBanner = (props) => {
           <SelectButton
             onClick={() => {
               props.setProTap(1);
+              pop2PB.play();
             }}
           >
             <Underline color={'#868686'}>제시어</Underline>
@@ -58,6 +61,7 @@ const ProgressBanner = (props) => {
           <SelectButton
             onClick={() => {
               props.setProTap(2);
+              pop2PB.play();
             }}
           >
             <Underline color={'#868686'}>자유</Underline>
