@@ -26,7 +26,7 @@ import completeIcon from '../../images/mypage/complete.png'
 import progressIcon from '../../images/mypage/progress.png'
 import clickDownload from '../../images/mypage/clickDownload.png'
 
-const GifCard = ({ data, myImg, myNickname }) => {
+const GifCard = ({ data, myImg, myNickname,samePerson }) => {
   const navigate = useNavigate();
   const baseURL = process.env.REACT_APP_API_KEY;
 
@@ -164,6 +164,7 @@ const GifCard = ({ data, myImg, myNickname }) => {
         setOpenSpecialModal={setOpenSpecialModal}
         postId={data.postId}
         data={data}
+        samePerson={samePerson}
       />
       {/* 참여자들 */}.
       <CardInner>

@@ -203,6 +203,16 @@ const CompleteButton = styled(Button)`
   }
 `;
 
+const EventButton = styled(Button)`
+  width: 150px;
+  font-size: 15px;
+  background: none;
+  color: #a3a3a3;
+  &:hover {
+    color: white;
+  }
+`;
+
 const LoginButton = styled(Button)`
   width: 80px;
   ${({ theme }) => theme.backgroundSet('cover')}

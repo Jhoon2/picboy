@@ -63,6 +63,7 @@ export const Context = (props) => {
     //그림판이 비어있을 떄
     const [ vacantCanvas , setVacantCanvas] =React.useState(false)
 
+
     const value = {
   
         timerMessage,
@@ -139,7 +140,8 @@ export const Context = (props) => {
         
         //그림판이 비어있을 떄
         vacantCanvas,
-        setVacantCanvas
+        setVacantCanvas,
+
     };
 
     return (

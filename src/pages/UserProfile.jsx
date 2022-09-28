@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { useState,useRef } from 'react'
 import { useEffect } from 'react'
 import { useMyContext } from '../shared/ContextApi'
@@ -14,13 +14,17 @@ import UseGetUser from '../hooks/UseGetUser'
 import GifCard from '../components/UserProfile/GifCard'
 import ProfileImageModal from '../components/UserProfile/ProfileImageModal'
 import CategoryOpen from '../components/UserProfile/CategoryOpen'
+import TopScroll from '../global/TopScroll'
 
 //이미지
 import basicImg from '../images/mypage/basicImg.png'
 import smallpencil from '../images/smallpencil.png'
 import camera from '../images/Camera.png'
 import editPencil from '../images/mypage/mode-edit-sharp.png'
-import TopScroll from '../global/TopScroll'
+import Listbanner from '../images/Com/Listbanner.svg';
+import Listfooter from '../images/mypage/myPageFooter.svg';
+
+
 
 
 const UserProfile = () => {
@@ -150,15 +154,15 @@ const UserProfile = () => {
     let button;
     if (editMyNickname) {
         button = <EditDone onClick={completeBtn}>
-             <div style={{width:'100px',height:'100px',marginLeft:'-10px',backgroundColor: 'white'}}>
+             <div style={{width:'100px',height:'100px',marginLeft:'-10px'}}>
                  <PenContainer style={{backgroundColor: 'black'}}>
                     <PenImg style={{backgroundColor: 'black'}} src={editPencil} />
-                             </PenContainer>
+                </PenContainer>
              </div>
         </EditDone>
     } else {
         button = <EditButton onClick={editNickname}>
-            <PenContainer style={{marginLeft:'-10px'}}>
+            <PenContainer style={{marginLeft:'-10px',backgroundColor: 'white'}}>
                 <PenImg src={smallpencil} />
             </PenContainer>
         </EditButton>
@@ -188,11 +192,16 @@ const UserProfile = () => {
             setAvailableNick(false);
         };
     
-    if(!userinfo?.data?.data?.username) return
+    if (!userinfo?.data?.data?.username) return
+    
+    //로그인유저 마이페이지 유저 같을 떄
+    const samePerson = UserPage && UserPage?.username === userinfo?.data?.data?.username;
+
     return (
         <>
         <UserProfileContainer >
-            <ContainerInner >
+                <ImgBox src={Listbanner} />
+                <ContainerInner >
                 <TopScroll />
                 {/* 프로필 */}
                 <ProfileContainer>
@@ -207,7 +216,7 @@ const UserProfile = () => {
                             <TextContentContainer>
                                 <TextContent>아이디</TextContent>
                                 
-                                <Texts>{logonUserStatus === 1 ? UserPage&&UserPage.username : 'Kakao user'}</Texts>
+                                <Texts>{logonUserStatus === 1 ? UserPage&&UserPage.username.slice(0,10) : 'Kakao user'}</Texts>
                             </TextContentContainer>
                             <TextContentContainer>
                                 <TextContent>닉네임</TextContent>
@@ -248,7 +257,8 @@ const UserProfile = () => {
                     <CardContainer>
                         {userData.content && userData.content.map((data, i) => {
                             return (
-                                <GifCard key={i} data={data} myImg={UserPage&&UserPage.profilImg} myNickname={UserPage&&UserPage.nickname} />
+                                <GifCard key={i} data={data} myImg={UserPage && UserPage.profilImg} myNickname={UserPage && UserPage.nickname}
+                                    samePerson={samePerson} />
                             )
                         })}
                     </CardContainer>
@@ -256,9 +266,9 @@ const UserProfile = () => {
                         </>
                         
             </ContainerInner>
-
             </UserProfileContainer>
 
+            <Footerimg />
                 
             {/* 프로필이미지 모달창 */}
             {UserPage&&UserPage.username === userinfo.data.data.username ? <ProfileImageModal shown={myContext.isOpenProfileImg}
@@ -278,6 +288,13 @@ const UserProfileContainer = styled.div`
 const ContainerInner = styled.div`
     max-width: 1200px;
 `
+//배너
+const ImgBox = styled.img`
+  width: 100%;
+  position: absolute;
+  z-index: -100;
+`;
+
 const ProfileContainer = styled.div`
     width: 100%;
     height: 300px;
@@ -445,6 +462,12 @@ const NoErrorsmessage = styled.div`
   color: green;
 `;
 
-
+const Footerimg = styled.div`
+  width: 100%;
+  height: 320px;
+  border: none;
+  background: url(${Listfooter});
+ ${({ theme }) => theme.backgroundSet('cover')}
+`;
 
 export default UserProfile

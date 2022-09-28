@@ -81,7 +81,7 @@ const PostRelay = () => {
     const image = new Image();
     image.src = Frame;
     image.onload = function () {
-      ctx.drawImage(image, 0, 0);
+      ctx?.drawImage(image, 0, 0);
     }
   }, [ctx]);
 
