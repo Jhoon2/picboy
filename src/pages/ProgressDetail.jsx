@@ -17,7 +17,8 @@ import addAft from '../images/detail/addAft.svg';
 import noImage from '../images/detail/noImage.png';
 import Listbanner from '../images/Com/Listbanner.svg';
 import Listfooter from '../images/Com/Listfooter.svg';
-import  api  from '../shared/apis';
+import basicimage from '../images/mypage/basicImg.png';
+import api from '../shared/apis';
 
 //소리
 import { error1PB } from '../global/sound';
@@ -56,15 +57,14 @@ const ProgressDetail = () => {
 
   const imgList = Data.frameImgList;
   const Topics = Data && Data.topic;
-  
+
   //에러창
   const clickError = () => {
     error1PB.play();
-    myContext.btnClickOn()
-  }
+    myContext.btnClickOn();
+  };
   const Move = () => {
-    if (!logonUser)
-      return clickError();
+    if (!logonUser) return clickError();
     navigate(`/post-relay/${params.id}`);
   };
 
@@ -128,10 +128,10 @@ const ProgressDetail = () => {
       {Topics === null ? (
         <>
           {myContext.btnOpen ? (
-        <ErrorBox onClick={() => myContext.btnClickOff()}>
-          <AnyModal title="회원정보" content="로그인 후 가능합니다" />
-        </ErrorBox>
-      ) : null}
+            <ErrorBox onClick={() => myContext.btnClickOff()}>
+              <AnyModal title="회원정보" content="로그인 후 가능합니다" />
+            </ErrorBox>
+          ) : null}
           <ImgBox>
             <span>PROGRESS</span>
           </ImgBox>
@@ -168,7 +168,7 @@ const ProgressDetail = () => {
               >
                 {imgList.map((item, index) => {
                   return (
-                    <div className="bg"  key={item}>
+                    <div className="bg" key={item}>
                       <Container>
                         <PagingItems className="paging_items">
                           <div style={{ position: 'relative' }}>
@@ -177,8 +177,18 @@ const ProgressDetail = () => {
                                 {item.frameNum} / {Data.frameTotal}
                               </Personnel>
                               <ProBox>
-                                <Profileimg img={item.profileimg}></Profileimg>
-                                <LastNickname>{item.nickname}</LastNickname>
+                                {item?.profileimg === null ? (
+                                  <>
+                                    <Profileimg img={basicimage} />
+                                  </>
+                                ) : (
+                                  <>
+                                    <Profileimg img={item.profileimg} />
+                                  </>
+                                )}
+                                <LastNickname>
+                                  {item.nickname.slice(0, 8)}
+                                </LastNickname>
                               </ProBox>
                             </Overlay>
                             <img src={noImage} alt="" />
@@ -263,7 +273,7 @@ const ProgressDetail = () => {
                     return (
                       <div className="bg" key={item}>
                         <Container>
-                          <PagingItems  className="paging_items">
+                          <PagingItems className="paging_items">
                             <div style={{ position: 'relative' }}>
                               <Overlay>
                                 <Personnel>
@@ -272,10 +282,19 @@ const ProgressDetail = () => {
                                   </span>
                                 </Personnel>
                                 <ProBox>
-                                  <Profileimg
-                                    img={item.profileimg}
-                                  ></Profileimg>
-                                  <LastNickname>{item.nickname}</LastNickname>
+                                  {item?.profileimg === null ? (
+                                    <>
+                                      <Profileimg img={basicimage} />
+                                    </>
+                                  ) : (
+                                    <>
+                                      <Profileimg img={item.profileimg} />
+                                    </>
+                                  )}
+
+                                  <LastNickname>
+                                    {item.nickname.slice(0, 8)}
+                                  </LastNickname>
                                 </ProBox>
                               </Overlay>
                               <img src={item.imgUrl} alt="" />

@@ -101,6 +101,16 @@ const Header = () => {
           >
             COMPLETE
           </CompleteButton>
+          <Box>
+            <EventButton
+              onClick={() => {
+                navigate('/event');
+                headerPB.play();
+              }}
+            >
+              EVENT
+            </EventButton>
+          </Box>
 
           <PostCategories />
 
@@ -177,13 +187,13 @@ const HeaderBox = styled.div`
 const Logo = styled.img`
   width: 104px;
   height: 30px;
-  margin-right: 100px;
+  margin-right: 50px;
   cursor: pointer;
 `;
 
 const ProceedingButton = styled(Button)`
   width: 150px;
-  margin-right: 60px;
+  margin-right: 30px;
   background: none;
   font-size: 15px;
   color: #a3a3a3;
@@ -194,8 +204,8 @@ const ProceedingButton = styled(Button)`
 
 const CompleteButton = styled(Button)`
   width: 150px;
-  margin-right: 420px;
   font-size: 15px;
+  margin-right: 40px;
   background: none;
   color: #a3a3a3;
   &:hover {
@@ -203,13 +213,41 @@ const CompleteButton = styled(Button)`
   }
 `;
 
-const EventButton = styled(Button)`
+const Box = styled.div`
   width: 150px;
+  height: 100vh;
+  margin-right: 320px;
+  display: grid;
+  place-items: center;
+  @media ${({ theme }) => theme.device.laptop} {
+    margin-right: 330px;
+  }
+`;
+
+const EventButton = styled(Button)`
+  margin-right: 420px;
   font-size: 15px;
   background: none;
-  color: #a3a3a3;
   &:hover {
     color: white;
+  }
+  width: 8ch;
+  animation: typing 2s steps(30), blink 0.1s step-end infinite alternate;
+  white-space: nowrap;
+  overflow: hidden;
+  animation-iteration-count: infinite;
+  animation: typing 2.5s 0.1s ease infinite;
+
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
   }
 `;
 
