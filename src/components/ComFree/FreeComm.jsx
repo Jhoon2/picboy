@@ -13,6 +13,7 @@ import downAft from '../../images/Com/downAft.svg';
 import userView from '../../images/Com/userView.svg';
 import userLike from '../../images/Com/userLike.svg';
 import userComm from '../../images/Com/userComm.svg';
+import { pop3PB } from '../../global/sound';
 
 const FreeComm = () => {
   const navigate = useNavigate();
@@ -87,6 +88,7 @@ const FreeComm = () => {
                 <Overlay
                   onClick={() => {
                     navigate(`/complete-detail/${item.id}`);
+                    pop3PB.play();
                   }}
                 >
                   <DescBox>

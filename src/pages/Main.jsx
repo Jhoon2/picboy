@@ -293,7 +293,7 @@ const Start = styled.div`
     }
   }
   @media ${({ theme }) => theme.device.laptop} {
-    left: 45%;
+    left: 44.5%;
   }
 `;
 

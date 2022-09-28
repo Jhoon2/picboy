@@ -15,7 +15,7 @@ import Down from '../elem/Down';
 import '../elem/Down.css';
 import notifi from '../images/main/notifi.svg';
 import complete from '../images/main/complete.svg';
-import { headerPB, pop1PB } from '../global/sound';
+import { headerPB, succ1PB } from '../global/sound';
 
 const Notification = () => {
   const dispatch = useDispatch();
@@ -137,14 +137,14 @@ const Notification = () => {
                 </Nonoti>
               </>
             ) : (
-                getList?.map((item, index) => (
-                  <div key={uuidv4()}>
-                    <HR />
+              getList?.map((item, index) => (
+                <div key={uuidv4()}>
+                  <HR />
                   <DescBox
-                      onClick={() => {
-                        console.log(item.postId)
-                      window.location.href = (`/complete-detail/${item.postId}`);
-                      pop1PB.play();
+                    onClick={() => {
+                      console.log(item.postId);
+                      window.location.href = `/complete-detail/${item.postId}`;
+                      succ1PB.play();
                     }}
                   >
                     <Comimg />
