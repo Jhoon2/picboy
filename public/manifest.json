@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "PICBOY",
+  "name": "예측할 수 없는 움짤 만들기",
   "icons": [
     {
       "src": "favicon.ico",
