@@ -14,12 +14,12 @@ import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 // img
 import Download from '../images/download-btn.png';
 import LikeBefore from '../images/like-before.png';
-import LikeClick from '../images/like-click.png'
+import LikeClick from '../images/like-click.png';
 import LikeCount from '../images/like-count.png';
 import Arrow from '../images/complete-detail-arrow-left.png';
 import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/complete-detail-bg-bottom.png';
-import clickDownload from '../images/clickDownload.png'
+import clickDownload from '../images/clickDownload.png';
 // components
 import CommentBox from '../components/completeDetail/CommentBox';
 import { useMyContext } from '../shared/ContextApi';
@@ -36,43 +36,42 @@ const CompleteDetail = () => {
   const params = useParams();
   const myContext = useMyContext();
   //redux
-  const [commentInput, setCommentInput] = useState('')
-  const { comments } = useSelector((state) => state.comments)
+  const [commentInput, setCommentInput] = useState('');
+  const { comments } = useSelector((state) => state.comments);
   const dispatch = useDispatch();
 
   ///////////////////////
   //댓글등록
   const commentChange = (e) => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
-    setCommentInput(e.target.value)
-    
-  }
-  
+    setCommentInput(e.target.value);
+  };
+
   const commentApply = () => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
-    if (commentInput === '') return
+    if (commentInput === '') return;
     const payload = {
       id: params.id,
-      content: commentInput
-    }
-    dispatch(__postComment(payload))
-    setCommentInput('')
-    myContext.setCommetDeleteBtn(false)
-  }
-
+      content: commentInput,
+    };
+    dispatch(__postComment(payload));
+    setCommentInput('');
+    myContext.setCommetDeleteBtn(false);
+  };
 
   useEffect(() => {
-    dispatch(__getComment(params.id))
-  }, [dispatch])
+    dispatch(__getComment(params.id));
+  }, [dispatch]);
 
   /////////////////////////
   // axios get
 
-  const [gif, setGif] = useState("");
+  const [gif, setGif] = useState('');
   const [likeCountState, setLikeCountState] = useState();
 
   const gifApi = () => {
-    instance.get(`/post/gif/detail/${params.id}`)
+    instance
+      .get(`/post/gif/detail/${params.id}`)
       .then(function (response) {
         setGif(response.data.data);
         setLikeCountState(response.data.data.likeCount);
@@ -81,12 +80,11 @@ const CompleteDetail = () => {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   useEffect(() => {
     gifApi();
   }, []);
-
 
   // carousel
   var settings = {
@@ -94,7 +92,7 @@ const CompleteDetail = () => {
     infinite: true,
     speed: 500,
     slidesToShow: 6,
-    slidesToScroll: 6
+    slidesToScroll: 6,
   };
 
   const imgList = gif.frameImgList;
@@ -105,15 +103,15 @@ const CompleteDetail = () => {
   const accessToken = getCookieToken();
 
   const likeHandler = (e) => {
-
     if (accessToken === undefined) {
       myContext.setCommetApplyBtn(true);
     } else {
       // setLikeState(!likeState);
       const info = {
-        like: 0
-      }
-      anyApis.liked(params.id, info)
+        like: 0,
+      };
+      anyApis
+        .liked(params.id, info)
 
         .then(function (response) {
           setLikeApi(response.data.data.like);
@@ -127,7 +125,7 @@ const CompleteDetail = () => {
           console.log(error);
         });
     }
-  }
+  };
 
   /////////////////
   // toggle
@@ -135,21 +133,19 @@ const CompleteDetail = () => {
 
   const toggleHandler = () => {
     setToggleBoolean(!toggleBoolean);
-  }
+  };
 
   //////////////
   // nav
   const arrowNav = () => {
-    window.location.replace("/CompList");
-  }
+    window.location.replace('/CompList');
+  };
 
   ///////////////////////
   // save image
   const saveImg = () => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
-
-  }
-
+  };
 
   return (
     <>
@@ -160,54 +156,69 @@ const CompleteDetail = () => {
       ) : null}
       <div style={{ position: 'relative' }}>
         <TitleBanner>
-          <div onClick={arrowNav}><TitleArrow src={Arrow} alt="" /></div>
+          <div onClick={arrowNav}>
+            <TitleArrow src={Arrow} alt="" />
+          </div>
           <ContentsTitle>COMPLETE</ContentsTitle>
         </TitleBanner>
         <WidthWrap>
-
-
           {/* git / img info start */}
           <GifInfo>
-            <CompleteGif><GifWrap src={gif.gifUrl} alt="gif" /></CompleteGif>
+            <CompleteGif>
+              <GifWrap src={gif.gifUrl} alt="gif" />
+            </CompleteGif>
             <ImgListToggleWrap>
               <ImgListToggleText>사용자 정보 한번에 보기</ImgListToggleText>
-              <ToggleWrap style={toggleBoolean ? { backgroundColor: '#000' } : {}}>
+              <ToggleWrap
+                style={toggleBoolean ? { backgroundColor: '#000' } : {}}
+              >
                 <ToggleInput type="checkbox" onClick={toggleHandler} />
                 <ToggleCheck style={toggleBoolean ? { left: '52%' } : {}} />
               </ToggleWrap>
             </ImgListToggleWrap>
             <Slider {...settings}>
-              {
-                imgList && imgList.map((img) => (
-                  <ImgListWrap key={img.frameNum} >
+              {imgList &&
+                imgList.map((img) => (
+                  <ImgListWrap key={img.frameNum}>
                     <ImgList src={img.imgUrl} alt="" />
                     <ImgListHoverInfoWrap
-                      style={toggleBoolean ? { backgroundColor: 'rgba(0, 0, 0, 0.5)' } : { opacity: '0' }}
+                      style={
+                        toggleBoolean
+                          ? { backgroundColor: 'rgba(0, 0, 0, 0.5)' }
+                          : { opacity: '0' }
+                      }
                     >
-                      <ImgListHoverFrameInfo>{img.frameNum}/{gif.frameTotal}</ImgListHoverFrameInfo>
+                      <ImgListHoverFrameInfo>
+                        {img.frameNum}/{gif.frameTotal}
+                      </ImgListHoverFrameInfo>
                       <ImgListHoverUserInfoWrap>
                         <ImgListHoverUserProfile src={img.profileimg} alt="" />
-                        <ImgListHoverUserNickName>{img.nickname}</ImgListHoverUserNickName>
+                        <ImgListHoverUserNickName>
+                          {img.nickname.slice(0, 8)}
+                        </ImgListHoverUserNickName>
                       </ImgListHoverUserInfoWrap>
                     </ImgListHoverInfoWrap>
                   </ImgListWrap>
-                ))
-              }
+                ))}
             </Slider>
             {/* git / img info end */}
 
             {/* topic info start */}
             <Community>
               <ContentsBtn>
-                <a href={`${baseURL}/download?postId=${Number(params.id)}&fileName=${gif.gifUrl}`} onClick={saveImg}>
+                <a
+                  href={`${baseURL}/download?postId=${Number(
+                    params.id
+                  )}&fileName=${gif.gifUrl}`}
+                  onClick={saveImg}
+                >
                   <DownloadImg />
                 </a>
-                {
-                  likeApi ?
-                    <BtnImg src={LikeClick} onClick={likeHandler} alt="" />
-                    :
-                    <BtnImg src={LikeBefore} onClick={likeHandler} alt="" />
-                }
+                {likeApi ? (
+                  <BtnImg src={LikeClick} onClick={likeHandler} alt="" />
+                ) : (
+                  <BtnImg src={LikeBefore} onClick={likeHandler} alt="" />
+                )}
               </ContentsBtn>
               <ContentsLine />
               <SuggestionInfo>
@@ -215,40 +226,60 @@ const CompleteDetail = () => {
                   <SuggestionInfoTitle>제시어</SuggestionInfoTitle>
                   <SuggestionInfoLikeCountWrap>
                     <img src={LikeCount} alt="" />
-                    <SuggestionInfoLikeCount>{likeCountState}</SuggestionInfoLikeCount>
+                    <SuggestionInfoLikeCount>
+                      {likeCountState}
+                    </SuggestionInfoLikeCount>
                   </SuggestionInfoLikeCountWrap>
                 </SuggestionInfoTitleWrap>
-                <Suggestion>{
-                  gif.topic === null ? <div>제시어가 없습니다.</div> : `${gif.topic}`
-                }</Suggestion>
+                <Suggestion>
+                  {gif.topic === null ? (
+                    <div>제시어가 없습니다.</div>
+                  ) : (
+                    `${gif.topic}`
+                  )}
+                </Suggestion>
               </SuggestionInfo>
               {/* topic info end */}
 
-
               {/* comment start */}
               <CommentWrap>
-                <CommentTitle>댓글<span style={{ marginLeft: '8px', color: '#a3a3a3' }}>{comments.length}</span></CommentTitle>
+                <CommentTitle>
+                  댓글
+                  <span style={{ marginLeft: '8px', color: '#a3a3a3' }}>
+                    {comments.length}
+                  </span>
+                </CommentTitle>
                 <ContentsLine />
-                <CommentInput onChange={commentChange} maxLength='80' value={commentInput} placeholder="댓글을 남겨주세요." />
+                <CommentInput
+                  onChange={commentChange}
+                  maxLength="80"
+                  value={commentInput}
+                  placeholder="댓글을 남겨주세요."
+                />
                 <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
-                <CommentList style={comments.length === 0 ? { border: 'none' } : {}}>
-                  {
-                    comments && comments.map((commentList, idx) =>
-                      <CommentBox commentList={commentList} key={idx} accessToken={accessToken} />
-                    )
-                  }
+                <CommentList
+                  style={comments.length === 0 ? { border: 'none' } : {}}
+                >
+                  {comments &&
+                    comments.map((commentList, idx) => (
+                      <CommentBox
+                        commentList={commentList}
+                        key={idx}
+                        accessToken={accessToken}
+                      />
+                    ))}
                 </CommentList>
               </CommentWrap>
               {/* comment end */}
             </Community>
           </GifInfo>
-          <BgTopStyle src={BgTop} alt='' />
-          <BgBottomStyle src={BgBottom} alt='' />
+          <BgTopStyle src={BgTop} alt="" />
+          <BgBottomStyle src={BgBottom} alt="" />
         </WidthWrap>
       </div>
     </>
-  )
-}
+  );
+};
 const ErrorBox = styled.div`
   position: fixed;
   top: 0;
@@ -292,7 +323,7 @@ const WidthWrap = styled.div`
 
 const ContentsTitleWrap = styled.div`
   display: flex;
-  `;
+`;
 
 const ContentsTitle = styled.div`
   margin-top: 230px;
@@ -393,34 +424,34 @@ const ImgListToggleText = styled.div`
 `;
 
 const ToggleWrap = styled.label`
-    width: 50px;
-    height: 26px;
-    margin-bottom: 26px;
-    display: flex;
-    position: relative;
-    display: inline-block;
-    background-color: #D9D9D9;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
+  width: 50px;
+  height: 26px;
+  margin-bottom: 26px;
+  display: flex;
+  position: relative;
+  display: inline-block;
+  background-color: #d9d9d9;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
 `;
 
 const ToggleInput = styled.input`
-    opacity: 0;
+  opacity: 0;
 `;
 
 const ToggleCheck = styled.span`
-    width: 22px;
-    height: 22px;
-    position: absolute;
-    top: 8%;
-    left: 5%;
-    border-radius: 50%;
-    background-color: #fff;
-    transition: all 0.3s;
-    &:after{
-        background-color: red;
-    }
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  top: 8%;
+  left: 5%;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: all 0.3s;
+  &:after {
+    background-color: red;
+  }
 `;
 const DownloadImg = styled.img`
   width: 46px;
@@ -431,7 +462,7 @@ const DownloadImg = styled.img`
   cursor: pointer;
   margin-left: 12px;
 
-  &:hover{
+  &:hover {
     background: url(${clickDownload});
     ${({ theme }) => theme.backgroundSet('contain')};
   }
@@ -455,7 +486,7 @@ const ContentsBtn = styled.div`
 
 const ContentsLine = styled.div`
   margin: 16px 0 24px 0;
-  border: 1px solid #E6E6E6;
+  border: 1px solid #e6e6e6;
 `;
 
 const SuggestionInfo = styled.div`
