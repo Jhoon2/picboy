@@ -7,6 +7,8 @@ import icon1 from '../images/event/icon1.svg';
 import icon2 from '../images/event/icon2.svg';
 import icon3 from '../images/event/icon3.svg';
 import icon4 from '../images/event/icon4.svg';
+import icon5 from '../images/event/icon5.svg';
+import icon6 from '../images/event/icon6.svg';
 
 const Event = () => {
   return (
@@ -16,6 +18,8 @@ const Event = () => {
         <Icon2 />
         <Icon3 />
         <Icon4 />
+        <Icon5 />
+        <Icon6 />
         <Title1 />
         <Fade bottom>
           <Button>
@@ -51,6 +55,7 @@ const Back = styled.div`
 const Title1 = styled.div`
   width: 700px;
   height: 975px;
+
   margin-top: 110px;
   background: url(${desc});
   ${({ theme }) => theme.backgroundSet('cover')}
@@ -113,7 +118,7 @@ const Icon1 = styled.div`
 const Icon2 = styled(Icon1)`
   width: 60px;
   height: 60px;
-  left: 65%;
+  left: 68%;
   top: 60%;
   background: url(${icon2});
   @media ${({ theme }) => theme.device.laptop} {
@@ -155,4 +160,20 @@ const Icon4 = styled(Icon3)`
   @media ${({ theme }) => theme.device.laptop} {
     left: 63%;
   }
+`;
+
+const Icon5 = styled(Icon2)`
+  width: 42px;
+  height: 42px;
+  background: url(${icon5});
+  top: 35%;
+  left: 65%;
+`;
+
+const Icon6 = styled(Icon1)`
+  width: 45px;
+  height: 45px;
+  background: url(${icon6});
+  top: 85%;
+  left: 33%;
 `;
