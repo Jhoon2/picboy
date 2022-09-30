@@ -215,7 +215,6 @@ const CompleteButton = styled(Button)`
 
 const Box = styled.div`
   width: 150px;
-  height: 100vh;
   margin-right: 320px;
   display: grid;
   place-items: center;
