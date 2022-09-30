@@ -73,7 +73,7 @@ const PostFree = () => {
       clickErrorFrame();
       return;
     }
-    
+
     if (vacantState(canvas)) return clickErrorVacant();
     instance
       .post(
@@ -534,7 +534,7 @@ const PostFree = () => {
               <ModeFrameTitle>제시어</ModeFrameTitle>
               <ModeFrameBtnWrap>
                 <TopicFreeGuide>
-                  제시어가 없다는 안내
+                  제시어가 없습니다. 자유롭게 그려보세요!
                 </TopicFreeGuide>
               </ModeFrameBtnWrap>
               <ModeFrameTitle style={{ marginTop: '32px' }}>
