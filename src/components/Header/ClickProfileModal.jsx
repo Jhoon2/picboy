@@ -8,14 +8,12 @@ import styled, { css } from 'styled-components';
 import UseGetUser from '../../hooks/UseGetUser';
 import '../../elem/Down';
 import Down from '../../elem/Down';
-import basicImg from '../../images/mypage/basicImg.png'
+import basicImg from '../../images/mypage/basicImg.png';
 import { headerPB } from '../../global/sound';
 import { pop1PB } from '../../global/sound';
 
 //로그아웃 알림창
 import AnyModal from '../../elem/AnyModal';
-
-
 
 const ClickProfileModal = ({ img }) => {
   const myContext = useMyContext();
@@ -23,19 +21,19 @@ const ClickProfileModal = ({ img }) => {
   const navigate = useNavigate();
   const logonUser = UseGetUser();
   const logonUsername = logonUser && logonUser.data.data.username;
-  
+
   const [selectContent, setSelectContent] = useState('myPage');
   const openClick = () => {
-    setSelect(!select)
-    headerPB.play()
-  }
+    setSelect(!select);
+    headerPB.play();
+  };
   //열고 닫는 함수
   const [select, setSelect] = useState(false);
 
   //로그아웃
   const Logout = (e) => {
     pop1PB.play();
-    myContext.setLogoutBtn(true)
+    myContext.setLogoutBtn(true);
     setSelectContent(e.target.id);
     removeCookieToken();
   };
@@ -69,54 +67,59 @@ const ClickProfileModal = ({ img }) => {
       ) : null}
       <div>
         <div onClick={openClick}>
-          <LoginUserImg src={img}/>
+          <LoginUserImg src={img} />
         </div>
       </div>
 
-          <SelectListBox onClick={(e) => {
-                  e.stopPropagation();
-                }}>
-          <Down select={select}>
-            <DownUl>
-              
-                <ProfileModalContainer >
-                  <div style={{display: 'flex', justifyContent: 'center'}}>
-                    <ProfileImg src={img ? img : basicImg} />
-                  </div>
+      <SelectListBox
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <Down select={select}>
+          <DownUl>
+            <ProfileModalContainer>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <ProfileImg src={img ? img : basicImg} />
+              </div>
               <ProfileNickname>
-                {logonUser?.data?.data?.status === 1 ? logonUser?.data?.data?.nickname : logonUser?.data?.data?.nickname.slice(0, 8)}
+                {logonUser?.data?.data?.status === 1
+                  ? logonUser?.data?.data?.nickname
+                  : logonUser?.data?.data?.nickname.slice(0, 8)}
               </ProfileNickname>
               <ProfileUsername>
-                {logonUser?.data?.data?.status === 1 ? logonUser?.data?.data?.username : 'Kakao user'}
+                {logonUser?.data?.data?.status === 1
+                  ? logonUser?.data?.data?.username
+                  : 'Kakao user'}
               </ProfileUsername>
-                </ProfileModalContainer>
-                <HR />
-                <ModalText
-                    id="myPage"
-                    name="myPage"
-                 onClick={(e) => {
-                      pop1PB.play();
-                   setSelectContent(e.target.id);
-                   setSelect(false)
-                      window.location.href = (`/user-profile/${logonUsername}`)
-                      // myContext.setLogonProfileImg(false);
-                    }}
-                    selectContent={selectContent}
-                  >
-                    마이페이지
-                  </ModalText>
-                  <HR />
-                  <ModalText
-                    id="Logout"
-                    name="Logout"
-                    onClick={Logout}
-                    categoryContent={selectContent}
-                  >
-                    로그아웃
-                  </ModalText>
-                 </DownUl>
-                </Down>
-          </SelectListBox>
+            </ProfileModalContainer>
+            <HR />
+            <ModalText
+              id="myPage"
+              name="myPage"
+              onClick={(e) => {
+                pop1PB.play();
+                setSelectContent(e.target.id);
+                setSelect(false);
+                window.location.href = `/user-profile/${logonUsername}`;
+                // myContext.setLogonProfileImg(false);
+              }}
+              selectContent={selectContent}
+            >
+              마이페이지
+            </ModalText>
+            <HR />
+            <ModalText
+              id="Logout"
+              name="Logout"
+              onClick={Logout}
+              categoryContent={selectContent}
+            >
+              로그아웃
+            </ModalText>
+          </DownUl>
+        </Down>
+      </SelectListBox>
     </div>
   );
 };
@@ -178,7 +181,7 @@ const ProfileImg = styled.img`
   height: 70px;
   margin-top: 22px;
   margin-left: 5px;
-`
+`;
 const ProfileNickname = styled.div`
   font-weight: ${(props) => props.theme.BodyBD};
   font-size: ${(props) => props.theme.Caption1};
@@ -208,7 +211,7 @@ const ModalText = styled.div`
 
   :hover {
     height: 65px;
-    background-color:${(props) => props.theme.basic};
+    background-color: ${(props) => props.theme.basic};
   }
 `;
 const HR = styled.hr`

@@ -8,8 +8,12 @@ body {
 }
 
 body::-webkit-scrollbar {
-  /* width: 8px;  */
-  display: none;
+  width: 8px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: black;
+  background-clip: padding-box;
 }
 
 code {
