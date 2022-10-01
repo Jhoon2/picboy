@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '../../shared/apis'
+import instance from '../../shared/apis';
+
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
 const baseURL = process.env.REACT_APP_API_KEY;
 
@@ -10,7 +12,7 @@ export const __getComment = createAsyncThunk(
   'comment/getComment',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`${baseURL}/comment/${payload}`);
+      const data = await api.get(`/comment/${payload}`);
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -21,15 +23,9 @@ export const __postComment = createAsyncThunk(
   'comment/postComment',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.post(
-        `${baseURL}/comment/${payload.id}`,
-        { content: payload.content },
-        {
-          headers: {
-            Authorization: myToken,
-            'refresh-token': refreshToken,
-          },
-        }
+      const data = await instance.post(
+        `/comment/${payload.id}`,
+        { content: payload.content }
       );
       return thunkAPI.fulfillWithValue(data.data.data);
     } catch (error) {
@@ -41,12 +37,7 @@ export const __deleteComment = createAsyncThunk(
   'comment/deleteComment',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.delete(`${baseURL}/comment/${payload}`, {
-        headers: {
-          Authorization: myToken,
-          'refresh-token': refreshToken,
-        },
-      });
+      const data = await instance.delete(`/comment/${payload}`);
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -57,15 +48,9 @@ export const __editComment = createAsyncThunk(
   'comment/editComment',
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.put(
-        `${baseURL}/comment/${payload.commentId}`,
-        { content: payload.content },
-        {
-          headers: {
-            Authorization: myToken,
-            'refresh-token': refreshToken,
-          },
-        }
+      const response = await instance.put(
+        `/comment/${payload.commentId}`,
+        { content: payload.content }
       );
       return thunkAPI.fulfillWithValue(payload);
     } catch (error) {

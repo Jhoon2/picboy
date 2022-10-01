@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 // import Canvas from '../components/Canvas';
 import styled, { css } from 'styled-components';
-import axios from 'axios';
 import { getCookieToken, getRefreshToken, setAccessToken } from '../shared/Cookie';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -283,9 +282,6 @@ const PostRelay = () => {
 
   const imgInfoUrl = `post/gif/images/detail/${params.id}`;
 
-  useEffect(() => {
-    Callaxios();
-  }, [])
 
   const Callaxios = () => {
     api

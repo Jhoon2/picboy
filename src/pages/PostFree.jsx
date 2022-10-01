@@ -7,7 +7,7 @@ import styled, { css } from 'styled-components';
 import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
 import instance from '../shared/apis';
-import vacantState from '../elem/vacantStateCanvas';
+import isCanvasBlank from '../elem/vacantStateCanvas';
 
 // image import
 import modeIc from '../images/pen.png';
@@ -73,8 +73,8 @@ const PostFree = () => {
       clickErrorFrame();
       return;
     }
-    
-    if (vacantState(canvas)) return clickErrorVacant();
+    // console.log(isCanvasBlank(canvas))
+    if (isCanvasBlank(canvas)) return clickErrorVacant();
     instance
       .post(
         `/post`,
@@ -117,7 +117,7 @@ const PostFree = () => {
   const [step, setStep] = useState(-1);
 
   const canvas = canvasRef.current;
-
+  
   useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = 500;

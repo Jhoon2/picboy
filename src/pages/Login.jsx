@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 // import kakaoButton from '../images/kakao_login_medium_wide.png'
-import axios from 'axios';
+import api from '../shared/apis'
 import { setAccessToken, setRefreshToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi'
 import LoginErrorModal from '../components/login/LoginErrorModal'
@@ -19,7 +19,6 @@ import Listfooter from '../images/picboy-bg-footer-2 1.png';
 import { error1PB } from '../global/sound';
 
 const Login = () => {
-  const baseURL = process.env.REACT_APP_API_KEY;
   const myContext = useMyContext();
   const navigate = useNavigate();
   const [focusedInput, setFocusedInput] = useState('');
@@ -32,7 +31,7 @@ const Login = () => {
       username: data.userId,
       password: data.password
     }
-    const response = await axios.post(`${baseURL}/user/login`, info)
+    const response = await api.post(`/user/login`, info)
       setAccessToken(response.headers.authorization);
       setRefreshToken(response.headers['refresh-token'])
 

@@ -162,6 +162,7 @@ const UserProfile = () => {
   const [availableNick, setAvailableNick] = useState(false);
 
   const checkNickname = async () => {
+    if(!loadMyNickname) return
     try {
       const response = await api.get(
         `/user/nickname-double-check/${loadMyNickname}`
@@ -276,7 +277,9 @@ const UserProfile = () => {
           {/* 카드 */}
           <>
             <CardContainer>
-              {userData.content &&
+              {/* {userData.content[0] ? userData.content &&
+                }): <NoContents>게시글이 없습니다</NoContents>} */}
+                 {userData.content &&
                 userData.content.map((data, i) => {
                   return (
                     <GifCard
@@ -458,6 +461,12 @@ const CardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
+
+const NoContents = styled.div`
+  padding-top: 100px;
+  margin-bottom: -500px;
+`
+
 const CheckButton = styled.button`
   width: 100px;
   height: 40px;

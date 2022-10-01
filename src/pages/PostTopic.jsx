@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 
 // import component

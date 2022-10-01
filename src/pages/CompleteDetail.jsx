@@ -1,6 +1,5 @@
 // 다솜님
 // 완료된 움짤 디테일 페이지
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Slider from 'react-slick';

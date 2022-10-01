@@ -1,25 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { useMyContext } from '../shared/ContextApi';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
-import PostCategories from '../elem/PostCategories';
-import logo from '../images/logo.svg';
+
 import {
   getCookieToken,
-  removeCookieToken,
-  removeRefreshCookieToken,
   getRefreshToken,
 } from '../shared/Cookie';
 import UseGetUser from '../hooks/UseGetUser';
 import ClickProfileModal from '../components/Header/ClickProfileModal';
-import basicImg from '../images/mypage/basicImg.png';
-import '../elem/Down';
 import { __getLogonUser } from '../redux/modules/UserPage';
-import { headerPB } from './sound';
+import instance from '../shared/apis';
+
+import '../elem/Down';
 import Notification from '../elem/Notification';
+import PostCategories from '../elem/PostCategories';
+import logo from '../images/logo.svg';
+import { headerPB } from './sound';
+import basicImg from '../images/mypage/basicImg.png';
 
 const throttle = function (callback, waitTime) {
   let timerId = null;
@@ -37,15 +37,30 @@ const Header = () => {
   const refreshToken = getRefreshToken();
 
   const [messageList, setMessageList] = useState([]);
-
+  const [valiData, setValiData] = useState();
   const location = useLocation();
 
   const dispatch = useDispatch();
   const getLogonUser = useSelector((state) => state?.logonUser);
   const loginUser = getLogonUser?.logonUser?.profileImg;
 
+
+  //만료토큰 검사
+  const validate = async () => {
+    try {
+      const response= await instance.get(
+        `/validate`
+      );
+      setValiData(response)
+    } catch (error) {
+      console.log(error);
+    }
+  } 
+
+  //처음 불러오기
   useEffect(() => {
     dispatch(__getLogonUser());
+    validate();
   }, []);
 
   const navigate = useNavigate();
@@ -113,8 +128,7 @@ const Header = () => {
           </Box>
 
           <PostCategories />
-
-          {myToken ? (
+          {valiData && valiData.data.data.validate === 0 ? (
             <>
               <Notification />
               {/* <LoginUserImg> */}
