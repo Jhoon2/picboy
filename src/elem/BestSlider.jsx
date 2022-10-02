@@ -107,6 +107,7 @@ const Rankimg = styled.img`
   margin-top: 60px;
   box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.2);
   position: relative;
+  z-index: -1;
   text-align: center;
 `;
 
@@ -130,6 +131,7 @@ const cssstyle = css`
     position: absolute;
     top: 85%;
     left: 77%;
+    z-index: 1;
     background: url(${first});
     background-position: center;
     background-size: 100% 100%;

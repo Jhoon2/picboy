@@ -15,6 +15,7 @@ import icon5 from '../images/main/icon5.gif';
 import icon6 from '../images/main/icon6.gif';
 import icon7 from '../images/main/icon7.gif';
 import { buttonPB } from '../global/sound';
+import mouse from '../images/main/icons8-연필-305.cur';
 
 const Main = () => {
   const moveRef = useRef();
@@ -27,8 +28,8 @@ const Main = () => {
   return (
     <MainContainer>
       <TopScroll />
-      <Background />
 
+      <Background />
       <Title>
         <Line1>
           <Icon1 />
@@ -71,6 +72,8 @@ export default Main;
 const MainContainer = styled.div`
   width: 100%;
   background: #161616;
+
+  cursor: url(${mouse}), auto;
 `;
 
 const Position = css`
