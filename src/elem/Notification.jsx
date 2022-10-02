@@ -110,8 +110,6 @@ const Notification = () => {
     window.location.href = `/user-profile/${id}`;
   };
 
-  console.log(getNotis);
-
   return (
     <div ref={node}>
       <NotifiImg
