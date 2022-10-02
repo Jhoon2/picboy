@@ -23,6 +23,7 @@ import camera from '../images/Camera.png';
 import editPencil from '../images/mypage/mode-edit-sharp.png';
 import Listbanner from '../images/Com/Listbanner.svg';
 import Listfooter from '../images/mypage/myPageFooter.svg';
+import { useCallback } from 'react';
 
 const UserProfile = () => {
   const myContext = useMyContext();
@@ -54,7 +55,7 @@ const UserProfile = () => {
   //페이지세팅
   let page = 0;
   //observe 콜백 함수
-  const onIntersect = (entries, observer) => {
+  const onIntersect = useCallback((entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         page++;
@@ -77,7 +78,7 @@ const UserProfile = () => {
         // console.log('여기서 취소?')
       }
     });
-  };
+  },[myContext.tabNum,myContext.categoryNum,dispatch,page,params.id])
 
   useEffect(() => {
     dispatch(__getUserPage({ username: params.id }));
@@ -106,10 +107,10 @@ const UserProfile = () => {
     return () => observer && observer.disconnect();
   }, [lastIntersectingData, ref, myContext.tabNum, myContext.categoryNum]);
 
-  const MouseClick = (e) => {
+  const MouseClick = useCallback((e) => {
     e.preventDefault();
     myContext.setIsOpenProfileImg(!myContext.isOpenProfileImg);
-  };
+  },[myContext])
 
   const editNickname = () => {
     setEditMyNickName(true);
@@ -176,6 +177,7 @@ const UserProfile = () => {
       console.log(error);
     }
   };
+
   const NickinputVacant = () => {
     setExistedNick(false);
     setAvailableNick(false);
@@ -510,3 +512,4 @@ const Footerimg = styled.div`
 `;
 
 export default UserProfile;
+

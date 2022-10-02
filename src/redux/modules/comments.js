@@ -2,11 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../shared/apis'
 import instance from '../../shared/apis';
 
-import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
-const baseURL = process.env.REACT_APP_API_KEY;
-
-const myToken = getCookieToken();
-const refreshToken = getRefreshToken();
 
 export const __getComment = createAsyncThunk(
   'comment/getComment',

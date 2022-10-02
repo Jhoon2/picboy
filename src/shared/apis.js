@@ -35,7 +35,6 @@ instance.interceptors.response.use((response) => {
       const {data} = await instance.get(
         `/validate`
       );
-      // console.log(data.data.validate)
       if (data.data.validate === 1) {
           // window.location.href = '/login'
       }
