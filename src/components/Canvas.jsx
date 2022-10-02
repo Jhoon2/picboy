@@ -1,139 +1,239 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, createContext } from "react";
 
-// image import 
-import paint from "../images/paint.png";
-import pen from "../images/pen.png";
-import eraser from "../images/eraser.png";
-import brush from "../images/brush.png";
-import rectangle from "../images/rectangle.png";
-import line from "../images/line.png";
-import triangle from "../images/triangle.png";
-import circle from "../images/circle.png";
-import undo from "../images/undo.png";
-import redo from "../images/redo.png";
-import stroke from "../images/stroke.png";
-import waterdrop from "../images/waterdrop.png";
+import { useDispatch, useSelector } from 'react-redux';
+import { addImgUrl } from "../redux/modules/CanvasSlice";
+
+// image import
+import paint from '../images/paint.png';
+import pen from '../images/pen.png';
+import eraser from '../images/eraser.png';
+import rectangle from '../images/rectangle.png';
+import line from '../images/line.png';
+import circle from '../images/circle.png';
+import undo from '../images/undo.png';
+import redo from '../images/redo.png';
+import stroke from '../images/stroke.png';
+import waterdrop from '../images/waterdrop.png';
+import CanvasArticle from '../images/canvas-top-article.png';
+import line6 from '../images/line6.png';
+import line8 from '../images/line8.png';
+import line10 from '../images/line10.png';
+import line12 from '../images/line12.png';
+import Frame from '../images/canvas-frame.png';
+import RangeBg from '../images/range-bg.png';
 
 
 const Canvas = () => {
+
+    const dispatch = useDispatch();
+
+    /////////////////////////////////
+    // canvas
     // useRef를 이용해 canvas 엘리먼트에 접근
     const canvasRef = useRef(null);
 
     const [ctx, setCtx] = useState();
     const [isPainting, setIsPainting] = useState(false);
-    const [lineWeight, setLineWeight] = useState(5);
     const [lineOpacity, setLineOpacity] = useState(1);
     const [rectState, setRectState] = useState(false);
+    const [circleState, setCircleState] = useState(false);
     const [pencilState, setPencilState] = useState(false);
-    const [brushState, setBrushState] = useState(false);
     const [paintState, setPaintState] = useState(false);
     const [eraserState, setEraserState] = useState(false);
-    const [undoState, setUndoState] = useState(0);
-    const [redoState, setRedoState] = useState(0);
+    const [lineState, setLineState] = useState(false);
+    const [colorPreview, setColorPreview] = useState();
+    const [LineWeightCount, setLineWeightCount] = useState('3');
+    const [undoBoolean, setUndoBoolean] = useState(false);
+    const [redoBoolean, setRedoBoolean] = useState(false);
+    const [pos, setPos] = useState([]);
+    const [imgArr, setImgArr] = useState([]);
+    const [step, setStep] = useState(-1);
+    const [imgUrl, setImgUrl] = useState();
+
+    const canvas = canvasRef.current;
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        canvas.width = 688;
-        canvas.height = 688;
+        canvas.width = 500;
+        canvas.height = 500;
         setPencilState(true);
         setCtx(canvasRef.current.getContext('2d'));
+        setColorPreview('#000');
     }, []);
 
-    // const submit = () => {
-    //     const canvas = canvasRef.current;
-    //     const imgDataUrl = canvas.toDataURL('image/png');
-    // }
+    useEffect(() => {
+        const image = new Image();
+        image.src = Frame;
+        image.onload = function () {
+            ctx?.drawImage(image, 0, 0);
+        }
+    }, [ctx]);
 
     const draw = (e) => {
-        const X = e.clientX - canvasRef.current.offsetLeft;
-        const Y = e.clientY - canvasRef.current.offsetTop + window.scrollY;
+        const X = Math.floor(e.clientX - canvasRef.current.offsetLeft);
+        const Y = Math.floor(e.clientY - canvasRef.current.offsetTop + window.scrollY);
         if (isPainting === true) {
             if (rectState === true) {
-                ctx.strokeRect(X, Y, X - canvasRef.current.offsetLeft, Y - canvasRef.current.offsetTop);
-            } else if (eraserState === true) {
-                ctx.strokeStyle = "white";
+                ctx.fillRect(pos[0], pos[1], X - pos[0], Y - pos[1]);
+            } else if (circleState === true) {
+                // x축, y축, 반지름, 시작각도, 마지막각도
+                ctx.arc(pos[0], pos[1], 50, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (lineState === true) {
+                ctx.lineWidth = LineWeightCount;
+                ctx.moveTo(pos[0], pos[1]);
+                ctx.lineTo(X, Y);
+                ctx.stroke()
+            } else if (paintState === true) {
+                ctx.fillRect(0, 0, 500, 500);
+            } else {
+                ctx.lineWidth = LineWeightCount;
+                ctx.lineTo(X, Y);
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.stroke();
+                if (eraserState === true) {
+                    ctx.strokeStyle = '#fff';
+                }
             }
-            ctx.lineWidth = lineWeight.value;
-            ctx.lineTo(X, Y);
-            ctx.stroke();
         } else {
             ctx.beginPath();
             ctx.moveTo(X, Y);
         }
-    }
-    // 사용자 마우스 움직임 감지
-    const startPainting = () => {
-        setIsPainting(true);
-    }
+    };
 
+    // 사용자 마우스 움직임 감지
+    const startPainting = (e) => {
+        setIsPainting(true);
+        setPos([e.clientX - canvasRef.current.offsetLeft, e.clientY - canvasRef.current.offsetTop + window.scrollY]);
+    };
+
+    //////////////////////////
+    //////////////////////////
+    // mouse up
     const cancelPainting = () => {
         setIsPainting(false);
-        setRectState(false);
-    }
+        setStep(step + 1);
+        if (step < imgArr.length) {
+            imgArr.length = step + 2
+        }
+        const imgURL = canvas.toDataURL();
+        setImgArr([...imgArr, imgURL]);
+        setImgUrl(imgURL);
+        console.log(imgUrl)
+    };
+
+    const cancelPaintingLeave = () => {
+        setIsPainting(false);
+        dispatch(addImgUrl(imgUrl));
+    };
 
     // 선 굵기 변경
-    const onLineWidthChange = (e) => {
-        setLineWeight(ctx.lineWidth = e.target.value);
+    const lineWeightHandler = (e) => {
+        if (e.target.id) {
+            setLineWeightCount(e.target.id);
+        }
     }
 
     // 선 투명도 변경
     const onLineOpacityChange = (e) => {
         setLineOpacity(ctx.globalAlpha = e.target.value);
-    }
+    };
 
     // paint
     const paintHandler = (e) => {
         setPaintState(true);
         setPencilState(false);
         setRectState(false);
-        setBrushState(false);
         setEraserState(false);
-
-        ctx.fillRect(0, 0, 688, 688);
-    }
+        setCircleState(false);
+        setLineState(false);
+    };
 
     // pencil
     const pencilHandler = () => {
         setPencilState(true);
         setRectState(false);
-        setBrushState(false);
         setPaintState(false);
         setEraserState(false);
-        ctx.lineCap = "butt";
-    }
-    // brush
-    const brushHandler = (e) => {
-        setBrushState(true);
-        setRectState(false);
-        setPencilState(false);
-        setPaintState(false);
-        setEraserState(false);
-        ctx.lineCap = "round";
-    }
+        setCircleState(false);
+        setLineState(false);
+        ctx.strokeStyle = colorPreview;
+        ctx.fillStyle = colorPreview;
+    };
 
     // eraser
     const eraseHandler = (e) => {
         setEraserState(true);
         setRectState(false);
         setPencilState(false);
-        setBrushState(false);
         setPaintState(false);
-    }
+        setCircleState(false);
+        setLineState(false);
+    };
 
+    //////////////////////////
+    //////////////////////////
     // undo
     const undoHandler = (e) => {
-    }
+        if (step > 0) {
+            setUndoBoolean(true);
+            setStep(step - 1);
+
+            const undoImage = new Image();
+            undoImage.src = imgArr[step];
+
+            undoImage.onload = function () {
+                ctx.drawImage(undoImage, 0, 0, 500, 500);
+                setUndoBoolean(false);
+            }
+        }
+    };
 
     // redo
     const redoHandler = (e) => {
-
-    }
+        if (step < imgArr.length) {
+            setRedoBoolean(true);
+            setStep(step + 1);
+            const redoImage = new Image();
+            redoImage.src = imgArr[step];
+            redoImage.onload = function () {
+                ctx.drawImage(redoImage, 0, 0, 500, 500);
+            }
+            setRedoBoolean(false);
+        }
+    };
 
     // draw Rect
     const drawRect = () => {
         setRectState(true);
+        setEraserState(false);
+        setPencilState(false);
+        setPaintState(false);
+        setCircleState(false);
+        setLineState(false);
+    };
+
+    // draw circle
+    const drawCircle = () => {
+        setCircleState(true);
+        setRectState(false);
+        setEraserState(false);
+        setPencilState(false);
+        setPaintState(false);
+        setLineState(false);
+    };
+
+    // draw line
+    const drawLine = () => {
+        setLineState(true);
+        setCircleState(false);
+        setRectState(false);
+        setEraserState(false);
+        setPencilState(false);
+        setPaintState(false);
     }
 
     // color change
@@ -141,7 +241,8 @@ const Canvas = () => {
         const colorValue = e.target.id;
         ctx.strokeStyle = colorValue;
         ctx.fillStyle = colorValue;
-    }
+        setColorPreview(e.target.id);
+    };
 
     return (
         <>
@@ -151,51 +252,155 @@ const Canvas = () => {
                         <Table>
                             <tbody>
                                 <tr>
-                                    <Td style={paintState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}><IcButton onClick={paintHandler}><img src={paint} alt="paint" style={paintState ? { filter: 'invert(100%)' } : {}} /></IcButton></Td>
-                                    <Td style={pencilState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}><IcButton onClick={pencilHandler}><img src={pen} alt="pen" style={pencilState ? { filter: 'invert(100%)' } : {}} /></IcButton></Td>
+                                    <Td style={paintState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                        <IcButton onClick={paintHandler}>
+                                            <img
+                                                src={paint}
+                                                alt="paint"
+                                                style={paintState ? { filter: 'invert(100%)' } : {}}
+                                            />
+                                        </IcButton>
+                                    </Td>
+                                    <Td style={pencilState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                        <IcButton onClick={pencilHandler}>
+                                            <img
+                                                src={pen}
+                                                alt="pen"
+                                                style={pencilState ? { filter: 'invert(100%)' } : {}}
+                                            />
+                                        </IcButton>
+                                    </Td>
                                 </tr>
                                 <tr>
-                                    <Td style={eraserState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}><IcButton onClick={eraseHandler}><img src={eraser} alt="eraser" style={eraserState ? { filter: 'invert(100%)' } : {}} /></IcButton></Td>
-                                    <Td style={brushState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}><IcButton onClick={brushHandler}><img src={brush} alt="brush" style={brushState ? { filter: 'invert(100%)' } : {}} /></IcButton></Td>
+                                    {/*  */}
+                                    <Td style={rectState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                        <IcButton onClick={drawRect}>
+                                            <img
+                                                src={rectangle}
+                                                alt="rectangle"
+                                                style={rectState ? { filter: 'invert(100%)' } : {}}
+                                            />
+                                        </IcButton>
+
+                                    </Td>
+                                    <Td style={circleState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                        <IcButton onClick={drawCircle}>
+                                            <img
+                                                src={circle}
+                                                alt="circle"
+                                                style={circleState ? { filter: 'invert(100%)' } : {}}
+                                            />
+                                        </IcButton>
+                                    </Td>
                                 </tr>
                                 <tr>
-                                    <Td><IcButton onClick={drawRect}><img src={rectangle} alt="rectangle" /></IcButton></Td>
-                                    <Td><IcButton><img src={line} alt="line" /></IcButton></Td>
+                                    <Td style={eraserState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                        <IcButton onClick={eraseHandler}>
+                                            <img
+                                                src={eraser}
+                                                alt="eraser"
+                                                style={eraserState ? { filter: 'invert(100%)' } : {}}
+                                            />
+                                        </IcButton>
+                                    </Td>
+                                    <Td style={lineState ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                        <IcButton onClick={drawLine}>
+                                            <img
+                                                src={line}
+                                                alt="line"
+                                                style={lineState ? { filter: 'invert(100%)' } : {}}
+                                            />
+                                        </IcButton>
+                                    </Td>
                                 </tr>
                                 <tr>
-                                    <Td><IcButton><img src={triangle} alt="triangle" /></IcButton></Td>
-                                    <Td><IcButton><img src={circle} alt="circle" /></IcButton></Td>
-                                </tr>
-                                <tr>
-                                    <Td><IcButton onClick={undoHandler} disabled={undoState === 0}><img src={undo} alt="undo" /></IcButton></Td>
-                                    <Td><IcButton onClick={redoHandler} disabled={redoState === 0}><img src={redo} alt="redo" /></IcButton></Td>
+                                    <Td style={undoBoolean ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                        <IcButton onClick={undoHandler}>
+                                            <img
+                                                src={undo}
+                                                alt="undo"
+                                                style={undoBoolean ? { filter: 'invert(100%)' } : {}}
+                                            />
+                                        </IcButton>
+                                    </Td>
+                                    <Td style={redoBoolean ? { filter: 'invert(0%)', backgroundColor: '#000' } : {}}>
+                                        <IcButton onClick={redoHandler} >
+                                            <img
+                                                src={redo}
+                                                alt="redo"
+                                                style={redoBoolean ? { filter: 'invert(100%)' } : {}}
+                                            />
+                                        </IcButton>
+                                    </Td>
                                 </tr>
                             </tbody>
                         </Table>
-                        <ToolShadow />
                     </ToolBox>
+                    {/* color */}
+                    <SelectedColorWrap>
+                        <SelectedColor color={`${colorPreview}`} />
+                    </SelectedColorWrap>
+                    <Table>
+                        <tbody>
+                            <tr>
+                                <Td>
+                                    <ColorOption color={'#FF2222'} onClick={colorChange} id="#FF2222" />
+                                </Td>
+                                <Td>
+                                    <ColorOption color={'#00A3FF'} onClick={colorChange} id="#00A3FF" />
+                                </Td>
+                            </tr>
+                            <tr>
+                                <Td>
+                                    <ColorOption color={'#FF5C00'} onClick={colorChange} id="#FF5C00" />
+                                </Td>
+                                <Td>
+                                    <ColorOption color={'#3139FF'} onClick={colorChange} id="#3139FF" />
+                                </Td>
+                            </tr>
+                            <tr>
+                                <Td>
+                                    <ColorOption color={'#FFEB37'} onClick={colorChange} id="#FFEB37" />
+                                </Td>
+                                <Td>
+                                    <ColorOption color={'#BD00FF'} onClick={colorChange} id="#BD00FF" />
+                                </Td>
+                            </tr>
+                            <tr>
+                                <Td>
+                                    <ColorOption color={'#00EF43'} onClick={colorChange} id="#00EF43" />
+                                </Td>
+                                <Td>
+                                    <ColorOption color={'#713D00'} onClick={colorChange} id="#713D00" />
+                                </Td>
+                            </tr>
+                            <tr>
+                                <Td>
+                                    <ColorOption color={'#FFFFFF'} onClick={colorChange} id="#FFFFFF" />
+                                </Td>
+                                <Td>
+                                    <ColorOption color={'#000000'} onClick={colorChange} id="#000000" />
+                                </Td>
+                            </tr>
+                        </tbody>
+                    </Table>
                     <LineStyle>
                         <RangeWrap>
-                            <div>
-                                <img src={stroke} alt="stroke" style={{ margin: '7px' }} />
-                            </div>
+                            <img src={stroke} alt="stroke" style={{ width: '24px', margin: '10px 0 10px 8px' }} />
                             <LineWeightCustomWrap>
-                                <LineWeightCustom
-                                    id="line-width"
-                                    type="range"
-                                    min="1"
-                                    max="20"
-                                    step="0.5"
-                                    value={lineWeight}
-                                    onChange={onLineWidthChange}
-                                />
+                                <LineWeight src={line6} id="3" onClick={lineWeightHandler} style={LineWeightCount === '3' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                <LineWeight src={line8} id="8" onClick={lineWeightHandler} style={LineWeightCount === '8' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                <LineWeight src={line10} id="14" onClick={lineWeightHandler} style={LineWeightCount === '14' ? { filter: 'brightness(0%)' } : {}} alt='' />
+                                <LineWeight src={line12} id="20" onClick={lineWeightHandler} style={LineWeightCount === '20' ? { filter: 'brightness(0%)' } : {}} alt='' />
                             </LineWeightCustomWrap>
                         </RangeWrap>
                         <RangeWrap>
-                            <div>
-                                <img src={waterdrop} alt="waterdrop" style={{ margin: '7px' }} />
-                            </div>
-                            <LineWeightCustomWrap>
+                            <img
+                                src={waterdrop}
+                                alt="waterdrop"
+                                style={{ width: '24px', margin: '10px 2px -1px 2px' }}
+                            />
+                            <LineOpacityCustomWrap>
                                 <LineOpacityCustom
                                     id="line-opacity"
                                     type="range"
@@ -205,141 +410,140 @@ const Canvas = () => {
                                     value={lineOpacity}
                                     onChange={onLineOpacityChange}
                                 />
-                            </LineWeightCustomWrap>
+                            </LineOpacityCustomWrap>
                         </RangeWrap>
-                        {/* <LineStyleShadow /> */}
                     </LineStyle>
-                    <Table>
-                        <tbody>
-                            <tr>
-                                <Td><ColorOption color={'#000'} onClick={colorChange} id="#000" /></Td>
-                                <Td><ColorOption color={'#FF2222'} onClick={colorChange} id="#FF2222" /></Td>
-                            </tr>
-                            <tr>
-                                <Td><ColorOption color={'#373737'} onClick={colorChange} id="#373737" /></Td>
-                                <Td><ColorOption color={'#FFEB37'} onClick={colorChange} id="#FFEB37" /></Td>
-                            </tr>
-                            <tr>
-                                <Td><ColorOption color={'#7A7A7A'} onClick={colorChange} id="#7A7A7A" /></Td>
-                                <Td><ColorOption color={'#33F96A'} onClick={colorChange} id="#33F96A" /></Td>
-                            </tr>
-                            <tr>
-                                <Td><ColorOption color={'#CCCCCC'} onClick={colorChange} id="#CCCCCC" /></Td>
-                                <Td><ColorOption color={'#3139FF'} onClick={colorChange} id="#3139FF" /></Td>
-                            </tr>
-                            <tr>
-                                <Td><ColorOption color={'#FFFFFF'} onClick={colorChange} id="#FFFFFF" /></Td>
-                                <Td><ColorOption color={'#BD00FF'} onClick={colorChange} id="#BD00FF" /></Td>
-                            </tr>
-                        </tbody>
-                    </Table>
                 </PaintOptionWrap>
-                <canvas
-                    ref={canvasRef}
-                    style={canvasStyle}
-                    onMouseMove={draw}
-                    onMouseDown={startPainting}
-                    onMouseUp={cancelPainting}
-                    onMouseLeave={cancelPainting}
-                />
+                <CanvasStyleWrap>
+                    <div>
+                        <CanvasArticleStyle src={CanvasArticle} alt="" />
+                    </div>
+                    <canvas
+                        ref={canvasRef}
+                        style={canvasStyle}
+                        onMouseMove={draw}
+                        onMouseDown={startPainting}
+                        onMouseUp={cancelPainting}
+                        onMouseLeave={cancelPaintingLeave}
+                    />
+                </CanvasStyleWrap>
             </CanvasWrap>
         </>
     )
 }
 
-const canvasStyle = {
-    width: '688px',
-    height: '688px',
-    border: '2px solid #000',
-    backgroundColor: '#fff'
-}
-
-const CanvasWrap = styled.div`
-    display: flex;
+const CanvasArticleStyle = styled.img`
 `;
 
-const PaintOptionWrap = styled.div`
-    margin-right: 16px;
-`;
-
-const ToolShadow = styled.div`
-    width: 78px;
-    height: 194px;
-    background-color: #000;
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    z-index: 0;
-`;
-
-const LineStyleShadow = styled.div`
-    width: 78px;
-    height: 194px;
-    background-color: #000;
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    z-index: 1;
-`;
-
-const LineWeightCustomWrap = styled.div`
-    width: 30px;
-    height: 80px;
-    margin-left: -47.5px;
-    margin-top: 52px;
-`;
-
-const LineWeightCustom = styled.input`
-    transform: rotate(-90deg);
-`;
-
-const LineOpacityCustom = styled.input`
-    transform: rotate(-90deg);
-`;
-
-const IcButton = styled.div`
-    padding: 6px;
-    margin-bottom: -6px;
-`;
-
-const Table = styled.table`
-    border: 2px solid #000;
-    border-collapse: collapse;
-    position: absolute;
-    z-index: 999;
-`;
-
-const Td = styled.td`
-    cursor: pointer;
-    border: 2px solid #000;
-    background-color: #fff;
-`;
-
-const ColorOption = styled.div`
-    width: 37px;
-    height: 37px;
-    border: 1px solid #fff;
-    background-color: ${props => props.color};
-`;
-
-
-const ToolBox = styled.div`
-    height: 200px;
-    margin-bottom: 12px;
-    position: relative;
-`;
-
-const LineStyle = styled.div`
-    display: flex;
-    border: 2px solid #000;
-    position: relative;
-`;
-
-const RangeWrap = styled.div`
+const CanvasStyleWrap = styled.div`
     display: flex;
     flex-direction: column;
 `;
 
+const canvasStyle = {
+    width: '500px',
+    height: '500px',
+    marginTop: '-9px',
+    border: '2px solid #000',
+    boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)',
+};
+
+const CanvasWrap = styled.div`
+  display: flex;
+  margin-right: 34px;
+`;
+
+const PaintOptionWrap = styled.div`
+    margin-right: 34px;
+`;
+
+const LineWeightCustomWrap = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+`;
+
+const LineWeight = styled.img`
+    margin-bottom: 4px;
+`;
+
+const LineOpacityCustomWrap = styled.div`
+  width: 10px;
+  height: 63px;
+  margin-left: -45px;
+  margin-top: 52px;
+`;
+
+const LineOpacityCustom = styled.input`
+  -webkit-appearance: none;
+  transform: rotate(-90deg);
+  margin-left: 8px;
+  width: 102px;
+  height: 8px;
+    border: 2px solid #000;
+    accent-color: #000;
+    background-image: url(${RangeBg});
+`;
+
+const IcButton = styled.div`
+  padding: 6px;
+  margin-bottom: -6px;
+`;
+
+const Table = styled.table`
+  margin-bottom: 10px;
+  border: 2px solid #000;
+  border-collapse: collapse;
+  z-index: 999;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const Td = styled.td`
+  cursor: pointer;
+  border: 2px solid #000;
+  background-color: #fff;
+`;
+
+const SelectedColorWrap = styled.div`
+    width: 70px;
+    height: 40px;
+    border: 2px solid #000;
+    margin-bottom: 2px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const SelectedColor = styled.div`
+    width: 62px;
+    height: 32px;
+    margin: 2px 0 0 2px;
+    background-color: ${(props) => props.color};
+`;
+
+const ColorOption = styled.div`
+  width: 32px;
+  height: 32px;
+  border: 2px solid #fff;
+  background-color: ${(props) => props.color};
+`;
+
+const ToolBox = styled.div`
+  position: relative;
+`;
+
+const LineStyle = styled.div`
+    height: 164px;
+  display: flex;
+  border: 2px solid #000;
+  position: relative;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const RangeWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  width: 50%;
+`;
 
 
 export default Canvas;

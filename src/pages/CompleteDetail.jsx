@@ -42,6 +42,9 @@ const CompleteDetail = () => {
   ///////////////////////
   //댓글등록
   const commentChange = (e) => {
+    if (commentInput.length === 80) {
+      return;
+    }
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     setCommentInput(e.target.value);
   };
@@ -253,7 +256,7 @@ const CompleteDetail = () => {
                   onChange={commentChange}
                   maxLength="80"
                   value={commentInput}
-                  placeholder="댓글을 남겨주세요."
+                  placeholder="댓글을 남겨주세요. (80자 제한)"
                 />
                 <CommentPostBtn onClick={commentApply}>게시하기</CommentPostBtn>
                 <CommentList
@@ -536,6 +539,10 @@ const CommentInput = styled.textarea`
   padding: 24px;
   border: 2px solid #e6e6e6;
   font-size: 14px;
+  resize: none;
+  &:focus{
+    outline: none;
+  }
 `;
 
 const CommentPostBtn = styled.div`
@@ -546,6 +553,7 @@ const CommentPostBtn = styled.div`
   float: right;
   font-size: 16px;
   font-weight: 700;
+  background-color: #fff;
 `;
 
 const CommentList = styled.div`

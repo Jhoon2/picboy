@@ -3,7 +3,7 @@ import React, { createContext, useContext } from 'react';
 export const myContext = createContext();
 
 export const useMyContext = () => {
-  return useContext(myContext);
+    return useContext(myContext);
 };
 
 export const Context = (props) => {
@@ -15,19 +15,19 @@ export const Context = (props) => {
     const [tabNum, setTabNum] = React.useState(0);
     const [categoryNum, setCategoryNum] = React.useState(1);
 
-    const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)  
+    const [isOpenProfileImg, setIsOpenProfileImg] = React.useState(false)
     // const [logonOpenProfileImg, setLogonProfileImg] = React.useState(false)  
 
-    const [signUpBtn, setSignUpBtn]= React.useState(false)
+    const [signUpBtn, setSignUpBtn] = React.useState(false)
     const signUpBtnClickOff = () => setSignUpBtn(false)
     const signUpBtnClickOn = () => setSignUpBtn(!signUpBtn)
-   
+
     //모든 참가자 보기 모달창 관련
     const [allParticipants, setAllParticipants] = React.useState(false)
 
     //페이지넘버
     const [pageNum, setPageNum] = React.useState(0)
-    
+
     //로그아웃
     const [logoutBtn, setLogoutBtn] = React.useState(false);
 
@@ -47,10 +47,10 @@ export const Context = (props) => {
 
     //댓글 로그인 이용 후 가능
     const [commetApplyBtn, setCommetApplyBtn] = React.useState(false);
-        
+
     //프레임 개수
     const [setttingFrameBtn, setSettingFrameBtn] = React.useState(false);
-    
+
     //그리기 완료
     const [drawingDoneBtn, setDrawingDoneBtn] = React.useState(false);
 
@@ -58,10 +58,10 @@ export const Context = (props) => {
     const [topicBtn, setTopicBtn] = React.useState(false);
 
     //포스트 릴레이 추가할때
-    const [ postTopicBtn, setPostTopicBtn] = React.useState(false)
+    const [postTopicBtn, setPostTopicBtn] = React.useState(false);
 
     //그림판이 비어있을 떄
-    const [ vacantCanvas , setVacantCanvas] =React.useState(false)
+    const [vacantCanvas, setVacantCanvas] = React.useState(false);
 
 
     const value = React.useMemo(() => ({
