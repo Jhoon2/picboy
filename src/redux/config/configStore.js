@@ -7,6 +7,7 @@ import { logonUserSlice } from '../modules/UserPage';
 import { reportSlice } from '../modules/Report';
 import { getNotiSlice } from '../modules/Noti';
 import { notiSlice } from '../modules/Noti';
+import canvas from '../modules/CanvasSlice';
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
 
     getNotis: getNotiSlice.reducer,
     notis: notiSlice.reducer,
+    canvas,
   },
 });
 
