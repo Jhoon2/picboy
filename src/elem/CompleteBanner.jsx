@@ -41,6 +41,10 @@ const CompleteBanner = (props) => {
       <Back />
       <ImgBox className={hide && 'hide'}>
         <span>COMPLETE</span>
+        <h3>
+          여러 유저들의 이어 그리기로 완성된 움짤들을 감상해 보세요! <br />
+          자유롭게 저장하고 소통해 보세요!
+        </h3>
         <SelectBox>
           <SelectButton
             onClick={() => {
@@ -104,6 +108,13 @@ const ImgBox = styled.div`
     font-style: normal;
     font-weight: 700;
     font-size: 65px;
+  }
+  h3 {
+    font-family: 'NotoBold';
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 150%;
+    letter-spacing: -0.04em;
   }
 `;
 
