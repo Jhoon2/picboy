@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import api from '../../shared/apis'
 
-const baseURL = process.env.REACT_APP_API_KEY;
 
 export const __getBest = createAsyncThunk(
   'getBest',

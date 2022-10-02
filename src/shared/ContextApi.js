@@ -64,89 +64,89 @@ export const Context = (props) => {
     const [vacantCanvas, setVacantCanvas] = React.useState(false);
 
 
-    const value = {
+    const value = React.useMemo(() => ({
+  
+            timerMessage,
+            setTimerMessage,
+            btnOpen,
+            btnClickOff,
+            btnClickOn,
+            isOpenProfileImg,
+            setIsOpenProfileImg,
 
-        timerMessage,
-        setTimerMessage,
-        btnOpen,
-        btnClickOff,
-        btnClickOn,
-        isOpenProfileImg,
-        setIsOpenProfileImg,
+            //회원가입 창
+            signUpBtn,
+            signUpBtnClickOn,
+            signUpBtnClickOff,
+            //탭넘버
+            tabNum,
+            setTabNum,
 
-        //회원가입 창
-        signUpBtn,
-        signUpBtnClickOn,
-        signUpBtnClickOff,
-        //탭넘버
-        tabNum,
-        setTabNum,
+            //카테고리넘버
+            categoryNum,
+            setCategoryNum,
 
-        //카테고리넘버
-        categoryNum,
-        setCategoryNum,
+            //로그아웃버튼
+            logoutBtn,
+            setLogoutBtn,
 
-        //로그아웃버튼
-        logoutBtn,
-        setLogoutBtn,
+            // 모든 참가자 모달창
+            allParticipants,
+            setAllParticipants,
 
-        // 모든 참가자 모달창
-        allParticipants,
-        setAllParticipants,
+            //페이지 넘버
+            pageNum,
+            setPageNum,
+    
+            //신고
+            declarBtn,
+            setDecalrBtn,
 
-        //페이지 넘버
-        pageNum,
-        setPageNum,
+            //신고취소
+            declarCancel,
+            setDeclarCancel,
 
-        //신고
-        declarBtn,
-        setDecalrBtn,
+            //list 중 신고
+            listDeclarBtn,
+            setListDecalrBtn,
 
-        //신고취소
-        declarCancel,
-        setDeclarCancel,
+            //List 중 신고취소
+            listDeclarCancel,
+            setListDeclarCancel,
+        
+            //댓글삭제
+            commetDeleteBtn,
+            setCommetDeleteBtn,
 
-        //list 중 신고
-        listDeclarBtn,
-        setListDecalrBtn,
+            //댓글 로그인 이후 가능
+            commetApplyBtn,
+            setCommetApplyBtn,
 
-        //List 중 신고취소
-        listDeclarCancel,
-        setListDeclarCancel,
+            //프레임 개수 설정
+            setttingFrameBtn,
+            setSettingFrameBtn,
 
-        //댓글삭제
-        commetDeleteBtn,
-        setCommetDeleteBtn,
+            //그리기 완료
+            drawingDoneBtn,
+            setDrawingDoneBtn,
 
-        //댓글 로그인 이후 가능
-        commetApplyBtn,
-        setCommetApplyBtn,
+            //제시어 입력
+            topicBtn,
+            setTopicBtn,
 
-        //프레임 개수 설정
-        setttingFrameBtn,
-        setSettingFrameBtn,
+            //추가하기 로그인 후 이용
+            postTopicBtn,
+            setPostTopicBtn,
+        
+            //그림판이 비어있을 떄
+            vacantCanvas,
+            setVacantCanvas,
 
-        //그리기 완료
-        drawingDoneBtn,
-        setDrawingDoneBtn,
-
-        //제시어 입력
-        topicBtn,
-        setTopicBtn,
-
-        //추가하기 로그인 후 이용
-        postTopicBtn,
-        setPostTopicBtn,
-
-        //그림판이 비어있을 떄
-        vacantCanvas,
-        setVacantCanvas,
-
-    };
+    }),[allParticipants, btnClickOn, btnOpen, categoryNum, commetApplyBtn, commetDeleteBtn, declarBtn, declarCancel, drawingDoneBtn, isOpenProfileImg, listDeclarBtn, listDeclarCancel, logoutBtn, pageNum, postTopicBtn, setttingFrameBtn, signUpBtn, signUpBtnClickOn, tabNum, timerMessage,topicBtn,vacantCanvas])
 
     return (
         <myContext.Provider value={value} >
             {props.children}
         </myContext.Provider >
     )
-};
+}

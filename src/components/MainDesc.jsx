@@ -6,6 +6,9 @@ import UseGetUser from '../hooks/UseGetUser';
 
 import Fade from 'react-reveal/Fade';
 import BestSlider from '../elem/BestSlider';
+import AnyModal from '../elem/AnyModal';
+
+//이미지
 import Howarrow from '../images/mainDesc/Howarrow.svg';
 import Howfirst from '../images/mainDesc/HowFirst.gif';
 import Howsecond from '../images/mainDesc/Howsecond.gif';
@@ -21,6 +24,8 @@ import Desc1 from '../images/mainDesc/Desc1.gif';
 import Desc2 from '../images/mainDesc/Desc2.gif';
 import Desc3 from '../images/mainDesc/Desc3.gif';
 import Desc4 from '../images/mainDesc/Desc4.gif';
+
+//소리
 import { buttonPB } from '../global/sound';
 import { coinPB } from '../global/sound';
 import { error1PB } from '../global/sound';
@@ -33,9 +38,9 @@ const MainDesc = ({ moveRef, move2Ref }) => {
   const logonUser = UseGetUser();
 
   const btnClick = () => {
-    myContext.btnClickOn();
-    error1PB.play();
-  };
+    myContext.setCommetApplyBtn(true);
+    error1PB.play()
+  }
   const moveTopic = () => {
     if (!logonUser) return btnClick();
     navigate('/post-topic');
@@ -55,7 +60,12 @@ const MainDesc = ({ moveRef, move2Ref }) => {
   const handleMoves = () => {
     TopicgRef.current.scrollIntoView({ behavior: 'smooth' });
   };
+
   return (
+    <>
+    {myContext.commetApplyBtn ? <ErrorBox onClick={()=>myContext.setCommetApplyBtn(false)}>
+    <AnyModal title="회원정보" content="로그인 후 가능합니다" />
+      </ErrorBox> : null}
     <DescContainer>
       <Fade bottom>
         <IntroBlock>
@@ -269,11 +279,25 @@ const MainDesc = ({ moveRef, move2Ref }) => {
           </StartButtonBox>
         </Fade>
       </StartBox>
-    </DescContainer>
+      </DescContainer>
+      </>
   );
 };
 
 export default MainDesc;
+
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 
 const IntroBlock = styled.div``;
 

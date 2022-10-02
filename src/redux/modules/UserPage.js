@@ -1,13 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from 'axios';
-import { getCookieToken, getRefreshToken } from '../../shared/Cookie'
 import  instance  from "../../shared/apis";
 import api from '../../shared/apis'
 
-const baseURL = process.env.REACT_APP_API_KEY;
-
-const myToken = getCookieToken();
-const refreshToken = getRefreshToken();
 
 //로그온유저정보
 export const __getLogonUser = createAsyncThunk(
