@@ -22,173 +22,209 @@ import { castDraft } from 'immer';
 //소리
 import { error1PB } from '../global/sound';
 
-
 const PostTopic = () => {
+  const canvas = useSelector((state) => state.canvas.imgUrl);
 
-    const canvas = useSelector((state) => state.canvas.imgUrl);
+  const [frame, setFrame] = useState(0);
+  const myContext = useMyContext();
 
-    const [frame, setFrame] = useState(0);
-    const myContext = useMyContext();
-
-    const frameCount = (e) => {
-        const target = e.target;
-        if (target.id === '6') {
-            setFrame(6);
-        } else if (target.id === '12') {
-            setFrame(12);
-        } else if (target.id === '18') {
-            setFrame(18);
-        } else if (target.id === '24') {
-            setFrame(24);
-        }
-    };
-
-    ///////////////////////////
-    // ajax
-
-
-    // get
-    // random topic
-    const [topicState, setTopicState] = useState('');
-    const [topicInputState, setTopicInputState] = useState('');
-
-    const randomTopic = () => {
-        const url = `/post/random-topic`;
-        api
-            .get(url)
-            .then(function (response) {
-                const RandomTopicApi = response.data.data.topic;
-                setTopicState(RandomTopicApi);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-        setTopicInputState('');
-    };
-
-    const topicInput = (e) => {
-        setTopicInputState(e.target.value);
-    };
-
-
-    //광클릭 막기
-    let clickCount = 0;
-
-    // post
-    const submitImg = () => {
-        console.log(canvas)
-        const topic = topicInputState || topicState;
-        if (topic === '') {
-            error1PB.play();
-            myContext.setTopicBtn(true);
-            return;
-        } else if (frame === 0) {
-            error1PB.play();
-            myContext.setSettingFrameBtn(true);
-            return;
-        } else if (canvas === '' || undefined) {
-            error1PB.play();
-            myContext.setVacantCanvas(true);
-            return;
-        }
-        // if (vacantState(canvas)) {
-        //     error1PB.play();
-        //     myContext.setVacantCanvas(true);
-        //     return;
-        // }
-        if (clickCount !== 0) return
-        instance
-            .post(
-                `/post`,
-                {
-                    topic: topic,
-                    frameTotal: frame,
-                    file: canvas,
-                },
-            )
-            .then(function (response) {
-                myContext.setDrawingDoneBtn(true)
-                ++clickCount
-                window.location.replace('/list');
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    };
-
-    const cancleNav = () => {
-        window.location.replace("/CompList");
+  const frameCount = (e) => {
+    const target = e.target;
+    if (target.id === '6') {
+      setFrame(6);
+    } else if (target.id === '12') {
+      setFrame(12);
+    } else if (target.id === '18') {
+      setFrame(18);
+    } else if (target.id === '24') {
+      setFrame(24);
     }
+  };
 
-    return (
-        <>
-            {myContext.topicBtn ? (
-                <ErrorBox onClick={() => myContext.setTopicBtn(false)}>
-                    <AnyModal content="제시어를 입력해주세요" />
-                </ErrorBox>
-            ) : null}
-            {myContext.setttingFrameBtn ? (
-                <ErrorBox onClick={() => myContext.setSettingFrameBtn(false)}>
-                    <AnyModal content="프레임 개수를 설정해주세요" />
-                </ErrorBox>
-            ) : null}
-            {myContext.drawingDoneBtn ? (
-                <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
-                    <AnyModal content="올리기가 완료되었습니다" />
-                </ErrorBox>
-            ) : null}
-            {myContext.vacantCanvas ? (
-                <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
-                    <AnyModal content="그림이 비어있습니다" />
-                </ErrorBox>
-            ) : null}
+  ///////////////////////////
+  // ajax
 
-            <div style={{ position: 'relative' }}>
-                <PostTitle>TOPIC</PostTitle>
-                <PostContentsWrap>
-                    <Canvas />
-                    <ContetnsWrap>
-                        <div><CanvasOptionArticleStyle src={CanvasOptionArticle} alt="" /></div>
-                        <ModeWrap>
-                            <ModeTitleWrap>
-                                <img src={modeIc} alt="" />
-                                <ModeTitle>새 글 쓰기</ModeTitle>
-                            </ModeTitleWrap>
-                            <ModeFrameWrap>
-                                <ModeFrameTitle>제시어</ModeFrameTitle>
-                                <ModeFrameBtnWrap>
-                                    <RandomTopicInput
-                                        onChange={topicInput}
-                                        value={topicInputState || topicState}
-                                        type="text"
-                                        placeholder="12자 제한입니다"
-                                        maxLength={12}
-                                    />
-                                    <RandomTopicBtn onClick={randomTopic}>랜덤선택</RandomTopicBtn>
-                                </ModeFrameBtnWrap>
-                                <ModeFrameTitle style={{ marginTop: '32px' }}>
-                                    프레임
-                                </ModeFrameTitle>
-                                <ModeFrameBtnWrap>
-                                    <ModeFrameBtn onClick={frameCount} id="6" style={frame === 6 ? { backgroundColor: 'black', color: 'white' } : {}}>6개</ModeFrameBtn>
-                                    <ModeFrameBtn onClick={frameCount} id="12" style={frame === 12 ? { backgroundColor: 'black', color: 'white' } : {}}>12개</ModeFrameBtn>
-                                    <ModeFrameBtn onClick={frameCount} id="18" style={frame === 18 ? { backgroundColor: 'black', color: 'white' } : {}}>18개</ModeFrameBtn>
-                                    <ModeFrameBtn onClick={frameCount} id="24" style={frame === 24 ? { backgroundColor: 'black', color: 'white' } : {}}>24개</ModeFrameBtn>
-                                </ModeFrameBtnWrap>
-                            </ModeFrameWrap>
-                            <PostBtnWrap>
-                                <PostBtn onClick={cancleNav}>취소하기</PostBtn>
-                                <PostBtn onClick={submitImg}>추가하기</PostBtn>
-                            </PostBtnWrap>
-                        </ModeWrap>
-                    </ContetnsWrap>
-                </PostContentsWrap>
-                <BgTopStyle src={BgTop} alt="" />
-                <BgBottomStyle src={BgBottom} alt="" />
+  // get
+  // random topic
+  const [topicState, setTopicState] = useState('');
+  const [topicInputState, setTopicInputState] = useState('');
+
+  const randomTopic = () => {
+    const url = `/post/random-topic`;
+    api
+      .get(url)
+      .then(function (response) {
+        const RandomTopicApi = response.data.data.topic;
+        setTopicState(RandomTopicApi);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    setTopicInputState('');
+  };
+
+  const topicInput = (e) => {
+    setTopicInputState(e.target.value);
+  };
+
+  //광클릭 막기
+  let clickCount = 0;
+
+  // post
+  const submitImg = () => {
+    const topic = topicInputState || topicState;
+    if (topic === '') {
+      error1PB.play();
+      myContext.setTopicBtn(true);
+      return;
+    } else if (frame === 0) {
+      error1PB.play();
+      myContext.setSettingFrameBtn(true);
+      return;
+    } else if (canvas === '' || undefined) {
+      error1PB.play();
+      myContext.setVacantCanvas(true);
+      return;
+    }
+    // if (vacantState(canvas)) {
+    //     error1PB.play();
+    //     myContext.setVacantCanvas(true);
+    //     return;
+    // }
+    if (clickCount !== 0) return;
+    instance
+      .post(`/post`, {
+        topic: topic,
+        frameTotal: frame,
+        file: canvas,
+      })
+      .then(function (response) {
+        myContext.setDrawingDoneBtn(true);
+        ++clickCount;
+        window.location.replace('/list');
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const cancleNav = () => {
+    window.location.replace('/CompList');
+  };
+
+  return (
+    <>
+      {myContext.topicBtn ? (
+        <ErrorBox onClick={() => myContext.setTopicBtn(false)}>
+          <AnyModal content="제시어를 입력해주세요" />
+        </ErrorBox>
+      ) : null}
+      {myContext.setttingFrameBtn ? (
+        <ErrorBox onClick={() => myContext.setSettingFrameBtn(false)}>
+          <AnyModal content="프레임 개수를 설정해주세요" />
+        </ErrorBox>
+      ) : null}
+      {myContext.drawingDoneBtn ? (
+        <ErrorBox onClick={() => myContext.setDrawingDoneBtn(false)}>
+          <AnyModal content="올리기가 완료되었습니다" />
+        </ErrorBox>
+      ) : null}
+      {myContext.vacantCanvas ? (
+        <ErrorBox onClick={() => myContext.setVacantCanvas(false)}>
+          <AnyModal content="그림이 비어있습니다" />
+        </ErrorBox>
+      ) : null}
+
+      <div style={{ position: 'relative' }}>
+        <PostTitle>TOPIC</PostTitle>
+        <PostContentsWrap>
+          <Canvas />
+          <ContetnsWrap>
+            <div>
+              <CanvasOptionArticleStyle src={CanvasOptionArticle} alt="" />
             </div>
-        </>
-    );
+            <ModeWrap>
+              <ModeTitleWrap>
+                <img src={modeIc} alt="" />
+                <ModeTitle>새 글 쓰기</ModeTitle>
+              </ModeTitleWrap>
+              <ModeFrameWrap>
+                <ModeFrameTitle>제시어</ModeFrameTitle>
+                <ModeFrameBtnWrap>
+                  <RandomTopicInput
+                    onChange={topicInput}
+                    value={topicInputState || topicState}
+                    type="text"
+                    placeholder="12자 제한입니다"
+                    maxLength={12}
+                  />
+                  <RandomTopicBtn onClick={randomTopic}>
+                    랜덤선택
+                  </RandomTopicBtn>
+                </ModeFrameBtnWrap>
+                <ModeFrameTitle style={{ marginTop: '32px' }}>
+                  프레임
+                </ModeFrameTitle>
+                <ModeFrameBtnWrap>
+                  <ModeFrameBtn
+                    onClick={frameCount}
+                    id="6"
+                    style={
+                      frame === 6
+                        ? { backgroundColor: 'black', color: 'white' }
+                        : {}
+                    }
+                  >
+                    6개
+                  </ModeFrameBtn>
+                  <ModeFrameBtn
+                    onClick={frameCount}
+                    id="12"
+                    style={
+                      frame === 12
+                        ? { backgroundColor: 'black', color: 'white' }
+                        : {}
+                    }
+                  >
+                    12개
+                  </ModeFrameBtn>
+                  <ModeFrameBtn
+                    onClick={frameCount}
+                    id="18"
+                    style={
+                      frame === 18
+                        ? { backgroundColor: 'black', color: 'white' }
+                        : {}
+                    }
+                  >
+                    18개
+                  </ModeFrameBtn>
+                  <ModeFrameBtn
+                    onClick={frameCount}
+                    id="24"
+                    style={
+                      frame === 24
+                        ? { backgroundColor: 'black', color: 'white' }
+                        : {}
+                    }
+                  >
+                    24개
+                  </ModeFrameBtn>
+                </ModeFrameBtnWrap>
+              </ModeFrameWrap>
+              <PostBtnWrap>
+                <PostBtn onClick={cancleNav}>취소하기</PostBtn>
+                <PostBtn onClick={submitImg}>추가하기</PostBtn>
+              </PostBtnWrap>
+            </ModeWrap>
+          </ContetnsWrap>
+        </PostContentsWrap>
+        <BgTopStyle src={BgTop} alt="" />
+        <BgBottomStyle src={BgBottom} alt="" />
+      </div>
+    </>
+  );
 };
 const ErrorBox = styled.div`
   position: fixed;
@@ -243,7 +279,7 @@ const ContetnsWrap = styled.div`
 `;
 
 const CanvasOptionArticleStyle = styled.img`
-    margin-bottom: -9px;
+  margin-bottom: -9px;
 `;
 
 const ModeWrap = styled.div`
@@ -282,17 +318,16 @@ const ModeFrameBtnWrap = styled.div`
 `;
 
 const RandomTopicBtn = styled.div`
-    font-size: 13px;
+  font-size: 13px;
   font-weight: 400;
   padding: 10px 14px;
   border: 1px solid #000;
   margin-right: 0px;
   cursor: pointer;
-  &:active{
+  &:active {
     background-color: #000;
     color: #fff;
   }
-
 `;
 
 const RandomTopicInput = styled.input`
@@ -321,15 +356,15 @@ const ModeFrameBtn = styled.div`
 `;
 
 const PostBtnWrap = styled.div`
-    width: 291px;
-    position: absolute;
-    bottom: 30px;
+  width: 291px;
+  position: absolute;
+  bottom: 30px;
   display: flex;
   justify-content: space-between;
 `;
 
 const PostBtn = styled.div`
-width: 136px;
+  width: 136px;
   display: inline;
   padding: 13px 0;
   font-size: 16px;
@@ -337,11 +372,10 @@ width: 136px;
   text-align: center;
   border: 2px solid #000;
   cursor: pointer;
-  &:hover{
-      background-color: #000;
-      color: #fff;
+  &:hover {
+    background-color: #000;
+    color: #fff;
   }
 `;
-
 
 export default PostTopic;
