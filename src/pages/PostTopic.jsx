@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -344,4 +345,3 @@ width: 136px;
 
 
 export default PostTopic;
-
