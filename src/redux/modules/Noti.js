@@ -1,21 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
-import axios from 'axios';
+import api from '../../shared/apis';
+import instance from '../../shared/apis';
 
-const myToken = getCookieToken();
-const refreshToken = getRefreshToken();
-const baseURL = process.env.REACT_APP_API_KEY;
+
 
 export const __getNoti = createAsyncThunk(
   'getNoti',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`${baseURL}/user/alert-get`, {
-        headers: {
-          Authorization: myToken,
-          'refresh-token': refreshToken,
-        },
-      });
+      const data = await instance.get(`/user/alert-get`);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -27,12 +21,7 @@ export const __readNoti = createAsyncThunk(
   'readNoti',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.get(`${baseURL}/user/alert`, {
-        headers: {
-          Authorization: myToken,
-          'refresh-token': refreshToken,
-        },
-      });
+      const data = await instance.get(`/user/alert`,);
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
@@ -44,12 +33,7 @@ export const __readAllnoti = createAsyncThunk(
   'readAllNoti',
   async (payload, thunkAPI) => {
     try {
-      const data = await axios.put(`${baseURL}/user/alert-update`, '', {
-        headers: {
-          Authorization: myToken,
-          'refresh-token': refreshToken,
-        },
-      });
+      const data = await instance.put(`/user/alert-update`, '');
       return thunkAPI.fulfillWithValue(data.data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

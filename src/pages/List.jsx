@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
 import Grid from '../styles/Grid';
 import ProgressAll from '../components/ProgressAll';

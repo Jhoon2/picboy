@@ -110,6 +110,8 @@ const Notification = () => {
     window.location.href = `/user-profile/${id}`;
   };
 
+  console.log(getNotis);
+
   return (
     <div ref={node}>
       <NotifiImg
@@ -120,7 +122,7 @@ const Notification = () => {
           headerPB.play();
         }}
       >
-        {read === false ? <CountBox onClick={() => {}} /> : null}
+        {read === false ? <CountBox /> : null}
       </NotifiImg>
 
       <NotiBox>
@@ -140,24 +142,28 @@ const Notification = () => {
               getList?.map((item, index) => (
                 <div key={uuidv4()}>
                   <HR />
-                  <DescBox
-                    onClick={() => {
-                      console.log(item.postId);
-                      window.location.href = `/complete-detail/${item.postId}`;
-                      succ1PB.play();
-                    }}
-                  >
+                  <DescBox>
                     <Comimg />
                     {item.topic === null ? (
                       <DescTitle>FREE</DescTitle>
                     ) : (
                       <DescTitle>{item.topic}</DescTitle>
                     )}
-                    <Desc>
-                      작성하신 게시물이 완성되었습니다.
-                      <br />
-                      지금 바로 확인하러 가보세요.
-                    </Desc>
+                    {item.content === '작성하신 게시물이 삭제되었습니다.' ? (
+                      <Desc>{item.content}</Desc>
+                    ) : (
+                      <Desc
+                        onClick={() => {
+                          window.location.href = `/complete-detail/${item.postId}`;
+                          succ1PB.play();
+                        }}
+                      >
+                        {item.content.substr(0, 18)}
+                        <br />
+                        지금 바로 확인해보세요.
+                      </Desc>
+                    )}
+
                     <Days> {displayedAt(item.createAt)}</Days>
                   </DescBox>
                 </div>

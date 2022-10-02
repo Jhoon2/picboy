@@ -6,6 +6,9 @@ import UseGetUser from '../hooks/UseGetUser';
 
 import Fade from 'react-reveal/Fade';
 import BestSlider from '../elem/BestSlider';
+import AnyModal from '../elem/AnyModal';
+
+//이미지
 import Howarrow from '../images/mainDesc/Howarrow.svg';
 import Howfirst from '../images/mainDesc/HowFirst.gif';
 import Howsecond from '../images/mainDesc/Howsecond.gif';
@@ -21,6 +24,8 @@ import Desc1 from '../images/mainDesc/Desc1.gif';
 import Desc2 from '../images/mainDesc/Desc2.gif';
 import Desc3 from '../images/mainDesc/Desc3.gif';
 import Desc4 from '../images/mainDesc/Desc4.gif';
+
+//소리
 import { buttonPB } from '../global/sound';
 import { coinPB } from '../global/sound';
 import { error1PB } from '../global/sound';
@@ -33,17 +38,17 @@ const MainDesc = ({ moveRef, move2Ref }) => {
   const logonUser = UseGetUser();
 
   const btnClick = () => {
-    myContext.btnClickOn();
+    myContext.setCommetApplyBtn(true);
     error1PB.play()
   }
   const moveTopic = () => {
-    if (!logonUser) return btnClick() 
+    if (!logonUser) return btnClick();
     navigate('/post-topic');
     coinPB.play();
   };
 
   const moveFree = () => {
-    if (!logonUser) return btnClick()  ;
+    if (!logonUser) return btnClick();
     navigate('/post-free');
     coinPB.play();
   };
@@ -55,7 +60,12 @@ const MainDesc = ({ moveRef, move2Ref }) => {
   const handleMoves = () => {
     TopicgRef.current.scrollIntoView({ behavior: 'smooth' });
   };
+
   return (
+    <>
+    {myContext.commetApplyBtn ? <ErrorBox onClick={()=>myContext.setCommetApplyBtn(false)}>
+    <AnyModal title="회원정보" content="로그인 후 가능합니다" />
+      </ErrorBox> : null}
     <DescContainer>
       <Fade bottom>
         <IntroBlock>
@@ -118,7 +128,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
         <DescSecond>
           <Fade left>
             <Number2>#2</Number2>
-            <Title2>간단한 컨텐츠</Title2>
+            <Title2>간단하게 즐길 수 있어요!</Title2>
             <Des2>
               주제어를 정하고 그려보세요.참여된 그림들을 보고
               예측해서그려봅시다.
@@ -155,7 +165,7 @@ const MainDesc = ({ moveRef, move2Ref }) => {
             <Title4>
               유저들과
               <br />
-              텔레파시
+              텔레파시를 해 보세요!
             </Title4>
             <Des4>
               유저들이 대체 어떤 상상을 하고 그렸을까요?
@@ -201,13 +211,16 @@ const MainDesc = ({ moveRef, move2Ref }) => {
               <HowDescBox>
                 <HowDesc2>드로잉 버튼 클릭</HowDesc2>
                 <HowDesc>
-                  제시어(FREE일 경우 PASS) <br />
-                  프레임 선택 후 그리기
+                  원하는 컨텐츠, 프레임 선택 후 <br />
+                  그림 그리고 추가하기!
                 </HowDesc>
-                <HowDesc1>진행중인 그림 감상</HowDesc1>
+                <HowDesc1>
+                  그림 완성될 때까지 <br />
+                  기다리기 (알람확인)
+                </HowDesc1>
                 <HowDesc>
                   프레임 수 채워지면 <br />
-                  완성버튼 클릭!
+                  자동 완성!
                 </HowDesc>
               </HowDescBox>
             </Fade>
@@ -266,11 +279,25 @@ const MainDesc = ({ moveRef, move2Ref }) => {
           </StartButtonBox>
         </Fade>
       </StartBox>
-    </DescContainer>
+      </DescContainer>
+      </>
   );
 };
 
 export default MainDesc;
+
+const ErrorBox = styled.div`
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+`;
 
 const IntroBlock = styled.div``;
 
@@ -616,7 +643,7 @@ const HowDesc = styled.span`
 `;
 
 const HowDesc1 = styled(HowDesc)`
-  margin-right: 20px;
+  margin-right: 25px;
 `;
 
 const HowDesc2 = styled(HowDesc)`

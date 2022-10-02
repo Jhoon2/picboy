@@ -12,6 +12,7 @@ import AnyModal from '../../elem/AnyModal';
 import basicImg from '../../images/mypage/basicImg.png';
 
 const CommentBox = ({ commentList, accessToken }) => {
+
   //로그인한 사람 정보
   const useGet = UseGetUser();
   const userNickname = useGet && useGet.data.data.nickname;
@@ -123,6 +124,31 @@ const CommentBox = ({ commentList, accessToken }) => {
     if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
     navigate(`/user-profile/${commentList?.username}`);
   };
+
+  // 타임스탬프
+  const start = new Date();
+  const end = commentList.modifiedAtAt;
+
+  const timeStamp = () => {
+    const time = end - start;
+    const seconds = time / 1000;
+    if (seconds < 60) return `방금 전`;
+    const minutes = seconds / 60;
+    if (minutes < 60) return `${Math.floor(minutes)}분 전`;
+    const hours = minutes / 60;
+    if (hours < 24) return `${Math.floor(hours)}시간 전`;
+    const days = hours / 24;
+    if (days < 7) return `${Math.floor(days)}일 전`;
+    const weeks = days / 7;
+    if (weeks < 5) return `${Math.floor(weeks)}주 전`;
+    const months = days / 30;
+    if (months < 12) return `${Math.floor(months)}개월 전`;
+    const years = days / 365;
+    return `${Math.floor(years)}년 전`;
+  }
+
+  const nowDate = timeStamp(new Date(timeStamp.createdAt));
+
   return (
     <>
       {myContext.commetDeleteBtn ? (
@@ -146,9 +172,12 @@ const CommentBox = ({ commentList, accessToken }) => {
               onClick={moveToUser}
             />
             <CommentIdContents>
-              <CommentUserNickName>
-                {commentList.nickname.slice(0, 8)}
-              </CommentUserNickName>
+              <CommentUserWrap>
+                <CommentUserNickName>
+                  {commentList.nickname.slice(0, 8)}
+                </CommentUserNickName>
+                {/* <CommentTimeStamp>{nowDate}</CommentTimeStamp> */}
+              </CommentUserWrap>
               {editState ? (
                 <EditCommentInput
                   type="text"
@@ -208,15 +237,27 @@ const CommentUserProfileImg = styled.img`
 `;
 
 const CommentIdContents = styled.div`
-  width: 300px;
+  width: 640px;
   display: flex;
   flex-direction: column;
 `;
 
+const CommentUserWrap = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const CommentUserNickName = styled.div`
-  margin: 8px 0 6px 0;
+  margin: 8px 8px 6px 0;
   font-size: 16px;
   font-weight: 700;
+`;
+
+const CommentTimeStamp = styled.div`
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #a3a3a3;
 `;
 
 const UserComment = styled.div`

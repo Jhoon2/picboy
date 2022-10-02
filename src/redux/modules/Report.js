@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getCookieToken, getRefreshToken } from '../../shared/Cookie';
-import axios from 'axios';
 import instance from '../../shared/apis';
 
 
