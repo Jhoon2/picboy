@@ -119,6 +119,7 @@ const Width = styled.div`
 const ListBox = styled.div`
   max-width: 1200px;
   margin: auto;
+  margin-top: 20px;
   position: sticky;
   z-index: 1;
 `;

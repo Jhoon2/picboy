@@ -106,7 +106,7 @@ const Header = () => {
               headerPB.play();
             }}
           >
-            PROCEEDING
+            PROGRESS
           </ProceedingButton>
           <CompleteButton
             onClick={() => {
