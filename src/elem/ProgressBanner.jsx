@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import back from '../images/Com/back.png';
+import back from '../images/Com/Listbanner.webp';
 import backscroll from '../images/Com/backscroll.png';
 import { pop2PB } from '../global/sound';
 
@@ -41,6 +41,10 @@ const ProgressBanner = (props) => {
       <Back />
       <ImgBox className={hide && 'hide'}>
         <span>PROGRESS</span>
+        <h3>
+          유저들이 그리기를 진행하고 있어요! <br />
+          이어 그리기에 동참해 예측할 수 없는 즐거움을 느껴보세요!
+        </h3>
         <SelectBox>
           <SelectButton
             onClick={() => {
@@ -104,6 +108,13 @@ const ImgBox = styled.div`
     font-style: normal;
     font-weight: 700;
     font-size: 65px;
+  }
+  h3 {
+    font-family: 'NotoBold';
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 150%;
+    letter-spacing: -0.04em;
   }
 `;
 
