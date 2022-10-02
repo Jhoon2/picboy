@@ -6,8 +6,6 @@ import { useMyContext } from '../../shared/ContextApi';
 
 //axios, apis
 import instance from '../../shared/apis';
-import api from '../../shared/apis';
-import axios from 'axios';
 import { anyApis } from '../../shared/apis';
 import styled from 'styled-components';
 import AllParticipants from './AllParticipants';
@@ -108,10 +106,11 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
                 </a>
               ) : null}
               {/* 좋아요기능 */}
-              <ClickCircle
+              {data.status === 2 ? <ClickCircle
                 src={likePlus ? colorHeart : heart}
                 onClick={clickLikeBtn}
-              />
+              /> : null }
+              
             </div>
           </HoverContent>
         </OverlayImg>
@@ -150,10 +149,15 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
               <LikeCount>{data.commentCount}</LikeCount>
             </>
           ) : null}
-          <Icons>
-            <IconImg src={favorite} />
-          </Icons>
-          <LikeCount>{smallLikeBtn}</LikeCount>
+          {data.status === 2 ? (
+            <>
+              <Icons>
+                <IconImg src={favorite} />
+              </Icons>
+              <LikeCount>{smallLikeBtn}</LikeCount>
+            </>
+          ) : null}
+          
         </div>
       </GifContents>
       {/* ...버튼 */}

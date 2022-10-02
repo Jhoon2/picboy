@@ -237,7 +237,7 @@ const CommentUserProfileImg = styled.img`
 `;
 
 const CommentIdContents = styled.div`
-  width: 740px;
+  width: 640px;
   display: flex;
   flex-direction: column;
 `;

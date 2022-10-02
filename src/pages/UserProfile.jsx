@@ -21,8 +21,9 @@ import basicImg from '../images/mypage/basicImg.png';
 import smallpencil from '../images/smallpencil.png';
 import camera from '../images/Camera.png';
 import editPencil from '../images/mypage/mode-edit-sharp.png';
-import Listbanner from '../images/Com/Listbanner.svg';
+import Listbanner from '../images/Com/Listbanner.webp';
 import Listfooter from '../images/mypage/myPageFooter.svg';
+import { useCallback } from 'react';
 
 const UserProfile = () => {
   const myContext = useMyContext();
@@ -54,7 +55,7 @@ const UserProfile = () => {
   //페이지세팅
   let page = 0;
   //observe 콜백 함수
-  const onIntersect = (entries, observer) => {
+  const onIntersect = useCallback((entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         page++;
@@ -77,7 +78,7 @@ const UserProfile = () => {
         // console.log('여기서 취소?')
       }
     });
-  };
+  },[myContext.tabNum,myContext.categoryNum,dispatch,page,params.id])
 
   useEffect(() => {
     dispatch(__getUserPage({ username: params.id }));
@@ -106,10 +107,10 @@ const UserProfile = () => {
     return () => observer && observer.disconnect();
   }, [lastIntersectingData, ref, myContext.tabNum, myContext.categoryNum]);
 
-  const MouseClick = (e) => {
+  const MouseClick = useCallback((e) => {
     e.preventDefault();
     myContext.setIsOpenProfileImg(!myContext.isOpenProfileImg);
-  };
+  },[myContext])
 
   const editNickname = () => {
     setEditMyNickName(true);
@@ -162,6 +163,7 @@ const UserProfile = () => {
   const [availableNick, setAvailableNick] = useState(false);
 
   const checkNickname = async () => {
+    if(!loadMyNickname) return
     try {
       const response = await api.get(
         `/user/nickname-double-check/${loadMyNickname}`
@@ -175,6 +177,7 @@ const UserProfile = () => {
       console.log(error);
     }
   };
+
   const NickinputVacant = () => {
     setExistedNick(false);
     setAvailableNick(false);
@@ -276,7 +279,9 @@ const UserProfile = () => {
           {/* 카드 */}
           <>
             <CardContainer>
-              {userData.content &&
+              {/* {userData.content[0] ? userData.content &&
+                }): <NoContents>게시글이 없습니다</NoContents>} */}
+                 {userData.content &&
                 userData.content.map((data, i) => {
                   return (
                     <GifCard
@@ -458,6 +463,12 @@ const CardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
+
+const NoContents = styled.div`
+  padding-top: 100px;
+  margin-bottom: -500px;
+`
+
 const CheckButton = styled.button`
   width: 100px;
   height: 40px;
@@ -501,3 +512,4 @@ const Footerimg = styled.div`
 `;
 
 export default UserProfile;
+

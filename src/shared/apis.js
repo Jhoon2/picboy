@@ -1,10 +1,12 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from 'axios';
+import axios from 'axios'
+import { Cookies } from "react-cookie";
 import { getCookieToken, getRefreshToken } from './Cookie'
 
 const baseURL = process.env.REACT_APP_API_KEY;
 
 const myToken = getCookieToken();
+
+const cookie = new Cookies();
 
 export const api = axios.create({
 	baseURL: process.env.REACT_APP_SERVER
@@ -20,21 +22,28 @@ const instance = axios.create({
 
 export default instance;
 
-export const downlodadApi = 
+
 
 //토큰 만료시 인터셉터
-instance.interceptors.response.use( (response) => {
+
+instance.interceptors.response.use((response) => {
   return response;
 },
   async (error) => {
-    const {
-      config,
-      response: { status },
-    } = error;
-    // if (status === 401) return window.location.href = '/login';
-    // 권한없음 === Access 토큰 만료됐을 경우
+    try {
+      const originalConfig = error.config;
+      const {data} = await instance.get(
+        `/validate`
+      );
+      if (data.data.validate === 1) {
+          // window.location.href = '/login'
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 );
+
 
 export const anyApis = { 
   //좋아요기능

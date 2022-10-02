@@ -345,4 +345,3 @@ width: 136px;
 
 
 export default PostTopic;
-
