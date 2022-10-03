@@ -2,7 +2,7 @@ import React,{useRef, useEffect} from 'react'
 import styled from 'styled-components'
 
 //이미지
-import basicImg from '../../images/basicImg.jpg'
+import basicImg from '../../images/mypage/basicImg.png'
 import grayPerson from '../../images/mypage/Person.png'
 
 //소리

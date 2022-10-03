@@ -8,11 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
 import instance from '../shared/apis';
-import vacantState from '../elem/vacantStateCanvas';
 import Canvas from '../components/Canvas';
 
 // image import
-import modeIc from '../images/pen.png';
+import modeIc from '../images/canvas/pen.png';
 import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/canvas-bottom-bg.png';
 import CanvasOptionArticle from '../images/canvas-option-top-article.png';
@@ -58,7 +57,6 @@ const PostFree = () => {
       return;
     }
 
-    if (vacantState(canvas)) return clickErrorVacant();
     instance
       .post(
         `/post`,

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import ListCategories from '../elem/ListCategories';
+import ListCategories from '../../elem/ListCategories';
 import AllNew from './ComAll/AllNew';
 import AllLike from './ComAll/AllLike';
 import AllComm from './ComAll/AllComm';
-import AllView from '../components/ComAll/AllView';
+import AllView from './ComAll/AllView';
 
 const CompAll = () => {
   const [tap, setTap] = useState(0);

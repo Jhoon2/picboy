@@ -5,10 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
-import {
-  getCookieToken,
-  getRefreshToken,
-} from '../shared/Cookie';
+import { getCookieToken, getRefreshToken } from '../shared/Cookie';
 import UseGetUser from '../hooks/UseGetUser';
 import ClickProfileModal from '../components/Header/ClickProfileModal';
 import { __getLogonUser } from '../redux/modules/UserPage';
@@ -44,22 +41,20 @@ const Header = () => {
   const getLogonUser = useSelector((state) => state?.logonUser);
   const loginUser = getLogonUser?.logonUser?.profileImg;
 
-
   //만료토큰 검사
   const validate = async () => {
     try {
-      const response= await instance.get(
-        `/validate`
-      );
-      setValiData(response)
+      const response = await instance.get(`/validate`);
+      setValiData(response);
+      if (response?.data?.data?.validate !== 0) return;
+      dispatch(__getLogonUser(response?.data?.data?.validate));
     } catch (error) {
       console.log(error);
     }
-  } 
+  };
 
   //처음 불러오기
   useEffect(() => {
-    dispatch(__getLogonUser());
     validate();
   }, []);
 
@@ -94,13 +89,14 @@ const Header = () => {
         <HeaderBox>
           <Logo
             src={logo}
-            alt=""
+            alt="로고"
             onClick={() => {
               navigate('/');
               headerPB.play();
             }}
           ></Logo>
           <ProceedingButton
+            type="button"
             onClick={() => {
               navigate('/list');
               headerPB.play();
@@ -109,6 +105,7 @@ const Header = () => {
             PROGRESS
           </ProceedingButton>
           <CompleteButton
+            type="button"
             onClick={() => {
               navigate('/CompList');
               headerPB.play();
@@ -118,6 +115,7 @@ const Header = () => {
           </CompleteButton>
           <Box>
             <EventButton
+              type="button"
               onClick={() => {
                 navigate('/event');
                 headerPB.play();
@@ -134,6 +132,7 @@ const Header = () => {
               {/* <LoginUserImg> */}
               <ClickProfileModal
                 img={!loginUser ? basicImg : loginUser}
+                alt=""
                 onClick={() => {
                   headerPB.play();
                 }}

@@ -85,10 +85,10 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
   return (
     <CardContainer>
       <OverlayWrap>
-        <GifImg src={data.gifUrl ?? data.imgUrl} />
-        <Badge src={data.status === 1 ? progressIcon : completeIcon} />
+        <GifImg src={data.gifUrl ?? data.imgUrl} alt=''/>
+        <Badge src={data.status === 1 ? progressIcon : completeIcon} alt='' />
         <OverlayImg onClick={movePage} openSpecialModal={openSpecialModal}>
-          <HoverSideButton onClick={buttonCollection}>
+          <HoverSideButton onClick={buttonCollection} type='button'>
             <HorizBtn src={moreHoriz} />
           </HoverSideButton>
           <HoverContent>
@@ -101,6 +101,8 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
                   href={`${baseURL}/download?postId=${data.postId}&fileName=${data.gifUrl}`}
                   download="free"
                   onClick={(e) => e.stopPropagation()}
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   <ClickCircleDownload />
                 </a>
@@ -109,6 +111,7 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
               {data.status === 2 ? <ClickCircle
                 src={likePlus ? colorHeart : heart}
                 onClick={clickLikeBtn}
+                alt=''
               /> : null }
               
             </div>
@@ -117,7 +120,7 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
       </OverlayWrap>
       <GifContents>
         <UserProfileContent onClick={showAllParticipants}>
-          <ProfileImage src={!data.profileImg ? basicImg : data.profileImg} />
+          <ProfileImage src={!data.profileImg ? basicImg : data.profileImg} alt=''/>
           {data.memberCount ? (
             <Participants>
               <div
@@ -138,13 +141,13 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
         </UserProfileContent>
         <div style={{ display: 'flex' }}>
           <Icons>
-            <IconImg src={grayEyes} />
+            <IconImg src={grayEyes} alt=''/>
           </Icons>
           <LikeCount>{data.viewCount}</LikeCount>
           {data.status === 2 ? (
             <>
               <Icons>
-                <IconImg src={textbox} />
+                <IconImg src={textbox} alt='' />
               </Icons>
               <LikeCount>{data.commentCount}</LikeCount>
             </>
@@ -152,7 +155,7 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
           {data.status === 2 ? (
             <>
               <Icons>
-                <IconImg src={favorite} />
+                <IconImg src={favorite} alt=''/>
               </Icons>
               <LikeCount>{smallLikeBtn}</LikeCount>
             </>

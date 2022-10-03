@@ -143,12 +143,6 @@ const CompleteDetail = () => {
     window.location.replace('/CompList');
   };
 
-  ///////////////////////
-  // save image
-  const saveImg = () => {
-    if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
-  };
-
   return (
     <>
       {myContext.commetApplyBtn ? (
@@ -212,7 +206,6 @@ const CompleteDetail = () => {
                   href={`${baseURL}/download?postId=${Number(
                     params.id
                   )}&fileName=${gif.gifUrl}`}
-                  onClick={saveImg}
                 >
                   <DownloadImg />
                 </a>
@@ -540,7 +533,7 @@ const CommentInput = styled.textarea`
   border: 2px solid #e6e6e6;
   font-size: 14px;
   resize: none;
-  &:focus{
+  &:focus {
     outline: none;
   }
 `;

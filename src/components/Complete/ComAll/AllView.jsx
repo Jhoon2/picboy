@@ -3,43 +3,41 @@ import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import Loadings from '../../global/Loading';
-import Report from '../../elem/Report';
-import Listprofile from '../../elem/Listprofile';
-import instance from '../../shared/apis';
-import Like from '../../elem/Like';
-import { useMyContext } from '../../shared/ContextApi';
-import downBef from '../../images/Com/downBef.svg';
-import downAft from '../../images/Com/downAft.svg';
-import userView from '../../images/Com/userView.svg';
-import userLike from '../../images/Com/userLike.svg';
-import userComm from '../../images/Com/userComm.svg';
-import { pop3PB } from '../../global/sound';
 
-const All = () => {
+import Report from '../../../elem/Report';
+import Listprofile from '../../../elem/Listprofile';
+import Like from '../../../elem/Like';
+import { getCookieToken } from '../../../shared/Cookie';
+import downBef from '../../../images/Com/downBef.svg';
+import downAft from '../../../images/Com/downAft.svg';
+import userView from '../../../images/Com/userView.svg';
+import userLike from '../../../images/Com/userLike.svg';
+import userComm from '../../../images/Com/userComm.svg';
+import { pop3PB } from '../../../global/sound';
+
+const AllView = () => {
   const navigate = useNavigate();
+  const [newData, setNewdata] = useState([]);
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
-  const [newData, setNewdata] = useState([]);
   const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
-  const myContext = useMyContext();
-  const [smallLikeBtn, setSmallLikeBtn] = useState();
+  const token = getCookieToken();
 
   const getCompleteData = async () => {
     setLoad(true);
     try {
-      const { data } = await instance.get(
-        `${baseURL}/post/gif/0/1?page=${page}&size=6`
+      const { data } = await axios.get(
+        `${baseURL}/post/gif/0/4?page=${page}&size=6`
       );
       if (!data) {
         return;
       }
-
       setNewdata(newData.concat(data.data.content));
     } catch (error) {
       console.log(error);
     }
+
     setLoad(false);
   };
 
@@ -72,7 +70,6 @@ const All = () => {
     }
     return () => observer && observer.disconnect();
   }, [ref]);
-
   return (
     <ListBox>
       {/* {load === true ? <Loadings /> : null} */}
@@ -96,14 +93,24 @@ const All = () => {
                         <Keyword> {item?.topic}</Keyword>
                       )}
                     </DescBox>
-                    <a
-                      href={`${baseURL}/download?postId=${item.id}&fileName=${item.gifUrl}`}
-                      download="free"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Download />
-                    </a>
-                    <Like item={item} smallLikeBtn={smallLikeBtn} />
+                    {token ? (
+                      <a
+                        href={`${baseURL}/download?postId=${item.id}&fileName=${item.gifUrl}`}
+                        download="free"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Download />
+                      </a>
+                    ) : (
+                      <a
+                        href={`${baseURL}/download?postId=${item.id}&fileName=${item.gifUrl}`}
+                        download="free"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <BefDownload />
+                      </a>
+                    )}
+                    <Like item={item} />
                   </DescBox>
                 </Overlay>
               </OverlayWrap>
@@ -146,7 +153,7 @@ const All = () => {
                     <DescText>999+</DescText>
                   ) : (
                     <DescText>
-                      <DescText> {item.likeCount}</DescText>
+                      <DescText> {item?.likeCount}</DescText>
                     </DescText>
                   )}
                 </LikeBox>
@@ -162,7 +169,7 @@ const All = () => {
   );
 };
 
-export default All;
+export default AllView;
 
 const Width = styled.div`
   width: 350px;
@@ -219,6 +226,10 @@ const Download = styled.button`
   &:hover {
     background: url(${downAft});
   }
+`;
+
+const BefDownload = styled(Download)`
+  right: 20px;
 `;
 
 const OverlaySize = css`

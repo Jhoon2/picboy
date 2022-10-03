@@ -1,8 +1,6 @@
 import up from '../sound/up.mp3';
 import error from '../sound/error.mp3';
 import error1 from '../sound/error1.mp3';
-import error2 from '../sound/error2.mp3';
-import error3 from '../sound/error3.mp3';
 import button from '../sound/button.mp3';
 import headerbutton from '../sound/headerbutton.mp3';
 import menu from '../sound/menu.mp3';
@@ -18,8 +16,6 @@ import success2 from '../sound/success2.mp3';
 const upPB = new Audio(up);
 const errorPB = new Audio(error);
 const error1PB = new Audio(error1);
-const error2PB = new Audio(error2);
-const error3PB = new Audio(error3);
 const buttonPB = new Audio(button);
 const headerPB = new Audio(headerbutton);
 const popPB = new Audio(pop1);
@@ -36,8 +32,6 @@ export {
   upPB,
   errorPB,
   error1PB,
-  error2PB,
-  error3PB,
   buttonPB,
   headerPB,
   popPB,

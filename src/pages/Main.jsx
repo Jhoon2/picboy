@@ -56,6 +56,7 @@ const Main = () => {
       <Thunder />
       <Start>PRESS START...</Start>
       <DownScroll
+        aria-label="down scroll"
         onClick={() => {
           buttonPB.play();
           handlesMove();
