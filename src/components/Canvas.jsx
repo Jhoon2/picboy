@@ -6,23 +6,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addImgUrl } from '../redux/modules/CanvasSlice';
 
 // image import
-import paint from '../images/paint.png';
-import pen from '../images/pen.png';
-import eraser from '../images/eraser.png';
-import rectangle from '../images/rectangle.png';
-import line from '../images/line.png';
-import circle from '../images/circle.png';
-import undo from '../images/undo.png';
-import redo from '../images/redo.png';
-import stroke from '../images/stroke.png';
-import waterdrop from '../images/waterdrop.png';
-import CanvasArticle from '../images/canvas-top-article.png';
-import line6 from '../images/line6.png';
-import line8 from '../images/line8.png';
-import line10 from '../images/line10.png';
-import line12 from '../images/line12.png';
-import Frame from '../images/canvas-frame.png';
-import RangeBg from '../images/range-bg.png';
+import paint from '../images/canvas/paint.png';
+import pen from '../images/canvas/pen.png';
+import eraser from '../images/canvas/eraser.png';
+import rectangle from '../images/canvas/rectangle.png';
+import line from '../images/canvas/line.png';
+import circle from '../images/canvas/circle.png';
+import undo from '../images/canvas/undo.png';
+import redo from '../images/canvas/redo.png';
+import stroke from '../images/canvas/stroke.png';
+import waterdrop from '../images/canvas/waterdrop.png';
+import CanvasArticle from '../images/canvas/canvas-top-article.png';
+import line6 from '../images/canvas/line6.png';
+import line8 from '../images/canvas/line8.png';
+import line10 from '../images/canvas/line10.png';
+import line12 from '../images/canvas/line12.png';
+import Frame from '../images/canvas/canvas-frame.png';
+import RangeBg from '../images/canvas/range-bg.png';
 
 const Canvas = () => {
   const dispatch = useDispatch();
