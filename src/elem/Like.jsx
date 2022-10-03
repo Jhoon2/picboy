@@ -11,7 +11,7 @@ const Like = ({ item }) => {
   const [smallLikeBtn, setSmallLikeBtn] = useState(
     item.likeCount && item.likeCount
   );
-  const accessToken = getCookieToken();
+  const token = getCookieToken();
 
   useEffect(() => {
     setSmallLikeBtn(item.likeCount && item.likeCount);
@@ -31,7 +31,9 @@ const Like = ({ item }) => {
 
   return (
     <>
-      <Likebutton src={likePlus ? likeAft : likeBef} onClick={clickLikeBtn} />
+      {token ? (
+        <Likebutton src={likePlus ? likeAft : likeBef} onClick={clickLikeBtn} />
+      ) : null}
     </>
   );
 };

@@ -8,6 +8,7 @@ import Report from '../../elem/Report';
 import Listprofile from '../../elem/Listprofile';
 import instance from '../../shared/apis';
 import Like from '../../elem/Like';
+import { getCookieToken } from '../../shared/Cookie';
 import { useMyContext } from '../../shared/ContextApi';
 import downBef from '../../images/Com/downBef.svg';
 import downAft from '../../images/Com/downAft.svg';
@@ -25,6 +26,7 @@ const All = () => {
   const baseURL = process.env.REACT_APP_API_KEY;
   const myContext = useMyContext();
   const [smallLikeBtn, setSmallLikeBtn] = useState();
+  const token = getCookieToken();
 
   const getCompleteData = async () => {
     setLoad(true);
@@ -96,13 +98,23 @@ const All = () => {
                         <Keyword> {item?.topic}</Keyword>
                       )}
                     </DescBox>
-                    <a
-                      href={`${baseURL}/download?postId=${item.id}&fileName=${item.gifUrl}`}
-                      download="free"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Download />
-                    </a>
+                    {token ? (
+                      <a
+                        href={`${baseURL}/download?postId=${item.id}&fileName=${item.gifUrl}`}
+                        download="free"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Download />
+                      </a>
+                    ) : (
+                      <a
+                        href={`${baseURL}/download?postId=${item.id}&fileName=${item.gifUrl}`}
+                        download="free"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <BefDownload />
+                      </a>
+                    )}
                     <Like item={item} smallLikeBtn={smallLikeBtn} />
                   </DescBox>
                 </Overlay>
@@ -219,6 +231,10 @@ const Download = styled.button`
   &:hover {
     background: url(${downAft});
   }
+`;
+
+const BefDownload = styled(Download)`
+  right: 20px;
 `;
 
 const OverlaySize = css`
