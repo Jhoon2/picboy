@@ -143,7 +143,6 @@ const CompleteDetail = () => {
     window.location.replace('/CompList');
   };
 
-
   return (
     <>
       {myContext.commetApplyBtn ? (
@@ -534,7 +533,7 @@ const CommentInput = styled.textarea`
   border: 2px solid #e6e6e6;
   font-size: 14px;
   resize: none;
-  &:focus{
+  &:focus {
     outline: none;
   }
 `;
