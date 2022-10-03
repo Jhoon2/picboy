@@ -15,7 +15,7 @@ import vacantState from '../elem/vacantStateCanvas';
 import Canvas from '../components/Canvas';
 
 // image import
-import modeIc from '../images/pen.png';
+import modeIc from '../images/canvas/pen.png';
 import CanvasOptionArticle from '../images/canvas-option-top-article.png';
 import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/canvas-bottom-bg.png';
