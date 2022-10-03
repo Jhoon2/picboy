@@ -113,6 +113,7 @@ const Notification = () => {
   return (
     <div ref={node}>
       <NotifiImg
+        aria-label="button"
         onClick={() => {
           setSelect(!select);
           dispatch(__readAllnoti());

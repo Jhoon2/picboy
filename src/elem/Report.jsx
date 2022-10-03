@@ -6,18 +6,20 @@ import { useSelector } from 'react-redux';
 import { __postReport } from '../redux/modules/Report';
 import reportBef from '../images/Com/reportBef.svg';
 import reportAft from '../images/Com/reportAft.svg';
+import { getCookieToken } from '../shared/Cookie';
 
 const Report = ({ item }) => {
   const dispatch = useDispatch();
   const [select, setSelect] = useState(false);
   const [text, setText] = useState(false);
-  const [toggleDeclar, setToggleDecla] = useState(item.reported)
+  const [toggleDeclar, setToggleDecla] = useState(item.reported);
+  const token = getCookieToken();
 
-  const { reports } = useSelector((state) => state.reports)
+  const { reports } = useSelector((state) => state.reports);
   const id = item.id;
-  
+
   function onReport() {
-    setToggleDecla(!toggleDeclar)
+    setToggleDecla(!toggleDeclar);
     dispatch(__postReport(id));
   }
 
@@ -39,9 +41,11 @@ const Report = ({ item }) => {
   return (
     <div ref={node}>
       <SelectBox>
-        <Select>
-          <div onClick={() => setSelect(!select)}>...</div>
-        </Select>
+        {token ? (
+          <Select>
+            <div onClick={() => setSelect(!select)}>...</div>
+          </Select>
+        ) : null}
       </SelectBox>
       <SelectListBox>
         {select && (
