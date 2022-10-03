@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { getCookieToken } from '../shared/Cookie';
+import AnyModal from './AnyModal';
 import basicimage from '../images/mypage/basicImg.png';
 import personBef from '../images/listCategory/PersonBef.svg';
 import personAft from '../images/listCategory/PersonAft.svg';
@@ -11,6 +13,7 @@ const Listprofile = ({ item }) => {
   const [select, setSelect] = useState(false);
   const userList = item?.participantResponseDtoList;
   const id = item.id;
+  const token = getCookieToken();
 
   const node = useRef();
   useEffect(() => {
@@ -49,25 +52,9 @@ const Listprofile = ({ item }) => {
         {select && (
           <SelectList>
             <ul>
-              <Title>최초 작성자</Title>
-              <UserBox
-                key={uuidv4()}
-                onClick={() => {
-                  navigate(`/user-profile/${item.username}`);
-                }}
-              >
-                {item.profileImg === null ? (
-                  <Userimage img={basicimage} />
-                ) : (
-                  <Userimage img={item.profileImg} />
-                )}
-                <Username>{item.nickname.slice(0,8)}</Username>
-                <UserGo />
-              </UserBox>
-              <HR />
-              <Title>참여자</Title>
-              <>
-                {userList?.map((item, index) => (
+              {token ? (
+                <>
+                  <Title>최초 작성자</Title>
                   <UserBox
                     key={uuidv4()}
                     onClick={() => {
@@ -79,11 +66,59 @@ const Listprofile = ({ item }) => {
                     ) : (
                       <Userimage img={item.profileImg} />
                     )}
-                    <Username>{item.nickname.slice(0,8)}</Username>
+                    <Username>{item.nickname.slice(0, 8)}</Username>
                     <UserGo />
                   </UserBox>
-                ))}
-              </>
+                  <HR />
+                  <Title>참여자</Title>
+                  <>
+                    {userList?.map((item, index) => (
+                      <UserBox
+                        key={uuidv4()}
+                        onClick={() => {
+                          navigate(`/user-profile/${item.username}`);
+                        }}
+                      >
+                        {item.profileImg === null ? (
+                          <Userimage img={basicimage} />
+                        ) : (
+                          <Userimage img={item.profileImg} />
+                        )}
+                        <Username>{item.nickname.slice(0, 8)}</Username>
+                        <UserGo />
+                      </UserBox>
+                    ))}
+                  </>
+                </>
+              ) : (
+                <>
+                  <Title>최초 작성자</Title>
+                  <UserBox key={uuidv4()}>
+                    {item.profileImg === null ? (
+                      <Userimage img={basicimage} />
+                    ) : (
+                      <Userimage img={item.profileImg} />
+                    )}
+                    <Username>{item.nickname.slice(0, 8)}</Username>
+                    <UserGo />
+                  </UserBox>
+                  <HR />
+                  <Title>참여자</Title>
+                  <>
+                    {userList?.map((item, index) => (
+                      <UserBox key={uuidv4()}>
+                        {item.profileImg === null ? (
+                          <Userimage img={basicimage} />
+                        ) : (
+                          <Userimage img={item.profileImg} />
+                        )}
+                        <Username>{item.nickname.slice(0, 8)}</Username>
+                        <UserGo />
+                      </UserBox>
+                    ))}
+                  </>
+                </>
+              )}
             </ul>
           </SelectList>
         )}
@@ -96,6 +131,17 @@ export default Listprofile;
 
 const HR = styled.hr`
   border: none;
+`;
+
+const Login = styled.div`
+  margin: auto;
+  font-family: 'NotoBold';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 180%;
+  letter-spacing: -0.02em;
+  color: #a3a3a3;
+  font-size: 13px;
 `;
 
 const ProfileBox = styled.div`

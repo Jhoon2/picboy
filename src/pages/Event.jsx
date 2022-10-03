@@ -22,7 +22,7 @@ const Event = () => {
         <Icon6 />
         <Title1 />
         <Fade bottom>
-          <Button>
+          <Button type="button">
             <a
               target="_blank"
               href="https://docs.google.com/forms/d/e/1FAIpQLSfnDqAdAXNB4BDkT5pHCx0xfS-mEjMH6UO4mD-DsHvFp5vldw/viewform"

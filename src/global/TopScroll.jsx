@@ -45,6 +45,7 @@ const TopScroll = () => {
     <>
       {BtnStatus ? (
         <TopScrolls
+          aria-label="top scroll"
           onClick={() => {
             handleTop();
             upPB.play();

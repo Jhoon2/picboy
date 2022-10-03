@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../shared/apis'
-
+import api from '../../shared/apis';
 
 export const __getBest = createAsyncThunk(
   'getBest',
