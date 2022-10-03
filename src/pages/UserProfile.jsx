@@ -143,7 +143,7 @@ const UserProfile = () => {
       <EditDone onClick={completeBtn}>
         <div style={{ width: '100px', height: '100px', marginLeft: '-10px' }}>
           <PenContainer style={{ backgroundColor: 'black' }}>
-            <PenImg style={{ backgroundColor: 'black' }} src={editPencil} />
+            <PenImg style={{ backgroundColor: 'black' }} src={editPencil} alt=''/>
           </PenContainer>
         </div>
       </EditDone>
@@ -199,6 +199,7 @@ const UserProfile = () => {
           <ProfileContainer>
             <ProfileInner>
               <ProfileImage
+                alt=''
                 src={
                   UserPage && UserPage.profilImg ? UserPage.profilImg : basicImg
                 }
@@ -208,7 +209,7 @@ const UserProfile = () => {
               UserPage?.username === userinfo?.data?.data?.username ? (
                 <CameraBox>
                   <CameraContainer>
-                    <CameraImg src={camera} />
+                    <CameraImg src={camera} alt=''/>
                   </CameraContainer>
                 </CameraBox>
               ) : null}

@@ -145,9 +145,9 @@ const CompleteDetail = () => {
 
   ///////////////////////
   // save image
-  const saveImg = () => {
-    if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
-  };
+  // const saveImg = () => {
+    // if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
+  // };
 
   return (
     <>
@@ -212,7 +212,6 @@ const CompleteDetail = () => {
                   href={`${baseURL}/download?postId=${Number(
                     params.id
                   )}&fileName=${gif.gifUrl}`}
-                  onClick={saveImg}
                 >
                   <DownloadImg />
                 </a>

@@ -52,6 +52,8 @@ const Header = () => {
         `/validate`
       );
       setValiData(response)
+      if(response?.data?.data?.validate !== 0) return 
+      dispatch(__getLogonUser( response?.data?.data?.validate));
     } catch (error) {
       console.log(error);
     }
@@ -59,8 +61,7 @@ const Header = () => {
 
   //처음 불러오기
   useEffect(() => {
-    dispatch(__getLogonUser());
-    validate();
+    validate();   
   }, []);
 
   const navigate = useNavigate();
@@ -101,6 +102,7 @@ const Header = () => {
             }}
           ></Logo>
           <ProceedingButton
+            type='button'
             onClick={() => {
               navigate('/list');
               headerPB.play();
@@ -109,6 +111,7 @@ const Header = () => {
             PROGRESS
           </ProceedingButton>
           <CompleteButton
+            type='button'
             onClick={() => {
               navigate('/CompList');
               headerPB.play();
@@ -118,6 +121,7 @@ const Header = () => {
           </CompleteButton>
           <Box>
             <EventButton
+              type='button'
               onClick={() => {
                 navigate('/event');
                 headerPB.play();
