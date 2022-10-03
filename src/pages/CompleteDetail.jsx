@@ -20,7 +20,7 @@ import BgTop from '../images/complete-detail-bg-top.png';
 import BgBottom from '../images/complete-detail-bg-bottom.png';
 import clickDownload from '../images/clickDownload.png';
 // components
-import CommentBox from '../components/completeDetail/CommentBox';
+import CommentBox from '../components/CompleteDetail/CommentBox';
 import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
 
@@ -143,11 +143,6 @@ const CompleteDetail = () => {
     window.location.replace('/CompList');
   };
 
-  ///////////////////////
-  // save image
-  // const saveImg = () => {
-    // if (accessToken === undefined) return myContext.setCommetApplyBtn(true);
-  // };
 
   return (
     <>

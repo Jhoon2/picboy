@@ -3,19 +3,19 @@ import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import Loadings from '../../global/Loading';
-import Report from '../../elem/Report';
-import Listprofile from '../../elem/Listprofile';
-import Like from '../../elem/Like';
-import { getCookieToken } from '../../shared/Cookie';
-import downBef from '../../images/Com/downBef.svg';
-import downAft from '../../images/Com/downAft.svg';
-import userView from '../../images/Com/userView.svg';
-import userLike from '../../images/Com/userLike.svg';
-import userComm from '../../images/Com/userComm.svg';
-import { pop3PB } from '../../global/sound';
 
-const FreeComm = () => {
+import Report from '../../../elem/Report';
+import Listprofile from '../../../elem/Listprofile';
+import Like from '../../../elem/Like';
+import { getCookieToken } from '../../../shared/Cookie';
+import downBef from '../../../images/Com/downBef.svg';
+import downAft from '../../../images/Com/downAft.svg';
+import userView from '../../../images/Com/userView.svg';
+import userLike from '../../../images/Com/userLike.svg';
+import userComm from '../../../images/Com/userComm.svg';
+import { pop3PB } from '../../../global/sound';
+
+const FreeView = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
@@ -28,7 +28,7 @@ const FreeComm = () => {
     setLoad(true);
     try {
       const { data } = await axios.get(
-        `${baseURL}/post/gif/2/3?page=${page}&size=6`
+        `${baseURL}/post/gif/2/4?page=${page}&size=6`
       );
       if (!data) {
         return;
@@ -44,12 +44,6 @@ const FreeComm = () => {
   useEffect(() => {
     getCompleteData();
   }, [page]);
-
-  useEffect(() => {
-    window.onbeforeunload = function pushRefresh() {
-      window.scrollTo(0, 0);
-    };
-  }, []);
 
   const options = {
     rootMargin: '30px',
@@ -76,7 +70,6 @@ const FreeComm = () => {
     }
     return () => observer && observer.disconnect();
   }, [ref]);
-
   return (
     <ListBox>
       {/* {load === true ? <Loadings /> : null} */}
@@ -172,7 +165,7 @@ const FreeComm = () => {
   );
 };
 
-export default FreeComm;
+export default FreeView;
 
 const Width = styled.div`
   width: 350px;

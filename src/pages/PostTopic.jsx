@@ -9,7 +9,6 @@ import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
 import api from '../shared/apis';
 import instance from '../shared/apis';
-import vacantState from '../elem/vacantStateCanvas';
 import Canvas from '../components/Canvas';
 
 // image import

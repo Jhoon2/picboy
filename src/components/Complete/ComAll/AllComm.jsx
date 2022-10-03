@@ -1,25 +1,25 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import Loadings from '../../global/Loading';
-import Report from '../../elem/Report';
-import Listprofile from '../../elem/Listprofile';
-import Like from '../../elem/Like';
-import { getCookieToken } from '../../shared/Cookie';
-import downBef from '../../images/Com/downBef.svg';
-import downAft from '../../images/Com/downAft.svg';
-import userView from '../../images/Com/userView.svg';
-import userLike from '../../images/Com/userLike.svg';
-import userComm from '../../images/Com/userComm.svg';
-import { pop3PB } from '../../global/sound';
 
-const FreeNew = () => {
+import Report from '../../../elem/Report';
+import Listprofile from '../../../elem/Listprofile';
+import Like from '../../../elem/Like';
+import { getCookieToken } from '../../../shared/Cookie';
+import downBef from '../../../images/Com/downBef.svg';
+import downAft from '../../../images/Com/downAft.svg';
+import userView from '../../../images/Com/userView.svg';
+import userLike from '../../../images/Com/userLike.svg';
+import userComm from '../../../images/Com/userComm.svg';
+import { pop3PB } from '../../../global/sound';
+
+const Free = () => {
   const navigate = useNavigate();
+  const [newData, setNewdata] = useState([]);
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
-  const [newData, setNewdata] = useState([]);
   const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
   const token = getCookieToken();
@@ -28,7 +28,7 @@ const FreeNew = () => {
     setLoad(true);
     try {
       const { data } = await axios.get(
-        `${baseURL}/post/gif/2/1?page=${page}&size=6`
+        `${baseURL}/post/gif/0/3?page=${page}&size=6`
       );
       if (!data) {
         return;
@@ -44,12 +44,6 @@ const FreeNew = () => {
   useEffect(() => {
     getCompleteData();
   }, [page]);
-
-  useEffect(() => {
-    window.onbeforeunload = function pushRefresh() {
-      window.scrollTo(0, 0);
-    };
-  }, []);
 
   const options = {
     rootMargin: '30px',
@@ -94,7 +88,11 @@ const FreeNew = () => {
                 >
                   <DescBox>
                     <DescBox>
-                      <Keyword> FREE</Keyword>
+                      {item?.topic === null ? (
+                        <Keyword>FREE</Keyword>
+                      ) : (
+                        <Keyword> {item?.topic}</Keyword>
+                      )}
                     </DescBox>
                     {token ? (
                       <a
@@ -113,6 +111,7 @@ const FreeNew = () => {
                         <BefDownload />
                       </a>
                     )}
+
                     <Like item={item} />
                   </DescBox>
                 </Overlay>
@@ -172,7 +171,7 @@ const FreeNew = () => {
   );
 };
 
-export default FreeNew;
+export default Free;
 
 const Width = styled.div`
   width: 350px;
@@ -201,18 +200,6 @@ const DescBox = styled(Width)`
   height: 110px;
   ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
   position: relative;
-`;
-
-const Button = styled.button`
-  width: 40px;
-  height: 40px;
-`;
-
-const Profile = styled(Button)`
-  margin-right: 15px;
-  border-radius: 50%;
-  background: url(${(props) => props.img});
-  ${({ theme }) => theme.backgroundSet('cover')};
 `;
 
 const Span = styled.span`
@@ -257,7 +244,6 @@ const Overlay = styled.div`
   margin-top: 100%;
   height: 300px;
   background: white;
-
   cursor: pointer;
   background: linear-gradient(
     360deg,

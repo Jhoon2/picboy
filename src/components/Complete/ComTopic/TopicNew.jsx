@@ -3,19 +3,19 @@ import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import Loadings from '../../global/Loading';
-import Report from '../../elem/Report';
-import Listprofile from '../../elem/Listprofile';
-import Like from '../../elem/Like';
-import { getCookieToken } from '../../shared/Cookie';
-import downBef from '../../images/Com/downBef.svg';
-import downAft from '../../images/Com/downAft.svg';
-import userView from '../../images/Com/userView.svg';
-import userLike from '../../images/Com/userLike.svg';
-import userComm from '../../images/Com/userComm.svg';
-import { pop3PB } from '../../global/sound';
 
-const TopicComm = () => {
+import Report from '../../../elem/Report';
+import Listprofile from '../../../elem/Listprofile';
+import Like from '../../../elem/Like';
+import { getCookieToken } from '../../../shared/Cookie';
+import downBef from '../../../images/Com/downBef.svg';
+import downAft from '../../../images/Com/downAft.svg';
+import userView from '../../../images/Com/userView.svg';
+import userLike from '../../../images/Com/userLike.svg';
+import userComm from '../../../images/Com/userComm.svg';
+import { pop3PB } from '../../../global/sound';
+
+const TopicNew = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
@@ -28,7 +28,7 @@ const TopicComm = () => {
     setLoad(true);
     try {
       const { data } = await axios.get(
-        `${baseURL}/post/gif/1/3?page=${page}&size=6`
+        `${baseURL}/post/gif/1/1?page=${page}&size=6`
       );
       if (!data) {
         return;
@@ -73,7 +73,6 @@ const TopicComm = () => {
 
   return (
     <ListBox>
-      {/* {load === true ? <Loadings /> : null} */}
       {newData.map((item, index) => {
         return (
           <BestBox key={uuidv4()}>
@@ -166,7 +165,7 @@ const TopicComm = () => {
   );
 };
 
-export default TopicComm;
+export default TopicNew;
 
 const Width = styled.div`
   width: 350px;
