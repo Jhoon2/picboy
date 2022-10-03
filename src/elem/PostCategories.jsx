@@ -1,14 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import styled, { css } from 'styled-components';
 import '../elem/Down.css';
 import Down from '../elem/Down';
+import { __getLogonUser } from '../redux/modules/UserPage';
+
 import TopicBef from '../images/listCategory/TopicBef.svg';
 import TopicAft from '../images/listCategory/TopicAft.svg';
 import FreeBef from '../images/listCategory/Freebef.svg';
 import FreeAft from '../images/listCategory/FreeAft.svg';
 import right from '../images/right.png';
-import UseGetUser from '../hooks/UseGetUser';
+// import UseGetUser from '../hooks/UseGetUser';
 import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
 import { headerPB, coinPB } from '../global/sound';
@@ -17,7 +21,10 @@ const Categories = () => {
   const navigate = useNavigate();
   const myContext = useMyContext();
 
-  const logonUser = UseGetUser();
+  // const logonUser = UseGetUser();
+  const dispatch = useDispatch();
+  const getLogonUser = useSelector((state) => state?.logonUser);
+  const logonUser = getLogonUser?.logonUser;
   const [select, setSelect] = useState(false);
 
   const moveTopic = () => {
@@ -34,6 +41,7 @@ const Categories = () => {
   //모달창 닫기
   const node = useRef();
   useEffect(() => {
+    dispatch(__getLogonUser());
     const clickOutside = (e) => {
       if (select && node.current && !node.current.contains(e.target)) {
         setSelect(false);
