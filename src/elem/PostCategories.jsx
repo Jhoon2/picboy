@@ -23,8 +23,9 @@ const Categories = () => {
 
   // const logonUser = UseGetUser();
   const dispatch = useDispatch();
-  const getLogonUser = useSelector((state) => state?.logonUser);
-  const logonUser = getLogonUser?.logonUser;
+  const getLogonUser = useSelector((state) => state.logonUser);
+
+  const logonUser = getLogonUser && getLogonUser.logonUser;
   const [select, setSelect] = useState(false);
 
   const moveTopic = () => {

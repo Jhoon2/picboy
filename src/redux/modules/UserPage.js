@@ -7,7 +7,7 @@ import api from '../../shared/apis'
 export const __getLogonUser = createAsyncThunk(
   'logon/getLogonUser',
   async (payload, thunkAPI) => {
-    if(payload !== 0) return
+    // if(payload !== 0) return
     try { 
       const response = await instance.get('/main/user-info')
       return thunkAPI.fulfillWithValue(response.data.data);
