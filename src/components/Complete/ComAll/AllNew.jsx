@@ -1,43 +1,46 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Loadings from '../../global/Loading';
-import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import Report from '../../elem/Report';
-import Listprofile from '../../elem/Listprofile';
-import Like from '../../elem/Like';
-import { getCookieToken } from '../../shared/Cookie';
-import downBef from '../../images/Com/downBef.svg';
-import downAft from '../../images/Com/downAft.svg';
-import userView from '../../images/Com/userView.svg';
-import userLike from '../../images/Com/userLike.svg';
-import userComm from '../../images/Com/userComm.svg';
-import { pop3PB } from '../../global/sound';
 
-const Topic = () => {
+import Report from '../../../elem/Report';
+import Listprofile from '../../../elem/Listprofile';
+import instance from '../../../shared/apis';
+import Like from '../../../elem/Like';
+import { getCookieToken } from '../../../shared/Cookie';
+import { useMyContext } from '../../../shared/ContextApi';
+import downBef from '../../../images/Com/downBef.svg';
+import downAft from '../../../images/Com/downAft.svg';
+import userView from '../../../images/Com/userView.svg';
+import userLike from '../../../images/Com/userLike.svg';
+import userComm from '../../../images/Com/userComm.svg';
+import { pop3PB } from '../../../global/sound';
+
+const All = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
   const [newData, setNewdata] = useState([]);
   const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
+  const myContext = useMyContext();
+  const [smallLikeBtn, setSmallLikeBtn] = useState();
   const token = getCookieToken();
 
   const getCompleteData = async () => {
     setLoad(true);
     try {
-      const { data } = await axios.get(
-        `${baseURL}/post/gif/0/2?page=${page}&size=6`
+      const { data } = await instance.get(
+        `${baseURL}/post/gif/0/1?page=${page}&size=6`
       );
       if (!data) {
         return;
       }
+
       setNewdata(newData.concat(data.data.content));
     } catch (error) {
       console.log(error);
     }
-
     setLoad(false);
   };
 
@@ -111,7 +114,7 @@ const Topic = () => {
                         <BefDownload />
                       </a>
                     )}
-                    <Like item={item} />
+                    <Like item={item} smallLikeBtn={smallLikeBtn} />
                   </DescBox>
                 </Overlay>
               </OverlayWrap>
@@ -154,7 +157,7 @@ const Topic = () => {
                     <DescText>999+</DescText>
                   ) : (
                     <DescText>
-                      <DescText> {item?.likeCount}</DescText>
+                      <DescText> {item.likeCount}</DescText>
                     </DescText>
                   )}
                 </LikeBox>
@@ -170,7 +173,7 @@ const Topic = () => {
   );
 };
 
-export default Topic;
+export default All;
 
 const Width = styled.div`
   width: 350px;

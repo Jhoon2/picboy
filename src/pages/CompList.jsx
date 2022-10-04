@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Grid from '../styles/Grid';
-import CompAll from '../components/CompAll';
-import CompTopic from '../components/CompTopic';
-import CompFree from '../components/CompFree';
+import CompAll from '../components/Complete/CompAll';
+import CompTopic from '../components/Complete/CompTopic';
+import CompFree from '../components/Complete/CompFree';
 import CompleteBanner from '../elem/CompleteBanner';
 import TopScroll from '../global/TopScroll';
 import footer from '../images/Com/footer.svg';

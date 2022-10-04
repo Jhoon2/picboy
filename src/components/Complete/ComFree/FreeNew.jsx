@@ -1,53 +1,55 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import Loadings from '../../global/Loading';
-import Report from '../../elem/Report';
-import Listprofile from '../../elem/Listprofile';
-import instance from '../../shared/apis';
-import Like from '../../elem/Like';
-import { getCookieToken } from '../../shared/Cookie';
-import { useMyContext } from '../../shared/ContextApi';
-import downBef from '../../images/Com/downBef.svg';
-import downAft from '../../images/Com/downAft.svg';
-import userView from '../../images/Com/userView.svg';
-import userLike from '../../images/Com/userLike.svg';
-import userComm from '../../images/Com/userComm.svg';
-import { pop3PB } from '../../global/sound';
 
-const All = () => {
+import Report from '../../../elem/Report';
+import Listprofile from '../../../elem/Listprofile';
+import Like from '../../../elem/Like';
+import { getCookieToken } from '../../../shared/Cookie';
+import downBef from '../../../images/Com/downBef.svg';
+import downAft from '../../../images/Com/downAft.svg';
+import userView from '../../../images/Com/userView.svg';
+import userLike from '../../../images/Com/userLike.svg';
+import userComm from '../../../images/Com/userComm.svg';
+import { pop3PB } from '../../../global/sound';
+
+const FreeNew = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(0);
   const [load, setLoad] = useState(false);
   const [newData, setNewdata] = useState([]);
   const [ref, setRef] = useState(null);
   const baseURL = process.env.REACT_APP_API_KEY;
-  const myContext = useMyContext();
-  const [smallLikeBtn, setSmallLikeBtn] = useState();
   const token = getCookieToken();
 
   const getCompleteData = async () => {
     setLoad(true);
     try {
-      const { data } = await instance.get(
-        `${baseURL}/post/gif/0/1?page=${page}&size=6`
+      const { data } = await axios.get(
+        `${baseURL}/post/gif/2/1?page=${page}&size=6`
       );
       if (!data) {
         return;
       }
-
       setNewdata(newData.concat(data.data.content));
     } catch (error) {
       console.log(error);
     }
+
     setLoad(false);
   };
 
   useEffect(() => {
     getCompleteData();
   }, [page]);
+
+  useEffect(() => {
+    window.onbeforeunload = function pushRefresh() {
+      window.scrollTo(0, 0);
+    };
+  }, []);
 
   const options = {
     rootMargin: '30px',
@@ -92,11 +94,7 @@ const All = () => {
                 >
                   <DescBox>
                     <DescBox>
-                      {item?.topic === null ? (
-                        <Keyword>FREE</Keyword>
-                      ) : (
-                        <Keyword> {item?.topic}</Keyword>
-                      )}
+                      <Keyword> FREE</Keyword>
                     </DescBox>
                     {token ? (
                       <a
@@ -115,7 +113,7 @@ const All = () => {
                         <BefDownload />
                       </a>
                     )}
-                    <Like item={item} smallLikeBtn={smallLikeBtn} />
+                    <Like item={item} />
                   </DescBox>
                 </Overlay>
               </OverlayWrap>
@@ -158,7 +156,7 @@ const All = () => {
                     <DescText>999+</DescText>
                   ) : (
                     <DescText>
-                      <DescText> {item.likeCount}</DescText>
+                      <DescText> {item?.likeCount}</DescText>
                     </DescText>
                   )}
                 </LikeBox>
@@ -174,7 +172,7 @@ const All = () => {
   );
 };
 
-export default All;
+export default FreeNew;
 
 const Width = styled.div`
   width: 350px;
@@ -203,6 +201,18 @@ const DescBox = styled(Width)`
   height: 110px;
   ${({ theme }) => theme.flexSet('row', 'flex-start', 'center')}
   position: relative;
+`;
+
+const Button = styled.button`
+  width: 40px;
+  height: 40px;
+`;
+
+const Profile = styled(Button)`
+  margin-right: 15px;
+  border-radius: 50%;
+  background: url(${(props) => props.img});
+  ${({ theme }) => theme.backgroundSet('cover')};
 `;
 
 const Span = styled.span`
@@ -247,6 +257,7 @@ const Overlay = styled.div`
   margin-top: 100%;
   height: 300px;
   background: white;
+
   cursor: pointer;
   background: linear-gradient(
     360deg,

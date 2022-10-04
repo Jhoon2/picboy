@@ -12,7 +12,6 @@ import AnyModal from '../../elem/AnyModal';
 import basicImg from '../../images/mypage/basicImg.png';
 
 const CommentBox = ({ commentList, accessToken }) => {
-
   //로그인한 사람 정보
   const useGet = UseGetUser();
   const userNickname = useGet && useGet.data.data.nickname;
@@ -145,7 +144,7 @@ const CommentBox = ({ commentList, accessToken }) => {
     if (months < 12) return `${Math.floor(months)}개월 전`;
     const years = days / 365;
     return `${Math.floor(years)}년 전`;
-  }
+  };
 
   const nowDate = timeStamp(new Date(timeStamp.createdAt));
 

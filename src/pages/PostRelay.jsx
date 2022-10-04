@@ -10,7 +10,6 @@ import instance from '../shared/apis';
 import { useMyContext } from '../shared/ContextApi';
 import AnyModal from '../elem/AnyModal';
 import api from '../shared/apis'
-import vacantState from '../elem/vacantStateCanvas';
 import Canvas from '../components/Canvas';
 
 // image import
@@ -86,8 +85,6 @@ const PostRelay = () => {
       return clickErrorUser();
 
 
-    //캔버스 빈화면일 때 알림창
-    if (vacantState(canvas)) return clickErrorVacant();
     instance
       .post(
         `/post/relay/${params.id}`,
