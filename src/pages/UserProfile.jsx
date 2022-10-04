@@ -402,6 +402,7 @@ const TextContentContainer = styled.div`
 const TextContent = styled.div`
   width: 80px;
   height: 50px;
+  color: #868686;
   display: flex;
   font-size: ${(props) => props.theme.Caption3};
 `;

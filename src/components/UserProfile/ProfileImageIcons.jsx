@@ -1,7 +1,4 @@
 import React,{ useState } from 'react'
-import { useRef } from 'react'
-import { useDispatch } from 'react-redux'
-import { useMyContext } from '../../shared/ContextApi'
 import {__selectIconImg} from '../../redux/modules/UserPage'
 import styled from 'styled-components'
 import robot1 from '../../images/mypage/robot1.png'
@@ -20,7 +17,7 @@ import IconImages from './IconImages'
 
 const robotImages = [robot1, robot2, robot3, robot4, robot5, robot6];
 const clickedRobots = [robotClick1,robotClick2,robotClick3,robotClick4,robotClick5,robotClick6]
-const iconNames = ['소미', '영이', '후니', '호야', '우기', '거니']
+const iconNames = ['소미', '미니', '후니', '호야', '우기', '거니']
 
 const ProfileImageIcons = ({ shown, close, setSelectIcon }) => {
 

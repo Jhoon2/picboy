@@ -70,14 +70,14 @@ const ProfileImageModal = ({ shown, close, }) => {
               />
             <ModalText name='myPc' onClick={FromMyPc}  >
               <ImgTextContainer >
-                <div>내 PC에서 가져오기</div>
+                <div style={{color:'#868686'}}>내 PC에서 가져오기</div>
                 <img src={lightArrow} />
               </ImgTextContainer>
             </ModalText>
         </label>
             <TextBr />
           <ModalText name='select' onClick={clickSelect}
-            style={path? { color: '#000000', fontWeight:'700'} : {color:'#A3A3A3',fontWeight:'400'}}>
+            style={path? { color: '#000000', fontWeight:'700'} : {color:'#868686',fontWeight:'400'}}>
             <ImgTextContainer >
               <div >아이콘 고르기</div>
               <img src={path? arrow:lightArrow} />
@@ -86,7 +86,7 @@ const ProfileImageModal = ({ shown, close, }) => {
             <TextBr />
           <ModalText name='noImg' onClick={clickBasic}  >
             <ImgTextContainer >
-              <div>기본이미지로</div>
+              <div style={{color:'#868686'}}>기본이미지로</div>
               <img src={lightArrow} />
             </ImgTextContainer>
           </ModalText>
