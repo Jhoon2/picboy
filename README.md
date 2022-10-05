@@ -3,7 +3,7 @@
 
 ## ****<img src="https://user-images.githubusercontent.com/98306332/193816813-16147c60-328d-4658-9cf0-dc7b291ffdfd.png" width="25" margin="auto"/> 프로젝트 소개****
 - 저희가 기획한 PICBOY는 릴레이로 이어 그린다는 재미에 착안점을 두고 개발 되었습니다.<br>
-- 한사람이 의미없이 그린 그림에 누군가 다음 과정을 예측,상상하여 이어 그려나가 말도안되는 상황 풀이나, 절묘하게 잘 맞아 떨어지는 연계에서 오는 재미를 느낄수 있습니다.!
+- 한사람이 의미없이 그린 그림에 누군가 다음 과정을 예측,상상하여 이어 그려나가 말도안되는 상황 풀이나, 절묘하게 잘 맞아 떨어지는 연계에서 오는 재미를 느낄수 있습니다!
 <br>
 
 👾[PICBOY 바로가기](http://www.naver.com/)
@@ -109,13 +109,8 @@
 |Styled-Component|스타일 도구 방법(css-in-js, css ,sass) 중 styled-component(css-in-js)는 컴포넌트화로 스타일 시트의 파일을 유지보수 할 필요가 없고, javascript와 css 사이의 상수와 함수를 쉽게 공유, props를 활용한 조건부 스타일링이 가능하며, 재사용성이 강하고, 유니크한 클래스를 자동으로 생성하기 때문에 코드 경량화의 강점이 있기 때문에 사용하게 되었습니다.|
 
 
-
 <br>
 <br>
-<br>
-<br>
-
-
 
 
 ## ****<img src="https://user-images.githubusercontent.com/98306332/193816813-16147c60-328d-4658-9cf0-dc7b291ffdfd.png" width="25" margin="auto"/>  트러블 슈팅****
