@@ -18,7 +18,7 @@ const IconImages = ({ robot, clickRobot, idx, num, setNum,iconNames }) => {
     <IconCard>
       <IconImage id={idx} src={Number(num)=== idx ? clickRobot: robot} onClick={handleIconClick}>
     </IconImage>
-      <IconName style={Number(num)=== idx?{color:'black'} : {color:'#A3A3A3'}}>{iconNames}</IconName>
+      <IconName style={Number(num)=== idx?{color:'black'} : {color:'#868686'}}>{iconNames}</IconName>
     </IconCard>
   )
 }
