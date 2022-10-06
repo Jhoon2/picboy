@@ -17,6 +17,7 @@ const AnyModal = ({title, content, anyData}) => {
     myContext.setDecalrBtn(false)
     myContext.setDeclarCancel(false)
     myContext.setVacantCanvas(false)
+    myContext.setDeclarPerson(false)
   }
   return (
     <ErrorContainer onClick={(e) => { e.stopPropagation(); }}>
