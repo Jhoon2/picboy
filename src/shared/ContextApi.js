@@ -22,6 +22,9 @@ export const Context = (props) => {
     const signUpBtnClickOff = () => setSignUpBtn(false)
     const signUpBtnClickOn = () => setSignUpBtn(!signUpBtn)
 
+    //신고회원
+    const [DeclarPerson, setDeclarPerson] = React.useState(false)
+
     //모든 참가자 보기 모달창 관련
     const [allParticipants, setAllParticipants] = React.useState(false)
 
@@ -89,6 +92,10 @@ export const Context = (props) => {
             //로그아웃버튼
             logoutBtn,
             setLogoutBtn,
+
+            //신고된 유저 차단
+            DeclarPerson,
+            setDeclarPerson,
 
             // 모든 참가자 모달창
             allParticipants,
