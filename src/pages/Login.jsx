@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
-// import kakaoButton from '../images/kakao_login_medium_wide.png'
+import { KAKAO_AUTH_URL } from '../shared/Kakao_oauth'
 import api from '../shared/apis'
 import { setAccessToken, setRefreshToken } from '../shared/Cookie';
 import { useMyContext } from '../shared/ContextApi'
 import LoginErrorModal from '../components/login/LoginErrorModal'
-import { KAKAO_AUTH_URL } from '../shared/Kakao_oauth'
+import AnyModal from '../elem/AnyModal';
 
 //이미지
 import logo from '../images/logo.svg'
@@ -32,13 +32,16 @@ const Login = () => {
       password: data.password
     }
     const response = await api.post(`/user/login`, info)
-      setAccessToken(response.headers.authorization);
-      setRefreshToken(response.headers['refresh-token'])
+    setAccessToken(response.headers.authorization);
+    setRefreshToken(response.headers['refresh-token'])
 
-    if (response.data.success) { window.location.href = '/'; }
-    else {
+    if (response.data.success) { window.location.href = '/' }
+    else if(response.data.errorResponse.status === 500) {
       error1PB.play();
       myContext.btnClickOn();
+    } else {
+      error1PB.play();
+      myContext.setDeclarPerson(true);
     }
 
   }
@@ -51,9 +54,15 @@ const Login = () => {
           <LogoImg src={logo} />
         </LogoContainer>
         <ImgBox src={Listbanner} />
+
       {myContext.btnOpen ? <ErrorBox onClick={()=>myContext.btnClickOff()}>
         <LoginErrorModal />
-      </ErrorBox> : null}
+        </ErrorBox> : null}
+
+        {myContext.DeclarPerson ? <ErrorBox onClick={()=>myContext.setDeclarPerson(false)}>
+          <AnyModal content='신고된 유저입니다' />
+        </ErrorBox> : null}
+        
       <FormContainer >
         <InputBox>
           <form onSubmit={handleSubmit(onClickLogin)}>
