@@ -60,15 +60,16 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
   };
 
   //좋아요 버튼
-
   const [likePlus, setLikePlus] = useState(data.likesFlag && data.likesFlag);
   const [smallLikeBtn, setSmallLikeBtn] = useState(
     data.likeCount && data.likeCount
   );
 
+
   useEffect(() => {
     setSmallLikeBtn(data.likeCount && data.likeCount);
-  }, [data.likeCount && data.likeCount]);
+    setLikePlus(data.likesFlag && data.likesFlag)
+  }, [data.likeCount && data.likeCount,data.likesFlag && data.likesFlag]);
 
   const clickLikeBtn = (e) => {
     e.stopPropagation();
@@ -109,7 +110,7 @@ const GifCard = ({ data, myImg, myNickname, samePerson }) => {
               ) : null}
               {/* 좋아요기능 */}
               {data.status === 2 ? <ClickCircle
-                src={likePlus ? colorHeart : heart}
+                src={likePlus ?  colorHeart : heart}
                 onClick={clickLikeBtn}
                 alt=''
               /> : null }

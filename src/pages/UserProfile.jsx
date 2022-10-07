@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { __getUserData, __getUserPage } from '../redux/modules/UserPage';
 import { __putEditNickname } from '../redux/modules/UserPage';
+import { useCallback } from 'react';
 
 import styled from 'styled-components';
 import api from '../shared/apis';
@@ -23,7 +24,7 @@ import camera from '../images/Camera.png';
 import editPencil from '../images/mypage/mode-edit-sharp.png';
 import Listbanner from '../images/Com/Listbanner.webp';
 import Listfooter from '../images/mypage/myPageFooter.svg';
-import { useCallback } from 'react';
+import NoContentsImg from '../images/mypage/noContet.svg'
 
 const UserProfile = () => {
   const myContext = useMyContext();
@@ -141,7 +142,7 @@ const UserProfile = () => {
   if (editMyNickname) {
     button = (
       <EditDone onClick={completeBtn}>
-        <div style={{ width: '100px', height: '100px', marginLeft: '-10px' }}>
+        <div style={{ width: '100px', height: '100px', marginLeft: '-250px', marginTop:'15px' }}>
           <PenContainer style={{ backgroundColor: 'black' }}>
             <PenImg style={{ backgroundColor: 'black' }} src={editPencil} alt=''/>
           </PenContainer>
@@ -183,8 +184,7 @@ const UserProfile = () => {
     setAvailableNick(false);
   };
 
-  if (!userinfo?.data?.data?.username) return;
-
+  if (!userinfo?.data?.data?.username) return; 
   //로그인유저 마이페이지 유저 같을 떄
   const samePerson =
     UserPage && UserPage?.username === userinfo?.data?.data?.username;
@@ -279,10 +279,8 @@ const UserProfile = () => {
 
           {/* 카드 */}
           <>
-            <CardContainer>
-              {/* {userData.content[0] ? userData.content &&
-                }): <NoContents>게시글이 없습니다</NoContents>} */}
-                 {userData.content &&
+          <CardContainer>
+            {userData.content && userData?.content[0] ? 
                 userData.content.map((data, i) => {
                   return (
                     <GifCard
@@ -291,10 +289,16 @@ const UserProfile = () => {
                       myImg={UserPage && UserPage.profilImg}
                       myNickname={UserPage && UserPage.nickname}
                       samePerson={samePerson}
-                    />
-                  );
-                })}
-            </CardContainer>
+                      />
+                      
+                      );
+                }) :
+                <NoContentsContainer>
+                  <NoContents>아직 작성한 게시글이 없습니다</NoContents>
+                  <NoContentsImgTag src={NoContentsImg} />
+                </NoContentsContainer>}
+              </CardContainer>
+
             <div
               style={{ width: '100px', height: '20px' }}
               ref={page ? null : lastIntersectingData}
@@ -315,9 +319,7 @@ const UserProfile = () => {
     </>
   );
 };
-const LoadingContainer = styled.div`
-  margin-top: 80px;
-`;
+
 const UserProfileContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -422,12 +424,7 @@ const EditInput = styled.input`
 `;
 
 const EditDone = styled.button`
-  width: 50px;
-  height: 50px;
-  margin-top: 100px;
-  margin-right: 50px;
-  border-radius: 50px;
-  border: none;
+  background: none;
 `;
 
 const EditButton = styled.button`
@@ -466,9 +463,24 @@ const CardContainer = styled.div`
   flex-wrap: wrap;
 `;
 
+const NoContentsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`
+
 const NoContents = styled.div`
   padding-top: 100px;
   margin-bottom: -500px;
+  margin-left: 450px;
+  font-size: ${(props) => props.theme.SubTitle};
+  font-weight: ${(props) => props.theme.SubTitleBD};
+  color: ${(props) => props.theme.inactive};
+`
+const NoContentsImgTag = styled.img`
+  width: 130px;
+  height: 130px;
+  margin-top: 170px;
+  margin-left: -220px;
 `
 
 const CheckButton = styled.button`
