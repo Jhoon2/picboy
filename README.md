@@ -76,7 +76,7 @@
 </div>
     
 ## ****<img src="https://user-images.githubusercontent.com/98306332/193816813-16147c60-328d-4658-9cf0-dc7b291ffdfd.png" width="25" margin="auto"/> 아키텍쳐****
-<img src="https://user-images.githubusercontent.com/98306332/193819343-1789572a-e67d-4f47-b00d-d1ce90a26817.png" width="1200" margin="auto"/>
+<img src="https://user-images.githubusercontent.com/98306332/194692076-3d0144f4-eb0e-47f5-bab8-73721ce2e041.png" width="1200" margin="auto"/>
 
 
 
